@@ -1,0 +1,9 @@
+[submodule "external/SDL"]
+	path = external/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "external/box2d"]
+	path = external/box2d
+	url = https://github.com/erincatto/box2d.git
+[submodule "external/entt"]
+	path = external/entt
+	url = https://github.com/skypjack/entt.git
