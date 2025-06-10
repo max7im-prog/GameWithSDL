@@ -7,11 +7,13 @@ add_subdirectory(external/entt)
 
 add_executable(Game
     src/main.cpp
+    src/game.cpp
+    src/game.hpp
+    src/renderContext.hpp
 )
 
 target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)
 
-# # Fix include paths
 target_include_directories(Game PRIVATE
     external/box2d/include
     external/SDL/include
