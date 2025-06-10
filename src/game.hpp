@@ -1,9 +1,14 @@
+#pragma once
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
 #include <entt/entt.hpp>
 
 #include "renderContext.hpp"
+
+#include "pollEventSystem.hpp"
+#include "quitSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game
@@ -14,6 +19,7 @@ public:
 
     // Used to determine if the game loop is active
     bool isRunning();
+    void setRunning(bool val);
 
     // Initializes Game, including SDL
     bool init();
@@ -47,7 +53,16 @@ private:
     // Used to determine if game loop is active
     bool running = false;
 
+    // Event systems
+    PollEventSystem pollEventSystem;
+    QuitSystem quitSystem;
+
+    // Update systems
+
+    // Render systems
+
     entt::registry registry;
+    entt::dispatcher eventDispatcher;
     RenderContext renderContext;
 };
 

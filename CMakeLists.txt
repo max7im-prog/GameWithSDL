@@ -9,7 +9,9 @@ add_executable(Game
     src/main.cpp
     src/game.cpp
     src/game.hpp
-    src/renderContext.hpp
+    src/render/renderContext.hpp
+    src/events/pollEventSystem.cpp
+    src/events/quitSystem.cpp
 )
 
 target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)
@@ -18,6 +20,12 @@ target_include_directories(Game PRIVATE
     external/box2d/include
     external/SDL/include
     external/entt/single_include
+)
+
+target_include_directories(Game PRIVATE
+    src
+    src/render
+    src/events
 )
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")

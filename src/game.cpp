@@ -17,9 +17,14 @@ bool Game::isRunning()
     return this->running;
 }
 
+void Game::setRunning(bool val)
+{
+    this->running = val;
+}
+
 bool Game::init()
 {
-    auto window = SDL_CreateWindow("Game",800,600,0);
+    auto window = SDL_CreateWindow("Game",this->WIDTH,this->HEIGHT,0);
     if(!window){
         std::cerr <<"Failed to create SDL window: " <<SDL_GetError() <<std::endl;
         return false;
@@ -45,12 +50,8 @@ void Game::clean()
 
 void Game::handleEvents()
 {
-    SDL_Event event;
-    while(SDL_PollEvent(&event)){
-        if(event.type == SDL_EVENT_QUIT){
-            this->running = false;
-        }
-    }
+    this->pollEventSystem.update(this->registry);
+    this->quitSystem.update(this->registry,*this);
 }
 
 void Game::update()
