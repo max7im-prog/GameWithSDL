@@ -12,6 +12,8 @@ add_executable(Game
     src/render/renderContext.hpp
     src/events/pollEventSystem.cpp
     src/events/quitSystem.cpp
+    src/physics/physicsObjects.hpp
+    src/physics/worldUpdateSystem.cpp
 )
 
 target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)
@@ -26,6 +28,7 @@ target_include_directories(Game PRIVATE
     src
     src/render
     src/events
+    src/physics
 )
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")

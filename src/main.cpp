@@ -6,16 +6,18 @@
 
 #include "game.hpp"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
+    Game game(800, 600, 60);
 
-    Game game(800,600,60);
-
-    if(!game.init()){
-        std::cerr <<"Failed to initialize game" << std::endl;
+    if (!game.init())
+    {
+        std::cerr << "Failed to initialize game" << std::endl;
         return 1;
     }
 
-    while(game.isRunning()){
+    while (game.isRunning())
+    {
         game.handleEvents();
         game.update();
         game.render();

@@ -8,6 +8,7 @@
 
 class Game;
 
+// System to handle exiting the game
 class QuitSystem{
 public:
     QuitSystem();

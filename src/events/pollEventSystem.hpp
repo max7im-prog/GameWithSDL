@@ -3,6 +3,7 @@
 
 #include <entt/entt.hpp>
 
+// System to poll SDL events (mostly player's input)
 class PollEventSystem{
 public:
     PollEventSystem();

@@ -1,14 +1,13 @@
 #pragma once
-
 #ifndef GAME_HPP
 #define GAME_HPP
 
 #include <entt/entt.hpp>
 
 #include "renderContext.hpp"
-
 #include "pollEventSystem.hpp"
 #include "quitSystem.hpp"
+#include "worldUpdateSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game
@@ -27,7 +26,6 @@ public:
     // Cleans the resources used by game, i guess
     void clean();
     
-
     // Calls all event systems
     void handleEvents();
 
@@ -58,6 +56,7 @@ private:
     QuitSystem quitSystem;
 
     // Update systems
+    WorldUpdateSystem worldUpdateSystem;
 
     // Render systems
 
