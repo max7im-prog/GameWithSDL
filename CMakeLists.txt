@@ -14,6 +14,8 @@ add_executable(Game
     src/events/quitSystem.cpp
     src/physics/physicsObjects.hpp
     src/physics/worldUpdateSystem.cpp
+    src/physics/physicsBodyCreationSystem.cpp
+    src/physics/physicsUtils.cpp
 )
 
 target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)

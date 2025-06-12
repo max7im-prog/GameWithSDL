@@ -4,9 +4,8 @@
 
 #include <SDL3/SDL.h>
 
-//TODO: remove temp declarations
 #include "physicsObjects.hpp"
-#include <box2d/box2d.h>
+#include "physicsUtils.hpp"
 
 Game::Game(int w, int h, int fps): WIDTH(w), HEIGHT(h), FPS(fps), running(false)
 {
@@ -43,31 +42,8 @@ bool Game::init()
     this->renderContext.renderer = renderer;
     this->running = true;
 
-    // TODO: proper initialization
-    auto world = this->registry.create();
-    b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity = (b2Vec2){0.0f, -10.0f};
-    b2WorldId worldId = b2CreateWorld(&worldDef);
-    this->registry.emplace<PhysicsWorld>(world,worldId);
-
-    for(int i = 0;i< 8;i++){
-        auto body = this->registry.create();
-
-        b2BodyDef bodyDef = b2DefaultBodyDef();
-        bodyDef.type = b2_dynamicBody;
-        bodyDef.position = (b2Vec2){0.0f+float(i), 4.0f};
-        b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
-
-        b2Polygon dynamicBox = b2MakeBox(1.0f, 1.0f);
-
-        b2ShapeDef shapeDef = b2DefaultShapeDef();
-        shapeDef.density = 1.0f;
-        shapeDef.material.friction = 0.3f;
-
-        b2CreatePolygonShape(bodyId, &shapeDef, &dynamicBox);
-
-        this->registry.emplace<RigidBody>(body,bodyId, worldId);
-    }
+    this->registry.on_destroy<PhysicsBody>().connect<&cleanupPhysicsBody>();
+    this->registry.on_destroy<PhysicsWorld>().connect<&cleanupPhysicsWorld>();
 
 
     return true;
@@ -75,13 +51,6 @@ bool Game::init()
 
 void Game::clean()
 {
-    // TODO: proper cleanup
-    auto v = this->registry.view<PhysicsWorld>();
-    for(auto& ent: v){
-        auto& comp = v.get<PhysicsWorld>(ent);
-        b2DestroyWorld(comp.worldId);
-        this->registry.destroy(ent);
-    }
     SDL_DestroyRenderer(this->renderContext.renderer);
     SDL_DestroyWindow(this->renderContext.window);
 }
@@ -95,17 +64,8 @@ void Game::handleEvents()
 
 void Game::update()
 {
+    this->physicsBodyCreationSystem.update(this->registry);
     this->worldUpdateSystem.update(this->registry, this->FPS);
-
-    // TODO: remove temporary code
-    std::cout <<"step" <<std::endl;
-    auto v = this->registry.view<RigidBody>();
-    for(auto ent:v){
-        auto& comp = v.get<RigidBody>(ent);
-        
-        auto pos = b2Body_GetPosition(comp.bodyId);
-        std::cout << pos.x << pos.y <<std::endl;
-    }
 }
 
 void Game::render()
