@@ -44,13 +44,40 @@ bool Game::init()
     this->renderContext.y = 0;
     this->renderContext.w = this->WIDTH;
     this->renderContext.h = this->HEIGHT;
-    this->renderContext.pixelToMeterRatio = 50;
+    this->renderContext.pixelToMeterRatio = 5;
 
     this->running = true;
 
     this->registry.on_destroy<PhysicsBody>().connect<&PhysicsUtils::cleanupPhysicsBody>();
     this->registry.on_destroy<PhysicsWorld>().connect<&PhysicsUtils::cleanupPhysicsWorld>();
 
+    // TODO: remove temp testing code
+
+    // world
+    auto wrldDef = b2DefaultWorldDef();
+    wrldDef.gravity = (b2Vec2){0.0f, -0.5f};
+    auto worldEnt = this->registry.create();
+    auto& worldComp = this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
+    worldComp.worldId = b2CreateWorld(&wrldDef);
+
+    // single circle body and shape
+    auto ent = this->registry.create();
+    registry.emplace_or_replace<PendingPhysicsBody>(ent);
+    auto &comp = registry.get<PendingPhysicsBody>(ent);
+    comp.bodyDef = b2DefaultBodyDef();
+    comp.bodyDef.type = b2_dynamicBody;
+    comp.bodyDef.position = {100,100};
+
+
+    auto shDef = b2DefaultShapeDef();
+    shDef.density =1;
+    comp.shapeDefs = {};
+    b2Circle circle;
+    circle.center = {0,0};
+    circle.radius = 3;
+    comp.shapeDefs.push_back({shDef, circle});
+    comp.texture = std::nullopt;
+    comp.worldId = worldComp.worldId;
 
     return true;
 }
@@ -77,6 +104,7 @@ void Game::update()
 void Game::render()
 {
     this->renderBackgroundSystem.update(this->registry,this->renderContext);
+    this->renderPhysicsBodiesSystem.update(this->registry,this->renderContext);
 
     SDL_RenderPresent(this->renderContext.renderer);
 }

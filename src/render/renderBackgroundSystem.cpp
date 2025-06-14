@@ -4,6 +4,8 @@
 
 #include <iostream>
 
+#include "renderUtils.hpp"
+
 RenderBackgroundSystem::RenderBackgroundSystem()
 {
 }
@@ -20,4 +22,5 @@ void RenderBackgroundSystem::update(entt::registry &registry,const RenderContext
     if(!SDL_RenderClear(renderContext.renderer)){
         std::cerr <<"failed to render clear" <<std::endl;
     }
+    
 }

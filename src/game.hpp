@@ -6,6 +6,9 @@
 
 #include "renderContext.hpp"
 #include "renderBackgroundSystem.hpp"
+#include "renderPhysicsBodiesSystem.hpp"
+
+
 #include "pollEventSystem.hpp"
 #include "quitSystem.hpp"
 #include "worldUpdateSystem.hpp"
@@ -63,6 +66,8 @@ private:
 
     // Render systems
     RenderBackgroundSystem renderBackgroundSystem ;
+    RenderPhysicsBodiesSystem renderPhysicsBodiesSystem;
+    
 
     entt::registry registry;
     entt::dispatcher eventDispatcher;
