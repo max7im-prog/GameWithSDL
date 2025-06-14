@@ -44,7 +44,7 @@ bool Game::init()
     this->renderContext.y = 0;
     this->renderContext.w = this->WIDTH;
     this->renderContext.h = this->HEIGHT;
-    this->renderContext.PixelToMeterRatio = 50;
+    this->renderContext.pixelToMeterRatio = 50;
 
     this->running = true;
 

@@ -15,7 +15,7 @@ public:
     int w,h;
 
     // Conversion from box2d meters to pixels
-    float PixelToMeterRatio;
+    float pixelToMeterRatio;
 };
 
 #endif //RENDERCONTEXT_HPP
