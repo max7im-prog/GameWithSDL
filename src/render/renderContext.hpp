@@ -7,6 +7,15 @@ class RenderContext
 public:
     SDL_Renderer *renderer;
     SDL_Window *window;
+
+    // Position of bottom left point of a window in box2d meters
+    double x,y;
+
+    // Width and height of a window in pixels
+    int w,h;
+
+    // Conversion from box2d meters to pixels
+    float PixelToMeterRatio;
 };
 
 #endif //RENDERCONTEXT_HPP

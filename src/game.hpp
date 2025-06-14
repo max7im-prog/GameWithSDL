@@ -5,6 +5,7 @@
 #include <entt/entt.hpp>
 
 #include "renderContext.hpp"
+#include "renderBackgroundSystem.hpp"
 #include "pollEventSystem.hpp"
 #include "quitSystem.hpp"
 #include "worldUpdateSystem.hpp"
@@ -61,6 +62,7 @@ private:
     PhysicsBodyCreationSystem physicsBodyCreationSystem;
 
     // Render systems
+    RenderBackgroundSystem renderBackgroundSystem ;
 
     entt::registry registry;
     entt::dispatcher eventDispatcher;

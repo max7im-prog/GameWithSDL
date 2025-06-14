@@ -9,9 +9,14 @@ add_executable(Game
     src/main.cpp
     src/game.cpp
     src/game.hpp
+
     src/render/renderContext.hpp
+    src/render/renderBackgroundSystem.cpp
+    src/render/renderUtils.cpp
+
     src/events/pollEventSystem.cpp
     src/events/quitSystem.cpp
+
     src/physics/physicsObjects.hpp
     src/physics/worldUpdateSystem.cpp
     src/physics/physicsBodyCreationSystem.cpp

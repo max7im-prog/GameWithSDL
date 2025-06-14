@@ -40,10 +40,16 @@ bool Game::init()
 
     this->renderContext.window = window;
     this->renderContext.renderer = renderer;
+    this->renderContext.x = 0;
+    this->renderContext.y = 0;
+    this->renderContext.w = this->WIDTH;
+    this->renderContext.h = this->HEIGHT;
+    this->renderContext.PixelToMeterRatio = 50;
+
     this->running = true;
 
-    this->registry.on_destroy<PhysicsBody>().connect<&cleanupPhysicsBody>();
-    this->registry.on_destroy<PhysicsWorld>().connect<&cleanupPhysicsWorld>();
+    this->registry.on_destroy<PhysicsBody>().connect<&PhysicsUtils::cleanupPhysicsBody>();
+    this->registry.on_destroy<PhysicsWorld>().connect<&PhysicsUtils::cleanupPhysicsWorld>();
 
 
     return true;
@@ -70,6 +76,9 @@ void Game::update()
 
 void Game::render()
 {
+    this->renderBackgroundSystem.update(this->registry,this->renderContext);
+
+    SDL_RenderPresent(this->renderContext.renderer);
 }
 
 void Game::deltaTime()

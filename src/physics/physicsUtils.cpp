@@ -4,7 +4,7 @@
 #include <box2d/box2d.h>
 #include "physicsObjects.hpp"
 
-void cleanupPhysicsBody(entt::registry& registry, entt::entity entity) {
+void PhysicsUtils::cleanupPhysicsBody(entt::registry& registry, entt::entity entity) {
     auto& physics = registry.get<PhysicsBody>(entity);
     for (b2ShapeId shape : physics.shapes) {
         b2DestroyShape(shape, false);
@@ -12,7 +12,7 @@ void cleanupPhysicsBody(entt::registry& registry, entt::entity entity) {
     b2DestroyBody(physics.bodyId);
 }
 
-void cleanupPhysicsWorld(entt::registry& registry, entt::entity entity){
+void PhysicsUtils::cleanupPhysicsWorld(entt::registry& registry, entt::entity entity){
     auto& world = registry.get<PhysicsWorld>(entity);
     b2DestroyWorld(world.worldId);
 

@@ -4,6 +4,7 @@
 
 #include "physicsObjects.hpp"
 
+// System for creating PhysicsBodies from PendingPhysicsBodies
 class PhysicsBodyCreationSystem{
 public:
     PhysicsBodyCreationSystem();
