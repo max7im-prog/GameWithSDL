@@ -60,23 +60,44 @@ bool Game::init()
     auto& worldComp = this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
     worldComp.worldId = b2CreateWorld(&wrldDef);
 
-    // single circle body and shape
-    auto ent = this->registry.create();
-    registry.emplace_or_replace<PendingPhysicsBody>(ent);
-    auto &comp = registry.get<PendingPhysicsBody>(ent);
-    comp.bodyDef = b2DefaultBodyDef();
-    comp.bodyDef.type = b2_dynamicBody;
-    comp.bodyDef.position = {100,100};
+    // some shapes
+    entt::entity ent;
 
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsShape(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){70.0f, 50.0f},
+         {{0,0},{0,10}, {10,10}, {10,0}});
 
-    auto shDef = b2DefaultShapeDef();
-    shDef.density =1;
-    comp.shapeDefs = {};
-    b2Circle circle;
-    circle.center = {0,0};
-    circle.radius = 3;
-    comp.shapeDefs.push_back({shDef, circle});
-    comp.worldId = worldComp.worldId;
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsShape(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){50.0f, 50.0f},
+         {{0,0},{0,10}, {10,10}, {13,0}});
+
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsShape(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){30.0f, 50.0f},
+         {{0,8},{0,10}, {10,19}, {10,0}});
+
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsShape(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){55.0f, 100.0f},
+         {{0,8},{0,10}, {10,19}, {10,0}});
+    
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsShape(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){10.0f, 10.0f},
+         {{0,0},{0,10}, {100,10}, {100,0}},
+        b2_staticBody); 
 
     return true;
 }

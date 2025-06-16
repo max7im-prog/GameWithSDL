@@ -65,10 +65,10 @@ bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context)
         auto polygon = b2Shape_GetPolygon(shapeId);
         auto transform = b2Body_GetTransform(bodyId);
         std::vector<std::pair<int, int>> points = {};
-        for (auto vert : polygon.vertices)
+        for (int i = 0;i< polygon.count;i++)
         {
-            b2Vec2 worldPoint = b2TransformPoint(transform, vert);
-            auto pixelPoint = metersToPixels({vert.x, vert.y}, context);
+            b2Vec2 worldPoint = b2TransformPoint(transform, polygon.vertices[i]);
+            auto pixelPoint = metersToPixels({worldPoint.x, worldPoint.y}, context);
             points.push_back(pixelPoint);
         }
         renderPolygon(points, context);

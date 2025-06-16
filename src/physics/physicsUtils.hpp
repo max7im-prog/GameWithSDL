@@ -1,5 +1,7 @@
 #include <entt/entt.hpp>
 
+#include <box2d/box2d.h>
+
 namespace PhysicsUtils
 {
     void cleanupPhysicsBody(entt::registry &registry, entt::entity entity);

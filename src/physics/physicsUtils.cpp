@@ -44,7 +44,7 @@ void PhysicsUtils::createPolygonPhysicsShape(entt::registry &registry, const ent
     shapeDef.material.restitution = restitution;
     b2ShapeId shapeId = b2CreatePolygonShape(bodyId,&shapeDef,&polygon);
 
-    auto comp = registry.emplace_or_replace<PhysicsBody>(entity);
+    auto &comp = registry.emplace_or_replace<PhysicsBody>(entity);
     comp.bodyId = bodyId;
     comp.worldId = worldId;
     comp.shapes = {shapeId};
