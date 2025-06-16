@@ -62,7 +62,7 @@ private:
 
     // Update systems
     WorldUpdateSystem worldUpdateSystem;
-    PhysicsBodyCreationSystem physicsBodyCreationSystem;
+    // PhysicsBodyCreationSystem physicsBodyCreationSystem;
 
     // Render systems
     RenderBackgroundSystem renderBackgroundSystem ;

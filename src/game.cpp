@@ -64,35 +64,35 @@ bool Game::init()
     entt::entity ent;
 
     ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsShape(registry,
+    PhysicsUtils::createPolygonPhysicsBody(registry,
          ent, 
          worldComp.worldId, 
          (b2Vec2){70.0f, 50.0f},
          {{0,0},{0,10}, {10,10}, {10,0}});
 
     ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsShape(registry,
+    PhysicsUtils::createPolygonPhysicsBody(registry,
          ent, 
          worldComp.worldId, 
          (b2Vec2){50.0f, 50.0f},
          {{0,0},{0,10}, {10,10}, {13,0}});
 
     ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsShape(registry,
+    PhysicsUtils::createPolygonPhysicsBody(registry,
          ent, 
          worldComp.worldId, 
          (b2Vec2){30.0f, 50.0f},
          {{0,8},{0,10}, {10,19}, {10,0}});
 
     ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsShape(registry,
+    PhysicsUtils::createPolygonPhysicsBody(registry,
          ent, 
          worldComp.worldId, 
          (b2Vec2){55.0f, 100.0f},
          {{0,8},{0,10}, {10,19}, {10,0}});
     
     ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsShape(registry,
+    PhysicsUtils::createPolygonPhysicsBody(registry,
          ent, 
          worldComp.worldId, 
          (b2Vec2){10.0f, 10.0f},
@@ -117,7 +117,7 @@ void Game::handleEvents()
 
 void Game::update()
 {
-    this->physicsBodyCreationSystem.update(this->registry);
+    // this->physicsBodyCreationSystem.update(this->registry);
     this->worldUpdateSystem.update(this->registry, this->FPS);
 }
 
