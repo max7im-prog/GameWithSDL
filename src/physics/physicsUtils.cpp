@@ -2,7 +2,7 @@
 
 #include <entt/entt.hpp>
 #include <box2d/box2d.h>
-#include "physicsObjects.hpp"
+#include "physicsComponents.hpp"
 
 void PhysicsUtils::cleanupPhysicsBody(entt::registry& registry, entt::entity entity) {
     auto& physics = registry.get<PhysicsBody>(entity);

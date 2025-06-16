@@ -2,7 +2,7 @@
 
 #include <entt/entt.hpp>
 
-#include "physicsObjects.hpp"
+#include "physicsComponents.hpp"
 
 // System for creating PhysicsBodies from PendingPhysicsBodies
 class PhysicsBodyCreationSystem{

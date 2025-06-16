@@ -4,7 +4,7 @@
 
 #include <SDL3/SDL.h>
 
-#include "physicsObjects.hpp"
+#include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
 
 Game::Game(int w, int h, int fps): WIDTH(w), HEIGHT(h), FPS(fps), running(false)
@@ -76,7 +76,6 @@ bool Game::init()
     circle.center = {0,0};
     circle.radius = 3;
     comp.shapeDefs.push_back({shDef, circle});
-    comp.texture = std::nullopt;
     comp.worldId = worldComp.worldId;
 
     return true;

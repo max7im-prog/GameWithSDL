@@ -1,5 +1,5 @@
 #include "worldUpdateSystem.hpp"
-#include "physicsObjects.hpp"
+#include "physicsComponents.hpp"
 WorldUpdateSystem::WorldUpdateSystem()
 {
 }

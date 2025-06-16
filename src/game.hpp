@@ -68,7 +68,6 @@ private:
     RenderBackgroundSystem renderBackgroundSystem ;
     RenderPhysicsBodiesSystem renderPhysicsBodiesSystem;
     
-
     entt::registry registry;
     entt::dispatcher eventDispatcher;
     RenderContext renderContext;

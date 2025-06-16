@@ -39,7 +39,6 @@ void PhysicsBodyCreationSystem::update(entt::registry& registry){
         comp.bodyId = bodyId;
         comp.shapes = shapeIds;
         comp.worldId = pending.worldId;
-        comp.texture = std::nullopt;
         registry.remove<PendingPhysicsBody>(ent);
     }
 

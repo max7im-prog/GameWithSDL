@@ -16,7 +16,6 @@ struct PhysicsBody
     b2BodyId bodyId;
     b2WorldId worldId;
     std::vector<b2ShapeId> shapes;
-    std::optional<SDL_Texture *> texture;
 };
 
 struct PendingPhysicsBody
@@ -26,5 +25,4 @@ struct PendingPhysicsBody
     std::vector<std::pair<
         b2ShapeDef, ShapeVariant>>
         shapeDefs;
-    std::optional<SDL_Texture *> texture;
 };

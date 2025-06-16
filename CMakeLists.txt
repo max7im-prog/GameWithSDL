@@ -11,6 +11,7 @@ add_executable(Game
     src/game.hpp
 
     src/render/renderContext.hpp
+    src/render/renderComponents.hpp
     src/render/renderBackgroundSystem.cpp
     src/render/renderPhysicsBodiesSystem.cpp
     src/render/renderUtils.cpp
@@ -18,7 +19,7 @@ add_executable(Game
     src/events/pollEventSystem.cpp
     src/events/quitSystem.cpp
 
-    src/physics/physicsObjects.hpp
+    src/physics/physicsComponents.hpp
     src/physics/worldUpdateSystem.cpp
     src/physics/physicsBodyCreationSystem.cpp
     src/physics/physicsUtils.cpp

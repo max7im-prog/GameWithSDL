@@ -1,6 +1,6 @@
 #include "renderPhysicsBodiesSystem.hpp"
 
-#include "physicsObjects.hpp"
+#include "physicsComponents.hpp"
 #include "renderUtils.hpp"
 
 RenderPhysicsBodiesSystem::RenderPhysicsBodiesSystem(){
