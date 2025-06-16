@@ -1,5 +1,7 @@
 #include "renderUtils.hpp"
 
+#include <vector>
+
 std::pair<int, int> RenderUtils::metersToPixels(std::pair<float, float> meters, const RenderContext &context)
 {
     std::pair<float, float> ret = {0, 0}; // first - x, second - y
@@ -19,7 +21,7 @@ std::pair<float, float> RenderUtils::pixelsToMeters(std::pair<int, int> pixels, 
     return ret;
 }
 
-bool RenderUtils::renderShape(b2ShapeId shapeId,const  RenderContext &context)
+bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context)
 {
 
     auto type = b2Shape_GetType(shapeId);
@@ -38,15 +40,38 @@ bool RenderUtils::renderShape(b2ShapeId shapeId,const  RenderContext &context)
     }
     else if (type == b2_capsuleShape)
     {
-        // TODO: implement
+        auto capsule = b2Shape_GetCapsule(shapeId);
+        auto transform = b2Body_GetTransform(bodyId);
+        b2Vec2 worldPoint1 = b2TransformPoint(transform, capsule.center1);
+        b2Vec2 worldPoint2 = b2TransformPoint(transform, capsule.center2);
+        auto pixelPoint1 = metersToPixels({worldPoint1.x, worldPoint1.y}, context);
+        auto pixelPoint2 = metersToPixels({worldPoint2.x, worldPoint2.y}, context);
+        float pixelRadius = capsule.radius*context.pixelToMeterRatio;
+        renderCapsule(pixelPoint1,pixelPoint2,pixelRadius,context);
+
     }
     else if (type == b2_segmentShape)
     {
-        // TODO: implement
+        auto segment = b2Shape_GetSegment(shapeId);
+        auto transform = b2Body_GetTransform(bodyId);
+        b2Vec2 worldPoint1 = b2TransformPoint(transform, segment.point1);
+        b2Vec2 worldPoint2 = b2TransformPoint(transform, segment.point2);
+        auto pixelPoint1 = metersToPixels({worldPoint1.x, worldPoint1.y}, context);
+        auto pixelPoint2 = metersToPixels({worldPoint2.x, worldPoint2.y}, context);
+        renderSegment(pixelPoint1, pixelPoint2, context);
     }
     else if (type == b2_polygonShape)
     {
-        // TODO: implement
+        auto polygon = b2Shape_GetPolygon(shapeId);
+        auto transform = b2Body_GetTransform(bodyId);
+        std::vector<std::pair<int, int>> points = {};
+        for (auto vert : polygon.vertices)
+        {
+            b2Vec2 worldPoint = b2TransformPoint(transform, vert);
+            auto pixelPoint = metersToPixels({vert.x, vert.y}, context);
+            points.push_back(pixelPoint);
+        }
+        renderPolygon(points, context);
     }
     else
     {
@@ -57,9 +82,9 @@ bool RenderUtils::renderShape(b2ShapeId shapeId,const  RenderContext &context)
     return true;
 }
 
-void RenderUtils::renderCircle(std::pair<int, int> pixelCenter, int pixelRadius,const  RenderContext &context)
+void RenderUtils::renderCircle(std::pair<int, int> pixelCenter, int pixelRadius, const RenderContext &context)
 {
-    SDL_SetRenderDrawColor(context.renderer,0,0,0,255);
+    SDL_SetRenderDrawColor(context.renderer, 255, 0, 0, 255);
     const int sides = 8;
     const double angleStep = 2.0 * M_PI / sides;
 
@@ -73,7 +98,7 @@ void RenderUtils::renderCircle(std::pair<int, int> pixelCenter, int pixelRadius,
         double angle = i * angleStep;
         float x = static_cast<float>(cx + pixelRadius * std::cos(angle));
         float y = static_cast<float>(cy + pixelRadius * std::sin(angle));
-        points[i] = { x, y };
+        points[i] = {x, y};
     }
 
     for (int i = 0; i < sides; ++i)
@@ -82,4 +107,37 @@ void RenderUtils::renderCircle(std::pair<int, int> pixelCenter, int pixelRadius,
                        points[i].x, points[i].y,
                        points[i + 1].x, points[i + 1].y);
     }
+}
+
+void RenderUtils::renderSegment(std::pair<int, int> point1, std::pair<int, int> point2, const RenderContext &context)
+{
+    SDL_SetRenderDrawColor(context.renderer, 0, 255, 0, 255);
+    SDL_RenderLine(context.renderer,
+                   point1.first, point1.second,
+                   point2.first, point2.second);
+}
+
+void RenderUtils::renderPolygon(const std::vector<std::pair<int, int>> &vertices, const RenderContext &context)
+{
+    if (vertices.size() < 2)
+        return;
+
+    SDL_SetRenderDrawColor(context.renderer, 0, 0, 255, 255);
+
+    for (int i = 0; i < vertices.size() - 1; i++)
+    {
+        SDL_RenderLine(context.renderer,
+                       vertices[i].first, vertices[i].second,
+                       vertices[i + 1].first, vertices[i + 1].second);
+    }
+    SDL_RenderLine(context.renderer,
+                   vertices[0].first, vertices[0].second,
+                   vertices[vertices.size() - 1].first, vertices[vertices.size() - 1].second);
+}
+
+void RenderUtils::renderCapsule(std::pair<int, int> center1, std::pair<int, int> center2, float radius, const RenderContext &context)
+{
+    renderCircle(center1,radius,context);
+    renderCircle(center2,radius,context);
+    renderSegment(center1,center2,context);
 }
