@@ -99,6 +99,47 @@ bool Game::init()
          {{0,0},{0,10}, {100,10}, {100,0}},
         b2_staticBody); 
 
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsBody(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){0.0f, 10.0f},
+         {{0,0},{0,100}, {10,100}, {10,0}},
+        b2_staticBody); 
+
+    ent = this->registry.create();
+    PhysicsUtils::createPolygonPhysicsBody(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){0.0f, 10.0f},
+         {{100,0},{100,100}, {110,100}, {110,0}},
+        b2_staticBody); 
+
+    ent = this->registry.create();
+    PhysicsUtils::createCirclePhysicsBody(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){45.0f, 80.0f},
+         {0,0},
+         10); 
+    
+    ent = this->registry.create();
+    PhysicsUtils::createSegmentPhysicsBody(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){70.0f, 57.0f},
+         {20,-10},
+         {10,10}); 
+    
+    ent = this->registry.create();
+    PhysicsUtils::createCapsulePhysicsBody(registry,
+         ent, 
+         worldComp.worldId, 
+         (b2Vec2){35.0f, 200.0f},
+         {-40,-10},
+         {10,10},
+        10); 
+
     return true;
 }
 

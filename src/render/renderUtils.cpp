@@ -85,7 +85,7 @@ bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context)
 void RenderUtils::renderCircle(std::pair<int, int> pixelCenter, int pixelRadius, const RenderContext &context)
 {
     SDL_SetRenderDrawColor(context.renderer, 255, 0, 0, 255);
-    const int sides = 8;
+    const int sides = 16;
     const double angleStep = 2.0 * M_PI / sides;
 
     int cx = pixelCenter.first;
@@ -137,7 +137,17 @@ void RenderUtils::renderPolygon(const std::vector<std::pair<int, int>> &vertices
 
 void RenderUtils::renderCapsule(std::pair<int, int> center1, std::pair<int, int> center2, float radius, const RenderContext &context)
 {
+    std::pair<float, float> perpendicular = {-(center1.second - center2.second),center1.first - center2.first};
+    float len = pow(pow(perpendicular.first,2) + pow(perpendicular.second,2),0.5f);
+    perpendicular = {perpendicular.first/len,perpendicular.second/len};
+
+    std::pair<int,int> p1 = {center1.first +perpendicular.first*radius,center1.second +perpendicular.second*radius};
+    std::pair<int,int> p2 = {center1.first -perpendicular.first*radius,center1.second -perpendicular.second*radius};
+    std::pair<int,int> p3 = {center2.first +perpendicular.first*radius,center2.second +perpendicular.second*radius};
+    std::pair<int,int> p4 = {center2.first -perpendicular.first*radius,center2.second -perpendicular.second*radius};
+
+    renderSegment(p1,p3,context);
+    renderSegment(p2,p4,context);
     renderCircle(center1,radius,context);
     renderCircle(center2,radius,context);
-    renderSegment(center1,center2,context);
 }
