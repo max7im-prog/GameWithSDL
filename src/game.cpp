@@ -153,7 +153,11 @@ bool Game::init()
         b1,
         b2,
         {0,0},
-        {0,0}
+        {10,10},
+        std::nullopt,
+        true,
+        30,
+        0.5
     );
 
 

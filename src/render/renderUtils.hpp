@@ -20,10 +20,10 @@ namespace RenderUtils
     // Renders a shape, returns true on success, false otherwise
     bool renderShape(b2ShapeId shapeId, const RenderContext &context);
 
-    void renderCircle(std::pair<int, int> pixelCenter, int pixelRadius, const RenderContext &context);
-    void renderSegment(std::pair<int, int> pixelPoint1, std::pair<int, int> pixelPoint2, const RenderContext &context);
-    void renderPolygon(const std::vector<std::pair<int, int>> &pixelVertices, const RenderContext &context);
-    void renderCapsule(std::pair<int, int> pixelCenter1, std::pair<int, int> pixelCenter2, float pixelRadius, const RenderContext &context);
+    void renderCircle(std::pair<int, int> pixelCenter, int pixelRadius,SDL_Color color, const RenderContext &context);
+    void renderSegment(std::pair<int, int> pixelPoint1, std::pair<int, int> pixelPoint2,SDL_Color color, const RenderContext &context);
+    void renderPolygon(const std::vector<std::pair<int, int>> &pixelVertices,SDL_Color color, const RenderContext &context);
+    void renderCapsule(std::pair<int, int> pixelCenter1, std::pair<int, int> pixelCenter2, float pixelRadius,SDL_Color color, const RenderContext &context);
 
     // Renders a joint, returns true on success, false otherwise
     bool renderJoint(b2JointId jointId, const RenderContext &context);
