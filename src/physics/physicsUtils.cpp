@@ -118,3 +118,37 @@ void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt
     comp.worldId = worldId;
     comp.shapes = {shapeId};
 }
+
+void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const entt::entity &entity,b2WorldId worldId,b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<float> length, bool isSpring, float freq, float damping)
+{
+    b2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
+    jointDef.base.bodyIdA = bodyAId;
+    jointDef.base.bodyIdB = bodyBId;
+
+    //FIXME: probably a wrong declaration
+    jointDef.base.localFrameA.p = localPointA;
+    jointDef.base.localFrameA.q = b2MakeRot(0);
+    jointDef.base.localFrameB.p = localPointB;
+    jointDef.base.localFrameB.q = b2MakeRot(0);
+
+    if(isSpring){
+        jointDef.enableSpring = true;
+        jointDef.hertz = freq;
+        jointDef.dampingRatio = damping;
+    }
+
+    if(length.has_value()){
+        jointDef.length = length.value();
+    }else{
+        float distance = b2Distance(b2Body_GetWorldPoint(bodyAId,localPointA),b2Body_GetWorldPoint(bodyBId,localPointB));
+        jointDef.length = distance;
+    }
+
+    b2JointId jointId = b2CreateDistanceJoint(worldId,&jointDef);
+
+    auto& comp = registry.emplace_or_replace<PhysicsJoint>(entity);
+    comp.bodyAId = bodyAId;
+    comp.bodyBId = bodyBId;
+    comp.jointId = jointId;
+    comp.worldId = worldId;
+}

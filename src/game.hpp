@@ -4,13 +4,17 @@
 
 #include <entt/entt.hpp>
 
+// Rendering
 #include "renderContext.hpp"
 #include "renderBackgroundSystem.hpp"
 #include "renderPhysicsBodiesSystem.hpp"
+#include "renderPhysicsJointsSystem.hpp"
 
-
+// Events
 #include "pollEventSystem.hpp"
 #include "quitSystem.hpp"
+
+// Update
 #include "worldUpdateSystem.hpp"
 #include "physicsBodyCreationSystem.hpp"
 
@@ -67,6 +71,7 @@ private:
     // Render systems
     RenderBackgroundSystem renderBackgroundSystem ;
     RenderPhysicsBodiesSystem renderPhysicsBodiesSystem;
+    RenderPhysicsJointsSystem renderPhysicsJointsSystem;
     
     entt::registry registry;
     entt::dispatcher eventDispatcher;

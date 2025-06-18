@@ -90,6 +90,7 @@ bool Game::init()
          worldComp.worldId, 
          (b2Vec2){55.0f, 100.0f},
          {{0,8},{0,10}, {10,19}, {10,0}});
+    b2BodyId b2 = this->registry.get<PhysicsBody>(ent).bodyId;
     
     ent = this->registry.create();
     PhysicsUtils::createPolygonPhysicsBody(registry,
@@ -106,6 +107,7 @@ bool Game::init()
          (b2Vec2){0.0f, 10.0f},
          {{0,0},{0,100}, {10,100}, {10,0}},
         b2_staticBody); 
+    
 
     ent = this->registry.create();
     PhysicsUtils::createPolygonPhysicsBody(registry,
@@ -122,6 +124,7 @@ bool Game::init()
          (b2Vec2){45.0f, 80.0f},
          {0,0},
          10); 
+    b2BodyId b1 = this->registry.get<PhysicsBody>(ent).bodyId;
     
     ent = this->registry.create();
     PhysicsUtils::createSegmentPhysicsBody(registry,
@@ -131,6 +134,7 @@ bool Game::init()
          {20,-10},
          {10,10}); 
     
+    
     ent = this->registry.create();
     PhysicsUtils::createCapsulePhysicsBody(registry,
          ent, 
@@ -139,6 +143,19 @@ bool Game::init()
          {-40,-10},
          {10,10},
         10); 
+    
+
+    // some joints 
+    ent = this->registry.create();
+    PhysicsUtils::createDistancePhysicsJoint(registry,
+        ent,
+        worldComp.worldId,
+        b1,
+        b2,
+        {0,0},
+        {0,0}
+    );
+
 
     return true;
 }
@@ -166,6 +183,7 @@ void Game::render()
 {
     this->renderBackgroundSystem.update(this->registry,this->renderContext);
     this->renderPhysicsBodiesSystem.update(this->registry,this->renderContext);
+    this->renderPhysicsJointsSystem.update(this->registry,this->renderContext);
 
     SDL_RenderPresent(this->renderContext.renderer);
 }

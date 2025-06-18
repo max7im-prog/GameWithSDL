@@ -151,3 +151,25 @@ void RenderUtils::renderCapsule(std::pair<int, int> center1, std::pair<int, int>
     renderCircle(center1,radius,context);
     renderCircle(center2,radius,context);
 }
+
+bool RenderUtils::renderJoint(b2JointId jointId, const RenderContext &context)
+{
+    b2JointType type = b2Joint_GetType(jointId);
+    b2BodyId bodyAId = b2Joint_GetBodyA(jointId);
+    b2BodyId bodyBId = b2Joint_GetBodyB(jointId);
+    b2Vec2 localPointA = b2Joint_GetLocalFrameA(jointId).p;
+    b2Vec2 localPointB = b2Joint_GetLocalFrameB(jointId).p;
+    b2Vec2 worldPointA = b2Body_GetWorldPoint(bodyAId,localPointA);
+    b2Vec2 worldPointB = b2Body_GetWorldPoint(bodyBId,localPointB);
+
+    if(type == b2JointType::b2_distanceJoint){
+        auto pixelPointA = metersToPixels({worldPointA.x,worldPointA.y}, context);
+        auto pixelPointB = metersToPixels({worldPointB.x,worldPointB.y}, context);
+        renderSegment(pixelPointA, pixelPointB, context);        
+    }else if (type == b2JointType::b2_revoluteJoint){
+        return false;
+    }else{
+        return false;
+    }
+    return true;
+}

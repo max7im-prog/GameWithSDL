@@ -1,6 +1,10 @@
+#pragma once
+
 #include <entt/entt.hpp>
 
 #include <box2d/box2d.h>
+
+#include <optional>
 
 namespace PhysicsUtils
 {
@@ -50,4 +54,17 @@ namespace PhysicsUtils
                                    float density = 1.0f,
                                    float friction = 0.3f,
                                    float restitution = 0.3f);
+
+    void createDistancePhysicsJoint(entt::registry &registry,
+                                   const entt::entity &entity,
+                                   b2WorldId worldId,
+                                   b2BodyId bodyAId,
+                                   b2BodyId bodyBId,
+                                   b2Vec2 localPointA,
+                                   b2Vec2 localPointB,
+                                   std::optional<float> length = std::nullopt,
+                                   bool isSpring = false,
+                                   float freq = 0.0f,
+                                   float damping = 1.0f
+                                );
 };

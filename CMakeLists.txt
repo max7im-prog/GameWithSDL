@@ -14,6 +14,7 @@ add_executable(Game
     src/render/renderComponents.hpp
     src/render/renderBackgroundSystem.cpp
     src/render/renderPhysicsBodiesSystem.cpp
+    src/render/renderPhysicsJointsSystem.cpp
     src/render/renderUtils.cpp
 
     src/events/pollEventSystem.cpp

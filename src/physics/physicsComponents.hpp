@@ -18,6 +18,14 @@ struct PhysicsBody
     std::vector<b2ShapeId> shapes;
 };
 
+struct PhysicsJoint
+{
+    b2JointId jointId;
+    b2BodyId bodyAId;
+    b2BodyId bodyBId;
+    b2WorldId worldId;
+};
+
 struct PendingPhysicsBody
 {
     b2BodyDef bodyDef;
