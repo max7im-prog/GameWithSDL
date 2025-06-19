@@ -42,7 +42,7 @@ void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity en
     auto &world = registry.get<PhysicsWorld>(entity);
 
     auto bodies = registry.view<PhysicsBody>();
-    for (auto &ent : bodies)
+    for (auto ent : bodies)
     {
         auto &comp = bodies.get<PhysicsBody>(ent);
         if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
@@ -61,7 +61,8 @@ void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity en
         }
     }
 
-    b2DestroyWorld(world.worldId);
+    if (b2World_IsValid(world.worldId))
+        b2DestroyWorld(world.worldId);
 }
 
 void PhysicsUtils::cleanupPhysicsJoint(entt::registry &registry, entt::entity entity)
@@ -188,6 +189,10 @@ void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const en
     else
     {
         float distance = b2Distance(b2Body_GetWorldPoint(bodyAId, localPointA), b2Body_GetWorldPoint(bodyBId, localPointB));
+        if (distance < 0.01f)
+        {
+            distance = 0.01f;
+        }
         jointDef.length = distance;
     }
 
@@ -244,7 +249,7 @@ void PhysicsUtils::createMousePhysicsJoint(entt::registry &registry, const entt:
     jointDef.base.localFrameB.p = targetLocalPoint;
     jointDef.base.localFrameB.q = b2MakeRot(0);
 
-    jointDef.maxForce = 1000 * b2Body_GetMass(targetBodyId);
+    jointDef.maxForce = 1000 * b2Body_GetMass(targetBodyId) + 1000;
     jointDef.dampingRatio = 50;
     jointDef.hertz = 1000;
 
@@ -274,12 +279,15 @@ std::vector<b2ShapeId> PhysicsUtils::getShapeAtPosition(b2WorldId worldId, b2Vec
 
     // TODO: find a proper way to initialize
     b2QueryFilter filter;
-    filter.maskBits = 1|2|4|8|16|32;
+    filter.maskBits = 1 | 2 | 4 | 8 | 16 | 32;
+    filter.categoryBits = 1 | 2 | 4 | 8 | 16 | 32;
 
     b2World_OverlapAABB(worldId, aabb, filter, &PhysicsUtils::pointOverlapCallbackFunction, &potential);
 
-    for(auto sh:potential){
-        if(b2Shape_TestPoint(sh,position)){
+    for (auto sh : potential)
+    {
+        if (b2Shape_TestPoint(sh, position))
+        {
             ret.push_back(sh);
         }
     }

@@ -168,6 +168,12 @@ bool RenderUtils::renderJoint(b2JointId jointId, const RenderContext &context)
         auto pixelPointB = metersToPixels({worldPointB.x, worldPointB.y}, context);
         renderSegment(pixelPointA, pixelPointB, {100, 100, 100, 255}, context);
     }
+    if (type == b2JointType::b2_mouseJoint)
+    {
+        auto pixelPointA = metersToPixels({worldPointA.x, worldPointA.y}, context);
+        auto pixelPointB = metersToPixels({worldPointB.x, worldPointB.y}, context);
+        renderSegment(pixelPointA, pixelPointB, {50, 50, 50, 255}, context);
+    }
     else if (type == b2JointType::b2_revoluteJoint)
     {
         auto pixelPointA = metersToPixels({worldPointA.x, worldPointA.y}, context);

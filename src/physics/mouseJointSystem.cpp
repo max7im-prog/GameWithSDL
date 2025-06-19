@@ -9,6 +9,7 @@
 #include "physicsComponents.hpp"
 #include "renderUtils.hpp"
 #include "physicsUtils.hpp"
+#include "debugUtils.hpp"
 
 MouseJointSystem::MouseJointSystem(entt::registry &registry) : buttonPressed(false), jointExists(false)
 {
@@ -90,20 +91,26 @@ void MouseJointSystem::update(entt::registry &registry, const RenderContext &ren
             b2BodyId bodyA = registry.get<PhysicsBody>(this->mouseBody).bodyId;
             b2BodyId bodyB = b2Shape_GetBody(shapesAtMouse[0]);
 
-            PhysicsUtils::createMousePhysicsJoint(
+            PhysicsUtils::createDistancePhysicsJoint(
                 registry,
                 this->mouseJoint,
                 worldId,
                 bodyA,
                 bodyB,
                 {0, 0},
-                b2Body_GetLocalPoint(bodyB, mouseLocation));
+                b2Body_GetLocalPoint(bodyB, mouseLocation),
+                std::nullopt,
+                true,
+                50,
+                1000);
             jointExists = true;
             std::cout << "created mouse joint and body" << std::endl;
+
+            DebugUtils::debugPrintRegistry(registry);
         }
     }
 
-    // Delete a mouse joint on unpress
+    // Delete a mouse joint on release
     else
     {
         if (!bp.pressed)
