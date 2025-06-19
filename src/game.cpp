@@ -53,6 +53,9 @@ bool Game::init()
     this->registry.on_destroy<PhysicsWorld>().connect<&PhysicsUtils::cleanupPhysicsWorld>();
     this->registry.on_destroy<PhysicsJoint>().connect<&PhysicsUtils::cleanupPhysicsJoint>();
 
+    // inti systems that require initilalization
+    this->mouseJointSystem = MouseJointSystem(this->registry);
+
     // TODO: remove temp testing code
 
     // world
@@ -193,7 +196,9 @@ void Game::handleEvents()
 void Game::update()
 {
     // this->physicsBodyCreationSystem.update(this->registry);
+    this->mouseJointSystem.update(this->registry,this->renderContext);
     this->worldUpdateSystem.update(this->registry, this->FPS);
+    
 }
 
 void Game::render()

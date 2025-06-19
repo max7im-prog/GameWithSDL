@@ -25,6 +25,8 @@ add_executable(Game
     src/physics/physicsBodyCreationSystem.cpp
     src/physics/mouseJointSystem.cpp
     src/physics/physicsUtils.cpp
+
+    src/misc/cleanupSystem.cpp
 )
 
 target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)
@@ -40,6 +42,7 @@ target_include_directories(Game PRIVATE
     src/render
     src/events
     src/physics
+    src/misc
 )
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")

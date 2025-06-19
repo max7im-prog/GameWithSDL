@@ -17,6 +17,7 @@
 // Update
 #include "worldUpdateSystem.hpp"
 #include "physicsBodyCreationSystem.hpp"
+#include "mouseJointSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game
@@ -67,6 +68,7 @@ private:
     // Update systems
     WorldUpdateSystem worldUpdateSystem;
     // PhysicsBodyCreationSystem physicsBodyCreationSystem;
+    MouseJointSystem mouseJointSystem;
 
     // Render systems
     RenderBackgroundSystem renderBackgroundSystem ;

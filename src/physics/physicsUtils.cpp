@@ -18,31 +18,34 @@ void PhysicsUtils::cleanupPhysicsBody(entt::registry &registry, entt::entity ent
     std::vector<b2JointId> joints;
     int numJoints = b2Body_GetJointCount(body.bodyId);
     joints.resize(numJoints);
-    b2Body_GetJoints(body.bodyId,joints.data(), numJoints);
+    b2Body_GetJoints(body.bodyId, joints.data(), numJoints);
     auto v = registry.view<PhysicsJoint>();
-    for(auto ent:v){
-        auto& comp = v.get<PhysicsJoint>(ent);
-        for(auto jointId:joints){
-            if(B2_ID_EQUALS(jointId,comp.jointId)){
+    for (auto ent : v)
+    {
+        auto &comp = v.get<PhysicsJoint>(ent);
+        for (auto jointId : joints)
+        {
+            if (B2_ID_EQUALS(jointId, comp.jointId))
+            {
                 registry.remove<PhysicsJoint>(ent);
                 break;
             }
         }
     }
 
-    if(b2Body_IsValid(body.bodyId))b2DestroyBody(body.bodyId);
+    if (b2Body_IsValid(body.bodyId))
+        b2DestroyBody(body.bodyId);
 }
 
 void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity entity)
 {
     auto &world = registry.get<PhysicsWorld>(entity);
-    b2DestroyWorld(world.worldId);
 
     auto bodies = registry.view<PhysicsBody>();
     for (auto &ent : bodies)
     {
         auto &comp = bodies.get<PhysicsBody>(ent);
-        if (!b2World_IsValid(comp.worldId))
+        if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
         {
             registry.remove<PhysicsBody>(ent);
         }
@@ -52,19 +55,20 @@ void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity en
     for (auto &ent : joints)
     {
         auto &comp = joints.get<PhysicsJoint>(ent);
-        if (!b2World_IsValid(comp.worldId))
+        if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
         {
             registry.remove<PhysicsJoint>(ent);
         }
     }
 
-    
+    b2DestroyWorld(world.worldId);
 }
 
 void PhysicsUtils::cleanupPhysicsJoint(entt::registry &registry, entt::entity entity)
 {
-    auto& joint = registry.get<PhysicsJoint>(entity);
-    if(b2Joint_IsValid(joint.jointId))b2DestroyJoint(joint.jointId);
+    auto &joint = registry.get<PhysicsJoint>(entity);
+    if (b2Joint_IsValid(joint.jointId))
+        b2DestroyJoint(joint.jointId);
 }
 
 void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, const std::vector<b2Vec2> vertices, b2BodyType bodyType, float density, float friction, float restitution)
@@ -196,15 +200,28 @@ void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const en
     comp.worldId = worldId;
 }
 
+void PhysicsUtils::createEmptyPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2BodyType bodyType)
+{
+    auto bodyDef = b2DefaultBodyDef();
+    bodyDef.type = bodyType;
+    bodyDef.position = position;
+    b2BodyId bodyId = b2CreateBody(worldId, &bodyDef);
+
+    auto &comp = registry.emplace_or_replace<PhysicsBody>(entity);
+    comp.bodyId = bodyId;
+    comp.worldId = worldId;
+    comp.shapes = {};
+}
+
 void PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 worldPoint)
 {
     b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
     jointDef.base.bodyIdA = bodyAId;
     jointDef.base.bodyIdB = bodyBId;
 
-    jointDef.base.localFrameA.p = b2Body_GetLocalPoint(bodyAId,worldPoint);
+    jointDef.base.localFrameA.p = b2Body_GetLocalPoint(bodyAId, worldPoint);
     jointDef.base.localFrameA.q = b2MakeRot(0);
-    jointDef.base.localFrameB.p = b2Body_GetLocalPoint(bodyBId,worldPoint);
+    jointDef.base.localFrameB.p = b2Body_GetLocalPoint(bodyBId, worldPoint);
     jointDef.base.localFrameB.q = b2MakeRot(0);
 
     b2JointId jointId = b2CreateRevoluteJoint(worldId, &jointDef);
@@ -214,4 +231,64 @@ void PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const en
     comp.bodyBId = bodyBId;
     comp.jointId = jointId;
     comp.worldId = worldId;
+}
+
+void PhysicsUtils::createMousePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId mouseBodyId, b2BodyId targetBodyId, b2Vec2 mouseLocalPoint, b2Vec2 targetLocalPoint)
+{
+    b2MouseJointDef jointDef = b2DefaultMouseJointDef();
+    jointDef.base.bodyIdA = mouseBodyId;
+    jointDef.base.bodyIdB = targetBodyId;
+
+    jointDef.base.localFrameA.p = mouseLocalPoint;
+    jointDef.base.localFrameA.q = b2MakeRot(0);
+    jointDef.base.localFrameB.p = targetLocalPoint;
+    jointDef.base.localFrameB.q = b2MakeRot(0);
+
+    jointDef.maxForce = 1000 * b2Body_GetMass(targetBodyId);
+    jointDef.dampingRatio = 50;
+    jointDef.hertz = 1000;
+
+    b2JointId jointId = b2CreateMouseJoint(worldId, &jointDef);
+
+    auto &comp = registry.emplace_or_replace<PhysicsJoint>(entity);
+    comp.bodyAId = mouseBodyId;
+    comp.bodyBId = targetBodyId;
+    comp.jointId = jointId;
+    comp.worldId = worldId;
+}
+
+std::vector<b2ShapeId> PhysicsUtils::getShapeAtPosition(b2WorldId worldId, b2Vec2 position)
+{
+    std::vector<b2ShapeId> potential = {};
+    std::vector<b2ShapeId> ret = {};
+
+    b2ShapeProxy proxy;
+    proxy.count = 1;
+    proxy.points[0] = position;
+    proxy.radius = 0;
+
+    const float epsilon = 0.001f;
+    b2AABB aabb;
+    aabb.lowerBound = {position.x - epsilon, position.y - epsilon};
+    aabb.upperBound = {position.x + epsilon, position.y + epsilon};
+
+    // TODO: find a proper way to initialize
+    b2QueryFilter filter;
+    filter.maskBits = 1|2|4|8|16|32;
+
+    b2World_OverlapAABB(worldId, aabb, filter, &PhysicsUtils::pointOverlapCallbackFunction, &potential);
+
+    for(auto sh:potential){
+        if(b2Shape_TestPoint(sh,position)){
+            ret.push_back(sh);
+        }
+    }
+    return ret;
+}
+
+bool PhysicsUtils::pointOverlapCallbackFunction(b2ShapeId shapeId, void *context)
+{
+    std::vector<b2ShapeId> *shapes = static_cast<std::vector<b2ShapeId> *>(context);
+    shapes->push_back(shapeId);
+    return true;
 }
