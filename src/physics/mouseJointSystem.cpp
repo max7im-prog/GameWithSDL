@@ -68,6 +68,9 @@ void MouseJointSystem::update(entt::registry &registry, const RenderContext &ren
         b2Transform t = b2Body_GetTransform(bodyId);
         t.p = {meters.first, meters.second};
         b2Body_SetTransform(bodyId, t.p, t.q);
+
+        b2BodyId targetBody = registry.get<PhysicsJoint>(this->mouseJoint).bodyBId;
+        b2Body_SetAwake(targetBody,true);
     }
 
     if (!foundWorld || !foundPress)
@@ -105,6 +108,8 @@ void MouseJointSystem::update(entt::registry &registry, const RenderContext &ren
                 1000);
             jointExists = true;
             std::cout << "created mouse joint and body" << std::endl;
+            std::cout << "body is active: " << b2Body_IsAwake(bodyB)<< std::endl;
+            
 
             DebugUtils::debugPrintRegistry(registry);
         }
