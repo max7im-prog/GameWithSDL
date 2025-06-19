@@ -167,13 +167,13 @@ void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt
 void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<float> length, bool isSpring, float freq, float damping)
 {
     b2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
-    jointDef.base.bodyIdA = bodyAId;
-    jointDef.base.bodyIdB = bodyBId;
+    jointDef.bodyIdA = bodyAId;
+    jointDef.bodyIdB = bodyBId;
 
-    jointDef.base.localFrameA.p = localPointA;
-    jointDef.base.localFrameA.q = b2MakeRot(0);
-    jointDef.base.localFrameB.p = localPointB;
-    jointDef.base.localFrameB.q = b2MakeRot(0);
+    jointDef.localAnchorA = localPointA;
+    // jointDef.base.localFrameA.q = b2MakeRot(0);
+    jointDef.localAnchorB= localPointB;
+    // jointDef.base.localFrameB.q = b2MakeRot(0);
 
     if (isSpring)
     {
@@ -221,13 +221,13 @@ void PhysicsUtils::createEmptyPhysicsBody(entt::registry &registry, const entt::
 void PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 worldPoint)
 {
     b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
-    jointDef.base.bodyIdA = bodyAId;
-    jointDef.base.bodyIdB = bodyBId;
+    jointDef.bodyIdA = bodyAId;
+    jointDef.bodyIdB = bodyBId;
 
-    jointDef.base.localFrameA.p = b2Body_GetLocalPoint(bodyAId, worldPoint);
-    jointDef.base.localFrameA.q = b2MakeRot(0);
-    jointDef.base.localFrameB.p = b2Body_GetLocalPoint(bodyBId, worldPoint);
-    jointDef.base.localFrameB.q = b2MakeRot(0);
+    jointDef.localAnchorA = b2Body_GetLocalPoint(bodyAId, worldPoint);
+    
+    jointDef.localAnchorB = b2Body_GetLocalPoint(bodyBId, worldPoint);
+    
 
     b2JointId jointId = b2CreateRevoluteJoint(worldId, &jointDef);
 
@@ -240,26 +240,27 @@ void PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const en
 
 void PhysicsUtils::createMousePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId mouseBodyId, b2BodyId targetBodyId, b2Vec2 mouseLocalPoint, b2Vec2 targetLocalPoint)
 {
-    b2MouseJointDef jointDef = b2DefaultMouseJointDef();
-    jointDef.base.bodyIdA = mouseBodyId;
-    jointDef.base.bodyIdB = targetBodyId;
+    // b2MouseJointDef jointDef = b2DefaultMouseJointDef();
+    // jointDef.bodyIdA = mouseBodyId;
+    // jointDef.bodyIdB = targetBodyId;
+    
 
-    jointDef.base.localFrameA.p = mouseLocalPoint;
-    jointDef.base.localFrameA.q = b2MakeRot(0);
-    jointDef.base.localFrameB.p = targetLocalPoint;
-    jointDef.base.localFrameB.q = b2MakeRot(0);
+    // jointDef. = mouseLocalPoint;
+    // jointDef.base.localFrameA.q = b2MakeRot(0);
+    // jointDef.base.localFrameB.p = targetLocalPoint;
+    // jointDef.base.localFrameB.q = b2MakeRot(0);
 
-    jointDef.maxForce = 1000 * b2Body_GetMass(targetBodyId) + 1000;
-    jointDef.dampingRatio = 50;
-    jointDef.hertz = 1000;
+    // jointDef.maxForce = 1000 * b2Body_GetMass(targetBodyId) + 1000;
+    // jointDef.dampingRatio = 50;
+    // jointDef.hertz = 1000;
 
-    b2JointId jointId = b2CreateMouseJoint(worldId, &jointDef);
+    // b2JointId jointId = b2CreateMouseJoint(worldId, &jointDef);
 
-    auto &comp = registry.emplace_or_replace<PhysicsJoint>(entity);
-    comp.bodyAId = mouseBodyId;
-    comp.bodyBId = targetBodyId;
-    comp.jointId = jointId;
-    comp.worldId = worldId;
+    // auto &comp = registry.emplace_or_replace<PhysicsJoint>(entity);
+    // comp.bodyAId = mouseBodyId;
+    // comp.bodyBId = targetBodyId;
+    // comp.jointId = jointId;
+    // comp.worldId = worldId;
 }
 
 std::vector<b2ShapeId> PhysicsUtils::getShapeAtPosition(b2WorldId worldId, b2Vec2 position)

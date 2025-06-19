@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(GameWithSDL VERSION 0.1.0 LANGUAGES C CXX)
 
-add_subdirectory(external/box2d)
-add_subdirectory(external/SDL)
-add_subdirectory(external/entt)
+add_subdirectory(external/box2d-3.1.1)
+add_subdirectory(external/SDL-release-3.2.16)
+add_subdirectory(external/entt-3.15.0)
 
 add_executable(Game
     src/main.cpp
@@ -34,9 +34,9 @@ add_executable(Game
 target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)
 
 target_include_directories(Game PRIVATE
-    external/box2d/include
-    external/SDL/include
-    external/entt/single_include
+    external/box2d-3.1.1/include
+    external/SDL-release-3.2.16/include
+    external/entt-3.15.0/single_include
 )
 
 target_include_directories(Game PRIVATE

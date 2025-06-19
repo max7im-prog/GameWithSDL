@@ -157,8 +157,8 @@ bool RenderUtils::renderJoint(b2JointId jointId, const RenderContext &context)
     b2JointType type = b2Joint_GetType(jointId);
     b2BodyId bodyAId = b2Joint_GetBodyA(jointId);
     b2BodyId bodyBId = b2Joint_GetBodyB(jointId);
-    b2Vec2 localPointA = b2Joint_GetLocalFrameA(jointId).p;
-    b2Vec2 localPointB = b2Joint_GetLocalFrameB(jointId).p;
+    b2Vec2 localPointA = b2Joint_GetLocalAnchorA(jointId);
+    b2Vec2 localPointB = b2Joint_GetLocalAnchorB(jointId);
     b2Vec2 worldPointA = b2Body_GetWorldPoint(bodyAId, localPointA);
     b2Vec2 worldPointB = b2Body_GetWorldPoint(bodyBId, localPointB);
 
