@@ -10,6 +10,7 @@ namespace PhysicsUtils
 {
     void cleanupPhysicsBody(entt::registry &registry, entt::entity entity);
     void cleanupPhysicsWorld(entt::registry &registry, entt::entity entity);
+    void cleanupPhysicsJoint(entt::registry &registry, entt::entity entity);
 
     void createPolygonPhysicsBody(entt::registry &registry,
                                    const entt::entity &entity,

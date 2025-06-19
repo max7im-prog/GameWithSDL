@@ -8,12 +8,29 @@
 
 void PhysicsUtils::cleanupPhysicsBody(entt::registry &registry, entt::entity entity)
 {
-    auto &physics = registry.get<PhysicsBody>(entity);
-    for (b2ShapeId shape : physics.shapes)
+    auto &body = registry.get<PhysicsBody>(entity);
+    for (b2ShapeId shape : body.shapes)
     {
         b2DestroyShape(shape, false);
     }
-    b2DestroyBody(physics.bodyId);
+
+    // Remove all joints connected to this body from the registry
+    std::vector<b2JointId> joints;
+    int numJoints = b2Body_GetJointCount(body.bodyId);
+    joints.resize(numJoints);
+    b2Body_GetJoints(body.bodyId,joints.data(), numJoints);
+    auto v = registry.view<PhysicsJoint>();
+    for(auto ent:v){
+        auto& comp = v.get<PhysicsJoint>(ent);
+        for(auto jointId:joints){
+            if(B2_ID_EQUALS(jointId,comp.jointId)){
+                registry.remove<PhysicsJoint>(ent);
+                break;
+            }
+        }
+    }
+
+    if(b2Body_IsValid(body.bodyId))b2DestroyBody(body.bodyId);
 }
 
 void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity entity)
@@ -21,15 +38,33 @@ void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity en
     auto &world = registry.get<PhysicsWorld>(entity);
     b2DestroyWorld(world.worldId);
 
-    auto v = registry.view<PhysicsBody>();
-    for (auto &ent : v)
+    auto bodies = registry.view<PhysicsBody>();
+    for (auto &ent : bodies)
     {
-        auto &comp = v.get<PhysicsBody>(ent);
+        auto &comp = bodies.get<PhysicsBody>(ent);
         if (!b2World_IsValid(comp.worldId))
         {
             registry.remove<PhysicsBody>(ent);
         }
     }
+
+    auto joints = registry.view<PhysicsJoint>();
+    for (auto &ent : joints)
+    {
+        auto &comp = joints.get<PhysicsJoint>(ent);
+        if (!b2World_IsValid(comp.worldId))
+        {
+            registry.remove<PhysicsJoint>(ent);
+        }
+    }
+
+    
+}
+
+void PhysicsUtils::cleanupPhysicsJoint(entt::registry &registry, entt::entity entity)
+{
+    auto& joint = registry.get<PhysicsJoint>(entity);
+    if(b2Joint_IsValid(joint.jointId))b2DestroyJoint(joint.jointId);
 }
 
 void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, const std::vector<b2Vec2> vertices, b2BodyType bodyType, float density, float friction, float restitution)

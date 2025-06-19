@@ -23,6 +23,7 @@ add_executable(Game
     src/physics/physicsComponents.hpp
     src/physics/worldUpdateSystem.cpp
     src/physics/physicsBodyCreationSystem.cpp
+    src/physics/mouseJointSystem.cpp
     src/physics/physicsUtils.cpp
 )
 

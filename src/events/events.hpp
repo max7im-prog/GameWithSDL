@@ -14,4 +14,5 @@ struct KeyPress {
 struct ButtonPress {
     uint8_t button;   // SDL button code, e.g. SDL_BUTTON_LEFT, SDL_BUTTON_RIGHT
     bool pressed;     // true if pressed, false if released
+    std::pair<float,float> location; // {x,y}
 };

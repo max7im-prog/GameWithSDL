@@ -51,6 +51,7 @@ bool Game::init()
 
     this->registry.on_destroy<PhysicsBody>().connect<&PhysicsUtils::cleanupPhysicsBody>();
     this->registry.on_destroy<PhysicsWorld>().connect<&PhysicsUtils::cleanupPhysicsWorld>();
+    this->registry.on_destroy<PhysicsJoint>().connect<&PhysicsUtils::cleanupPhysicsJoint>();
 
     // TODO: remove temp testing code
 
