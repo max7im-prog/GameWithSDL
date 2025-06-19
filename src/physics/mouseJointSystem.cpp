@@ -125,6 +125,8 @@ void MouseJointSystem::update(entt::registry &registry, const RenderContext &ren
                 jointExists = false;
                 std::cout << "removed mouse joint and body" << std::endl;
             }
+
+            DebugUtils::debugPrintRegistry(registry);
         }
     }
 }

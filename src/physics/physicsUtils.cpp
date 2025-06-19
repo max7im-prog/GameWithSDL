@@ -14,24 +14,24 @@ void PhysicsUtils::cleanupPhysicsBody(entt::registry &registry, entt::entity ent
         b2DestroyShape(shape, false);
     }
 
-    // Remove all joints connected to this body from the registry
-    std::vector<b2JointId> joints;
-    int numJoints = b2Body_GetJointCount(body.bodyId);
-    joints.resize(numJoints);
-    b2Body_GetJoints(body.bodyId, joints.data(), numJoints);
-    auto v = registry.view<PhysicsJoint>();
-    for (auto ent : v)
-    {
-        auto &comp = v.get<PhysicsJoint>(ent);
-        for (auto jointId : joints)
-        {
-            if (B2_ID_EQUALS(jointId, comp.jointId))
-            {
-                registry.remove<PhysicsJoint>(ent);
-                break;
-            }
-        }
-    }
+    // // Remove all joints connected to this body from the registry
+    // std::vector<b2JointId> joints;
+    // int numJoints = b2Body_GetJointCount(body.bodyId);
+    // joints.resize(numJoints);
+    // b2Body_GetJoints(body.bodyId, joints.data(), numJoints);
+    // auto v = registry.view<PhysicsJoint>();
+    // for (auto ent : v)
+    // {
+    //     auto &comp = v.get<PhysicsJoint>(ent);
+    //     for (auto jointId : joints)
+    //     {
+    //         if (B2_ID_EQUALS(jointId, comp.jointId))
+    //         {
+    //             registry.remove<PhysicsJoint>(ent);
+    //             break;
+    //         }
+    //     }
+    // }
 
     if (b2Body_IsValid(body.bodyId))
         b2DestroyBody(body.bodyId);
@@ -41,25 +41,25 @@ void PhysicsUtils::cleanupPhysicsWorld(entt::registry &registry, entt::entity en
 {
     auto &world = registry.get<PhysicsWorld>(entity);
 
-    auto bodies = registry.view<PhysicsBody>();
-    for (auto ent : bodies)
-    {
-        auto &comp = bodies.get<PhysicsBody>(ent);
-        if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
-        {
-            registry.remove<PhysicsBody>(ent);
-        }
-    }
+    // auto bodies = registry.view<PhysicsBody>();
+    // for (auto ent : bodies)
+    // {
+    //     auto &comp = bodies.get<PhysicsBody>(ent);
+    //     if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
+    //     {
+    //         registry.remove<PhysicsBody>(ent);
+    //     }
+    // }
 
-    auto joints = registry.view<PhysicsJoint>();
-    for (auto &ent : joints)
-    {
-        auto &comp = joints.get<PhysicsJoint>(ent);
-        if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
-        {
-            registry.remove<PhysicsJoint>(ent);
-        }
-    }
+    // auto joints = registry.view<PhysicsJoint>();
+    // for (auto &ent : joints)
+    // {
+    //     auto &comp = joints.get<PhysicsJoint>(ent);
+    //     if (comp.worldId.index1 == world.worldId.index1 && comp.worldId.generation == world.worldId.generation)
+    //     {
+    //         registry.remove<PhysicsJoint>(ent);
+    //     }
+    // }
 
     if (b2World_IsValid(world.worldId))
         b2DestroyWorld(world.worldId);
