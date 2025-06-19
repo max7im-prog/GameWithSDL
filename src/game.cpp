@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <SDL3/SDL.h>
+#include <box2d/box2d.h>
 
 #include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
@@ -76,6 +77,7 @@ bool Game::init()
          worldComp.worldId, 
          (b2Vec2){50.0f, 50.0f},
          {{0,0},{0,10}, {10,10}, {13,0}});
+    b2BodyId b4 = this->registry.get<PhysicsBody>(ent).bodyId;
 
     ent = this->registry.create();
     PhysicsUtils::createPolygonPhysicsBody(registry,
@@ -83,6 +85,7 @@ bool Game::init()
          worldComp.worldId, 
          (b2Vec2){30.0f, 50.0f},
          {{0,8},{0,10}, {10,19}, {10,0}});
+    b2BodyId b3 = this->registry.get<PhysicsBody>(ent).bodyId;
 
     ent = this->registry.create();
     PhysicsUtils::createPolygonPhysicsBody(registry,
@@ -99,6 +102,7 @@ bool Game::init()
          (b2Vec2){10.0f, 10.0f},
          {{0,0},{0,10}, {100,10}, {100,0}},
         b2_staticBody); 
+    
 
     ent = this->registry.create();
     PhysicsUtils::createPolygonPhysicsBody(registry,
@@ -158,6 +162,14 @@ bool Game::init()
         true,
         30,
         0.5
+    );
+
+    ent = this->registry.create();
+    PhysicsUtils::createRevolutePhysicsJoint(registry,
+        ent,worldComp.worldId,
+        b3,
+        b4,
+        b2Body_GetWorldPoint(b3,{20,20})
     );
 
 

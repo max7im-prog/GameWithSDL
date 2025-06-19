@@ -67,4 +67,12 @@ namespace PhysicsUtils
                                    float freq = 0.0f,
                                    float damping = 1.0f
                                 );
+    
+    void createRevolutePhysicsJoint(entt::registry &registry,
+                                   const entt::entity &entity,
+                                   b2WorldId worldId,
+                                   b2BodyId bodyAId,
+                                   b2BodyId bodyBId,
+                                   b2Vec2 worldPoint
+                                );
 };
