@@ -107,11 +107,10 @@ void MouseJointSystem::update(entt::registry &registry, const RenderContext &ren
                 50,
                 1000);
             jointExists = true;
-            std::cout << "created mouse joint and body" << std::endl;
-            std::cout << "body is active: " << b2Body_IsAwake(bodyB)<< std::endl;
-            
 
-            DebugUtils::debugPrintRegistry(registry);
+            // std::cout << "created mouse joint and body" << std::endl;
+            // std::cout << "body is active: " << b2Body_IsAwake(bodyB)<< std::endl;
+            // DebugUtils::debugPrintRegistry(registry);
         }
     }
 
@@ -128,10 +127,10 @@ void MouseJointSystem::update(entt::registry &registry, const RenderContext &ren
                 registry.remove<PhysicsBody>(this->mouseBody);
 
                 jointExists = false;
-                std::cout << "removed mouse joint and body" << std::endl;
+                // std::cout << "removed mouse joint and body" << std::endl;
             }
 
-            DebugUtils::debugPrintRegistry(registry);
+            // DebugUtils::debugPrintRegistry(registry);
         }
     }
 }
