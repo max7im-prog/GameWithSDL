@@ -11,7 +11,8 @@ void PhysicsUtils::cleanupPhysicsBody(entt::registry &registry, entt::entity ent
     auto &body = registry.get<PhysicsBody>(entity);
     for (b2ShapeId shape : body.shapes)
     {
-        b2DestroyShape(shape, false);
+        if(b2Shape_IsValid(shape))
+            b2DestroyShape(shape, false);
     }
 
     // // Remove all joints connected to this body from the registry
@@ -290,6 +291,19 @@ std::vector<b2ShapeId> PhysicsUtils::getShapeAtPosition(b2WorldId worldId, b2Vec
             ret.push_back(sh);
         }
     }
+    return ret;
+}
+
+b2BodyId PhysicsUtils::getBodyId(entt::registry &registry, entt::entity ent)
+{
+    b2BodyId ret = b2_nullBodyId;
+
+    if (registry.all_of<PhysicsBody>(ent))
+    {
+        auto &phBody = registry.get<PhysicsBody>(ent);
+        ret = phBody.bodyId;
+    }
+
     return ret;
 }
 

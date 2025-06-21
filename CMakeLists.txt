@@ -26,6 +26,9 @@ add_executable(Game
     src/physics/mouseJointSystem.cpp
     src/physics/physicsUtils.cpp
 
+    src/creature/baseCreature.cpp
+    src/creature/humanoid.cpp
+
     src/debug/debugUtils.cpp
 
     src/misc/cleanupSystem.cpp
@@ -46,6 +49,7 @@ target_include_directories(Game PRIVATE
     src/physics
     src/misc
     src/debug
+    src/creature
 )
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")

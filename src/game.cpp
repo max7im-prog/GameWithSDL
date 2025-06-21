@@ -7,6 +7,9 @@
 
 #include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
+#include "creatureComponents.hpp"
+
+#include "humanoid.hpp"
 
 Game::Game(int w, int h, int fps): WIDTH(w), HEIGHT(h), FPS(fps), running(false)
 {
@@ -68,36 +71,36 @@ bool Game::init()
     // some shapes
     entt::entity ent;
 
-    ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){70.0f, 50.0f},
-         {{0,0},{0,10}, {10,10}, {10,0}});
+    // ent = this->registry.create();
+    // PhysicsUtils::createPolygonPhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){70.0f, 50.0f},
+    //      {{0,0},{0,10}, {10,10}, {10,0}});
 
-    ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){50.0f, 50.0f},
-         {{0,0},{0,10}, {10,10}, {13,0}});
-    b2BodyId b4 = this->registry.get<PhysicsBody>(ent).bodyId;
+    // ent = this->registry.create();
+    // PhysicsUtils::createPolygonPhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){50.0f, 50.0f},
+    //      {{0,0},{0,10}, {10,10}, {13,0}});
+    // b2BodyId b4 = this->registry.get<PhysicsBody>(ent).bodyId;
 
-    ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){30.0f, 50.0f},
-         {{0,8},{0,10}, {10,19}, {10,0}});
-    b2BodyId b3 = this->registry.get<PhysicsBody>(ent).bodyId;
+    // ent = this->registry.create();
+    // PhysicsUtils::createPolygonPhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){30.0f, 50.0f},
+    //      {{0,8},{0,10}, {10,19}, {10,0}});
+    // b2BodyId b3 = this->registry.get<PhysicsBody>(ent).bodyId;
 
-    ent = this->registry.create();
-    PhysicsUtils::createPolygonPhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){55.0f, 100.0f},
-         {{0,8},{0,10}, {10,19}, {10,0}});
-    b2BodyId b2 = this->registry.get<PhysicsBody>(ent).bodyId;
+    // ent = this->registry.create();
+    // PhysicsUtils::createPolygonPhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){55.0f, 100.0f},
+    //      {{0,8},{0,10}, {10,19}, {10,0}});
+    // b2BodyId b2 = this->registry.get<PhysicsBody>(ent).bodyId;
     
     ent = this->registry.create();
     PhysicsUtils::createPolygonPhysicsBody(registry,
@@ -125,56 +128,62 @@ bool Game::init()
          {{100,0},{100,100}, {110,100}, {110,0}},
         b2_staticBody); 
 
+
     ent = this->registry.create();
-    PhysicsUtils::createCirclePhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){45.0f, 80.0f},
-         {0,0},
-         10); 
-    b2BodyId b1 = this->registry.get<PhysicsBody>(ent).bodyId;
+    auto& h = this->registry.emplace_or_replace<Creature>(ent);
+    Humanoid *human = new Humanoid(this->registry,ent,worldComp.worldId,{50,50},20,20);
+    h.creature = std::unique_ptr<Humanoid>(human);
+
+    // ent = this->registry.create();
+    // PhysicsUtils::createCirclePhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){45.0f, 80.0f},
+    //      {0,0},
+    //      10); 
+    // b2BodyId b1 = this->registry.get<PhysicsBody>(ent).bodyId;
     
-    ent = this->registry.create();
-    PhysicsUtils::createSegmentPhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){70.0f, 57.0f},
-         {20,-10},
-         {10,10}); 
+    // ent = this->registry.create();
+    // PhysicsUtils::createSegmentPhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){70.0f, 57.0f},
+    //      {20,-10},
+    //      {10,10}); 
     
     
-    ent = this->registry.create();
-    PhysicsUtils::createCapsulePhysicsBody(registry,
-         ent, 
-         worldComp.worldId, 
-         (b2Vec2){35.0f, 200.0f},
-         {-40,-10},
-         {10,10},
-        10); 
+    // ent = this->registry.create();
+    // PhysicsUtils::createCapsulePhysicsBody(registry,
+    //      ent, 
+    //      worldComp.worldId, 
+    //      (b2Vec2){35.0f, 200.0f},
+    //      {-40,-10},
+    //      {10,10},
+    //     10); 
     
 
     // some joints 
-    ent = this->registry.create();
-    PhysicsUtils::createDistancePhysicsJoint(registry,
-        ent,
-        worldComp.worldId,
-        b1,
-        b2,
-        {0,0},
-        {10,10},
-        std::nullopt,
-        true,
-        30,
-        0.5
-    );
+    // ent = this->registry.create();
+    // PhysicsUtils::createDistancePhysicsJoint(registry,
+    //     ent,
+    //     worldComp.worldId,
+    //     b1,
+    //     b2,
+    //     {0,0},
+    //     {10,10},
+    //     std::nullopt,
+    //     true,
+    //     30,
+    //     0.5
+    // );
 
-    ent = this->registry.create();
-    PhysicsUtils::createRevolutePhysicsJoint(registry,
-        ent,worldComp.worldId,
-        b3,
-        b4,
-        b2Body_GetWorldPoint(b3,{20,20})
-    );
+    // ent = this->registry.create();
+    // PhysicsUtils::createRevolutePhysicsJoint(registry,
+    //     ent,worldComp.worldId,
+    //     b3,
+    //     b4,
+    //     b2Body_GetWorldPoint(b3,{20,20})
+    // );
 
 
     return true;
@@ -182,6 +191,7 @@ bool Game::init()
 
 void Game::clean()
 {
+    this->registry.clear();
     SDL_DestroyRenderer(this->renderContext.renderer);
     SDL_DestroyWindow(this->renderContext.window);
 }
