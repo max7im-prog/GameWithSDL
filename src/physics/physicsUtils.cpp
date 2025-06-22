@@ -307,6 +307,18 @@ b2BodyId PhysicsUtils::getBodyId(entt::registry &registry, entt::entity ent)
     return ret;
 }
 
+int PhysicsUtils::getNextNegativeId()
+{
+    static int ret = -1;
+    return ret--;
+}
+
+int PhysicsUtils::getNextPositiveId()
+{
+    static int ret = 1;
+    return ret++;
+}
+
 bool PhysicsUtils::pointOverlapCallbackFunction(b2ShapeId shapeId, void *context)
 {
     std::vector<b2ShapeId> *shapes = static_cast<std::vector<b2ShapeId> *>(context);

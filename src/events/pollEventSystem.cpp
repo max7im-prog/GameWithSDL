@@ -40,11 +40,11 @@ void PollEventSystem::update(entt::registry &registry)
             auto &kp = registry.emplace<KeyPress>(ent);
             kp.key = event.key.key; // SDL_Keycode
             kp.pressed = (event.type == SDL_EVENT_KEY_DOWN);
-            if(kp.pressed){
-                std::cout <<"Pressed key " <<kp.key << std::endl; 
-            }else{
-                std::cout <<"Released key " <<kp.key << std::endl; 
-            }
+            // if(kp.pressed){
+            //     std::cout <<"Pressed key " <<kp.key << std::endl; 
+            // }else{
+            //     std::cout <<"Released key " <<kp.key << std::endl; 
+            // }
         }
         else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN || event.type == SDL_EVENT_MOUSE_BUTTON_UP)
         {
@@ -56,11 +56,11 @@ void PollEventSystem::update(entt::registry &registry)
             bp.pressed = (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN);
             bp.location = {event.button.x,event.button.y};
 
-            if(bp.pressed){
-                std::cout <<"Pressed button " <<bp.button << " at {" <<bp.location.first <<","<<bp.location.second <<"}"  << std::endl; 
-            }else{
-                std::cout <<"Released button " <<bp.button << " at {" <<bp.location.first <<","<<bp.location.second <<"}"<< std::endl; 
-            }
+            // if(bp.pressed){
+            //     std::cout <<"Pressed button " <<bp.button << " at {" <<bp.location.first <<","<<bp.location.second <<"}"  << std::endl; 
+            // }else{
+            //     std::cout <<"Released button " <<bp.button << " at {" <<bp.location.first <<","<<bp.location.second <<"}"<< std::endl; 
+            // }
         }
     }
 }

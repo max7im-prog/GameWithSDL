@@ -5,7 +5,7 @@
 class BaseCreature
 {
 public:
-    BaseCreature(entt::registry &registry, entt::entity self, b2WorldId worldId, b2Vec2 position);
+    BaseCreature(entt::registry &registry, entt::entity self, b2WorldId worldId, b2Vec2 position, int groupId);
     virtual ~BaseCreature();
 
     virtual void move(b2Vec2 direction);
@@ -18,11 +18,16 @@ public:
 protected:
     b2WorldId worldId;
     b2Vec2 position;
+    const int groupId;
 
     entt::entity self;
     entt::registry &registry;
     std::vector<entt::entity> bodies;
     std::vector<entt::entity> joints;
 
+    // Creates an entity in registry and registres it in bodies. Does NOT attach a PhysicsBody to an entity
+    entt::entity createBodyEntity();
+
+    // Creates a new revolute joint in a registry and 
     bool connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint);
 };

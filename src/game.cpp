@@ -130,9 +130,20 @@ bool Game::init()
 
 
     ent = this->registry.create();
-    auto& h = this->registry.emplace_or_replace<Creature>(ent);
-    Humanoid *human = new Humanoid(this->registry,ent,worldComp.worldId,{50,50},20,20);
-    h.creature = std::unique_ptr<Humanoid>(human);
+    auto& h1 = this->registry.emplace_or_replace<Creature>(ent);
+    h1.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,ent,worldComp.worldId,{50,50},20,20));
+
+    ent = this->registry.create();
+    auto& h2 = this->registry.emplace_or_replace<Creature>(ent);
+    h2.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,ent,worldComp.worldId,{30,50},20,20));
+
+    ent = this->registry.create();
+    auto& h3 = this->registry.emplace_or_replace<Creature>(ent);
+    h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,ent,worldComp.worldId,{70,50},20,20));
+
+    ent = this->registry.create();
+    auto& h4 = this->registry.emplace_or_replace<Creature>(ent);
+    h4.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,ent,worldComp.worldId,{50,70},20,20));
 
     // ent = this->registry.create();
     // PhysicsUtils::createCirclePhysicsBody(registry,

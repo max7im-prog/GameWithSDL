@@ -93,6 +93,12 @@ public:
 
    static b2BodyId getBodyId(entt::registry &registry,entt::entity ent);
 
+   // Used to get a unique identifier for a group with disabled collision
+   static int getNextNegativeId();
+
+   // Used to get a unique identifier for a group with enabled collision
+   static int getNextPositiveId();
+
 private:
    // Used in getShapeAtPosition to get a callback from a b2World_OverlapAABB. Context should be a pointer to std::vector<b2ShapeId>
    static bool pointOverlapCallbackFunction(b2ShapeId shapeId, void *context);

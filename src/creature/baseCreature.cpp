@@ -2,7 +2,7 @@
 #include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
 
-BaseCreature::BaseCreature(entt::registry &registry, entt::entity self,b2WorldId worldId, b2Vec2 position):registry(registry), self(self),worldId(worldId),position(position)
+BaseCreature::BaseCreature(entt::registry &registry, entt::entity self,b2WorldId worldId, b2Vec2 position, int groupId):registry(registry), self(self),worldId(worldId),position(position),groupId(groupId)
 {
 }
 
@@ -25,6 +25,13 @@ void BaseCreature::move(b2Vec2 direction)
 
 void BaseCreature::jump()
 {
+}
+
+entt::entity BaseCreature::createBodyEntity()
+{
+    entt::entity ret = this->registry.create();
+    this->bodies.push_back(ret);
+    return ret;
 }
 
 bool BaseCreature::connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint)
