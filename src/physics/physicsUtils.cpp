@@ -222,6 +222,44 @@ void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const en
     comp.worldId = worldId;
 }
 
+void PhysicsUtils::createPrismaticPhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<b2Vec2> moveAxisA, bool isSpring, float freq, float damping)
+{
+    // FIXME: make work properly
+
+    b2PrismaticJointDef jointDef = b2DefaultPrismaticJointDef();
+    jointDef.bodyIdA = bodyAId;
+    jointDef.bodyIdB = bodyBId;
+
+    jointDef.localAnchorA = localPointA;
+    // jointDef.base.localFrameA.q = b2MakeRot(0);
+    jointDef.localAnchorB = localPointB;
+    // jointDef.base.localFrameB.q = b2MakeRot(0);
+
+    if (isSpring)
+    {
+        jointDef.enableSpring = true;
+        jointDef.hertz = freq;
+        jointDef.dampingRatio = damping;
+    }
+
+    if (moveAxisA.has_value())
+    {
+        jointDef.localAxisA = moveAxisA.value();
+    }
+    else
+    {
+        jointDef.localAxisA = b2Sub(b2Body_GetWorldPoint(bodyAId,localPointA),b2Body_GetWorldPoint(bodyBId,localPointB));
+    }
+
+    b2JointId jointId = b2CreatePrismaticJoint(worldId, &jointDef);
+
+    auto &comp = registry.emplace_or_replace<PhysicsJoint>(entity);
+    comp.bodyAId = bodyAId;
+    comp.bodyBId = bodyBId;
+    comp.jointId = jointId;
+    comp.worldId = worldId;
+}
+
 void PhysicsUtils::createEmptyPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2BodyType bodyType)
 {
     auto bodyDef = b2DefaultBodyDef();
@@ -323,6 +361,18 @@ b2BodyId PhysicsUtils::getBodyId(entt::registry &registry, entt::entity ent)
     return ret;
 }
 
+b2JointId PhysicsUtils::getJointId(entt::registry &registry, entt::entity ent)
+{
+    b2JointId ret = b2_nullJointId;
+
+    if (registry.all_of<PhysicsJoint>(ent))
+    {
+        auto &phJoint = registry.get<PhysicsJoint>(ent);
+        ret = phJoint.jointId;
+    }
+    return ret;
+}
+
 int PhysicsUtils::getNextNegativeId()
 {
     static int ret = -1;
@@ -340,4 +390,13 @@ bool PhysicsUtils::pointOverlapCallbackFunction(b2ShapeId shapeId, void *context
     std::vector<b2ShapeId> *shapes = static_cast<std::vector<b2ShapeId> *>(context);
     shapes->push_back(shapeId);
     return true;
+}
+
+
+void PhysicsUtils::applyTorguePD(b2BodyId bodyId, float targetAngle, float kp, float kd)
+{
+    float curAngle = b2Rot_GetAngle(b2Body_GetTransform(bodyId).q);
+    float error = targetAngle - curAngle;
+    float torgue = kp * error - kd * b2Body_GetAngularVelocity(bodyId);
+    b2Body_ApplyTorque(bodyId,torgue,true);
 }

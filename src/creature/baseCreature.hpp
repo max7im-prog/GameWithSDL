@@ -13,12 +13,13 @@ public:
     virtual void aim(b2Vec2 direction) = 0;
     virtual void attack() = 0;
     virtual void defend() = 0;
-    virtual void update() = 0;
+    virtual void update(int FPS) = 0;
 
 protected:
     b2WorldId worldId;
     b2Vec2 position;
     const int groupId;
+    float weightKg;
 
     entt::entity self;
     entt::registry &registry;
@@ -29,5 +30,10 @@ protected:
     entt::entity createBodyEntity();
 
     // Creates a new revolute joint in a registry and 
-    bool connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint);
+    b2JointId connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint);
+
+    b2JointId connectPrismatic(entt::entity first, entt::entity second, b2Vec2 worldPointFirst, b2Vec2 worldPointSecond);
+
+    // Sets the weightKg value to be the sum of all weights of bodies in this->bodies
+    void updateWeight();
 };

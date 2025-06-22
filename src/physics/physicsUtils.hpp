@@ -72,6 +72,18 @@ public:
                                           bool isSpring = false,
                                           float freq = 0.0f,
                                           float damping = 1.0f);
+                                    
+   static void createPrismaticPhysicsJoint(entt::registry &registry,
+                                          const entt::entity &entity,
+                                          b2WorldId worldId,
+                                          b2BodyId bodyAId,
+                                          b2BodyId bodyBId,
+                                          b2Vec2 localPointA,
+                                          b2Vec2 localPointB,
+                                          std::optional<b2Vec2> moveAxisA = std::nullopt,
+                                          bool isSpring = false,
+                                          float freq = 0.0f,
+                                          float damping = 1.0f);
 
    static void createEmptyPhysicsBody(entt::registry &registry,
                                       const entt::entity &entity,
@@ -96,12 +108,16 @@ public:
    static std::vector<b2ShapeId> getShapeAtPosition(b2WorldId worldId, b2Vec2 position);
 
    static b2BodyId getBodyId(entt::registry &registry,entt::entity ent);
+   static b2JointId getJointId(entt::registry &registry,entt::entity ent);
 
    // Used to get a unique identifier for a group with disabled collision
    static int getNextNegativeId();
 
    // Used to get a unique identifier for a group with enabled collision
    static int getNextPositiveId();
+
+   // Apply torgue with a proportional derivative control
+   static void applyTorguePD(b2BodyId bodyId, float targetAngle, float kp, float kd);
 
 private:
    // Used in getShapeAtPosition to get a callback from a b2World_OverlapAABB. Context should be a pointer to std::vector<b2ShapeId>

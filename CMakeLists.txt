@@ -28,6 +28,7 @@ add_executable(Game
 
     src/creature/baseCreature.cpp
     src/creature/humanoid.cpp
+    src/creature/creatureUpdateSystem.cpp
 
     src/debug/debugUtils.cpp
 

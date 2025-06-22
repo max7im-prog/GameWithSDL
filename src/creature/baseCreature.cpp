@@ -2,7 +2,7 @@
 #include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
 
-BaseCreature::BaseCreature(entt::registry &registry, entt::entity self,b2WorldId worldId, b2Vec2 position, int groupId):registry(registry), self(self),worldId(worldId),position(position),groupId(groupId)
+BaseCreature::BaseCreature(entt::registry &registry, entt::entity self,b2WorldId worldId, b2Vec2 position, int groupId):registry(registry), self(self),worldId(worldId),position(position),groupId(groupId), weightKg(0)
 {
 }
 
@@ -34,17 +34,45 @@ entt::entity BaseCreature::createBodyEntity()
     return ret;
 }
 
-bool BaseCreature::connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint)
+b2JointId BaseCreature::connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint)
 {
+    b2JointId ret = b2_nullJointId;
     if(!this->registry.all_of<PhysicsBody>(first) ||!this->registry.all_of<PhysicsBody>(second)){
-        return false;
+        return ret;
     }
     b2BodyId firstId = PhysicsUtils::getBodyId(this->registry,first);
     b2BodyId secondId = PhysicsUtils::getBodyId(this->registry,second);
 
     entt::entity joint = this->registry.create();
     PhysicsUtils::createRevolutePhysicsJoint(this->registry,joint,this->worldId,firstId,secondId,worldPoint);
-
     this->joints.push_back(joint);
-    return true;
+
+    return PhysicsUtils::getJointId(this->registry,joint);
+}
+
+b2JointId BaseCreature::connectPrismatic(entt::entity first, entt::entity second, b2Vec2 worldPointFirst, b2Vec2 worldPointSecond)
+{
+    b2JointId ret = b2_nullJointId;
+    if(!this->registry.all_of<PhysicsBody>(first) ||!this->registry.all_of<PhysicsBody>(second)){
+        return ret;
+    }
+    b2BodyId firstId = PhysicsUtils::getBodyId(this->registry,first);
+    b2BodyId secondId = PhysicsUtils::getBodyId(this->registry,second);
+
+    entt::entity joint = this->registry.create();
+    b2Vec2 localPointFirst = b2Body_GetLocalPoint(firstId, worldPointFirst);
+    b2Vec2 localPointSecond = b2Body_GetLocalPoint(secondId, worldPointSecond);
+    PhysicsUtils::createPrismaticPhysicsJoint(this->registry,joint,this->worldId,firstId,secondId,localPointFirst,localPointSecond,std::nullopt, true);
+    this->joints.push_back(joint);
+
+    return PhysicsUtils::getJointId(this->registry,joint);
+}
+
+void BaseCreature::updateWeight()
+{
+    float total = 0;
+    for(auto ent:this->bodies){
+        total+=b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,ent));
+    }
+    this->weightKg = total;
 }

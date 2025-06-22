@@ -23,8 +23,8 @@ Humanoid::Humanoid(entt::registry &registry,
     b2Vec2 posRightElbow = b2Add(posRightShoulder, {3.0f * measureX, 0});
     b2Vec2 posLeftPalm = b2Add(posLeftElbow, {-3.0f * measureX, 0});
     b2Vec2 posRightPalm = b2Add(posRightElbow, {3.0f * measureX, 0});
-    b2Vec2 posLeftHip = b2Add(posTorsoBase, {-1.5f, 0});
-    b2Vec2 posRightHip = b2Add(posTorsoBase, {1.5f, 0});
+    b2Vec2 posLeftHip = b2Add(posTorsoBase, {-1.5f* measureX, 0});
+    b2Vec2 posRightHip = b2Add(posTorsoBase, {1.5f* measureX, 0});
     b2Vec2 posLeftKnee = b2Add(posLeftHip, {0, -3.0f * measureY});
     b2Vec2 posRightKnee = b2Add(posRightHip, {0, -3.0f * measureY});
     b2Vec2 posLeftFoot = b2Add(posLeftKnee, {0, -3.0f * measureY});
@@ -35,8 +35,8 @@ Humanoid::Humanoid(entt::registry &registry,
     filter.groupIndex = this->groupId;
 
     // Neck and torso
-    neckHigh = createBodyEntity();
-    PhysicsUtils::createCapsulePhysicsBody(this->registry, neckHigh, worldId, posNeckBase, {0, 0}, b2Sub(posHeadBase, position), 0.5f * measure, filter);
+    neck = createBodyEntity();
+    PhysicsUtils::createCapsulePhysicsBody(this->registry, neck, worldId, posNeckBase, {0, 0}, b2Sub(posHeadBase, position), 0.5f * measure, filter);
     head = createBodyEntity();
     std::vector<b2Vec2> headShape = {{-1.0f * measureX, 0}, {-1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 0}};
     PhysicsUtils::createPolygonPhysicsBody(this->registry, head, worldId, posHeadBase, headShape, filter);
@@ -64,9 +64,15 @@ Humanoid::Humanoid(entt::registry &registry,
     PhysicsUtils::createCapsulePhysicsBody(this->registry, calfRight, worldId, posRightKnee, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
 
     // Connect limbs
-    // connectRevolute(neckLow,neckHigh,posNeckBase);
-    connectRevolute(neckHigh, head, posHeadBase);
-    connectRevolute(neckHigh, torso, posNeckBase);
+    b2JointId temp;
+    temp = connectRevolute(neck, head, posHeadBase);
+    // b2RevoluteJoint_SetLimits(temp,-0.1f,0.1f);
+    // b2RevoluteJoint_EnableLimit(temp, true);
+
+    temp = connectRevolute(neck, torso, posNeckBase);
+    b2RevoluteJoint_SetLimits(temp,-0.1f,0.1f);
+    b2RevoluteJoint_EnableLimit(temp, true);
+
     connectRevolute(torso, upperArmLeft, posLeftShoulder);
     connectRevolute(torso, upperArmRight, posRightShoulder);
     connectRevolute(torso, femurLeft, posLeftHip);
@@ -75,6 +81,8 @@ Humanoid::Humanoid(entt::registry &registry,
     connectRevolute(femurRight, calfRight, posRightKnee);
     connectRevolute(forearmLeft, upperArmLeft, posLeftElbow);
     connectRevolute(forearmRight, upperArmRight, posRightElbow);
+
+    this->updateWeight();
 }
 
 Humanoid::~Humanoid()
@@ -93,6 +101,42 @@ void Humanoid::defend()
 {
 }
 
-void Humanoid::update()
+void Humanoid::update(int FPS)
 {
+    keepTorsoUpright(FPS);
+    keepHeadUpright(FPS);
+}
+
+void Humanoid::keepTorsoUpright(int FPS)
+{
+    b2BodyId torsoId = PhysicsUtils::getBodyId(this->registry, torso);
+
+    float I = b2Body_GetRotationalInertia(torsoId); 
+    float omega_n = 4.0f;  // rad/s: responsiveness
+    float kp = I * omega_n * omega_n;
+    float kd = 2 * I * omega_n;
+    float targetAngle = 0.0f;
+    PhysicsUtils::applyTorguePD(torsoId,targetAngle,kp,kd);
+}
+
+void Humanoid::keepHeadUpright(int FPS)
+{
+    b2BodyId neckId = PhysicsUtils::getBodyId(this->registry, neck);
+
+    float I = b2Body_GetRotationalInertia(neckId); 
+    float omega_n = 8.0f;  // rad/s: responsiveness
+    float kp = I * omega_n * omega_n;
+    float kd = 2 * I * omega_n;
+    float targetAngle = 0.0f;
+    PhysicsUtils::applyTorguePD(neckId,targetAngle,kp,kd);
+
+
+    b2BodyId headId = PhysicsUtils::getBodyId(this->registry, head);
+
+    I = b2Body_GetRotationalInertia(headId); 
+    omega_n = 4.0f;  // rad/s: responsiveness
+    kp = I * omega_n * omega_n;
+    kd = 2 * I * omega_n;
+    targetAngle = 0.0f;
+    PhysicsUtils::applyTorguePD(headId,targetAngle,kp,kd);
 }

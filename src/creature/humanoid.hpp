@@ -18,11 +18,16 @@ public:
     void aim(b2Vec2 point) override;
     void attack() override;
     void defend() override;
-    void update() override;
+    void update(int FPS) override;
+protected:
+    void keepTorsoUpright(int FPS);
+    void keepHeadUpright(int FPS);
+    
+
+
 protected:
     entt::entity torso;
-    entt::entity neckLow;
-    entt::entity neckHigh;
+    entt::entity neck;
     entt::entity head;
 
     entt::entity shoulderLeft;

@@ -19,6 +19,9 @@
 #include "physicsBodyCreationSystem.hpp"
 #include "mouseJointSystem.hpp"
 
+// Creatures
+#include "creatureUpdateSystem.hpp"
+
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game
 {
@@ -35,7 +38,7 @@ public:
 
     // Cleans the resources used by game, i guess
     void clean();
-    
+
     // Calls all event systems
     void handleEvents();
 
@@ -49,7 +52,6 @@ public:
     void deltaTime();
 
 private:
-    
     // Window parameters
     int WIDTH = 800;
     int HEIGHT = 600;
@@ -67,19 +69,20 @@ private:
 
     // Update systems
     WorldUpdateSystem worldUpdateSystem;
+
     // PhysicsBodyCreationSystem physicsBodyCreationSystem;
+
     MouseJointSystem mouseJointSystem;
+    CreatureUpdateSystem creatureUpdateSystem;
 
     // Render systems
-    RenderBackgroundSystem renderBackgroundSystem ;
+    RenderBackgroundSystem renderBackgroundSystem;
     RenderPhysicsBodiesSystem renderPhysicsBodiesSystem;
     RenderPhysicsJointsSystem renderPhysicsJointsSystem;
-    
+
     entt::registry registry;
     entt::dispatcher eventDispatcher;
     RenderContext renderContext;
 };
 
-
-
-#endif //GAME_HPP
+#endif // GAME_HPP
