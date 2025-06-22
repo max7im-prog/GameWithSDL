@@ -20,12 +20,22 @@ public:
     void defend() override;
     void update(int FPS) override;
 protected:
+    // Get a height of a torso above the ground in meters, returns -1 if could not find the ground or if too high
+    float getHeightAboveTheGround();
+
     void keepTorsoUpright(int FPS);
     void keepHeadUpright(int FPS);
+    void keepBodyAboveTheGround(float heightMeters);
     
 
 
 protected:
+    float sizeXMeters;
+    float sizeYMeters;
+
+    // Used by keepBodyAboveTheGround() function
+    float legHeight;
+
     entt::entity torso;
     entt::entity neck;
     entt::entity head;
