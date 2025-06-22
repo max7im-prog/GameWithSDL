@@ -11,7 +11,7 @@ void PhysicsUtils::cleanupPhysicsBody(entt::registry &registry, entt::entity ent
     auto &body = registry.get<PhysicsBody>(entity);
     for (b2ShapeId shape : body.shapes)
     {
-        if(b2Shape_IsValid(shape))
+        if (b2Shape_IsValid(shape))
             b2DestroyShape(shape, false);
     }
 
@@ -73,7 +73,7 @@ void PhysicsUtils::cleanupPhysicsJoint(entt::registry &registry, entt::entity en
         b2DestroyJoint(joint.jointId);
 }
 
-void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, const std::vector<b2Vec2> vertices, b2BodyType bodyType, float density, float friction, float restitution)
+void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, const std::vector<b2Vec2> vertices, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -87,6 +87,10 @@ void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt
     shapeDef.density = density;
     shapeDef.material.friction = friction;
     shapeDef.material.restitution = restitution;
+    if (shapeFilter.has_value())
+    {
+        shapeDef.filter = shapeFilter.value();
+    }
     b2ShapeId shapeId = b2CreatePolygonShape(bodyId, &shapeDef, &polygon);
 
     auto &comp = registry.emplace_or_replace<PhysicsBody>(entity);
@@ -95,7 +99,7 @@ void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt
     comp.shapes = {shapeId};
 }
 
-void PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center, float radius, b2BodyType bodyType, float density, float friction, float restitution)
+void PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center, float radius, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -110,6 +114,10 @@ void PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt:
     shapeDef.density = density;
     shapeDef.material.friction = friction;
     shapeDef.material.restitution = restitution;
+    if (shapeFilter.has_value())
+    {
+        shapeDef.filter = shapeFilter.value();
+    }
     b2ShapeId shapeId = b2CreateCircleShape(bodyId, &shapeDef, &circle);
 
     auto &comp = registry.emplace_or_replace<PhysicsBody>(entity);
@@ -118,7 +126,7 @@ void PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt:
     comp.shapes = {shapeId};
 }
 
-void PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center1, b2Vec2 center2, float radius, b2BodyType bodyType, float density, float friction, float restitution)
+void PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center1, b2Vec2 center2, float radius, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -134,6 +142,10 @@ void PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt
     shapeDef.density = density;
     shapeDef.material.friction = friction;
     shapeDef.material.restitution = restitution;
+    if (shapeFilter.has_value())
+    {
+        shapeDef.filter = shapeFilter.value();
+    }
     b2ShapeId shapeId = b2CreateCapsuleShape(bodyId, &shapeDef, &capsule);
 
     auto &comp = registry.emplace_or_replace<PhysicsBody>(entity);
@@ -142,7 +154,7 @@ void PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt
     comp.shapes = {shapeId};
 }
 
-void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 point1, b2Vec2 point2, b2BodyType bodyType, float density, float friction, float restitution)
+void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 point1, b2Vec2 point2, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -157,6 +169,10 @@ void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt
     shapeDef.density = density;
     shapeDef.material.friction = friction;
     shapeDef.material.restitution = restitution;
+    if (shapeFilter.has_value())
+    {
+        shapeDef.filter = shapeFilter.value();
+    }
     b2ShapeId shapeId = b2CreateSegmentShape(bodyId, &shapeDef, &segment);
 
     auto &comp = registry.emplace_or_replace<PhysicsBody>(entity);

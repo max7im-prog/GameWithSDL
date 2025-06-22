@@ -108,6 +108,7 @@ bool Game::init()
          worldComp.worldId, 
          (b2Vec2){10.0f, 10.0f},
          {{0,0},{0,10}, {100,10}, {100,0}},
+         std::nullopt,
         b2_staticBody); 
     
 
@@ -117,6 +118,7 @@ bool Game::init()
          worldComp.worldId, 
          (b2Vec2){0.0f, 10.0f},
          {{0,0},{0,100}, {10,100}, {10,0}},
+         std::nullopt,
         b2_staticBody); 
     
 
@@ -126,6 +128,7 @@ bool Game::init()
          worldComp.worldId, 
          (b2Vec2){0.0f, 10.0f},
          {{100,0},{100,100}, {110,100}, {110,0}},
+         std::nullopt,
         b2_staticBody); 
 
 
