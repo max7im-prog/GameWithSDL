@@ -25,8 +25,8 @@ Humanoid::Humanoid(entt::registry &registry,
     b2Vec2 posRightElbow = b2Add(posRightShoulder, {3.0f * measureX, 0});
     b2Vec2 posLeftPalm = b2Add(posLeftElbow, {-3.0f * measureX, 0});
     b2Vec2 posRightPalm = b2Add(posRightElbow, {3.0f * measureX, 0});
-    b2Vec2 posLeftHip = b2Add(posTorsoBase, {-1.5f * measureX, 0});
-    b2Vec2 posRightHip = b2Add(posTorsoBase, {1.5f * measureX, 0});
+    b2Vec2 posLeftHip = b2Add(posTorsoBase, {-0.75f * measureX, 0});
+    b2Vec2 posRightHip = b2Add(posTorsoBase, {0.75f * measureX, 0});
     b2Vec2 posLeftKnee = b2Add(posLeftHip, {0, -3.0f * measureY});
     b2Vec2 posRightKnee = b2Add(posRightHip, {0, -3.0f * measureY});
     b2Vec2 posLeftFoot = b2Add(posLeftKnee, {0, -3.0f * measureY});
@@ -45,6 +45,7 @@ Humanoid::Humanoid(entt::registry &registry,
     torso = createBodyEntity();
     std::vector<b2Vec2> torsoShape = {{0, 0}, {-2.0f * measureX, 5.0f * measureY}, {2.0f * measureX, 5.0f * measureY}};
     PhysicsUtils::createPolygonPhysicsBody(this->registry, torso, worldId, posTorsoBase, torsoShape, filter);
+    b2Body_SetLinearDamping(PhysicsUtils::getBodyId(this->registry,torso),1.0f);
 
     // Limb parts
     upperArmLeft = createBodyEntity();
@@ -65,6 +66,8 @@ Humanoid::Humanoid(entt::registry &registry,
     calfRight = createBodyEntity();
     PhysicsUtils::createCapsulePhysicsBody(this->registry, calfRight, worldId, posRightKnee, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
 
+    this->updateWeight();
+
     // Connect limbs
     b2JointId temp;
     temp = connectRevolute(neck, head, posHeadBase);
@@ -74,17 +77,50 @@ Humanoid::Humanoid(entt::registry &registry,
     temp = connectRevolute(neck, torso, posNeckBase);
     b2RevoluteJoint_SetLimits(temp, -0.1f, 0.1f);
     b2RevoluteJoint_EnableLimit(temp, true);
+    
 
-    connectRevolute(torso, upperArmLeft, posLeftShoulder);
-    connectRevolute(torso, upperArmRight, posRightShoulder);
-    connectRevolute(torso, femurLeft, posLeftHip);
-    connectRevolute(torso, femurRight, posRightHip);
-    connectRevolute(femurLeft, calfLeft, posLeftKnee);
-    connectRevolute(femurRight, calfRight, posRightKnee);
-    connectRevolute(forearmLeft, upperArmLeft, posLeftElbow);
-    connectRevolute(forearmRight, upperArmRight, posRightElbow);
+    temp = connectRevolute(torso, upperArmLeft, posLeftShoulder);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,upperArmLeft))/11);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
 
-    this->updateWeight();
+    temp = connectRevolute(torso, upperArmRight, posRightShoulder);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,upperArmRight))/11);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+    temp = connectRevolute(torso, femurLeft, posLeftHip);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,femurLeft))/15);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+    temp = connectRevolute(torso, femurRight, posRightHip);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,femurRight))/15);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+    temp = connectRevolute(femurLeft, calfLeft, posLeftKnee);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,calfLeft))/15);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+
+    temp = connectRevolute(femurRight, calfRight, posRightKnee);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,calfRight))/15);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+    temp = connectRevolute(forearmLeft, upperArmLeft, posLeftElbow);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,forearmLeft))/15);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+    temp = connectRevolute(forearmRight, upperArmRight, posRightElbow);
+    b2RevoluteJoint_EnableMotor(temp,true);
+    b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,forearmRight))/15);
+    b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+
+    
 }
 
 Humanoid::~Humanoid()
