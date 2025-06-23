@@ -19,9 +19,7 @@ BaseCreature::~BaseCreature()
     }
 }
 
-void BaseCreature::move(b2Vec2 direction)
-{
-}
+
 
 void BaseCreature::jump()
 {

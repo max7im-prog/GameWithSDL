@@ -206,9 +206,9 @@ void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const en
     else
     {
         float distance = b2Distance(b2Body_GetWorldPoint(bodyAId, localPointA), b2Body_GetWorldPoint(bodyBId, localPointB));
-        if (distance < 0.01f)
+        if (distance < 0.000001f)
         {
-            distance = 0.01f;
+            distance = 0.000001f;
         }
         jointDef.length = distance;
     }

@@ -178,8 +178,8 @@ bool RenderUtils::renderJoint(b2JointId jointId, const RenderContext &context)
     {
         auto pixelPointA = metersToPixels({worldPointA.x, worldPointA.y}, context);
         auto pixelPointB = metersToPixels({worldPointB.x, worldPointB.y}, context);
-        renderCircle(pixelPointA,5,{255,0,0,255},context);
-        renderCircle(pixelPointB,3,{0,255,0,255},context);
+        renderCircle(pixelPointA,1,{255,0,0,255},context);
+        renderCircle(pixelPointB,2,{0,255,0,255},context);
     }
     else
     {

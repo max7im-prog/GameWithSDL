@@ -275,3 +275,26 @@ void Humanoid::keepBodyAboveTheGround(float targetHeightMeters)
     b2Body_ApplyForceToCenter(torsoBody, forceVec, true);
 }
 
+void Humanoid::move(b2Vec2 direction, float speedMperSec, float accelerationMpS2)
+{
+    if (b2LengthSquared(direction) == 0.0f)
+        return;
+
+    b2BodyId torsoId = PhysicsUtils::getBodyId(this->registry, torso);
+    b2Vec2 norm = b2Normalize(direction);
+
+    float curSpeedInDirection = b2Dot(b2Body_GetLinearVelocity(torsoId), norm);
+    
+    if (curSpeedInDirection < speedMperSec)
+    {
+        float speedError = speedMperSec - curSpeedInDirection;
+        float gain = 10.0f; // Tweak as needed
+        float limitedAcceleration = std::min(accelerationMpS2, speedError * gain);
+        float forceN = this->weightKg * limitedAcceleration;
+
+        b2Vec2 forceVector = b2MulSV(forceN, norm);
+        b2Body_ApplyForceToCenter(torsoId, forceVector, true);
+    }
+}
+
+
