@@ -4,7 +4,7 @@
 
 #include "physicsComponents.hpp"
 #include "renderComponents.hpp"
-#include "events.hpp"
+#include "eventComponents.hpp"
 #include "eventComponents.hpp"
 
 void DebugUtils::debugPrintRegistry(entt::registry &registry)

@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 #include <box2d/box2d.h>
 
 struct PlayerControlled

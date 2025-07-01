@@ -120,6 +120,9 @@ void Game::handleEvents()
 void Game::update()
 {
     // this->physicsBodyCreationSystem.update(this->registry);
+    this->controllerUpdateSystem.update(this->registry);
+    this->creatureControlSystem.update(this->registry);
+
     this->creatureUpdateSystem.update(this->registry, this->FPS);
     this->mouseJointSystem.update(this->registry, this->renderContext);
 

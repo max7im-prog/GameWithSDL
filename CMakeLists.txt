@@ -30,6 +30,9 @@ add_executable(Game
     src/creature/humanoid.cpp
     src/creature/creatureUpdateSystem.cpp
 
+    src/controls/controllerUpdateSystem.cpp
+    src/controls/creatureControlSystem.cpp
+
     src/debug/debugUtils.cpp
 
     src/misc/cleanupSystem.cpp

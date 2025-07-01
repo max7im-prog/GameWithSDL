@@ -1,5 +1,5 @@
 #include "quitSystem.hpp"
-#include "events.hpp"
+#include "eventComponents.hpp"
 #include "game.hpp"
 QuitSystem::QuitSystem()
 {

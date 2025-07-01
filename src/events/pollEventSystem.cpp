@@ -2,7 +2,7 @@
 
 #include <SDL3/SDL.h>
 
-#include "events.hpp"
+#include "eventComponents.hpp"
 
 #include <iostream>
 

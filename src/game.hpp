@@ -15,6 +15,8 @@
 #include "quitSystem.hpp"
 
 // Update
+#include "controllerUpdateSystem.hpp"
+#include "creatureControlSystem.hpp"
 #include "worldUpdateSystem.hpp"
 #include "physicsBodyCreationSystem.hpp"
 #include "mouseJointSystem.hpp"
@@ -69,9 +71,9 @@ private:
 
     // Update systems
     WorldUpdateSystem worldUpdateSystem;
-
+    ControllerUpdateSystem controllerUpdateSystem;
+    CreatureControlSystem creatureControlSystem;
     // PhysicsBodyCreationSystem physicsBodyCreationSystem;
-
     MouseJointSystem mouseJointSystem;
     CreatureUpdateSystem creatureUpdateSystem;
 
