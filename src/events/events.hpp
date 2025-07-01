@@ -1,6 +1,8 @@
 #pragma once
 #include <SDL3/SDL.h>
 
+// TODO: move to eventComponents.hpp
+
 struct QuitEvent{};
 
 struct PlayerInput{};

@@ -51,6 +51,7 @@ target_include_directories(Game PRIVATE
     src/misc
     src/debug
     src/creature
+    src/controls
 )
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")
