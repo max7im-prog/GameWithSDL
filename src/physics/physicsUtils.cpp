@@ -73,7 +73,7 @@ void PhysicsUtils::cleanupPhysicsJoint(entt::registry &registry, entt::entity en
         b2DestroyJoint(joint.jointId);
 }
 
-void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, const std::vector<b2Vec2> vertices, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
+std::pair<entt::entity,b2BodyId> PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, const std::vector<b2Vec2> vertices, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -97,9 +97,11 @@ void PhysicsUtils::createPolygonPhysicsBody(entt::registry &registry, const entt
     comp.bodyId = bodyId;
     comp.worldId = worldId;
     comp.shapes = {shapeId};
+
+    return {entity,bodyId};
 }
 
-void PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center, float radius, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
+std::pair<entt::entity,b2BodyId> PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center, float radius, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -124,9 +126,11 @@ void PhysicsUtils::createCirclePhysicsBody(entt::registry &registry, const entt:
     comp.bodyId = bodyId;
     comp.worldId = worldId;
     comp.shapes = {shapeId};
+
+    return {entity,bodyId};
 }
 
-void PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center1, b2Vec2 center2, float radius, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
+std::pair<entt::entity,b2BodyId> PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 center1, b2Vec2 center2, float radius, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -152,9 +156,11 @@ void PhysicsUtils::createCapsulePhysicsBody(entt::registry &registry, const entt
     comp.bodyId = bodyId;
     comp.worldId = worldId;
     comp.shapes = {shapeId};
+
+    return {entity,bodyId};
 }
 
-void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 point1, b2Vec2 point2, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
+std::pair<entt::entity,b2BodyId> PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2Vec2 point1, b2Vec2 point2, std::optional<b2Filter> shapeFilter, b2BodyType bodyType, float density, float friction, float restitution)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -179,9 +185,11 @@ void PhysicsUtils::createSegmentPhysicsBody(entt::registry &registry, const entt
     comp.bodyId = bodyId;
     comp.worldId = worldId;
     comp.shapes = {shapeId};
+
+    return {entity,bodyId};
 }
 
-void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<float> length, bool isSpring, float freq, float damping)
+std::pair<entt::entity,b2JointId> PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<float> length, bool isSpring, float freq, float damping)
 {
     b2DistanceJointDef jointDef = b2DefaultDistanceJointDef();
     jointDef.bodyIdA = bodyAId;
@@ -220,9 +228,11 @@ void PhysicsUtils::createDistancePhysicsJoint(entt::registry &registry, const en
     comp.bodyBId = bodyBId;
     comp.jointId = jointId;
     comp.worldId = worldId;
+
+    return {entity, jointId};
 }
 
-void PhysicsUtils::createPrismaticPhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<b2Vec2> moveAxisA, bool isSpring, float freq, float damping)
+std::pair<entt::entity,b2JointId> PhysicsUtils::createPrismaticPhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 localPointA, b2Vec2 localPointB, std::optional<b2Vec2> moveAxisA, bool isSpring, float freq, float damping)
 {
     // FIXME: make work properly
 
@@ -258,9 +268,11 @@ void PhysicsUtils::createPrismaticPhysicsJoint(entt::registry &registry, const e
     comp.bodyBId = bodyBId;
     comp.jointId = jointId;
     comp.worldId = worldId;
+
+    return {entity, jointId};
 }
 
-void PhysicsUtils::createEmptyPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2BodyType bodyType)
+std::pair<entt::entity,b2BodyId> PhysicsUtils::createEmptyPhysicsBody(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2Vec2 position, b2BodyType bodyType)
 {
     auto bodyDef = b2DefaultBodyDef();
     bodyDef.type = bodyType;
@@ -271,9 +283,11 @@ void PhysicsUtils::createEmptyPhysicsBody(entt::registry &registry, const entt::
     comp.bodyId = bodyId;
     comp.worldId = worldId;
     comp.shapes = {};
+
+    return {entity, bodyId};
 }
 
-void PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 worldPoint)
+std::pair<entt::entity,b2JointId> PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId bodyAId, b2BodyId bodyBId, b2Vec2 worldPoint)
 {
     b2RevoluteJointDef jointDef = b2DefaultRevoluteJointDef();
     jointDef.bodyIdA = bodyAId;
@@ -290,9 +304,11 @@ void PhysicsUtils::createRevolutePhysicsJoint(entt::registry &registry, const en
     comp.bodyBId = bodyBId;
     comp.jointId = jointId;
     comp.worldId = worldId;
+
+    return {entity, jointId};
 }
 
-void PhysicsUtils::createMousePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId mouseBodyId, b2BodyId targetBodyId, b2Vec2 mouseLocalPoint, b2Vec2 targetLocalPoint)
+std::pair<entt::entity,b2JointId> PhysicsUtils::createMousePhysicsJoint(entt::registry &registry, const entt::entity &entity, b2WorldId worldId, b2BodyId mouseBodyId, b2BodyId targetBodyId, b2Vec2 mouseLocalPoint, b2Vec2 targetLocalPoint)
 {
     b2MouseJointDef jointDef = b2DefaultMouseJointDef();
     jointDef.bodyIdA = mouseBodyId;
@@ -314,6 +330,8 @@ void PhysicsUtils::createMousePhysicsJoint(entt::registry &registry, const entt:
     comp.bodyBId = targetBodyId;
     comp.jointId = jointId;
     comp.worldId = worldId;
+
+    return {entity, jointId};
 }
 
 std::vector<b2ShapeId> PhysicsUtils::getShapeAtPosition(b2WorldId worldId, b2Vec2 position)
