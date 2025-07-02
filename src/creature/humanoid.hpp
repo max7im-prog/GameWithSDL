@@ -27,6 +27,8 @@ protected:
     void keepTorsoUpright(int FPS);
     void keepHeadUpright(int FPS);
     void keepBodyAboveTheGround(float heightMeters);
+
+    void applyForceToTorso();
     
 
 
@@ -36,6 +38,10 @@ protected:
 
     // Used by keepBodyAboveTheGround() function
     float legHeight;
+
+    float desiredSpeed;
+    float currentAcceleration;
+    b2Vec2 accelerationDir;
 
     entt::entity torso;
     entt::entity neck;

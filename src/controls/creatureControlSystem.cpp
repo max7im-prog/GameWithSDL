@@ -29,7 +29,7 @@ void CreatureControlSystem::update(entt::registry &registry)
     }
     auto &controller = registry.get<Controller>(controllerEnt);
     {
-        auto v = registry.view<Creature>();
+        auto v = registry.view<PlayerControlled,Creature>();
         for(auto [ent,cr]:v.each()){
             cr.creature->move(controller.moveDirection,0.2,0.2);
         }

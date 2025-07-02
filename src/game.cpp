@@ -8,6 +8,7 @@
 #include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
 #include "creatureComponents.hpp"
+#include"controlComponents.hpp"
 
 #include "humanoid.hpp"
 
@@ -95,6 +96,7 @@ bool Game::init()
     ent = this->registry.create();
     auto &h3 = this->registry.emplace_or_replace<Creature>(ent);
     h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {8, 4}));
+    this->registry.emplace_or_replace<PlayerControlled>(ent);
 
     ent = this->registry.create();
     auto &h4 = this->registry.emplace_or_replace<Creature>(ent);
