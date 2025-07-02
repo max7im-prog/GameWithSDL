@@ -29,6 +29,10 @@ add_executable(Game
     src/creature/baseCreature.cpp
     src/creature/humanoid.cpp
     src/creature/creatureUpdateSystem.cpp
+    src/creature/bodyPart.cpp
+    src/creature/capsuleBodyPart.cpp
+    src/creature/polygonBodyPart.cpp
+    src/creature/circleBodyPart.cpp
 
     src/controls/controllerUpdateSystem.cpp
     src/controls/creatureControlSystem.cpp

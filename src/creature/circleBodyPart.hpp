@@ -1,5 +1,6 @@
 #pragma once
 #include "bodyPart.hpp"
+#include <optional>
 
 class CircleBodyPart:public BodyPart{
 public:

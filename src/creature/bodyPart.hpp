@@ -8,9 +8,9 @@ class BodyPart{
 public:
     BodyPart(entt::registry &registry, b2WorldId worldId);
     virtual ~BodyPart();
+protected:
     std::unordered_map<entt::entity,b2BodyId> bodies;
     std::unordered_map<entt::entity,b2JointId> joints;
-protected:
     entt::registry &registry;
     b2WorldId worldId;
     bool addJointToMap(std::pair<entt::entity, b2JointId> jointPair);
