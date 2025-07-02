@@ -33,6 +33,7 @@ add_executable(Game
     src/creature/bodyParts/capsuleBodyPart.cpp
     src/creature/bodyParts/polygonBodyPart.cpp
     src/creature/bodyParts/circleBodyPart.cpp
+    src/creature/bodyParts/limbBodyPart.cpp
 
     src/controls/controllerUpdateSystem.cpp
     src/controls/creatureControlSystem.cpp

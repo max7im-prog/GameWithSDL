@@ -12,4 +12,7 @@ public:
                  std::vector<std::pair<float,float>> portionRadiusPairs,
                  std::optional<b2Filter> shapeFilter = std::nullopt);
     ~LimbBodyPart();
+
+    std::vector<std::pair<entt::entity,b2BodyId>> getBodies();
+    std::vector<std::pair<entt::entity,b2JointId>> getJoints();
 };

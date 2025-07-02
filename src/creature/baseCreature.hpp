@@ -3,6 +3,10 @@
 #include <box2d/box2d.h>
 
 #include "bodyPart.hpp"
+#include "capsuleBodyPart.hpp"
+#include "circleBodyPart.hpp"
+#include "polygonBodyPart.hpp"
+#include "limbBodyPart.hpp"
 
 class BaseCreature
 {
@@ -39,4 +43,10 @@ protected:
 
     // Sets the weightKg value to be the sum of all weights of bodies in this->bodies
     void updateWeight();
+
+    // Adds a body part's bodies and joint to the bodies and joints of a creature
+    void registerBodyPart(CapsuleBodyPart part);
+    void registerBodyPart(CircleBodyPart part);
+    void registerBodyPart(PolygonBodyPart part);
+    void registerBodyPart(LimbBodyPart part);
 };

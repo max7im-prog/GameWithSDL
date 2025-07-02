@@ -15,16 +15,22 @@ PolygonBodyPart::~PolygonBodyPart()
 {
 }
 
-std::pair<entt::entity, b2BodyId> PolygonBodyPart::getBody()
+
+
+std::vector<std::pair<entt::entity, b2BodyId>> PolygonBodyPart::getBodies()
 {
-    if (this->bodies.size() != 0)
-    {
-        for (auto pair : this->bodies)
-            return pair;
+    std::vector<std::pair<entt::entity, b2BodyId>> ret = {};
+    for(auto pair:this->bodies){
+        ret.push_back(pair);
     }
-    else
-    {
-        return {};
+    return ret;
+}
+
+std::vector<std::pair<entt::entity, b2JointId>> PolygonBodyPart::getJoints()
+{
+    std::vector<std::pair<entt::entity, b2JointId>> ret = {};
+    for(auto pair:this->joints){
+        ret.push_back(pair);
     }
-    return {};
+    return ret;
 }

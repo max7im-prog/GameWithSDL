@@ -46,7 +46,8 @@ Humanoid::Humanoid(entt::registry &registry,
     // std::vector<b2Vec2> torsoShape = {{0, 0}, {-2.0f * measureX, 5.0f * measureY}, {2.0f * measureX, 5.0f * measureY}};
     // PhysicsUtils::createPolygonPhysicsBody(this->registry, torso, worldId, posTorsoBase, torsoShape, filter);
     // b2Body_SetLinearDamping(PhysicsUtils::getBodyId(this->registry,torso),1.0f);
-
+    
+    
     // // Limb parts
     // upperArmLeft = createBodyEntity();
     // PhysicsUtils::createCapsulePhysicsBody(this->registry, upperArmLeft, worldId, posLeftShoulder, {0, 0}, {-3.0f * measureX, 0}, 0.5F * measure, filter);
@@ -66,7 +67,7 @@ Humanoid::Humanoid(entt::registry &registry,
     // calfRight = createBodyEntity();
     // PhysicsUtils::createCapsulePhysicsBody(this->registry, calfRight, worldId, posRightKnee, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
 
-    // this->updateWeight();
+    this->updateWeight();
 
     // // Connect limbs
     // b2JointId temp;

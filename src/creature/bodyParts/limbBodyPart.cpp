@@ -39,3 +39,13 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
 LimbBodyPart::~LimbBodyPart()
 {
 }
+
+std::vector<std::pair<entt::entity, b2BodyId>> LimbBodyPart::getBodies()
+{
+    // TODO: insert return statement here
+}
+
+std::vector<std::pair<entt::entity, b2JointId>> LimbBodyPart::getJoints()
+{
+    // TODO: insert return statement here
+}

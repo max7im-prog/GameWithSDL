@@ -74,3 +74,22 @@ void BaseCreature::updateWeight()
     }
     this->weightKg = total;
 }
+
+void BaseCreature::registerBodyPart(CapsuleBodyPart part)
+{
+
+}
+
+void BaseCreature::registerBodyPart(CircleBodyPart part)
+{
+
+}
+
+void BaseCreature::registerBodyPart(PolygonBodyPart part)
+{
+
+}
+
+void BaseCreature::registerBodyPart(LimbBodyPart part)
+{
+}
