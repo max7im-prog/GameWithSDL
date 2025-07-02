@@ -26,4 +26,5 @@ std::pair<entt::entity, b2BodyId> PolygonBodyPart::getBody()
     {
         return {};
     }
+    return {};
 }

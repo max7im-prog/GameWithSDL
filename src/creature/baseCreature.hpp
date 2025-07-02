@@ -25,12 +25,12 @@ protected:
 
     entt::entity self;
     entt::registry &registry;
-    std::vector<entt::entity> bodies;
-    std::vector<entt::entity> joints;
-    std::vector<BodyPart> bodyParts;
+    std::vector<std::pair<entt::entity,b2BodyId>> bodies;
+    std::vector<std::pair<entt::entity,b2JointId>> joints;
+    std::vector<std::shared_ptr<BodyPart>> bodyParts;
 
     // Creates an entity in registry and registres it in bodies. Does NOT attach a PhysicsBody to an entity
-    entt::entity createBodyEntity();
+    // entt::entity createBodyEntity();
 
     // Creates a new revolute joint in a registry and 
     b2JointId connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint);

@@ -5,6 +5,12 @@
 #include <entt/entt.hpp>
 #include <box2d/box2d.h>
 
+#include "bodyPart.hpp"
+#include "capsuleBodyPart.hpp"
+#include "circleBodyPart.hpp"
+#include "polygonBodyPart.hpp"
+#include "limbBodyPart.hpp"
+
 class Humanoid: public BaseCreature{
 public:
     Humanoid(entt::registry &registry, 
@@ -43,29 +49,13 @@ protected:
     float currentAcceleration;
     b2Vec2 accelerationDir;
 
-    entt::entity torso;
-    entt::entity neck;
-    entt::entity head;
+    std::shared_ptr<PolygonBodyPart> torso;
+    std::shared_ptr<CapsuleBodyPart>  neck;
+    std::shared_ptr<PolygonBodyPart>  head;
 
-    entt::entity shoulderLeft;
-    entt::entity upperArmLeft;
-    entt::entity elbowLeft;
-    entt::entity forearmLeft;
-    entt::entity palmLeft;
-    entt::entity hipLeft;
-    entt::entity femurLeft;
-    entt::entity kneeLeft;
-    entt::entity calfLeft;
-    entt::entity footLeft;
+    std::shared_ptr<LimbBodyPart> leftArm;
+    std::shared_ptr<LimbBodyPart> rightArm;
 
-    entt::entity shoulderRight;
-    entt::entity upperArmRight;
-    entt::entity elbowRight;
-    entt::entity forearmRight;
-    entt::entity palmRight;
-    entt::entity hipRight;
-    entt::entity femurRight;
-    entt::entity kneeRight;
-    entt::entity calfRight;
-    entt::entity footRight;
+    std::shared_ptr<LimbBodyPart> leftLeg;
+    std::shared_ptr<LimbBodyPart> rightLeg;
 };

@@ -23,4 +23,5 @@ std::pair<entt::entity, b2BodyId> CapsuleBodyPart::getBody()
     {
         return {};
     }
+    return {};
 }
