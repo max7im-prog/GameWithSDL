@@ -2,6 +2,8 @@
 #include <entt/entt.hpp>
 #include <box2d/box2d.h>
 
+#include "bodyPart.hpp"
+
 class BaseCreature
 {
 public:
@@ -25,6 +27,7 @@ protected:
     entt::registry &registry;
     std::vector<entt::entity> bodies;
     std::vector<entt::entity> joints;
+    std::vector<BodyPart> bodyParts;
 
     // Creates an entity in registry and registres it in bodies. Does NOT attach a PhysicsBody to an entity
     entt::entity createBodyEntity();

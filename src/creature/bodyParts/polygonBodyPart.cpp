@@ -14,3 +14,16 @@ PolygonBodyPart::PolygonBodyPart(entt::registry &registry, b2WorldId worldId, b2
 PolygonBodyPart::~PolygonBodyPart()
 {
 }
+
+std::pair<entt::entity, b2BodyId> PolygonBodyPart::getBody()
+{
+    if (this->bodies.size() != 0)
+    {
+        for (auto pair : this->bodies)
+            return pair;
+    }
+    else
+    {
+        return {};
+    }
+}

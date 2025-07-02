@@ -11,3 +11,16 @@ CapsuleBodyPart::CapsuleBodyPart(entt::registry &registry, b2WorldId worldId, b2
 CapsuleBodyPart::~CapsuleBodyPart()
 {
 }
+
+std::pair<entt::entity, b2BodyId> CapsuleBodyPart::getBody()
+{
+    if (this->bodies.size() != 0)
+    {
+        for (auto pair : this->bodies)
+            return pair;
+    }
+    else
+    {
+        return {};
+    }
+}
