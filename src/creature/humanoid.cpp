@@ -14,7 +14,7 @@ Humanoid::Humanoid(entt::registry &registry,
     float measureY = sizeYMeters / 14.5f;
     float measure = std::min(measureX, measureY);
 
-    legHeight = measureY*6.0f + 0.5f*measure;
+    legHeight = measureY * 6.0f + 0.5f * measure;
 
     b2Vec2 posNeckBase = b2Add(position, {0, 0});
     b2Vec2 posHeadBase = b2Add(posNeckBase, {0, measureY * 1.0f});
@@ -36,37 +36,60 @@ Humanoid::Humanoid(entt::registry &registry,
     b2Filter filter = b2DefaultFilter();
     filter.groupIndex = this->groupId;
 
-    // // Neck and torso
-    // neck = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, neck, worldId, posNeckBase, {0, 0}, b2Sub(posHeadBase, position), 0.5f * measure, filter);
-    // head = createBodyEntity();
-    // std::vector<b2Vec2> headShape = {{-1.0f * measureX, 0}, {-1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 0}};
-    // PhysicsUtils::createPolygonPhysicsBody(this->registry, head, worldId, posHeadBase, headShape, filter);
-    // torso = createBodyEntity();
-    // std::vector<b2Vec2> torsoShape = {{0, 0}, {-2.0f * measureX, 5.0f * measureY}, {2.0f * measureX, 5.0f * measureY}};
-    // PhysicsUtils::createPolygonPhysicsBody(this->registry, torso, worldId, posTorsoBase, torsoShape, filter);
+    // Neck and torso
     // b2Body_SetLinearDamping(PhysicsUtils::getBodyId(this->registry,torso),1.0f);
-    
-    
-    // // Limb parts
-    // upperArmLeft = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, upperArmLeft, worldId, posLeftShoulder, {0, 0}, {-3.0f * measureX, 0}, 0.5F * measure, filter);
-    // upperArmRight = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, upperArmRight, worldId, posRightShoulder, {0, 0}, {3.0f * measureX, 0}, 0.5F * measure, filter);
-    // forearmLeft = this->registry.create();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, forearmLeft, worldId, posLeftElbow, {0, 0}, {-3.0f * measureX, 0}, 0.5F * measure, filter);
-    // this->bodies.push_back(forearmLeft);
-    // forearmRight = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, forearmRight, worldId, posRightElbow, {0, 0}, {3.0f * measureX, 0}, 0.5F * measure, filter);
-    // femurLeft = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, femurLeft, worldId, posLeftHip, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
-    // femurRight = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, femurRight, worldId, posRightHip, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
-    // calfLeft = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, calfLeft, worldId, posLeftKnee, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
-    // calfRight = createBodyEntity();
-    // PhysicsUtils::createCapsulePhysicsBody(this->registry, calfRight, worldId, posRightKnee, {0, 0}, {0, -3.0f * measureY}, 0.5F * measure, filter);
+    {
+        neck = std::make_shared<CapsuleBodyPart>(
+            this->registry,
+            worldId,
+            posNeckBase,
+            b2Vec2{0, 0},
+            b2Sub(posHeadBase, position),
+            0.5f * measure,
+            filter);
+        this->bodyParts.push_back(neck);
+    }
 
+    {
+        std::vector<b2Vec2> headShape = {{-1.0f * measureX, 0}, {-1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 0}};
+        head = std::make_shared<PolygonBodyPart>(
+            this->registry, worldId, posHeadBase, headShape, filter);
+        this->bodyParts.push_back(head);
+    }
+
+    {
+        std::vector<b2Vec2> torsoShape = {{0, 0}, {-2.0f * measureX, 5.0f * measureY}, {2.0f * measureX, 5.0f * measureY}};
+        torso = std::make_shared<PolygonBodyPart>(
+            this->registry, worldId, posTorsoBase, torsoShape, filter);
+        this->bodyParts.push_back(torso);
+    }
+
+    // Limbs
+    {
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        leftLeg = std::make_shared<LimbBodyPart>(
+            this->registry,worldId,posLeftHip,posLeftFoot,portionRadiusPairs,filter);
+        this->bodyParts.push_back(leftLeg);
+    }
+    {
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        rightLeg = std::make_shared<LimbBodyPart>(
+            this->registry,worldId,posRightHip,posRightFoot,portionRadiusPairs,filter);
+        this->bodyParts.push_back(rightLeg);
+    }
+    {
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        leftArm = std::make_shared<LimbBodyPart>(
+            this->registry,worldId,posLeftShoulder,posLeftPalm,portionRadiusPairs,filter);
+        this->bodyParts.push_back(leftArm);
+    }
+    {
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        rightArm = std::make_shared<LimbBodyPart>(
+            this->registry,worldId,posRightShoulder,posRightPalm,portionRadiusPairs,filter);
+        this->bodyParts.push_back(rightArm);
+    }
+    
     this->updateWeight();
 
     // // Connect limbs
@@ -78,7 +101,6 @@ Humanoid::Humanoid(entt::registry &registry,
     // temp = connectRevolute(neck, torso, posNeckBase);
     // b2RevoluteJoint_SetLimits(temp, -0.1f, 0.1f);
     // b2RevoluteJoint_EnableLimit(temp, true);
-    
 
     // temp = connectRevolute(torso, upperArmLeft, posLeftShoulder);
     // b2RevoluteJoint_EnableMotor(temp,true);
@@ -105,7 +127,6 @@ Humanoid::Humanoid(entt::registry &registry,
     // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,calfLeft))/15);
     // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
 
-
     // temp = connectRevolute(femurRight, calfRight, posRightKnee);
     // b2RevoluteJoint_EnableMotor(temp,true);
     // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,calfRight))/15);
@@ -120,8 +141,6 @@ Humanoid::Humanoid(entt::registry &registry,
     // b2RevoluteJoint_EnableMotor(temp,true);
     // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,forearmRight))/15);
     // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    
 }
 
 Humanoid::~Humanoid()
@@ -291,7 +310,7 @@ void Humanoid::applyForceToTorso()
     // b2Vec2 norm = b2Normalize(accelerationDir);
 
     // float curSpeedInDirection = b2Dot(b2Body_GetLinearVelocity(torsoId), norm);
-    
+
     // if (curSpeedInDirection < desiredSpeed)
     // {
     //     float speedError = desiredSpeed - curSpeedInDirection;
@@ -310,5 +329,3 @@ void Humanoid::move(b2Vec2 direction, float speedMperSec, float accelerationMpS2
     desiredSpeed = speedMperSec;
     currentAcceleration = accelerationMpS2;
 }
-
-
