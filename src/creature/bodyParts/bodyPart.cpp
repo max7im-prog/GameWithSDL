@@ -19,14 +19,24 @@ BodyPart::~BodyPart()
     this->joints = {};
 }
 
-bool BodyPart::addJointToMap(std::pair<entt::entity, b2JointId> jointPair)
+bool BodyPart::addJoint(std::pair<entt::entity, b2JointId> jointPair)
 {
-    this->joints[jointPair.first] = jointPair.second;
+    this->joints.push_back(jointPair);
     return true;
 }
 
-bool BodyPart::addBodyToMap(std::pair<entt::entity, b2BodyId> bodyPair)
+bool BodyPart::addBody(std::pair<entt::entity, b2BodyId> bodyPair)
 {
-    this->bodies[bodyPair.first] = bodyPair.second;
+    this->bodies.push_back(bodyPair);
     return true;
+}
+
+const std::vector<std::pair<entt::entity, b2BodyId>> &BodyPart::getBodies()
+{
+    return this->bodies;
+}
+
+const std::vector<std::pair<entt::entity, b2JointId>> &BodyPart::getJoints()
+{
+    return this->joints;
 }

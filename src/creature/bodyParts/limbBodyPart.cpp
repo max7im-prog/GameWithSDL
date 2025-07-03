@@ -23,7 +23,7 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
         auto ent = registry.create();
         b2Vec2 increment = b2MulSV(limbLen*portion,limbDirection);
         auto pair = PhysicsUtils::createCapsulePhysicsBody(registry,ent,worldId,curPoint,{0,0},b2Add({0,0}, increment),radius,shapeFilter);
-        addBodyToMap(pair);
+        addBody(pair);
         createdBodies.push_back({curPoint,pair.second});
 
         curPoint = b2Add(curPoint,increment);
@@ -32,7 +32,7 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
     for(int i = 1;i< createdBodies.size();i++){
         auto ent = registry.create();
         auto pair = PhysicsUtils::createRevolutePhysicsJoint(registry,ent,worldId,createdBodies[i-1].second,createdBodies[i].second,createdBodies[i].first);
-        addJointToMap(pair);
+        addJoint(pair);
     }
 }
 
@@ -40,12 +40,3 @@ LimbBodyPart::~LimbBodyPart()
 {
 }
 
-std::vector<std::pair<entt::entity, b2BodyId>> LimbBodyPart::getBodies()
-{
-    // TODO: insert return statement here
-}
-
-std::vector<std::pair<entt::entity, b2JointId>> LimbBodyPart::getJoints()
-{
-    // TODO: insert return statement here
-}

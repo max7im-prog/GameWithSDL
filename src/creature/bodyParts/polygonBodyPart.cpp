@@ -2,35 +2,13 @@
 
 #include "physicsUtils.hpp"
 
-// entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint, const std::vector<b2Vec2> vertices, std::optional<b2Filter> shapeFilter
-
 PolygonBodyPart::PolygonBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint, const std::vector<b2Vec2> vertices, std::optional<b2Filter> shapeFilter):BodyPart(registry,worldId)
 {
     auto ent = this->registry.create();
     auto pair = PhysicsUtils::createPolygonPhysicsBody(this->registry,ent,this->worldId,worldPoint,vertices,shapeFilter);
-    this->addBodyToMap(pair);
+    this->addBody(pair);
 }
 
 PolygonBodyPart::~PolygonBodyPart()
 {
-}
-
-
-
-std::vector<std::pair<entt::entity, b2BodyId>> PolygonBodyPart::getBodies()
-{
-    std::vector<std::pair<entt::entity, b2BodyId>> ret = {};
-    for(auto pair:this->bodies){
-        ret.push_back(pair);
-    }
-    return ret;
-}
-
-std::vector<std::pair<entt::entity, b2JointId>> PolygonBodyPart::getJoints()
-{
-    std::vector<std::pair<entt::entity, b2JointId>> ret = {};
-    for(auto pair:this->joints){
-        ret.push_back(pair);
-    }
-    return ret;
 }
