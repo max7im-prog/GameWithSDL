@@ -29,7 +29,6 @@ protected:
 
     entt::entity self;
     entt::registry &registry;
-    std::vector<std::pair<entt::entity,b2BodyId>> bodies;
     std::vector<std::pair<entt::entity,b2JointId>> joints;
     std::vector<std::shared_ptr<BodyPart>> bodyParts;
 
@@ -37,16 +36,20 @@ protected:
     // entt::entity createBodyEntity();
 
     // Creates a new revolute joint in a registry and 
-    b2JointId connectRevolute(entt::entity first, entt::entity second, b2Vec2 worldPoint);
+    std::pair<entt::entity,b2JointId> connectRevolute(b2BodyId first, b2BodyId second, b2Vec2 worldPoint);
 
-    b2JointId connectPrismatic(entt::entity first, entt::entity second, b2Vec2 worldPointFirst, b2Vec2 worldPointSecond);
+    std::pair<entt::entity,b2JointId> connectPrismatic(b2BodyId first, b2BodyId second, b2Vec2 worldPointFirst, b2Vec2 worldPointSecond);
 
     // Sets the weightKg value to be the sum of all weights of bodies in this->bodies
     void updateWeight();
 
     // Adds a body part's bodies and joint to the bodies and joints of a creature
-    void registerBodyPart(CapsuleBodyPart part);
-    void registerBodyPart(CircleBodyPart part);
-    void registerBodyPart(PolygonBodyPart part);
-    void registerBodyPart(LimbBodyPart part);
+    // void registerBodyPart(CapsuleBodyPart part);
+    // void registerBodyPart(CircleBodyPart part);
+    // void registerBodyPart(PolygonBodyPart part);
+    // void registerBodyPart(LimbBodyPart part);
+
+private:
+    // std::vector<std::pair<entt::entity,b2BodyId>> bodies;
+    
 };

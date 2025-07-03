@@ -37,7 +37,6 @@ Humanoid::Humanoid(entt::registry &registry,
     filter.groupIndex = this->groupId;
 
     // Neck and torso
-    // b2Body_SetLinearDamping(PhysicsUtils::getBodyId(this->registry,torso),1.0f);
     {
         neck = std::make_shared<CapsuleBodyPart>(
             this->registry,
@@ -49,14 +48,12 @@ Humanoid::Humanoid(entt::registry &registry,
             filter);
         this->bodyParts.push_back(neck);
     }
-
     {
         std::vector<b2Vec2> headShape = {{-1.0f * measureX, 0}, {-1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 2.0f * measureY}, {1.0f * measureX, 0}};
         head = std::make_shared<PolygonBodyPart>(
             this->registry, worldId, posHeadBase, headShape, filter);
         this->bodyParts.push_back(head);
     }
-
     {
         std::vector<b2Vec2> torsoShape = {{0, 0}, {-2.0f * measureX, 5.0f * measureY}, {2.0f * measureX, 5.0f * measureY}};
         torso = std::make_shared<PolygonBodyPart>(
@@ -66,81 +63,98 @@ Humanoid::Humanoid(entt::registry &registry,
 
     // Limbs
     {
-        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5, 0.5F * measure}, {0.5, 0.5F * measure}};
         leftLeg = std::make_shared<LimbBodyPart>(
-            this->registry,worldId,posLeftHip,posLeftFoot,portionRadiusPairs,filter);
+            this->registry, worldId, posLeftHip, posLeftFoot, portionRadiusPairs, filter);
         this->bodyParts.push_back(leftLeg);
     }
     {
-        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5, 0.5F * measure}, {0.5, 0.5F * measure}};
         rightLeg = std::make_shared<LimbBodyPart>(
-            this->registry,worldId,posRightHip,posRightFoot,portionRadiusPairs,filter);
+            this->registry, worldId, posRightHip, posRightFoot, portionRadiusPairs, filter);
         this->bodyParts.push_back(rightLeg);
     }
     {
-        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5, 0.5F * measure}, {0.5, 0.5F * measure}};
         leftArm = std::make_shared<LimbBodyPart>(
-            this->registry,worldId,posLeftShoulder,posLeftPalm,portionRadiusPairs,filter);
+            this->registry, worldId, posLeftShoulder, posLeftPalm, portionRadiusPairs, filter);
         this->bodyParts.push_back(leftArm);
     }
     {
-        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5,0.5F * measure},{0.5,0.5F * measure}};
+        std::vector<std::pair<float, float>> portionRadiusPairs = {{0.5, 0.5F * measure}, {0.5, 0.5F * measure}};
         rightArm = std::make_shared<LimbBodyPart>(
-            this->registry,worldId,posRightShoulder,posRightPalm,portionRadiusPairs,filter);
+            this->registry, worldId, posRightShoulder, posRightPalm, portionRadiusPairs, filter);
         this->bodyParts.push_back(rightArm);
     }
-    
     this->updateWeight();
 
-    // // Connect limbs
-    // b2JointId temp;
-    // temp = connectRevolute(neck, head, posHeadBase);
-    // // b2RevoluteJoint_SetLimits(temp,-0.1f,0.1f);
-    // // b2RevoluteJoint_EnableLimit(temp, true);
-
-    // temp = connectRevolute(neck, torso, posNeckBase);
-    // b2RevoluteJoint_SetLimits(temp, -0.1f, 0.1f);
-    // b2RevoluteJoint_EnableLimit(temp, true);
-
-    // temp = connectRevolute(torso, upperArmLeft, posLeftShoulder);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,upperArmLeft))/11);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(torso, upperArmRight, posRightShoulder);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,upperArmRight))/11);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(torso, femurLeft, posLeftHip);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,femurLeft))/15);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(torso, femurRight, posRightHip);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,femurRight))/15);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(femurLeft, calfLeft, posLeftKnee);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,calfLeft))/15);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(femurRight, calfRight, posRightKnee);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,calfRight))/15);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(forearmLeft, upperArmLeft, posLeftElbow);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,forearmLeft))/15);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
-
-    // temp = connectRevolute(forearmRight, upperArmRight, posRightElbow);
-    // b2RevoluteJoint_EnableMotor(temp,true);
-    // b2RevoluteJoint_SetMaxMotorTorque(temp,b2Body_GetMass(PhysicsUtils::getBodyId(this->registry,forearmRight))/15);
-    // b2RevoluteJoint_SetMotorSpeed(temp,0.0f);
+    // Connect limbs
+    {
+        auto bodies1 = neck->getBodies();
+        auto bodies2 = head->getBodies();
+        if (bodies1.size() > 0 && bodies2.size() > 0)
+        {
+            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posHeadBase);
+            this->joints.push_back(pair);
+            b2RevoluteJoint_SetLimits(pair.second, -0.1f, 0.1f);
+            b2RevoluteJoint_EnableLimit(pair.second, true);
+        }
+    }
+    {
+        auto bodies1 = neck->getBodies();
+        auto bodies2 = torso->getBodies();
+        if (bodies1.size() > 0 && bodies2.size() > 0)
+        {
+            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posNeckBase);
+            this->joints.push_back(pair);
+            b2RevoluteJoint_SetLimits(pair.second, -0.1f, 0.1f);
+            b2RevoluteJoint_EnableLimit(pair.second, true);
+        }
+    }
+    {
+        auto bodies1 = leftArm->getBodies();
+        auto bodies2 = torso->getBodies();
+        if (bodies1.size() > 0 && bodies2.size() > 0)
+        {
+            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posLeftShoulder);
+            this->joints.push_back(pair);
+            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+        }
+    }
+    {
+        auto bodies1 = rightArm->getBodies();
+        auto bodies2 = torso->getBodies();
+        if (bodies1.size() > 0 && bodies2.size() > 0)
+        {
+            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posRightShoulder);
+            this->joints.push_back(pair);
+            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+        }
+    }
+    {
+        auto bodies1 = leftLeg->getBodies();
+        auto bodies2 = torso->getBodies();
+        if (bodies1.size() > 0 && bodies2.size() > 0)
+        {
+            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posLeftHip);
+            this->joints.push_back(pair);
+            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+        }
+    }
+    {
+        auto bodies1 = rightLeg->getBodies();
+        auto bodies2 = torso->getBodies();
+        if (bodies1.size() > 0 && bodies2.size() > 0)
+        {
+            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posRightHip);
+            this->joints.push_back(pair);
+            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+        }
+    }
 }
 
 Humanoid::~Humanoid()
