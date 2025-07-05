@@ -1,6 +1,7 @@
 #include "limbBodyPart.hpp"
 
 #include "physicsUtils.hpp"
+#include <cmath>
 
 LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1, b2Vec2 worldPoint2, std::vector<std::pair<float, float>> portionRadiusPairs, std::optional<b2Filter> shapeFilter):BodyPart(registry,worldId)
 {
@@ -34,9 +35,90 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
         auto pair = PhysicsUtils::createRevolutePhysicsJoint(registry,ent,worldId,createdBodies[i-1].second,createdBodies[i].second,createdBodies[i].first);
         addJoint(pair);
     }
+
+    // Updating weight
+    weightKg = 0;
+    for(auto b:bodies){
+        weightKg+= b2Body_GetMass(b.second);
+    }
 }
 
 LimbBodyPart::~LimbBodyPart()
 {
+}
+
+
+b2Vec2 LimbBodyPart::getBase()
+{
+    constexpr int ARRAY_SIZE = 8;
+    if(this->bodies.size() != 0){
+        b2BodyId bodyId = this->bodies[0].second;
+        b2ShapeId shapeArray[ARRAY_SIZE];
+        size_t shapeCount = b2Body_GetShapeCount(bodyId);
+        if(shapeCount > 0){
+            b2Body_GetShapes(bodyId,(b2ShapeId*)&shapeArray,ARRAY_SIZE);
+            return b2Shape_GetCapsule(shapeArray[0]).center1;
+        }
+    }
+    return {0,0};
+}
+
+b2Vec2 LimbBodyPart::getEnd()
+{
+    constexpr int ARRAY_SIZE = 8;
+    if(this->bodies.size() != 0){
+        b2BodyId bodyId = this->bodies[this->bodies.size()-1].second;
+        b2ShapeId shapeArray[ARRAY_SIZE];
+        size_t shapeCount = b2Body_GetShapeCount(bodyId);
+        if(shapeCount > 0){
+            b2Body_GetShapes(bodyId,(b2ShapeId*)&shapeArray,ARRAY_SIZE);
+            return b2Shape_GetCapsule(shapeArray[0]).center2;
+        }
+    }
+    return {0,0};
+}
+
+void LimbBodyPart::pointAt(b2Vec2 worldPoint)
+{
+    if (this->bodies.empty())
+        return;
+
+    constexpr int ARRAY_SIZE = 8;
+    b2BodyId bodyId = this->bodies.back().second;
+    size_t shapeCount = b2Body_GetShapeCount(bodyId);
+
+    if (shapeCount == 0)
+        return;
+
+    b2ShapeId shapeArray[ARRAY_SIZE];
+    b2Body_GetShapes(bodyId, shapeArray, ARRAY_SIZE);
+    b2Capsule capsule = b2Shape_GetCapsule(shapeArray[0]);
+
+    // Get the world positions of the capsule ends
+    b2Vec2 worldC1 = b2Body_GetWorldPoint(bodyId, capsule.center1);
+    b2Vec2 worldC2 = b2Body_GetWorldPoint(bodyId, capsule.center2);
+
+    // Direction vector of the capsule
+    b2Vec2 limbDir = b2Normalize(b2Sub(worldC2, worldC1));
+
+    // Desired direction from capsule's C1 to target
+    b2Vec2 desiredDir = b2Normalize(b2Sub(worldPoint, worldC1));
+
+    // Angle between current and desired direction
+    float angleDiff = b2Atan2(desiredDir.y, desiredDir.x) - b2Atan2(limbDir.y, limbDir.x);
+    
+    // Normalize angle to [-π, π]
+    angleDiff = std::fmod(angleDiff + M_PI, 2 * M_PI) - M_PI;
+
+    b2Rot curBodyRot = b2Body_GetRotation(bodyId);
+    float desiredBodyAngle = b2Atan2(curBodyRot.s,curBodyRot.c)+angleDiff;
+    desiredBodyAngle = std::fmod(desiredBodyAngle + M_PI, 2 * M_PI) - M_PI;
+
+    // PD controller
+    float I = b2Body_GetRotationalInertia(bodyId);
+    float omega_n = 6.0f; // natural frequency (responsiveness)
+    float kp = I * omega_n * omega_n;
+    float kd = 2.0f * I * omega_n;
+    PhysicsUtils::applyTorguePD(bodyId, desiredBodyAngle, kp, kd);
 }
 

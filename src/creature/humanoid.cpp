@@ -175,10 +175,14 @@ void Humanoid::defend()
 
 void Humanoid::update(int FPS)
 {
-    keepTorsoUpright(FPS);
-    keepHeadUpright(FPS);
-    keepBodyAboveTheGround(this->legHeight);
-    applyForceToTorso();
+    // keepTorsoUpright(FPS);
+    // keepHeadUpright(FPS);
+    // keepBodyAboveTheGround(this->legHeight);
+    // applyForceToTorso();
+    this->leftArm->pointAt({5.0f, 5.0f});
+    this->leftLeg->pointAt({5.0f, 5.0f});
+    this->rightArm->pointAt({5.0f, 5.0f});
+    this->rightLeg->pointAt({5.0f, 5.0f});
 }
 
 float Humanoid::getHeightAboveTheGround()

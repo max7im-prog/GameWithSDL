@@ -82,6 +82,16 @@ bool Game::init()
                                            {{0, 0}, {0, 0.5f}, {14, 0.5f}, {14, 0}},
                                            std::nullopt,
                                            b2_staticBody);
+                            
+    ent = this->registry.create();
+    PhysicsUtils::createCirclePhysicsBody(registry,
+                                           ent,
+                                           worldComp.worldId,
+                                           (b2Vec2){5.0f, 5.0f},
+                                           (b2Vec2){0.0f, 0.0f},
+                                           0.2f,
+                                           std::nullopt,
+                                           b2_staticBody);
 
 
 

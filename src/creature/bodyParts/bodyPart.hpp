@@ -19,4 +19,6 @@ protected:
     b2WorldId worldId;
     bool addJoint(std::pair<entt::entity, b2JointId> jointPair);
     bool addBody(std::pair<entt::entity, b2BodyId> bodyPair);
+
+    float weightKg = 0;
 };
