@@ -26,6 +26,8 @@ add_executable(Game
     src/physics/mouseJointSystem.cpp
     src/physics/physicsUtils.cpp
 
+    src/kinematics/kinematicUtils.cpp
+
     src/creature/baseCreature.cpp
     src/creature/humanoid.cpp
     src/creature/creatureUpdateSystem.cpp
@@ -56,6 +58,7 @@ target_include_directories(Game PRIVATE
     src/render
     src/events
     src/physics
+    src/kinematics
     src/misc
     src/debug
     src/creature

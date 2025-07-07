@@ -21,9 +21,7 @@ public:
 
     // Aligns the outmost part of a limb with a direction to a worldPoint and tries to move it there
     void pointAt(b2Vec2 worldPoint);
-
-    // const std::vector<std::pair<entt::entity,b2BodyId>> &getBodies();
-    // const std::vector<std::pair<entt::entity,b2JointId>> &getJoints();
+    
     std::pair<entt::entity, b2JointId> getConnectionJoint();
     std::pair<entt::entity, b2JointId> connect(b2BodyId bodyId, b2Vec2 worldPoint);
 protected:
