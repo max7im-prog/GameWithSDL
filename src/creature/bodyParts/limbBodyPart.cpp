@@ -86,6 +86,19 @@ b2Vec2 LimbBodyPart::getEnd()
     return {0, 0};
 }
 
+std::vector<b2Vec2> LimbBodyPart::getJointsPos()
+{
+    std::vector<b2Vec2> ret;
+    if(this->bodies.size() == 0){
+        return ret;
+    }
+    for(auto elem:bodies){
+        ret.push_back(b2Body_GetPosition(elem.second));
+    }
+    ret.push_back(this->getEnd());
+    return ret;
+}
+
 void LimbBodyPart::pointAt(b2Vec2 worldPoint)
 {
     if (this->bodies.empty())

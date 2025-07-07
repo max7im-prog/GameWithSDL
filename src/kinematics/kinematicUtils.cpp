@@ -36,7 +36,6 @@ std::vector<b2Vec2> KinematicUtils::solveFABRIK(
     }
     else
     {
-
         float curMargin = b2Distance(ret.back(), target);
         for (int iter = 0; iter < maxIter && curMargin > marginMtr; iter++)
         {

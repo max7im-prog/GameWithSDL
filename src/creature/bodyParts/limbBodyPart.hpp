@@ -19,6 +19,9 @@ public:
     // Returns a position of an end of a limb
     b2Vec2 getEnd();
 
+    // Returns positions of joints in a limb, including the beginning and the end of a limb
+    std::vector<b2Vec2> getJointsPos();
+
     // Aligns the outmost part of a limb with a direction to a worldPoint and tries to move it there
     void pointAt(b2Vec2 worldPoint);
     
