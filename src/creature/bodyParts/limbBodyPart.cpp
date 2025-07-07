@@ -121,7 +121,13 @@ void LimbBodyPart::pointAt(b2Vec2 worldPoint)
 
     std::vector<float>  angleDiffs = {};
     for(int i = 0;i<oldAngles.size();i++){
-        angleDiffs.push_back(newAngles[i]-oldAngles[i]);
+        float diff = newAngles[i] - oldAngles[i];
+        // Wrap to [-π, π]
+        diff = std::fmod(diff + M_PI, 2.0f * M_PI);
+        if (diff < 0) diff += 2.0f * M_PI;
+        diff -= M_PI;
+
+        angleDiffs.push_back(diff);
     }
     
     auto pair = this->getConnectionJoint();

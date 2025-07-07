@@ -105,7 +105,7 @@ bool Game::init()
 
     ent = this->registry.create();
     auto &h3 = this->registry.emplace_or_replace<Creature>(ent);
-    h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {8, 4}));
+    h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {8, 4},10,10));
     this->registry.emplace_or_replace<PlayerControlled>(ent);
 
     ent = this->registry.create();
