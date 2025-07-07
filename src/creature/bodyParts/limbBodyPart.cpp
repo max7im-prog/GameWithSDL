@@ -1,6 +1,7 @@
 #include "limbBodyPart.hpp"
 
 #include "physicsUtils.hpp"
+#include "kinematicUtils.hpp"
 #include <cmath>
 
 LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1, b2Vec2 worldPoint2, std::vector<std::pair<float, float>> portionRadiusPairs, std::optional<b2Filter> shapeFilter) : BodyPart(registry, worldId)
@@ -37,6 +38,7 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
     {
         auto ent = registry.create();
         auto pair = PhysicsUtils::createRevolutePhysicsJoint(registry, ent, worldId, createdBodies[i - 1].second, createdBodies[i].second, createdBodies[i].first);
+        b2RevoluteJoint_EnableMotor(pair.second,true);
         addJoint(pair);
     }
 
@@ -63,7 +65,7 @@ b2Vec2 LimbBodyPart::getBase()
         if (shapeCount > 0)
         {
             b2Body_GetShapes(bodyId, (b2ShapeId *)&shapeArray, ARRAY_SIZE);
-            return b2Shape_GetCapsule(shapeArray[0]).center1;
+            return b2Body_GetWorldPoint(bodyId,b2Shape_GetCapsule(shapeArray[0]).center1);
         }
     }
     return {0, 0};
@@ -80,7 +82,7 @@ b2Vec2 LimbBodyPart::getEnd()
         if (shapeCount > 0)
         {
             b2Body_GetShapes(bodyId, (b2ShapeId *)&shapeArray, ARRAY_SIZE);
-            return b2Shape_GetCapsule(shapeArray[0]).center2;
+            return b2Body_GetWorldPoint(bodyId,b2Shape_GetCapsule(shapeArray[0]).center2);
         }
     }
     return {0, 0};
@@ -104,38 +106,32 @@ void LimbBodyPart::pointAt(b2Vec2 worldPoint)
     if (this->bodies.empty())
         return;
 
-    constexpr int ARRAY_SIZE = 8;
-    b2BodyId bodyId = this->bodies.back().second;
-    size_t shapeCount = b2Body_GetShapeCount(bodyId);
-    if (shapeCount == 0)
+    std::vector<b2Vec2> oldPos = this->getJointsPos(); // Joint positions before solving
+    std::vector<b2Vec2> newPos = KinematicUtils::solveFABRIK(oldPos[0], worldPoint, oldPos);
+
+    if (newPos.size() != oldPos.size() || newPos.size() < 2)
         return;
 
-    b2ShapeId shapeArray[ARRAY_SIZE];
-    b2Body_GetShapes(bodyId, shapeArray, ARRAY_SIZE);
-    b2Capsule capsule = b2Shape_GetCapsule(shapeArray[0]);
+    std::vector<float> oldAngles = KinematicUtils::getAngles(oldPos);
+    std::vector<float> newAngles = KinematicUtils::getAngles(newPos);
 
-    b2Vec2 worldC1 = b2Body_GetWorldPoint(bodyId, capsule.center1);
-    b2Vec2 worldC2 = b2Body_GetWorldPoint(bodyId, capsule.center2);
+    if (newAngles.size() != oldAngles.size() || oldAngles.size() ==0){
+        return;
+    }
 
-    b2Vec2 limbDir = b2Normalize(b2Sub(worldC2, worldC1));
-    b2Vec2 desiredDir = b2Normalize(b2Sub(worldPoint, worldC1));
+    std::vector<float>  angleDiffs = {};
+    for(int i = 0;i<oldAngles.size();i++){
+        angleDiffs.push_back(newAngles[i]-oldAngles[i]);
+    }
+    
+    auto pair = this->getConnectionJoint();
+    PhysicsUtils::applyPDToRevoluteJoint(pair.second,angleDiffs[0],5,5);
 
-    float angleDiff = b2Atan2(desiredDir.y, desiredDir.x) - b2Atan2(limbDir.y, limbDir.x);
-    angleDiff = std::fmod(angleDiff + M_PI, 2.0f * M_PI) - M_PI;
-
-    b2Rot curBodyRot = b2Body_GetRotation(bodyId);
-    float currentAngle = b2Atan2(curBodyRot.s, curBodyRot.c);
-    float desiredBodyAngle = currentAngle + angleDiff;
-    desiredBodyAngle = std::fmod(desiredBodyAngle + M_PI, 2.0f * M_PI) - M_PI;
-
-    // PD controller
-    float I = b2Body_GetRotationalInertia(bodyId);
-    float omega_n = 6.0f;
-    float kp = I * omega_n * omega_n;
-    float kd = 2.0f * I * omega_n;
-
-    PhysicsUtils::applyTorguePD(bodyId, desiredBodyAngle, kp, kd);
+    for(int i = 0;i<this->joints.size();i++){
+        PhysicsUtils::applyPDToRevoluteJoint(this->joints[i].second,angleDiffs[i+1],5,5);
+    }
 }
+
 
 std::pair<entt::entity, b2JointId> LimbBodyPart::getConnectionJoint()
 {
@@ -152,5 +148,7 @@ std::pair<entt::entity, b2JointId> LimbBodyPart::connect(b2BodyId bodyId, b2Vec2
     }
     auto ent = registry.create();
     auto pair = PhysicsUtils::createRevolutePhysicsJoint(this->registry,ent,this->worldId,bodyId,this->bodies[0].second,worldPoint);
+    b2RevoluteJoint_EnableMotor(pair.second,true);
+    this->connectionJoint = pair;
     return pair;
 }

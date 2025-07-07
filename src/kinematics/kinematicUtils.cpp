@@ -1,5 +1,6 @@
 #include "kinematicUtils.hpp"
 #include <numeric>
+#include <cmath>
 
 std::vector<b2Vec2> KinematicUtils::solveFABRIK(
     b2Vec2 fixture,
@@ -61,3 +62,34 @@ std::vector<b2Vec2> KinematicUtils::solveFABRIK(
 
     return ret;
 }
+
+std::vector<float> KinematicUtils::getAngles(const std::vector<b2Vec2> &pos)
+{
+    if (pos.size() < 2)
+        return {};
+
+    std::vector<float> ret;
+    b2Vec2 lastVec = {1, 0};  // Reference direction (e.g., pointing along X axis)
+
+    for (size_t i = 0; i < pos.size() - 1; ++i)
+    {
+        b2Vec2 curVec = b2Sub(pos[i + 1], pos[i]);
+
+        float lastAngle = b2Atan2(lastVec.y, lastVec.x);
+        float curAngle = b2Atan2(curVec.y, curVec.x);
+        float angleDiff = curAngle - lastAngle;
+
+        // Normalize angle to [-π, π]
+        angleDiff = std::fmod(angleDiff + M_PI, 2.0f * M_PI);
+        if (angleDiff < 0)
+            angleDiff += 2.0f * M_PI;
+        angleDiff -= M_PI;
+
+        ret.push_back(angleDiff);
+
+        lastVec = curVec;
+    }
+
+    return ret;
+}
+

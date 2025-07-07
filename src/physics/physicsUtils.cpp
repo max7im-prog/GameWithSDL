@@ -418,3 +418,41 @@ void PhysicsUtils::applyTorguePD(b2BodyId bodyId, float targetAngle, float kp, f
     float torgue = kp * error - kd * b2Body_GetAngularVelocity(bodyId);
     b2Body_ApplyTorque(bodyId,torgue,true);
 }
+
+void PhysicsUtils::applyPDToRevoluteJoint(b2JointId jointId, float angleError, float kp, float kd)
+{
+    if (b2Joint_GetType(jointId) != b2_revoluteJoint)
+        return;
+
+    if (!b2RevoluteJoint_IsMotorEnabled(jointId))
+        return;
+
+    // Get connected bodies
+    b2BodyId bodyA = b2Joint_GetBodyA(jointId);
+    b2BodyId bodyB = b2Joint_GetBodyB(jointId);
+
+    // Get their angular velocities
+    float omegaA = b2Body_GetAngularVelocity(bodyA);
+    float omegaB = b2Body_GetAngularVelocity(bodyB);
+
+    // Relative angular velocity across the joint
+    float jointSpeed = omegaB - omegaA;
+
+    // PD controller: calculate desired motor speed
+    float desiredSpeed = kp * angleError - kd * jointSpeed;
+
+    // Clamp the motor speed (optional, prevents instability)
+    float maxSpeed = 10.0f;
+    desiredSpeed = std::clamp(desiredSpeed, -maxSpeed, maxSpeed);
+
+    // Apply motor speed
+    b2RevoluteJoint_SetMotorSpeed(jointId, desiredSpeed);
+
+    // Optional safety net for torque
+    float torqueLimit = b2RevoluteJoint_GetMaxMotorTorque(jointId);
+    if (torqueLimit < 1.0f) {
+        b2RevoluteJoint_SetMaxMotorTorque(jointId, 10.0f);
+    }
+}
+
+

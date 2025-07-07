@@ -119,6 +119,8 @@ public:
    // Apply torgue with a proportional derivative control
    static void applyTorguePD(b2BodyId bodyId, float targetAngle, float kp, float kd);
 
+   static void applyPDToRevoluteJoint(b2JointId jointId, float angleError, float kp, float kd);
+
 private:
    // Used in getShapeAtPosition to get a callback from a b2World_OverlapAABB. Context should be a pointer to std::vector<b2ShapeId>
    static bool pointOverlapCallbackFunction(b2ShapeId shapeId, void *context);
