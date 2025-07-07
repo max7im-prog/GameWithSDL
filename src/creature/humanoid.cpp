@@ -116,10 +116,12 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posLeftShoulder);
-            this->joints.push_back(pair);
-            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
-            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            auto pair = leftArm->connect(bodies2[0].second,posLeftShoulder);
+            if(pair.first != entt::null){
+                this->joints.push_back(pair);
+                b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+                b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            }
         }
     }
     {
@@ -127,10 +129,12 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posRightShoulder);
+            auto pair = rightArm->connect(bodies2[0].second,posRightShoulder);
+            if(pair.first != entt::null){
             this->joints.push_back(pair);
             b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
             b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            }
         }
     }
     {
@@ -138,10 +142,12 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posLeftHip);
-            this->joints.push_back(pair);
-            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
-            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            auto pair = leftLeg->connect(bodies2[0].second,posLeftHip);
+            if(pair.first != entt::null){
+                this->joints.push_back(pair);
+                b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+                b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            }
         }
     }
     {
@@ -149,10 +155,12 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = connectRevolute(bodies1[0].second, bodies2[0].second, posRightHip);
+            auto pair = rightLeg->connect(bodies2[0].second,posRightHip);
+            if(pair.first != entt::null){
             this->joints.push_back(pair);
             b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
             b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            }
         }
     }
 }

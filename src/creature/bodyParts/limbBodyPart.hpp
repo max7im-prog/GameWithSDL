@@ -24,4 +24,8 @@ public:
 
     // const std::vector<std::pair<entt::entity,b2BodyId>> &getBodies();
     // const std::vector<std::pair<entt::entity,b2JointId>> &getJoints();
+    std::pair<entt::entity, b2JointId> getConnectionJoint();
+    std::pair<entt::entity, b2JointId> connect(b2BodyId bodyId, b2Vec2 worldPoint);
+protected:
+    std::pair<entt::entity, b2JointId> connectionJoint = {entt::null,b2JointId{}};
 };
