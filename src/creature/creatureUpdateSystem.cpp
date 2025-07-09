@@ -16,7 +16,7 @@ void CreatureUpdateSystem::update(entt::registry& registry,int FPS)
     for(auto ent:v){
         auto& comp = v.get<Creature>(ent);
         if(comp.creature){
-            comp.creature->update(FPS);
+            comp.creature->update(1.0f/FPS);
         }
     }
 }

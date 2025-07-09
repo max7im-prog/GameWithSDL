@@ -181,16 +181,19 @@ void Humanoid::defend()
 {
 }
 
-void Humanoid::update(int FPS)
+void Humanoid::update(float dt)
 {
     // keepTorsoUpright(FPS);
     // keepHeadUpright(FPS);
     // keepBodyAboveTheGround(this->legHeight);
     // applyForceToTorso();
-    this->leftArm->pointAt({5.0f, 5.0f});
-    this->leftLeg->pointAt({5.0f, 5.0f});
-    this->rightArm->pointAt({5.0f, 5.0f});
-    this->rightLeg->pointAt({5.0f, 5.0f});
+    // this->leftArm->updateTracking({5.0f, 5.0f});
+    // this->leftLeg->updateTracking({5.0f, 5.0f});
+    // this->rightArm->updateTracking({5.0f, 5.0f});
+    // this->rightLeg->updateTracking({5.0f, 5.0f});
+    for(auto bp:this->bodyParts){
+        bp->update(dt);
+    }
 }
 
 float Humanoid::getHeightAboveTheGround()

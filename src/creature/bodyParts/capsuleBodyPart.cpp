@@ -12,5 +12,6 @@ CapsuleBodyPart::~CapsuleBodyPart()
 {
 }
 
-
-
+void CapsuleBodyPart::update(float dt)
+{
+}

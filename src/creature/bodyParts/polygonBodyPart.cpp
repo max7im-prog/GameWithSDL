@@ -12,3 +12,7 @@ PolygonBodyPart::PolygonBodyPart(entt::registry &registry, b2WorldId worldId, b2
 PolygonBodyPart::~PolygonBodyPart()
 {
 }
+
+void PolygonBodyPart::update(float dt)
+{
+}

@@ -24,7 +24,7 @@ public:
     void aim(b2Vec2 point) override;
     void attack() override;
     void defend() override;
-    void update(int FPS) override;
+    void update(float dt) override;
     void move(b2Vec2 direction, float speedMperSec, float accelerationMpS2) override;
 protected:
     // Get a height of a torso above the ground in meters, returns -1 if could not find the ground or if too high

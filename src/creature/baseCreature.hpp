@@ -19,7 +19,7 @@ public:
     virtual void aim(b2Vec2 direction) = 0;
     virtual void attack() = 0;
     virtual void defend() = 0;
-    virtual void update(int FPS) = 0;
+    virtual void update(float dt) = 0;
 
 protected:
     b2WorldId worldId;

@@ -12,6 +12,6 @@ CircleBodyPart::~CircleBodyPart()
 {
 }
 
-
-
-
+void CircleBodyPart::update(float dt)
+{
+}

@@ -28,6 +28,8 @@ add_executable(Game
 
     src/controls/kinematics/kinematicUtils.cpp
 
+    src/controls/PID/PIDController.cpp
+
     src/creature/baseCreature.cpp
     src/creature/humanoid.cpp
     src/creature/creatureUpdateSystem.cpp
@@ -64,6 +66,7 @@ target_include_directories(Game PRIVATE
     src/creature/bodyParts
     src/controls
     src/controls/kinematics
+    src/controls/PID
 )
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")

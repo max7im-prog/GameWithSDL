@@ -11,6 +11,8 @@ public:
 
     const virtual std::vector<std::pair<entt::entity,b2BodyId>> &getBodies();
     const virtual std::vector<std::pair<entt::entity,b2JointId>> &getJoints();
+
+    virtual void update(float dt) = 0;
     
 protected:
     std::vector<std::pair<entt::entity,b2BodyId>> bodies;
