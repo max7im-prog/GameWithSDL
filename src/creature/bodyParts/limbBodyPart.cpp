@@ -103,6 +103,7 @@ std::vector<b2Vec2> LimbBodyPart::getJointsPos()
 
 void LimbBodyPart::pointAt(b2Vec2 worldPoint)
 {
+    // TODO: rewrite to apply force directly to segments,without using joint motors
     if (this->bodies.empty())
         return;
 
