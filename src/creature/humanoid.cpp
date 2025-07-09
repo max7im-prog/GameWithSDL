@@ -169,8 +169,10 @@ Humanoid::~Humanoid()
 {
 }
 
-void Humanoid::aim(b2Vec2 point)
+void Humanoid::aim(b2Vec2 direction, bool aim)
 {
+    this->leftArm->trackPoint(direction,aim);
+    this->rightArm->trackPoint(direction,aim);
 }
 
 void Humanoid::attack()

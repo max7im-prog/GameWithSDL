@@ -16,7 +16,7 @@ public:
 
     virtual void move(b2Vec2 direction, float speedMperSec, float accelerationMpS2) = 0;
     virtual void jump();
-    virtual void aim(b2Vec2 direction) = 0;
+    virtual void aim(b2Vec2 direction, bool aim) = 0;
     virtual void attack() = 0;
     virtual void defend() = 0;
     virtual void update(float dt) = 0;

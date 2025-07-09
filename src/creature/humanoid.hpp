@@ -21,7 +21,7 @@ public:
         float sizeYMeters = 2.0f);
     ~Humanoid();
 
-    void aim(b2Vec2 point) override;
+    void aim(b2Vec2 direction, bool aim) override;
     void attack() override;
     void defend() override;
     void update(float dt) override;

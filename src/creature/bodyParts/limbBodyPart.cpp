@@ -46,9 +46,13 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
     this->PIDControllers = {};
     for (auto [ent, body] : this->bodies)
     {
-        // TODO: calculate dependent on weight
-        PIDController first(5, 5, 5);
-        PIDController second(5, 5, 5);
+        float mass = b2Body_GetMass(body);
+        float omega_n = 0.2f;
+        float kp = mass * omega_n * omega_n;
+        float kd = 2.0f * mass * omega_n;
+        float ki = 0.1f * kp;
+        PIDController first(kp, ki, kd);
+        PIDController second(kp, ki, kd);
         this->PIDControllers.push_back({first, second});
     }
 

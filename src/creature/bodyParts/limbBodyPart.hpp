@@ -31,12 +31,11 @@ public:
     void update(float dt) override;
 
 protected:
-
     // Stores PID controllers for each segment of a limb (2 controllers for each segment - 1 for beginning and 1 for end of a segment)
-    std::vector<std::pair<PIDController,PIDController>> PIDControllers;
+    std::vector<std::pair<PIDController, PIDController>> PIDControllers;
     std::pair<entt::entity, b2JointId> connectionJoint = {entt::null, b2JointId{}};
-    b2Vec2 trackingPoint;
-    bool isTracking;
+    b2Vec2 trackingPoint = {0, 0};
+    bool isTracking = false;
 
     // Points a limb at a world point by using inverse kinematics and applying appropriate forces to segments of a limb
     void updateTracking(float dt);
