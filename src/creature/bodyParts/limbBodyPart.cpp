@@ -4,6 +4,8 @@
 #include "kinematicUtils.hpp"
 #include <cmath>
 
+constexpr float DEFAULT_LIMB_RESPONSIVENESS = 1.0f;
+
 LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1, b2Vec2 worldPoint2, std::vector<std::pair<float, float>> portionRadiusPairs, std::optional<b2Filter> shapeFilter) : BodyPart(registry, worldId), isTracking(false), trackingPoint({0, 0})
 {
     float totalPortions = 0;
@@ -44,17 +46,18 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
         addJoint(pair);
     }
 
-    // Creating PID controllers for each segment
+    // Creating PD controllers for each segment (integral component = 0)
     this->PIDControllers = {};
     for (auto [ent, body] : this->bodies)
     {
         float mass = b2Body_GetMass(body);
-        float omega_n = 0.2f;
+        float omega_n = DEFAULT_LIMB_RESPONSIVENESS;
         float kp = mass * omega_n * omega_n;
         float kd = 2.0f * mass * omega_n;
-        float ki = 0.1f * kp;
-        PIDScalarController first(kp, ki, kd);
-        PIDScalarController second(kp, ki, kd);
+        // float ki = 0.1f * kp;
+        float ki = 0;
+        PIDVectorController first(kp, ki, kd);
+        PIDVectorController second(kp, ki, kd);
         this->PIDControllers.push_back({first, second});
     }
 
@@ -156,20 +159,18 @@ void LimbBodyPart::updateTracking(float dt)
     for (int i = 0; i < newPos.size() - 1; i++)
     {
         constexpr int ARRAY_SIZE = 10;
-        float error1 = b2Distance(newPos[i], oldPos[i]);
-        float error2 = b2Distance(newPos[i + 1], oldPos[i + 1]);
-        float force1 = this->PIDControllers[i].first.update(error1, dt);
-        float force2 = this->PIDControllers[i].second.update(error2, dt);
-        b2Vec2 dir1 = b2Normalize(b2Sub(newPos[i], oldPos[i]));
-        b2Vec2 dir2 = b2Normalize(b2Sub(newPos[i + 1], oldPos[i + 1]));
+        b2Vec2 error1 = b2Sub(newPos[i], oldPos[i]);
+        b2Vec2 error2 = b2Sub(newPos[i + 1], oldPos[i + 1]);
+        b2Vec2 force1 = this->PIDControllers[i].first.update(error1, dt);
+        b2Vec2 force2 = this->PIDControllers[i].second.update(error2, dt);
 
         b2BodyId bodyId = this->bodies[i].second;
         b2ShapeId shapeArray[ARRAY_SIZE];
         b2Body_GetShapes(bodyId, (b2ShapeId *)&shapeArray, ARRAY_SIZE);
         b2Capsule caps = b2Shape_GetCapsule(shapeArray[0]);
 
-        b2Body_ApplyForce(bodyId, b2MulSV(force1, dir1), b2Body_GetWorldPoint(bodyId, caps.center1), true);
-        b2Body_ApplyForce(bodyId, b2MulSV(force2, dir2), b2Body_GetWorldPoint(bodyId, caps.center2), true);
+        b2Body_ApplyForce(bodyId, force1, b2Body_GetWorldPoint(bodyId, caps.center1), true);
+        b2Body_ApplyForce(bodyId, force2, b2Body_GetWorldPoint(bodyId, caps.center2), true);
     }
 }
 
