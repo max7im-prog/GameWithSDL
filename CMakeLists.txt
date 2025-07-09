@@ -28,7 +28,7 @@ add_executable(Game
 
     src/controls/kinematics/kinematicUtils.cpp
 
-    src/controls/PID/PIDController.cpp
+    src/controls/PID/PIDScalarController.cpp
 
     src/creature/baseCreature.cpp
     src/creature/humanoid.cpp

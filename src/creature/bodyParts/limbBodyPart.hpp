@@ -1,7 +1,7 @@
 #pragma once
 #include "bodyPart.hpp"
 #include <optional>
-#include "PIDController.hpp"
+#include "PIDScalarController.hpp"
 
 class LimbBodyPart : public BodyPart
 {
@@ -32,7 +32,7 @@ public:
 
 protected:
     // Stores PID controllers for each segment of a limb (2 controllers for each segment - 1 for beginning and 1 for end of a segment)
-    std::vector<std::pair<PIDController, PIDController>> PIDControllers;
+    std::vector<std::pair<PIDScalarController, PIDScalarController>> PIDControllers;
     std::pair<entt::entity, b2JointId> connectionJoint = {entt::null, b2JointId{}};
     b2Vec2 trackingPoint = {0, 0};
     bool isTracking = false;

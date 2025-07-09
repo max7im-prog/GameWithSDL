@@ -34,11 +34,13 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
         curPoint = b2Add(curPoint, increment);
     }
 
+    // Connectng segments with revolute joints
     for (int i = 1; i < createdBodies.size(); i++)
     {
         auto ent = registry.create();
         auto pair = PhysicsUtils::createRevolutePhysicsJoint(registry, ent, worldId, createdBodies[i - 1].second, createdBodies[i].second, createdBodies[i].first);
         b2RevoluteJoint_EnableMotor(pair.second, true);
+        // b2RevoluteJoint_set
         addJoint(pair);
     }
 
@@ -51,8 +53,8 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
         float kp = mass * omega_n * omega_n;
         float kd = 2.0f * mass * omega_n;
         float ki = 0.1f * kp;
-        PIDController first(kp, ki, kd);
-        PIDController second(kp, ki, kd);
+        PIDScalarController first(kp, ki, kd);
+        PIDScalarController second(kp, ki, kd);
         this->PIDControllers.push_back({first, second});
     }
 
