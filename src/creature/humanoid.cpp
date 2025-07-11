@@ -4,7 +4,7 @@
 #include "physicsComponents.hpp"
 
 constexpr float DEFAULT_TORSO_HEIGHT_RESPONSIVENESS = 1.0f;
-constexpr float DEFAULT_TORSO_ROTATION_RESPONSIVENESS = 1.0f;
+constexpr float DEFAULT_TORSO_ROTATION_RESPONSIVENESS = 3.0f;
 
 Humanoid::Humanoid(entt::registry &registry,
                    entt::entity self,
@@ -62,6 +62,7 @@ Humanoid::Humanoid(entt::registry &registry,
         torso = std::make_shared<PolygonBodyPart>(
             this->registry, worldId, posTorsoBase, torsoShape, filter);
         this->bodyParts.push_back(torso);
+        this->torsoHeight = 5.0f * measureY;
     }
 
     // Limbs
@@ -182,7 +183,7 @@ Humanoid::Humanoid(entt::registry &registry,
         this->heightController = PIDScalarController(kp, ki, kd);
     }
     {
-        float mass = b2Body_GetMass(this->torso->getBodies()[0].second);
+        float mass = this->weightKg;
         float omega_n = DEFAULT_TORSO_ROTATION_RESPONSIVENESS;
         float kp = mass * gravity * omega_n * omega_n;
         float kd = 2.0f * mass * omega_n;
@@ -219,6 +220,8 @@ void Humanoid::update(float dt)
     // this->leftLeg->updateTracking({5.0f, 5.0f});
     // this->rightArm->updateTracking({5.0f, 5.0f});
     // this->rightLeg->updateTracking({5.0f, 5.0f});
+    this->keepTorsoAboveTheGround(dt);
+    this->keepTorsoUpgright(dt);
     for (auto bp : this->bodyParts)
     {
         bp->update(dt);
@@ -228,68 +231,91 @@ void Humanoid::update(float dt)
 float Humanoid::getHeightAboveTheGround()
 {
     // TODO: delete?
-    // float ret = -1.0f;
-    // b2Vec2 posHipLeft = b2Body_GetWorldPoint(PhysicsUtils::getBodyId(this->registry, femurLeft), {0, 0});
-    // b2Vec2 posHipRight = b2Body_GetWorldPoint(PhysicsUtils::getBodyId(this->registry, femurRight), {0, 0});
+    float ret = -1.0f;
 
-    // struct MyRaycastContext
-    // {
-    //     int humanoidGroupId;
-    //     float minDistance = FLT_MAX;
-    //     b2Vec2 origin = {0, 0};
-    //     b2ShapeId closestShape = b2_nullShapeId;
-    // } contextHipLeft, contextHipRight;
-    // contextHipLeft.humanoidGroupId = this->groupId;
-    // contextHipLeft.origin = posHipLeft;
-    // contextHipRight.humanoidGroupId = this->groupId;
-    // contextHipRight.origin = posHipRight;
+    b2Vec2 posLeftHip = this->leftLeg->getBase();
+    b2Vec2 posRightHip = this->rightLeg->getBase();
 
-    // auto fcn = [](b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void *context) -> float
-    // {
-    //     MyRaycastContext *myRaycastContext = static_cast<MyRaycastContext *>(context);
-    //     if (b2Shape_GetFilter(shapeId).groupIndex != myRaycastContext->humanoidGroupId)
-    //     {
-    //         float dist = b2Distance(myRaycastContext->origin, point);
-    //         if (dist < myRaycastContext->minDistance)
-    //         {
-    //             myRaycastContext->minDistance = dist;
-    //             myRaycastContext->closestShape = shapeId;
-    //         }
-    //         return fraction;
-    //     }
-    //     else
-    //     {
-    //         return -1;
-    //     }
-    // };
+    struct MyRaycastContext
+    {
+        int humanoidGroupId;
+        float minDistance = FLT_MAX;
+        b2Vec2 origin = {0, 0};
+        b2ShapeId closestShape = b2_nullShapeId;
+    } contextHipLeft, contextHipRight;
+    contextHipLeft.humanoidGroupId = this->groupId;
+    contextHipLeft.origin = posLeftHip;
+    contextHipRight.humanoidGroupId = this->groupId;
+    contextHipRight.origin = posRightHip;
 
-    // // TODO: don't use a sizeYMeters*3, come up with something more general
-    // b2World_CastRay(this->worldId, posHipLeft, {0, -sizeYMeters*3}, b2DefaultQueryFilter(), fcn, &contextHipLeft);
-    // b2World_CastRay(this->worldId, posHipRight, {0, -sizeYMeters*3}, b2DefaultQueryFilter(), fcn, &contextHipRight);
+    auto fcn = [](b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void *context) -> float
+    {
+        MyRaycastContext *myRaycastContext = static_cast<MyRaycastContext *>(context);
+        if (b2Shape_GetFilter(shapeId).groupIndex != myRaycastContext->humanoidGroupId)
+        {
+            float dist = b2Distance(myRaycastContext->origin, point);
+            if (dist < myRaycastContext->minDistance)
+            {
+                myRaycastContext->minDistance = dist;
+                myRaycastContext->closestShape = shapeId;
+            }
+            return fraction;
+        }
+        else
+        {
+            return -1;
+        }
+    };
 
-    // float dLeft = -1, dRight = -1;
-    // float n = 0;
-    // float s = 0;
+    // TODO: don't use a sizeYMeters*3, come up with something more general
+    b2World_CastRay(this->worldId, posLeftHip, {0, -sizeYMeters * 3}, b2DefaultQueryFilter(), fcn, &contextHipLeft);
+    b2World_CastRay(this->worldId, posRightHip, {0, -sizeYMeters * 3}, b2DefaultQueryFilter(), fcn, &contextHipRight);
 
-    // if (!B2_ID_EQUALS(contextHipLeft.closestShape, b2_nullShapeId))
-    // {
-    //     dLeft = contextHipLeft.minDistance;
-    //     s += dLeft;
-    //     n++;
-    // }
-    // if (!B2_ID_EQUALS(contextHipRight.closestShape, b2_nullShapeId))
-    // {
-    //     dRight = contextHipRight.minDistance;
-    //     s += dRight;
-    //     n++;
-    // }
-    // if (n != 0)
-    // {
-    //     ret = s / n;
-    // }
+    float dLeft = -1, dRight = -1;
+    float n = 0;
+    float s = 0;
 
-    // return ret;
-    return 0;
+    if (!B2_ID_EQUALS(contextHipLeft.closestShape, b2_nullShapeId))
+    {
+        dLeft = contextHipLeft.minDistance;
+        s += dLeft;
+        n++;
+    }
+    if (!B2_ID_EQUALS(contextHipRight.closestShape, b2_nullShapeId))
+    {
+        dRight = contextHipRight.minDistance;
+        s += dRight;
+        n++;
+    }
+    if (n != 0)
+    {
+        ret = s / n;
+    }
+
+    return ret;
+}
+
+void Humanoid::keepTorsoAboveTheGround(float dt)
+{
+    float curHeight  = getHeightAboveTheGround();
+    if(curHeight <0){
+        return;
+    }
+    float error = this->legHeight-curHeight;
+    if(error <0 &&std::abs(error)/this->legHeight >0.2){
+        return;
+    }
+    float force = this->heightController.update(error,dt);
+    b2BodyId torsoId = this->torso->getBodies()[0].second;
+    b2Body_ApplyForce(torsoId,b2MulSV(force,{0,1}),b2Body_GetWorldPoint(torsoId,b2MulSV(torsoHeight,{0,-1})),true);
+}
+
+void Humanoid::keepTorsoUpgright(float dt)
+{
+    b2BodyId torsoId = this->torso->getBodies()[0].second;
+    float error =  -b2Rot_GetAngle(b2Body_GetRotation(torsoId));
+    float torque = this->torsoRotationController.update(error,dt);
+    b2Body_ApplyTorque(torsoId,torque,true);
 }
 
 void Humanoid::move(b2Vec2 direction, float speedMperSec, float accelerationMpS2)

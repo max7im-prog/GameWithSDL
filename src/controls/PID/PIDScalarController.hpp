@@ -9,6 +9,7 @@ public:
     PIDScalarController();
 
     // Updates a state of a PID controller and returns the new output of a controller
+    // Error in this context is DESIRED value minus CURRENT value
     float update(float error, float dt);
 
     void reset();

@@ -95,10 +95,10 @@ bool Game::init()
 
 
 
-    ent = this->registry.create();
-    auto &h1 = this->registry.emplace_or_replace<Creature>(ent);
-    h1.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {2, 4},1,1));
-    h1.creature->aim({5,5},true);
+    // ent = this->registry.create();
+    // auto &h1 = this->registry.emplace_or_replace<Creature>(ent);
+    // h1.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {2, 4},1,1));
+    // h1.creature->aim({5,5},true);
 
 
     ent = this->registry.create();
@@ -106,16 +106,16 @@ bool Game::init()
     h2.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {5, 7},7,5));
     h2.creature->aim({5,5},true);
 
-    ent = this->registry.create();
-    auto &h3 = this->registry.emplace_or_replace<Creature>(ent);
-    h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {8, 4},10,10));
-    h3.creature->aim({5,5},true);
-    this->registry.emplace_or_replace<PlayerControlled>(ent);
+    // ent = this->registry.create();
+    // auto &h3 = this->registry.emplace_or_replace<Creature>(ent);
+    // h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {8, 4},10,10));
+    // h3.creature->aim({5,5},true);
+    // this->registry.emplace_or_replace<PlayerControlled>(ent);
 
-    ent = this->registry.create();
-    auto &h4 = this->registry.emplace_or_replace<Creature>(ent);
-    h4.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {11, 4},6,2));
-    h4.creature->aim({5,5},true);
+    // ent = this->registry.create();
+    // auto &h4 = this->registry.emplace_or_replace<Creature>(ent);
+    // h4.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry, ent, worldComp.worldId, {11, 4},6,2));
+    // h4.creature->aim({5,5},true);
 
 
     return true;

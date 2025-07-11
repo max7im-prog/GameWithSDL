@@ -53,7 +53,7 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
     {
         float mass = b2Body_GetMass(body);
         float omega_n = DEFAULT_LIMB_RESPONSIVENESS;
-        float kp = mass*gravity * omega_n * omega_n;
+        float kp = mass * gravity * omega_n * omega_n;
         float kd = 2.0f * mass * omega_n;
         // float ki = 0.1f * kp;
         float ki = 0; // Set integral component to zero because it works best that way
@@ -157,6 +157,7 @@ void LimbBodyPart::updateTracking(float dt)
     if (newPos.size() != oldPos.size() || newPos.size() < 2)
         return;
 
+    b2Vec2 resultingForce = {0, 0};
     for (int i = 0; i < newPos.size() - 1; i++)
     {
         constexpr int ARRAY_SIZE = 10;
@@ -172,7 +173,14 @@ void LimbBodyPart::updateTracking(float dt)
 
         b2Body_ApplyForce(bodyId, force1, b2Body_GetWorldPoint(bodyId, caps.center1), true);
         b2Body_ApplyForce(bodyId, force2, b2Body_GetWorldPoint(bodyId, caps.center2), true);
+        resultingForce = b2Add(resultingForce, force1);
+        resultingForce = b2Add(resultingForce, force2);
     }
+
+    // Apply force to the base of a limb to negate the force applied to body solving kinematic problem
+    b2Vec2 basePos = b2Body_GetPosition(this->bodies[0].second);
+    b2Body_ApplyForce(this->bodies[0].second, b2Neg(resultingForce), basePos, true);
+
 }
 
 std::pair<entt::entity, b2JointId> LimbBodyPart::getConnectionJoint()

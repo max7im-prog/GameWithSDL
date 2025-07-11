@@ -10,6 +10,7 @@ public:
     ~PIDVectorController();
 
     // Updates a state of a PID controller and returns the new output of a controller
+    // Error in this context is DESIRED value minus CURRENT value
     b2Vec2 update(b2Vec2 error, float dt);
 
     void reset();

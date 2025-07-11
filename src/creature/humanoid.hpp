@@ -34,12 +34,14 @@ public:
 protected:
     // Get a height of a torso above the ground in meters, returns -1 if could not find the ground or if too high
     float getHeightAboveTheGround();
+    void keepTorsoAboveTheGround(float dt);
+    void keepTorsoUpgright(float dt);
 
 protected:
     float sizeXMeters;
     float sizeYMeters;
-
     float legHeight;
+    float torsoHeight;
 
     float desiredSpeed;
     float currentAcceleration;
