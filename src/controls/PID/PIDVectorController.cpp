@@ -19,6 +19,11 @@ b2Vec2 PIDVectorController::update(b2Vec2 error, float dt)
     previousError = error;
     b2Vec2 output = b2Add(b2Add(b2MulSV(kp, error), b2MulSV(ki, integral)), b2MulSV(kd, derivative));
 
+    if (b2Length(integral) > maxForce)
+    {
+        integral = b2MulSV(maxForce, b2Normalize(integral));
+    }
+
     if (b2Length(output) > maxForce)
     {
         output = b2MulSV(maxForce, b2Normalize(output));

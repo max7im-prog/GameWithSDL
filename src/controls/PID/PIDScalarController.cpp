@@ -8,7 +8,7 @@ PIDScalarController::~PIDScalarController()
 {
 }
 
-PIDScalarController::PIDScalarController():kp(0), ki(0), kd(0), maxForce(INFINITY), integral(0), previousError(0)
+PIDScalarController::PIDScalarController() : kp(0), ki(0), kd(0), maxForce(INFINITY), integral(0), previousError(0)
 {
 }
 
@@ -18,6 +18,15 @@ float PIDScalarController::update(float error, float dt)
     float derivative = error - previousError;
     previousError = error;
     float output = kp * error + ki * integral + kd * derivative;
+
+    if (integral > maxForce)
+    {
+        integral = maxForce;
+    }
+    else if (integral < -maxForce)
+    {
+        integral = -maxForce;
+    }
 
     if (output > maxForce)
     {

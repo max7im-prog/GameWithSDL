@@ -32,7 +32,10 @@ std::vector<b2Vec2> KinematicUtils::solveFABRIK(
     size_t maxIter)
 {
     std::vector<b2Vec2> ret = points; 
-    size_t numPoints = lengths.size() +1;
+    size_t numPoints = points.size();
+    if(numPoints-1!=lengths.size()){
+        return ret;
+    }
 
     float totalDist = 0;
     for (auto &elem : lengths)
