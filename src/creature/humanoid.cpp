@@ -3,6 +3,9 @@
 #include "baseCreature.hpp"
 #include "physicsComponents.hpp"
 
+constexpr float DEFAULT_TORSO_HEIGHT_RESPONSIVENESS = 1.0f;
+constexpr float DEFAULT_TORSO_ROTATION_RESPONSIVENESS = 1.0f;
+
 Humanoid::Humanoid(entt::registry &registry,
                    entt::entity self,
                    b2WorldId worldId,
@@ -116,8 +119,9 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = leftArm->connect(bodies2[0].second,posLeftShoulder);
-            if(pair.first != entt::null){
+            auto pair = leftArm->connect(bodies2[0].second, posLeftShoulder);
+            if (pair.first != entt::null)
+            {
                 this->joints.push_back(pair);
                 b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
                 b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
@@ -129,11 +133,12 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = rightArm->connect(bodies2[0].second,posRightShoulder);
-            if(pair.first != entt::null){
-            this->joints.push_back(pair);
-            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
-            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            auto pair = rightArm->connect(bodies2[0].second, posRightShoulder);
+            if (pair.first != entt::null)
+            {
+                this->joints.push_back(pair);
+                b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+                b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
             }
         }
     }
@@ -142,8 +147,9 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = leftLeg->connect(bodies2[0].second,posLeftHip);
-            if(pair.first != entt::null){
+            auto pair = leftLeg->connect(bodies2[0].second, posLeftHip);
+            if (pair.first != entt::null)
+            {
                 this->joints.push_back(pair);
                 b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
                 b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
@@ -155,13 +161,33 @@ Humanoid::Humanoid(entt::registry &registry,
         auto bodies2 = torso->getBodies();
         if (bodies1.size() > 0 && bodies2.size() > 0)
         {
-            auto pair = rightLeg->connect(bodies2[0].second,posRightHip);
-            if(pair.first != entt::null){
-            this->joints.push_back(pair);
-            b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
-            b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
+            auto pair = rightLeg->connect(bodies2[0].second, posRightHip);
+            if (pair.first != entt::null)
+            {
+                this->joints.push_back(pair);
+                b2RevoluteJoint_SetMaxMotorTorque(pair.second, b2Body_GetMass(bodies1[0].second) / 11);
+                b2RevoluteJoint_SetMotorSpeed(pair.second, 0.0f);
             }
         }
+    }
+
+    // PID controllers
+    float gravity = b2Length(b2World_GetGravity(this->worldId));
+    {
+        float mass = this->weightKg;
+        float omega_n = DEFAULT_TORSO_HEIGHT_RESPONSIVENESS;
+        float kp = mass * gravity * omega_n * omega_n;
+        float kd = 2.0f * mass * omega_n;
+        float ki = 0;
+        this->heightController = PIDScalarController(kp, ki, kd);
+    }
+    {
+        float mass = b2Body_GetMass(this->torso->getBodies()[0].second);
+        float omega_n = DEFAULT_TORSO_ROTATION_RESPONSIVENESS;
+        float kp = mass * gravity * omega_n * omega_n;
+        float kd = 2.0f * mass * omega_n;
+        float ki = 0;
+        this->torsoRotationController = PIDScalarController(kp, ki, kd);
     }
 }
 
@@ -171,8 +197,8 @@ Humanoid::~Humanoid()
 
 void Humanoid::aim(b2Vec2 direction, bool aim)
 {
-    this->leftArm->trackPoint(direction,aim);
-    this->rightArm->trackPoint(direction,aim);
+    this->leftArm->trackPoint(direction, aim);
+    this->rightArm->trackPoint(direction, aim);
 }
 
 void Humanoid::attack()
@@ -193,7 +219,8 @@ void Humanoid::update(float dt)
     // this->leftLeg->updateTracking({5.0f, 5.0f});
     // this->rightArm->updateTracking({5.0f, 5.0f});
     // this->rightLeg->updateTracking({5.0f, 5.0f});
-    for(auto bp:this->bodyParts){
+    for (auto bp : this->bodyParts)
+    {
         bp->update(dt);
     }
 }
@@ -263,95 +290,6 @@ float Humanoid::getHeightAboveTheGround()
 
     // return ret;
     return 0;
-}
-
-void Humanoid::keepTorsoUpright(int FPS)
-{
-    // TODO: delete?
-    // b2BodyId torsoId = PhysicsUtils::getBodyId(this->registry, torso);
-
-    // float I = b2Body_GetRotationalInertia(torsoId);
-    // float omega_n = 6.0f; // rad/s: responsiveness
-    // float kp = I * omega_n * omega_n;
-    // float kd = 2 * I * omega_n;
-    // float targetAngle = 0.0f;
-    // PhysicsUtils::applyTorguePD(torsoId, targetAngle, kp, kd);
-}
-
-void Humanoid::keepHeadUpright(int FPS)
-{
-    // TODO: delete?
-    // b2BodyId neckId = PhysicsUtils::getBodyId(this->registry, neck);
-
-    // float I = b2Body_GetRotationalInertia(neckId);
-    // float omega_n = 8.0f; // rad/s: responsiveness
-    // float kp = I * omega_n * omega_n;
-    // float kd = 2 * I * omega_n;
-    // float targetAngle = 0.0f;
-    // PhysicsUtils::applyTorguePD(neckId, targetAngle, kp, kd);
-
-    // b2BodyId headId = PhysicsUtils::getBodyId(this->registry, head);
-
-    // I = b2Body_GetRotationalInertia(headId);
-    // omega_n = 4.0f; // rad/s: responsiveness
-    // kp = I * omega_n * omega_n;
-    // kd = 2 * I * omega_n;
-    // targetAngle = 0.0f;
-    // PhysicsUtils::applyTorguePD(headId, targetAngle, kp, kd);
-}
-
-// TODO: rewrite so it works properly
-void Humanoid::keepBodyAboveTheGround(float targetHeightMeters)
-{
-    // TODO: delete?
-    // float curDistance = getHeightAboveTheGround();
-
-    // // No valid ground detected — abort
-    // if (curDistance < 0.0f)
-    //     return;
-
-    // // Get torso body
-    // b2BodyId torsoBody = PhysicsUtils::getBodyId(this->registry, torso);
-
-    // // PD controller gains (you can tune these later)
-    // float kp = 2.3f*this->weightKg;
-    // float kd = 0.7f*this->weightKg;
-
-    // // Error and derivative
-    // float error = targetHeightMeters - curDistance;
-    // float velocity = b2Body_GetLinearVelocity(torsoBody).y;
-
-    // // Only apply upward force
-    // float force = kp * error - kd * velocity;
-    // if (force < 0.0f)
-    //     force = 0.0f;
-
-    // // Apply upward force at torso center
-    // b2Vec2 forceVec = {0.0f, force};
-    // b2Body_ApplyForceToCenter(torsoBody, forceVec, true);
-}
-
-void Humanoid::applyForceToTorso()
-{
-    // TODO: delete?
-    // if (b2LengthSquared(accelerationDir) == 0.0f)
-    //     return;
-
-    // b2BodyId torsoId = PhysicsUtils::getBodyId(this->registry, torso);
-    // b2Vec2 norm = b2Normalize(accelerationDir);
-
-    // float curSpeedInDirection = b2Dot(b2Body_GetLinearVelocity(torsoId), norm);
-
-    // if (curSpeedInDirection < desiredSpeed)
-    // {
-    //     float speedError = desiredSpeed - curSpeedInDirection;
-    //     float gain = 10.0f; // Tweak as needed
-    //     float limitedAcceleration = std::min(currentAcceleration, speedError * gain);
-    //     float forceN = this->weightKg * limitedAcceleration;
-
-    //     b2Vec2 forceVector = b2MulSV(forceN, norm);
-    //     b2Body_ApplyForceToCenter(torsoId, forceVector, true);
-    // }
 }
 
 void Humanoid::move(b2Vec2 direction, float speedMperSec, float accelerationMpS2)

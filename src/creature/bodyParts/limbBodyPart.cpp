@@ -48,14 +48,15 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
 
     // Creating PD controllers for each segment (integral component = 0)
     this->PIDControllers = {};
+    float gravity = b2Length(b2World_GetGravity(this->worldId));
     for (auto [ent, body] : this->bodies)
     {
         float mass = b2Body_GetMass(body);
         float omega_n = DEFAULT_LIMB_RESPONSIVENESS;
-        float kp = mass * omega_n * omega_n;
+        float kp = mass*gravity * omega_n * omega_n;
         float kd = 2.0f * mass * omega_n;
         // float ki = 0.1f * kp;
-        float ki = 0;
+        float ki = 0; // Set integral component to zero because it works best that way
         PIDVectorController first(kp, ki, kd);
         PIDVectorController second(kp, ki, kd);
         this->PIDControllers.push_back({first, second});

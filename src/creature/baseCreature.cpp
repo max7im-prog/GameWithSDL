@@ -74,7 +74,6 @@ void BaseCreature::jump()
 
 std::pair<entt::entity, b2JointId> BaseCreature::connectRevolute(b2BodyId first, b2BodyId second, b2Vec2 worldPoint)
 {
-    // return std::pair<entt::entity, b2JointId>();
     auto ent = this->registry.create();
     auto pair = PhysicsUtils::createRevolutePhysicsJoint(this->registry,ent,worldId,first,second,worldPoint);
 
