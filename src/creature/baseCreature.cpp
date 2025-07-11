@@ -92,9 +92,7 @@ void BaseCreature::updateWeight()
 {
     float total = 0;
     for(auto bp:this->bodyParts){
-        for(auto pair: bp->getBodies()){
-            total+=b2Body_GetMass(pair.second);
-        }
+        total+= bp->getMassKg();
     }
     this->weightKg = total;
 }

@@ -40,3 +40,12 @@ const std::vector<std::pair<entt::entity, b2JointId>> &BodyPart::getJoints()
 {
     return this->joints;
 }
+
+float BodyPart::getMassKg()
+{
+    float ret = 0.0f;
+    for(auto pair:this->bodies){
+        ret += b2Body_GetMass(pair.second);
+    }
+    return ret;
+}

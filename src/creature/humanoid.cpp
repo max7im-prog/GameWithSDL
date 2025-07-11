@@ -3,7 +3,7 @@
 #include "baseCreature.hpp"
 #include "physicsComponents.hpp"
 
-constexpr float DEFAULT_TORSO_HEIGHT_RESPONSIVENESS = 1.0f;
+constexpr float DEFAULT_TORSO_HEIGHT_RESPONSIVENESS = 1.1f;
 constexpr float DEFAULT_TORSO_ROTATION_RESPONSIVENESS = 3.0f;
 
 Humanoid::Humanoid(entt::registry &registry,
@@ -16,8 +16,7 @@ Humanoid::Humanoid(entt::registry &registry,
     float measureX = sizeXMeters / 17.0f; // I got the proportions from a drawing of a ragdoll
     float measureY = sizeYMeters / 14.5f;
     float measure = std::min(measureX, measureY);
-
-    legHeight = measureY * 6.0f + 0.5f * measure;
+    this->legHeight = (measureY * 6.0f + 0.5f * measure);
 
     b2Vec2 posNeckBase = b2Add(position, {0, 0});
     b2Vec2 posHeadBase = b2Add(posNeckBase, {0, measureY * 1.0f});
@@ -179,8 +178,9 @@ Humanoid::Humanoid(entt::registry &registry,
         float omega_n = DEFAULT_TORSO_HEIGHT_RESPONSIVENESS;
         float kp = mass * gravity * omega_n * omega_n;
         float kd = 2.0f * mass * omega_n;
-        float ki = 0;
-        this->heightController = PIDScalarController(kp, ki, kd);
+        float ki = kp*0.1;
+        float maxForce = mass*gravity*4;
+        this->heightController = PIDScalarController(kp, ki, kd,maxForce);
     }
     {
         float mass = this->weightKg;
@@ -230,7 +230,7 @@ void Humanoid::update(float dt)
 
 float Humanoid::getHeightAboveTheGround()
 {
-    // TODO: delete?
+
     float ret = -1.0f;
 
     b2Vec2 posLeftHip = this->leftLeg->getBase();
@@ -301,8 +301,10 @@ void Humanoid::keepTorsoAboveTheGround(float dt)
     if(curHeight <0){
         return;
     }
-    float error = this->legHeight-curHeight;
-    if(error <0 &&std::abs(error)/this->legHeight >0.2){
+    float error = this->legHeight*0.8-curHeight;
+    
+    if(this->legHeight-curHeight <0 &&std::abs(this->legHeight-curHeight)/this->legHeight >0.8){
+        this->heightController.reset();
         return;
     }
     float force = this->heightController.update(error,dt);
