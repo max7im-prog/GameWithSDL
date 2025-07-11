@@ -28,7 +28,9 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
         float portion = prp.first;
         float radius = prp.second;
         auto ent = registry.create();
-        b2Vec2 increment = b2MulSV(limbLen * portion, limbDirection);
+        float segmentLen = limbLen * portion;
+        this->segmentLengths.push_back(segmentLen);
+        b2Vec2 increment = b2MulSV(segmentLen, limbDirection);
         auto pair = PhysicsUtils::createCapsulePhysicsBody(registry, ent, worldId, curPoint, {0, 0}, b2Add({0, 0}, increment), radius, shapeFilter);
         addBody(pair);
         createdBodies.push_back({curPoint, pair.second});
@@ -123,6 +125,11 @@ std::vector<b2Vec2> LimbBodyPart::getJointsPos()
     return ret;
 }
 
+const std::vector<float> &LimbBodyPart::getSegmentLengths()
+{
+    return this->segmentLengths;
+}
+
 void LimbBodyPart::trackPoint(b2Vec2 worldPoint, bool track)
 {
     if (track)
@@ -152,7 +159,7 @@ void LimbBodyPart::updateTracking(float dt)
         return;
 
     std::vector<b2Vec2> oldPos = this->getJointsPos(); // Joint positions before solving
-    std::vector<b2Vec2> newPos = KinematicUtils::solveFABRIK(oldPos[0], this->trackingPoint, oldPos);
+    std::vector<b2Vec2> newPos = KinematicUtils::solveFABRIK(oldPos[0], this->trackingPoint, oldPos,this->segmentLengths);
 
     if (newPos.size() != oldPos.size() || newPos.size() < 2)
         return;

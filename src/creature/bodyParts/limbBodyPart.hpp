@@ -23,6 +23,8 @@ public:
     // Returns positions of joints in a limb, including the beginning and the end of a limb
     std::vector<b2Vec2> getJointsPos();
 
+    const std::vector<float> &getSegmentLengths();
+
     void trackPoint(b2Vec2 worldPoint, bool track);
 
     std::pair<entt::entity, b2JointId> getConnectionJoint();
@@ -34,6 +36,7 @@ protected:
     // Stores PID controllers for each segment of a limb (2 controllers for each segment - 1 for beginning and 1 for end of a segment)
     std::vector<std::pair<PIDVectorController, PIDVectorController>> PIDControllers;
     std::pair<entt::entity, b2JointId> connectionJoint = {entt::null, b2JointId{}};
+    std::vector<float> segmentLengths;
     b2Vec2 trackingPoint = {0, 0};
     bool isTracking = false;
 

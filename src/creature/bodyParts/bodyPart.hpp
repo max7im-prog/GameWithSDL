@@ -7,6 +7,10 @@
 class BodyPart{
 public:
     BodyPart(entt::registry &registry, b2WorldId worldId);
+    BodyPart(BodyPart& other) = delete;
+    BodyPart(BodyPart&& other) = delete;
+    BodyPart& operator=(BodyPart& other) = delete;
+    BodyPart&& operator=(BodyPart&& other) = delete;
     virtual ~BodyPart();
 
     const virtual std::vector<std::pair<entt::entity,b2BodyId>> &getBodies();

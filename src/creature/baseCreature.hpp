@@ -13,6 +13,10 @@ class BaseCreature
 public:
     BaseCreature(entt::registry &registry, entt::entity self, b2WorldId worldId, b2Vec2 position, int groupId);
     virtual ~BaseCreature();
+    BaseCreature(BaseCreature& other) = delete;
+    BaseCreature(BaseCreature&& other) = delete;
+    BaseCreature& operator=(BaseCreature& other) = delete;
+    BaseCreature&& operator=(BaseCreature&& other) = delete;
 
     virtual void move(b2Vec2 direction, float speedMperSec, float accelerationMpS2) = 0;
     virtual void jump();

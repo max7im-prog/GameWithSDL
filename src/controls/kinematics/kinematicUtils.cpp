@@ -20,6 +20,20 @@ std::vector<b2Vec2> KinematicUtils::solveFABRIK(
         lengths[i] = b2Distance(points[i], points[i + 1]);
     }
 
+    return KinematicUtils::solveFABRIK(fixture,target,points,lengths,marginMtr,maxIter);
+}
+
+std::vector<b2Vec2> KinematicUtils::solveFABRIK(
+    b2Vec2 fixture,
+    b2Vec2 target,
+    const std::vector<b2Vec2> &points,
+    const std::vector<float> &lengths,
+    float marginMtr,
+    size_t maxIter)
+{
+    std::vector<b2Vec2> ret = points; 
+    size_t numPoints = lengths.size() +1;
+
     float totalDist = 0;
     for (auto &elem : lengths)
     {
