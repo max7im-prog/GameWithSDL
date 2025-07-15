@@ -157,10 +157,14 @@ void Game::render()
 
 void Game::deltaTime()
 {
-    auto cur = SDL_GetTicks();
-    if (cur - frameStart < 1000 / this->FPS)
+    Uint64 cur = SDL_GetTicks();
+    Uint64 frameDuration = 1000u / static_cast<Uint64>(this->FPS);
+
+    if (cur - frameStart < frameDuration)
     {
-        SDL_Delay(cur - frameStart);
-        frameStart = SDL_GetTicks();
+        SDL_Delay(frameDuration - (cur - frameStart));
     }
+
+    frameStart = SDL_GetTicks();
 }
+

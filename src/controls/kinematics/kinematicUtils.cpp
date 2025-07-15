@@ -55,7 +55,7 @@ std::vector<b2Vec2> KinematicUtils::solveFABRIK(
     else
     {
         float curMargin = b2Distance(ret.back(), target);
-        for (int iter = 0; iter < maxIter && curMargin > marginMtr; iter++)
+        for (size_t iter = 0; iter < maxIter && curMargin > marginMtr; iter++)
         {
             // BACKWARD
             ret.back() = target;
@@ -67,7 +67,7 @@ std::vector<b2Vec2> KinematicUtils::solveFABRIK(
 
             // FORWARD
             ret[0] = fixture;
-            for (int i = 1; i < numPoints; i++)
+            for (size_t i = 1; i < numPoints; i++)
             {
                 b2Vec2 dir = b2Normalize(b2Sub(ret[i], ret[i - 1]));
                 ret[i] = b2Add(ret[i - 1], b2MulSV(lengths[i - 1], dir));

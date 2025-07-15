@@ -6,7 +6,7 @@
 
 constexpr float DEFAULT_LIMB_RESPONSIVENESS = 1.0f;
 
-LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1, b2Vec2 worldPoint2, std::vector<std::pair<float, float>> portionRadiusPairs, std::optional<b2Filter> shapeFilter) : BodyPart(registry, worldId), isTracking(false), trackingPoint({0, 0})
+LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1, b2Vec2 worldPoint2, std::vector<std::pair<float, float>> portionRadiusPairs, std::optional<b2Filter> shapeFilter) : BodyPart(registry, worldId), trackingPoint({0, 0}), isTracking(false)
 {
     float totalPortions = 0;
     for (auto pair : portionRadiusPairs)
@@ -39,7 +39,7 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
     }
 
     // Connectng segments with revolute joints
-    for (int i = 1; i < createdBodies.size(); i++)
+    for (size_t i = 1; i < createdBodies.size(); i++)
     {
         auto ent = registry.create();
         auto pair = PhysicsUtils::createRevolutePhysicsJoint(registry, ent, worldId, createdBodies[i - 1].second, createdBodies[i].second, createdBodies[i].first);
@@ -165,7 +165,7 @@ void LimbBodyPart::updateTracking(float dt)
         return;
 
     b2Vec2 resultingForce = {0, 0};
-    for (int i = 0; i < newPos.size() - 1; i++)
+    for (size_t i = 0; i < newPos.size() - 1; i++)
     {
         constexpr int ARRAY_SIZE = 10;
         b2Vec2 error1 = b2Sub(newPos[i], oldPos[i]);

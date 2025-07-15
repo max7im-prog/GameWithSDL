@@ -124,7 +124,7 @@ void RenderUtils::renderPolygon(const std::vector<std::pair<int, int>> &vertices
 
     SDL_SetRenderDrawColor(context.renderer, color.r, color.g, color.b, color.a);
 
-    for (int i = 0; i < vertices.size() - 1; i++)
+    for (size_t i = 0; i < vertices.size() - 1; i++)
     {
         SDL_RenderLine(context.renderer,
                        vertices[i].first, vertices[i].second,

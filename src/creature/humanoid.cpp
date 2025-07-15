@@ -62,6 +62,7 @@ Humanoid::Humanoid(entt::registry &registry,
             this->registry, worldId, posTorsoBase, torsoShape, filter);
         this->bodyParts.push_back(torso);
         this->torsoHeight = 5.0f * measureY;
+        b2Body_SetLinearDamping(torso->getBodies()[0].second,0.2);
     }
 
     // Limbs
@@ -176,9 +177,9 @@ Humanoid::Humanoid(entt::registry &registry,
     {
         float mass = this->weightKg;
         float omega_n = DEFAULT_TORSO_HEIGHT_RESPONSIVENESS;
-        float kp = mass * gravity * omega_n * omega_n;
-        float kd = 2.0f * mass * omega_n;
-        float ki = kp*0.1;
+        float kp = mass * gravity * omega_n * omega_n/2;
+        float kd = 4.0f * mass * omega_n;
+        float ki = kp*0.2;
         float maxForce = mass*gravity*4;
         this->heightController = PIDScalarController(kp, ki, kd,maxForce);
     }
@@ -301,13 +302,16 @@ void Humanoid::keepTorsoAboveTheGround(float dt)
     if(curHeight <0){
         return;
     }
-    float error = this->legHeight*0.8-curHeight;
+    float error = this->legHeight*0.9-curHeight;
     
     if(this->legHeight-curHeight <0 &&std::abs(this->legHeight-curHeight)/this->legHeight >0.8){
         this->heightController.reset();
         return;
     }
     float force = this->heightController.update(error,dt);
+    if(force <0){
+        return;
+    }
     b2BodyId torsoId = this->torso->getBodies()[0].second;
     b2Body_ApplyForce(torsoId,b2MulSV(force,{0,1}),b2Body_GetWorldPoint(torsoId,b2MulSV(torsoHeight,{0,-1})),true);
 }
