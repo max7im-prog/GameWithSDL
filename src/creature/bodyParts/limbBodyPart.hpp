@@ -24,8 +24,11 @@ public:
     std::vector<b2Vec2> getJointsPos();
 
     const std::vector<float> &getSegmentLengths();
+    float getLen();
 
     void trackPoint(b2Vec2 worldPoint, bool track);
+    bool getIsTracking();
+    b2Vec2 getTrackingPoint();
 
     std::pair<entt::entity, b2JointId> getConnectionJoint();
     std::pair<entt::entity, b2JointId> connect(b2BodyId bodyId, b2Vec2 worldPoint);
@@ -37,6 +40,7 @@ protected:
     std::vector<std::pair<PIDVectorController, PIDVectorController>> PIDControllers;
     std::pair<entt::entity, b2JointId> connectionJoint = {entt::null, b2JointId{}};
     std::vector<float> segmentLengths;
+    float totalLength;
     b2Vec2 trackingPoint = {0, 0};
     bool isTracking = false;
 

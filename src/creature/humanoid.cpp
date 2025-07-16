@@ -34,6 +34,8 @@ Humanoid::Humanoid(entt::registry &registry,
     b2Vec2 posLeftFoot = b2Add(posLeftKnee, {0, -3.0f * measureY});
     b2Vec2 posRightFoot = b2Add(posRightKnee, {0, -3.0f * measureY});
 
+    this->legContext.stepSizeMtrs = 2.0 * measureX;
+
     // Filter to disable collisions between the body parts
     b2Filter filter = b2DefaultFilter();
     filter.groupIndex = this->groupId;
@@ -62,7 +64,7 @@ Humanoid::Humanoid(entt::registry &registry,
             this->registry, worldId, posTorsoBase, torsoShape, filter);
         this->bodyParts.push_back(torso);
         this->torsoHeight = 5.0f * measureY;
-        b2Body_SetLinearDamping(torso->getBodies()[0].second,0.2);
+        b2Body_SetLinearDamping(torso->getBodies()[0].second, 0.2);
     }
 
     // Limbs
@@ -177,11 +179,11 @@ Humanoid::Humanoid(entt::registry &registry,
     {
         float mass = this->weightKg;
         float omega_n = DEFAULT_TORSO_HEIGHT_RESPONSIVENESS;
-        float kp = mass * gravity * omega_n * omega_n/2;
+        float kp = mass * gravity * omega_n * omega_n / 2;
         float kd = 4.0f * mass * omega_n;
-        float ki = kp*0.2;
-        float maxForce = mass*gravity*4;
-        this->heightController = PIDScalarController(kp, ki, kd,maxForce);
+        float ki = kp * 0.2;
+        float maxForce = mass * gravity * 4;
+        this->heightController = PIDScalarController(kp, ki, kd, maxForce);
     }
     {
         float mass = this->weightKg;
@@ -223,6 +225,7 @@ void Humanoid::update(float dt)
     // this->rightLeg->updateTracking({5.0f, 5.0f});
     this->keepTorsoAboveTheGround(dt);
     this->keepTorsoUpgright(dt);
+    this->updateFeetPosition(dt);
     for (auto bp : this->bodyParts)
     {
         bp->update(dt);
@@ -298,30 +301,166 @@ float Humanoid::getHeightAboveTheGround()
 
 void Humanoid::keepTorsoAboveTheGround(float dt)
 {
-    float curHeight  = getHeightAboveTheGround();
-    if(curHeight <0){
+    float curHeight = getHeightAboveTheGround();
+    if (curHeight < 0)
+    {
         return;
     }
-    float error = this->legHeight*0.9-curHeight;
-    
-    if(this->legHeight-curHeight <0 &&std::abs(this->legHeight-curHeight)/this->legHeight >0.8){
+    float error = this->legHeight * 0.9 - curHeight;
+
+    if (this->legHeight - curHeight < 0 && std::abs(this->legHeight - curHeight) / this->legHeight > 0.8)
+    {
         this->heightController.reset();
         return;
     }
-    float force = this->heightController.update(error,dt);
-    if(force <0){
+    float force = this->heightController.update(error, dt);
+    if (force < 0)
+    {
         return;
     }
     b2BodyId torsoId = this->torso->getBodies()[0].second;
-    b2Body_ApplyForce(torsoId,b2MulSV(force,{0,1}),b2Body_GetWorldPoint(torsoId,b2MulSV(torsoHeight,{0,-1})),true);
+    b2Body_ApplyForce(torsoId, b2MulSV(force, {0, 1}), b2Body_GetWorldPoint(torsoId, b2MulSV(torsoHeight, {0, -1})), true);
 }
 
 void Humanoid::keepTorsoUpgright(float dt)
 {
     b2BodyId torsoId = this->torso->getBodies()[0].second;
-    float error =  -b2Rot_GetAngle(b2Body_GetRotation(torsoId));
-    float torque = this->torsoRotationController.update(error,dt);
-    b2Body_ApplyTorque(torsoId,torque,true);
+    float error = -b2Rot_GetAngle(b2Body_GetRotation(torsoId));
+    float torque = this->torsoRotationController.update(error, dt);
+    b2Body_ApplyTorque(torsoId, torque, true);
+}
+
+void Humanoid::updateFeetPosition(float dt)
+{
+    enum Movement
+    {
+        left,
+        right
+    } move;
+
+    struct MyRaycastContext
+    {
+        int humanoidGroupId;
+        float minDistance = FLT_MAX;
+        b2Vec2 intersectionPoint = {0, 0};
+        b2Vec2 origin = {0, 0};
+        bool foundIntersection = false;
+    } raycastContext;
+
+    auto fcn = [](b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void *context) -> float
+    {
+        MyRaycastContext *myRaycastContext = static_cast<MyRaycastContext *>(context);
+        if (b2Shape_GetFilter(shapeId).groupIndex != myRaycastContext->humanoidGroupId)
+        {
+            float dist = b2Distance(myRaycastContext->origin, point);
+            if (dist < myRaycastContext->minDistance)
+            {
+                myRaycastContext->minDistance = dist;
+                myRaycastContext->intersectionPoint = point;
+                myRaycastContext->foundIntersection = true;
+            }
+            return fraction;
+        }
+        else
+        {
+            return -1;
+        }
+    };
+
+    bool updateFeet = false;
+    bool touchingGround = false;
+    b2Vec2 castPoint = {0, 0};
+
+    if (this->leftLeg->getIsTracking())
+    {
+        touchingGround = true;
+        b2Vec2 leftHip = this->leftLeg->getBase();
+        b2Vec2 leftTarget = this->leftLeg->getTrackingPoint();
+        if (b2Distance(leftHip, leftTarget) > this->leftLeg->getLen())
+        {
+            this->leftLeg->trackPoint({0, 0}, false);
+            this->legContext.nextLeg = Humanoid::LegMovementContext::Leg::left;
+            updateFeet = true;
+        }
+    }
+    if (this->rightLeg->getIsTracking())
+    {
+        touchingGround = true;
+        b2Vec2 rightHip = this->rightLeg->getBase();
+        b2Vec2 rightTarget = this->rightLeg->getTrackingPoint();
+        if (b2Distance(rightHip, rightTarget) > this->rightLeg->getLen())
+        {
+            this->rightLeg->trackPoint({0, 0}, false);
+            if (updateFeet)
+            {
+                touchingGround = false;
+            }
+            this->legContext.nextLeg = Humanoid::LegMovementContext::Leg::right;
+
+            updateFeet = true;
+        }
+    }
+
+    if (!touchingGround || updateFeet)
+    {
+        b2Vec2 dir = b2Body_GetLinearVelocity(this->torso->getBodies()[0].second);
+        if (dir.x > 0)
+        {
+            move = Movement::right;
+        }
+        else
+        {
+            move = Movement::left;
+        }
+        raycastContext.humanoidGroupId = this->groupId;
+        float rayLen = 0;
+        b2Vec2 legEnd = {0, 0};
+        if (this->legContext.nextLeg == Humanoid::LegMovementContext::Leg::right)
+        {
+            raycastContext.origin = this->rightLeg->getBase();
+            rayLen = this->leftLeg->getLen();
+            legEnd = this->rightLeg->getEnd();
+        }
+        else
+        {
+            raycastContext.origin = this->leftLeg->getBase();
+            rayLen = this->rightLeg->getLen();
+            legEnd = this->leftLeg->getEnd();
+        }
+
+        if (!touchingGround)
+        {
+            castPoint = b2Add(raycastContext.origin, b2MulSV(rayLen, {0, -1}));
+        }
+        else
+        {
+            if (move == Movement::left)
+            {
+                castPoint = b2Add(legEnd, b2MulSV(this->legContext.stepSizeMtrs, {-1, 0}));
+            }
+            else if (move == Movement::right)
+            {
+                castPoint = b2Add(legEnd, b2MulSV(this->legContext.stepSizeMtrs, {1, 0}));
+            }
+        }
+        b2Vec2 castTranslation = b2MulSV(2,b2Sub(castPoint, raycastContext.origin));
+
+        b2World_CastRay(this->worldId, raycastContext.origin, castTranslation, b2DefaultQueryFilter(), fcn, &raycastContext);
+
+        if (raycastContext.foundIntersection)
+        {
+            if (this->legContext.nextLeg == Humanoid::LegMovementContext::Leg::right)
+            {
+                this->rightLeg->trackPoint(raycastContext.intersectionPoint, true);
+            }
+            else
+            {
+                this->leftLeg->trackPoint(raycastContext.intersectionPoint, true);
+            }
+        }
+
+        this->legContext.lastStep = this->legContext.nextStep;
+    }
 }
 
 void Humanoid::move(b2Vec2 direction, float speedMperSec, float accelerationMpS2)

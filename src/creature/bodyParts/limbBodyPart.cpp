@@ -19,6 +19,7 @@ LimbBodyPart::LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 w
     }
     b2Vec2 limbDirection = b2Normalize(b2Sub(worldPoint2, worldPoint1));
     float limbLen = b2Length(b2Sub(worldPoint2, worldPoint1));
+    this->totalLength = limbLen;
 
     // Creating capsules for a limb
     std::vector<std::pair<b2Vec2, b2BodyId>> createdBodies;
@@ -130,6 +131,11 @@ const std::vector<float> &LimbBodyPart::getSegmentLengths()
     return this->segmentLengths;
 }
 
+float LimbBodyPart::getLen()
+{
+    return this->totalLength;
+}
+
 void LimbBodyPart::trackPoint(b2Vec2 worldPoint, bool track)
 {
     if (track)
@@ -149,6 +155,16 @@ void LimbBodyPart::trackPoint(b2Vec2 worldPoint, bool track)
     }
 }
 
+bool LimbBodyPart::getIsTracking()
+{
+    return this->isTracking;
+}
+
+b2Vec2 LimbBodyPart::getTrackingPoint()
+{
+    return this->trackingPoint;
+}
+
 void LimbBodyPart::updateTracking(float dt)
 {
     if (!this->isTracking)
@@ -159,7 +175,7 @@ void LimbBodyPart::updateTracking(float dt)
         return;
 
     std::vector<b2Vec2> oldPos = this->getJointsPos(); // Joint positions before solving
-    std::vector<b2Vec2> newPos = KinematicUtils::solveFABRIK(oldPos[0], this->trackingPoint, oldPos,this->segmentLengths);
+    std::vector<b2Vec2> newPos = KinematicUtils::solveFABRIK(oldPos[0], this->trackingPoint, oldPos, this->segmentLengths);
 
     if (newPos.size() != oldPos.size() || newPos.size() < 2)
         return;
@@ -187,7 +203,6 @@ void LimbBodyPart::updateTracking(float dt)
     // Apply force to the base of a limb to negate the force applied to body solving kinematic problem
     b2Vec2 basePos = b2Body_GetPosition(this->bodies[0].second);
     b2Body_ApplyForce(this->bodies[0].second, b2Neg(resultingForce), basePos, true);
-
 }
 
 std::pair<entt::entity, b2JointId> LimbBodyPart::getConnectionJoint()

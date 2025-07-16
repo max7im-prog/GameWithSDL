@@ -36,6 +36,7 @@ protected:
     float getHeightAboveTheGround();
     void keepTorsoAboveTheGround(float dt);
     void keepTorsoUpgright(float dt);
+    void updateFeetPosition(float dt);
 
 protected:
     float sizeXMeters;
@@ -59,4 +60,14 @@ protected:
 
     PIDScalarController heightController;
     PIDScalarController torsoRotationController;
+
+    struct LegMovementContext{
+        enum Leg{
+            left,right,
+        }leg;
+        int nextLeg = Leg::left;
+        float stepSizeMtrs = 0;
+        b2Vec2 lastStep = {0,0};
+        b2Vec2 nextStep = {0,0};
+    }legContext;
 };

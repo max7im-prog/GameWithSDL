@@ -30,9 +30,10 @@ protected:
     b2Vec2 position;
     const int groupId;
     float weightKg;
-
-    entt::entity self;
+    
     entt::registry &registry;
+    entt::entity self;
+    
     std::vector<std::pair<entt::entity, b2JointId>> joints;
     std::vector<std::shared_ptr<BodyPart>> bodyParts;
 
