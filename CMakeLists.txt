@@ -7,16 +7,6 @@ project(
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_STANDARD 17)
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-  set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -fsanitize=leak -fsanitize=address -fsanitize=undefined -g -ggdb3 -Wall -Wextra"
-  )
-  message(
-    STATUS "Selected ${CMAKE_BUILD_TYPE} build type. Building with sanitizers.")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -ggdb3 -Wall -Wextra")
-endif()
-
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_Declare(
@@ -85,4 +75,12 @@ add_executable(
 target_link_libraries(Game PRIVATE ${EXTERNAL_LIBS})
 target_include_directories(Game PRIVATE ${GAME_ALL_INCLUDE_DIRS})
 
-message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")
+target_compile_options(Game PRIVATE
+  $<$<CONFIG:Debug>:-Wall -Wextra -g -ggdb3 -fsanitize=address -fsanitize=undefined -fsanitize=leak>
+  $<$<CONFIG:Release>:-Wall -Wextra -O3 -g -ggdb3>
+)
+
+target_link_options(Game PRIVATE
+  $<$<CONFIG:Debug>:-fsanitize=address -fsanitize=undefined -fsanitize=leak>
+)
+
