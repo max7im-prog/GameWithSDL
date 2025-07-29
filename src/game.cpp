@@ -66,7 +66,7 @@ bool Game::init()
 
     // world
     auto wrldDef = b2DefaultWorldDef();
-    wrldDef.gravity = (b2Vec2){0.0f, -0.5f};
+    wrldDef.gravity = (b2Vec2){0.0f, -10.0f};
     auto worldEnt = this->registry.create();
     auto &worldComp = this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
     worldComp.worldId = b2CreateWorld(&wrldDef);

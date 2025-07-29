@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-    Game game(800, 600, 25);
+    Game game(800, 600, 60);
 
     if (!game.init())
     {
