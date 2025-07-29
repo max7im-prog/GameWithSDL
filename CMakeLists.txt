@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.0)
+cmake_minimum_required(VERSION 3.20.0)
 project(
   GameWithSDL
   VERSION 0.1.0
@@ -40,58 +40,49 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(entt)
 
-add_executable(
-  Game
-  src/main.cpp
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/creature)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
+
+set(EXTERNAL_LIBS
+  box2d
+  SDL3-shared
+  EnTT::EnTT
+)
+
+set(GAME_ALL_SOURCES
+  ${CONTROLS_SRC}
+  ${CREATURE_SRC}
+  ${DEBUG_SRC}
+  ${EVENTS_SRC}
+  ${MISC_SRC}
+  ${PHYSICS_SRC}
+  ${RENDER_SRC}
   src/game.cpp
   src/game.hpp
-  src/render/renderContext.hpp
-  src/render/renderComponents.hpp
-  src/render/renderBackgroundSystem.cpp
-  src/render/renderPhysicsBodiesSystem.cpp
-  src/render/renderPhysicsJointsSystem.cpp
-  src/render/renderUtils.cpp
-  src/events/pollEventSystem.cpp
-  src/events/quitSystem.cpp
-  src/physics/physicsComponents.hpp
-  src/physics/worldUpdateSystem.cpp
-  src/physics/physicsBodyCreationSystem.cpp
-  src/physics/mouseJointSystem.cpp
-  src/physics/physicsUtils.cpp
-  src/controls/kinematics/kinematicUtils.cpp
-  src/controls/PID/PIDScalarController.cpp
-  src/controls/PID/PIDVectorController.cpp
-  src/creature/baseCreature.cpp
-  src/creature/humanoid.cpp
-  src/creature/creatureUpdateSystem.cpp
-  src/creature/bodyParts/bodyPart.cpp
-  src/creature/bodyParts/capsuleBodyPart.cpp
-  src/creature/bodyParts/polygonBodyPart.cpp
-  src/creature/bodyParts/circleBodyPart.cpp
-  src/creature/bodyParts/limbBodyPart.cpp
-  src/controls/controllerUpdateSystem.cpp
-  src/controls/creatureControlSystem.cpp
-  src/debug/debugUtils.cpp
-  src/misc/cleanupSystem.cpp)
+  src/main.cpp
+)
 
-target_link_libraries(Game PRIVATE box2d SDL3-shared EnTT::EnTT)
+set(GAME_ALL_INCLUDE_DIRS
+  ${CONTROLS_INCLUDE_DIRS}
+  ${CREATURE_INCLUDE_DIRS}
+  ${DEBUG_INCLUDE_DIRS}
+  ${EVENTS_INCLUDE_DIRS}
+  ${MISC_INCLUDE_DIRS}
+  ${PHYSICS_INCLUDE_DIRS}
+  ${RENDER_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
+)
 
-target_include_directories(
-  Game PRIVATE external/box2d-3.1.1/include external/SDL-release-3.2.16/include
-  external/entt-3.15.0/single_include)
-
-target_include_directories(
+add_executable(
   Game
-  PRIVATE src
-  src/render
-  src/events
-  src/physics
-  src/misc
-  src/debug
-  src/creature
-  src/creature/bodyParts
-  src/controls
-  src/controls/kinematics
-  src/controls/PID)
+  ${GAME_ALL_SOURCES}
+)
+target_link_libraries(Game PRIVATE ${EXTERNAL_LIBS})
+target_include_directories(Game PRIVATE ${GAME_ALL_INCLUDE_DIRS})
 
 message(STATUS "Include directories: ${CMAKE_CXX_INCLUDE_DIRECTORIES}")
