@@ -1,49 +1,57 @@
 #pragma once
+#include "PIDVectorController.hpp"
 #include "bodyPart.hpp"
 #include <optional>
-#include "PIDVectorController.hpp"
 
-class LimbBodyPart : public BodyPart
-{
+class LimbBodyPart : public BodyPart {
 public:
-    LimbBodyPart(entt::registry &registry,
-                 b2WorldId worldId,
-                 b2Vec2 worldPoint1,
-                 b2Vec2 worldPoint2,
-                 std::vector<std::pair<float, float>> portionRadiusPairs,
-                 std::optional<b2Filter> shapeFilter = std::nullopt);
-    ~LimbBodyPart();
+  std::shared_ptr<LimbBodyPart>
+  create(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1,
+         b2Vec2 worldPoint2,
+         std::vector<std::pair<float, float>> portionRadiusPairs,
+         std::optional<b2Filter> shapeFilter = std::nullopt);
+  LimbBodyPart(entt::registry &registry, b2WorldId worldId, b2Vec2 worldPoint1,
+               b2Vec2 worldPoint2,
+               std::vector<std::pair<float, float>> portionRadiusPairs,
+               std::optional<b2Filter> shapeFilter = std::nullopt);
+  ~LimbBodyPart();
 
-    // Returns a position of a base of a limb
-    b2Vec2 getBase();
+  // Returns a position of a base of a limb
+  b2Vec2 getBase();
 
-    // Returns a position of an end of a limb
-    b2Vec2 getEnd();
+  // Returns a position of an end of a limb
+  b2Vec2 getEnd();
 
-    // Returns positions of joints in a limb, including the beginning and the end of a limb
-    std::vector<b2Vec2> getJointsPos();
+  // Returns positions of joints in a limb, including the beginning and the end
+  // of a limb
+  std::vector<b2Vec2> getJointsPos();
 
-    const std::vector<float> &getSegmentLengths();
-    float getLen();
+  const std::vector<float> &getSegmentLengths();
+  float getLen();
 
-    void trackPoint(b2Vec2 worldPoint, bool track);
-    bool getIsTracking();
-    b2Vec2 getTrackingPoint();
+  void trackPoint(b2Vec2 worldPoint, bool track);
+  bool getIsTracking();
+  b2Vec2 getTrackingPoint();
 
-    std::pair<entt::entity, b2JointId> getConnectionJoint();
-    std::pair<entt::entity, b2JointId> connect(b2BodyId bodyId, b2Vec2 worldPoint);
+  std::pair<entt::entity, b2JointId> getConnectionJoint();
+  std::pair<entt::entity, b2JointId> connect(b2BodyId bodyId,
+                                             b2Vec2 worldPoint);
 
-    void update(float dt) override;
+  void update(float dt) override;
 
 protected:
-    // Stores PID controllers for each segment of a limb (2 controllers for each segment - 1 for beginning and 1 for end of a segment)
-    std::vector<std::pair<PIDVectorController, PIDVectorController>> PIDControllers;
-    std::pair<entt::entity, b2JointId> connectionJoint = {entt::null, b2JointId{}};
-    std::vector<float> segmentLengths;
-    float totalLength;
-    b2Vec2 trackingPoint = {0, 0};
-    bool isTracking = false;
+  // Stores PID controllers for each segment of a limb (2 controllers for each
+  // segment - 1 for beginning and 1 for end of a segment)
+  std::vector<std::pair<PIDVectorController, PIDVectorController>>
+      PIDControllers;
+  std::pair<entt::entity, b2JointId> connectionJoint = {entt::null,
+                                                        b2JointId{}};
+  std::vector<float> segmentLengths;
+  float totalLength;
+  b2Vec2 trackingPoint = {0, 0};
+  bool isTracking = false;
 
-    // Points a limb at a world point by using inverse kinematics and applying appropriate forces to segments of a limb
-    void updateTracking(float dt);
+  // Points a limb at a world point by using inverse kinematics and applying
+  // appropriate forces to segments of a limb
+  void updateTracking(float dt);
 };

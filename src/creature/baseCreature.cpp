@@ -2,7 +2,7 @@
 #include "physicsComponents.hpp"
 #include "physicsUtils.hpp"
 
-BaseCreature::BaseCreature(entt::registry &registry, entt::entity self,b2WorldId worldId, b2Vec2 position, int groupId):registry(registry), self(self),worldId(worldId),position(position),groupId(groupId), weightKg(0)
+BaseCreature::BaseCreature(entt::registry &registry, entt::entity self,b2WorldId worldId, b2Vec2 position, int groupId):worldId(worldId), position(position),groupId(groupId),weightKg(0),registry(registry), self(self)
 {
 }
 
