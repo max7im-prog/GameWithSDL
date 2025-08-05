@@ -37,6 +37,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/shape)
 
 set(EXTERNAL_LIBS
   box2d
@@ -52,6 +53,7 @@ set(GAME_ALL_SOURCES
   ${MISC_SRC}
   ${PHYSICS_SRC}
   ${RENDER_SRC}
+  ${SHAPE_SRC}
   src/game.cpp
   src/game.hpp
   src/main.cpp
@@ -65,6 +67,7 @@ set(GAME_ALL_INCLUDE_DIRS
   ${MISC_INCLUDE_DIRS}
   ${PHYSICS_INCLUDE_DIRS}
   ${RENDER_INCLUDE_DIRS}
+  ${SHAPE_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
