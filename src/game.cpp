@@ -14,6 +14,7 @@
 #include "physicsUtils.hpp"
 
 #include "humanoid.hpp"
+#include "revoluteJoint.hpp"
 
 Game::Game(int w, int h, int fps)
     : WIDTH(w), HEIGHT(h), FPS(fps), running(false) {}
@@ -83,58 +84,47 @@ bool Game::init() {
   auto factory =
       std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
 
+  std::shared_ptr<Shape> b0;
   {
     auto config = CircleConfig::defaultConfig();
-    config.bodyDef.position = {10,10};
+    config.bodyDef.position = {10, 10};
     config.bodyDef.type = b2_dynamicBody;
-    factory->createCircle(config);
+    b0 = factory->createCircle(config);
   }
-
+  std::shared_ptr<Shape> b1;
   {
     auto config = PolygonConfig::defaultConfig();
-    config.bodyDef.position = {9,10};
+    config.bodyDef.position = {9, 10};
     config.bodyDef.type = b2_dynamicBody;
-    factory->createPolygon(config);
+    b1 = factory->createPolygon(config);
+  }
+  std::shared_ptr<Shape> b2;
+  {
+    auto config = CapsuleConfig::defaultConfig();
+    config.bodyDef.position = {8, 10};
+    config.bodyDef.type = b2_dynamicBody;
+    b2 = factory->createCapsule(config);
   }
 
   {
-    auto config = CapsuleConfig::defaultConfig();
-    config.bodyDef.position = {8,10};
-    config.bodyDef.type = b2_dynamicBody;
-    factory->createCapsule(config);
+    auto config = RevoluteJointConfig::defaultConfig();
+    config.jointDef.bodyIdA = b1->getBodyId();
+    config.jointDef.bodyIdB = b2->getBodyId();
+    config.jointDef.localAnchorA = {5, 5};
+    config.jointDef.localAnchorB = {5, 6};
+    factory->createRevoluteJoint(config);
   }
 
-  // ent = this->registry.create();
-  // PhysicsUtils::createCirclePhysicsBody(registry,
-  //                                        ent,
-  //                                        worldComp.worldId,
-  //                                        (b2Vec2){5.0f, 5.0f},
-  //                                        (b2Vec2){0.0f, 0.0f},
-  //                                        0.2f,
-  //                                        std::nullopt,
-  //                                        b2_staticBody);
-
-  // ent = this->registry.create();
-  // auto &h1 = this->registry.emplace_or_replace<Creature>(ent);
-  // h1.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,
-  // ent, worldComp.worldId, {2, 4},1,1)); h1.creature->aim({5,5},true);
-
-  // ent = this->registry.create();
-  // auto &h2 = this->registry.emplace_or_replace<Creature>(ent);
-  // h2.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,
-  // ent, worldComp.worldId, {8, 7},7,5)); h2.creature->aim({5,5},true);
-
-  // ent = this->registry.create();
-  // auto &h3 = this->registry.emplace_or_replace<Creature>(ent);
-  // h3.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,
-  // ent, worldComp.worldId, {8, 4},10,10)); h3.creature->aim({5,5},true);
-  // this->registry.emplace_or_replace<PlayerControlled>(ent);
-
-  // ent = this->registry.create();
-  // auto &h4 = this->registry.emplace_or_replace<Creature>(ent);
-  // h4.creature = std::unique_ptr<Humanoid>(new Humanoid(this->registry,
-  // ent, worldComp.worldId, {11, 4},6,2)); h4.creature->aim({5,5},true);
-
+  {
+    auto config = DistanceJointConfig::defaultConfig();
+    config.jointDef.bodyIdA = b0->getBodyId();
+    config.jointDef.bodyIdB = b2->getBodyId();
+    config.jointDef.localAnchorA = {0, 0};
+    config.jointDef.localAnchorB = {0, 0};
+    config.jointDef.length = 4;
+    factory->createDistanceJoint(config);
+  }
+  
   return true;
 }
 

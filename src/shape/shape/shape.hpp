@@ -28,7 +28,7 @@ protected:
 
   b2BodyId bodyId;
   b2ShapeId shapeId;
-  entt::entity entity;
+  entt::entity entity = entt::null;
 
   friend class PhysicsFactory;
 };
