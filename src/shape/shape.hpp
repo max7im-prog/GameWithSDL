@@ -13,6 +13,7 @@ struct ShapeConfig {
 class Shape {
 public:
   b2BodyId getBodyId();
+  b2ShapeId getShapeId();
   entt::entity getEntity();
   b2ShapeType getType();
 

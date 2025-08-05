@@ -2,7 +2,7 @@
 #include "shape.hpp"
 
 struct CircleConfig : public ShapeConfig {
-  CircleConfig defaultConfig();
+  static CircleConfig defaultConfig();
   float radius;
 };
 
