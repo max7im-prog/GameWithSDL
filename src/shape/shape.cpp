@@ -8,3 +8,9 @@ entt::entity Shape::getEntity() { return entity; }
 b2ShapeType Shape::getType() { return b2Shape_GetType(shapeId); }
 
 Shape::Shape() {}
+
+Shape::~Shape() {
+  if (b2Body_IsValid(bodyId)) {
+    b2DestroyBody(bodyId);
+  }
+}

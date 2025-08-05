@@ -1,9 +1,17 @@
 #pragma once
-#include "box2d/id.h"
+#include "box2d/box2d.h"
 class World {
 public:
   b2WorldId getWorldId() const;
 
-private:
+protected:
+  World();
+  World(World &other) = delete;
+  World(World &&other) = delete;
+  World &operator=(World &other) = delete;
+  World &operator=(World &&other) = delete;
+  virtual ~World() = default;
+
   b2WorldId worldId;
+
 };

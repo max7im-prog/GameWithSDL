@@ -16,13 +16,14 @@ public:
   entt::entity getEntity();
   b2ShapeType getType();
 
+  virtual ~Shape();
+
 protected:
   Shape();
   Shape(Shape &other) = delete;
   Shape(Shape &&other) = delete;
   Shape &operator=(Shape &other) = delete;
   Shape &operator=(Shape &&other) = delete;
-  virtual ~Shape() = default;
 
   b2BodyId bodyId;
   b2ShapeId shapeId;

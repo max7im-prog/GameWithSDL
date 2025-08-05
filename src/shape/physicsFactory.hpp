@@ -5,9 +5,9 @@
 class PhysicsFactory {
 public:
   std::shared_ptr<Circle> createCircle(CircleConfig config);
-  PhysicsFactory(entt::registry &registry, const World &world);
+  PhysicsFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
 private:
   entt::registry &registry;
-  const World &world;
+  const std::shared_ptr<World> world;
 };
