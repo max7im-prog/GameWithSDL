@@ -20,3 +20,33 @@ BodyFactory::createCircleBody(const CircleBodyConfig &config) {
   comp.bodyPart = ret;
   return ret;
 }
+
+std::shared_ptr<CapsuleBody>
+BodyFactory::createCapsuleBody(const CapsuleBodyConfig &config) {
+  std::shared_ptr<CapsuleBody> ret = nullptr;
+  try {
+    ret = std::shared_ptr<CapsuleBody>(
+        new CapsuleBody(registry, world, config, physicsFactory));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  ret->entity = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
+  comp.bodyPart = ret;
+  return ret;
+}
+
+std::shared_ptr<PolygonBody>
+BodyFactory::createPolygonBody(const PolygonBodyConfig &config) {
+  std::shared_ptr<PolygonBody> ret = nullptr;
+  try {
+    ret = std::shared_ptr<PolygonBody>(
+        new PolygonBody(registry, world, config, physicsFactory));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  ret->entity = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
+  comp.bodyPart = ret;
+  return ret;
+}
