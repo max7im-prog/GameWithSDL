@@ -1,9 +1,14 @@
 #pragma once
+#include "box2d/box2d.h"
 #include "joint.hpp"
 #include "physicsFactory.hpp"
 #include "shape.hpp"
 
-struct BodyPartConfig;
+
+struct BodyPartConfig {
+  b2Vec2 position;
+  b2Rot rotation;
+};
 
 class BodyPart {
 public:

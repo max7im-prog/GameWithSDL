@@ -55,6 +55,7 @@ set(GAME_ALL_SOURCES
   ${RENDER_SRC}
   ${SHAPE_SRC}
   ${SYSTEMS_SRC}
+  ${BODY_SRC}
   src/game.cpp
   src/game.hpp
   src/main.cpp
@@ -70,6 +71,7 @@ set(GAME_ALL_INCLUDE_DIRS
   ${RENDER_INCLUDE_DIRS}
   ${SHAPE_INCLUDE_DIRS}
   ${SYSTEMS_INCLUDE_DIRS}
+  ${BODY_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 

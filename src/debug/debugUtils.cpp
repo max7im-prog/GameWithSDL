@@ -39,31 +39,9 @@ void DebugUtils::debugPrintRegistry(entt::registry &registry)
             std::cout << "  - Mouse\n";
         }
 
-        if (registry.all_of<PhysicsWorld>(entity)) {
-            const auto &pw = registry.get<PhysicsWorld>(entity);
-            std::cout << "  - PhysicsWorld: worldId=" << pw.worldId.index1 << "\n";
-        }
+        // TODO: create output for all other components
 
-        if (registry.all_of<PhysicsBody>(entity)) {
-            const auto &pb = registry.get<PhysicsBody>(entity);
-            std::cout << "  - PhysicsBody: bodyId=" << pb.bodyId.index1
-                      << ", worldId=" << pb.worldId.index1
-                      << ", shapes=" << pb.shapes.size() << "\n";
-        }
-
-        if (registry.all_of<PhysicsJoint>(entity)) {
-            const auto &pj = registry.get<PhysicsJoint>(entity);
-            std::cout << "  - PhysicsJoint: jointId=" << pj.jointId.index1
-                      << ", bodyAId=" << pj.bodyAId.index1
-                      << ", bodyBId=" << pj.bodyBId.index1
-                      << ", worldId=" << pj.worldId.index1 << "\n";
-        }
-
-        if (registry.all_of<PendingPhysicsBody>(entity)) {
-            const auto &ppb = registry.get<PendingPhysicsBody>(entity);
-            std::cout << "  - PendingPhysicsBody: worldId=" << ppb.worldId.index1
-                      << ", shapeDefs=" << ppb.shapeDefs.size() << "\n";
-        }
+        
 
         if (registry.all_of<texture>(entity)) {
             const auto &tex = registry.get<texture>(entity);

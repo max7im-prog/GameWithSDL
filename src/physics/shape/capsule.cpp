@@ -3,7 +3,8 @@
 #include <box2d/box2d.h>
 
 Capsule::Capsule(entt::registry &registry, const World &world,
-                 const CapsuleConfig &config):Shape(registry) {
+                 const CapsuleConfig &config)
+    : Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
 
   b2Capsule capsule;
@@ -21,4 +22,19 @@ CapsuleConfig CapsuleConfig::defaultConfig() {
   ret.center1 = {-1, -1};
   ret.center2 = {1, 1};
   return ret;
+}
+
+b2Vec2 Capsule::getCenter1() {
+  b2Capsule capsule = b2Shape_GetCapsule(shapeId);
+  return b2Body_GetWorldPoint(bodyId, capsule.center1);
+}
+
+b2Vec2 Capsule::getCenter2() {
+  b2Capsule capsule = b2Shape_GetCapsule(shapeId);
+  return b2Body_GetWorldPoint(bodyId, capsule.center2);
+}
+
+float Capsule::getRadius() {
+  b2Capsule capsule = b2Shape_GetCapsule(shapeId);
+  return capsule.radius;
 }

@@ -11,6 +11,9 @@ struct CapsuleConfig : public ShapeConfig {
 class Capsule : public Shape {
 public:
   virtual ~Capsule() = default;
+  b2Vec2 getCenter1();
+  b2Vec2 getCenter2();
+  float getRadius();
 
 protected:
   Capsule() = delete;

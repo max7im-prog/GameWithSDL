@@ -9,10 +9,13 @@ struct CircleConfig : public ShapeConfig {
 class Circle : public Shape {
 public:
   virtual ~Circle() = default;
+  b2Vec2 getCenter();
+  float getRadius();
 
 protected:
   Circle() = delete;
-  Circle(entt::registry& registry,const World &world, const CircleConfig &config);
+  Circle(entt::registry &registry, const World &world,
+         const CircleConfig &config);
 
   friend class PhysicsFactory;
 };

@@ -20,3 +20,13 @@ CircleConfig CircleConfig::defaultConfig() {
   ret.radius = 1;
   return ret;
 }
+
+b2Vec2 Circle::getCenter() {
+  b2Circle circle = b2Shape_GetCircle(shapeId);
+  return b2Body_GetWorldPoint(bodyId, circle.center);
+}
+
+float Circle::getRadius() {
+  b2Circle circle = b2Shape_GetCircle(shapeId);
+  return circle.radius;
+}

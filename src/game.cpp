@@ -7,13 +7,8 @@
 
 #include "basicWorld.hpp"
 #include "box2d/types.h"
-#include "controlComponents.hpp"
-// #include "creatureComponents.hpp"
 #include "physicsComponents.hpp"
 #include "physicsFactory.hpp"
-// #include "physicsUtils.hpp"
-
-// #include "humanoid.hpp"
 #include "revoluteJoint.hpp"
 
 Game::Game(int w, int h, int fps)
@@ -48,28 +43,27 @@ bool Game::init() {
 
   this->running = true;
 
-  // init systems that require initilalization
+  
 
   // TODO: remove temp testing code
 
   // world
-  // auto wrldDef = b2DefaultWorldDef();
-  // wrldDef.gravity = (b2Vec2){0.0f, -10.0f};
-  // auto worldEnt = this->registry.create();
-  // auto &worldComp =
-  // this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
-  // worldComp.worldId = b2CreateWorld(&wrldDef);
-
   auto worldEnt = this->registry.create();
   auto &worldComp = this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
   auto world = std::shared_ptr<World>(new BasicWorld);
   worldComp.world = world;
 
   // some shapes
-  
-
   auto factory =
       std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
+
+  {
+    auto config = PolygonConfig::defaultConfig();
+    config.bodyDef.position = {1, 1};
+    config.vertices = {{0,0},{0,1},{14,1},{14,0}};
+    config.bodyDef.type = b2_staticBody;
+    factory->createPolygon(config);
+  }
 
   std::shared_ptr<Shape> b0;
   {
