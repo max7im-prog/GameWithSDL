@@ -2,7 +2,7 @@
 #include "box2d/types.h"
 #include <box2d/box2d.h>
 
-Polygon::Polygon(const World &world, const PolygonConfig &config) {
+Polygon::Polygon(entt::registry& registry,const World &world, const PolygonConfig &config):Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
 
   b2Hull hull = b2ComputeHull(

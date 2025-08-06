@@ -15,7 +15,8 @@ public:
 
 protected:
   RevoluteJoint() = delete;
-  RevoluteJoint(const World &world, const RevoluteJointConfig &config);
+  RevoluteJoint(entt::registry &registry, const World &world,
+                const RevoluteJointConfig &config);
 
   friend class PhysicsFactory;
 };

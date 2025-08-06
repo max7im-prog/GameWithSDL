@@ -8,7 +8,8 @@ RevoluteJointConfig RevoluteJointConfig::defaultConfig() {
   return ret;
 }
 
-RevoluteJoint::RevoluteJoint(const World &world,
-                             const RevoluteJointConfig &config) {
+RevoluteJoint::RevoluteJoint(entt::registry &registry, const World &world,
+                             const RevoluteJointConfig &config)
+    : Joint(registry) {
   jointId = b2CreateRevoluteJoint(world.getWorldId(), &(config.jointDef));
 }

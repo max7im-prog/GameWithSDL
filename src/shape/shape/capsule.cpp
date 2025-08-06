@@ -2,7 +2,8 @@
 #include "box2d/types.h"
 #include <box2d/box2d.h>
 
-Capsule::Capsule(const World &world, const CapsuleConfig &config) {
+Capsule::Capsule(entt::registry &registry, const World &world,
+                 const CapsuleConfig &config):Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
 
   b2Capsule capsule;

@@ -12,11 +12,9 @@ Joint::~Joint() {
     b2DestroyJoint(jointId);
   }
 
-  if(entity != entt::null){
-    
+  if (registry.valid(entity)) {
+    registry.destroy(entity);
   }
 }
 
-Joint::Joint(){
-  
-}
+Joint::Joint(entt::registry &registry) : registry(registry) {}

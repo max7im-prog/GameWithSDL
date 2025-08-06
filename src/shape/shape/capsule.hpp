@@ -14,7 +14,8 @@ public:
 
 protected:
   Capsule() = delete;
-  Capsule(const World &world, const CapsuleConfig &config);
+  Capsule(entt::registry &registry, const World &world,
+          const CapsuleConfig &config);
 
   friend class PhysicsFactory;
 };

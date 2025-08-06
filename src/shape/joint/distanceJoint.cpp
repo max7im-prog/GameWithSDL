@@ -8,7 +8,7 @@ DistanceJointConfig DistanceJointConfig::defaultConfig() {
   return ret;
 }
 
-DistanceJoint::DistanceJoint(const World &world,
-                             const DistanceJointConfig &config) {
+DistanceJoint::DistanceJoint(entt::registry &registry,const World &world,
+                             const DistanceJointConfig &config):Joint(registry) {
   jointId = b2CreateDistanceJoint(world.getWorldId(), &(config.jointDef));
 }

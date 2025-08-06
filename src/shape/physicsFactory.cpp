@@ -9,7 +9,7 @@ PhysicsFactory::PhysicsFactory(entt::registry &registry,
 std::shared_ptr<Circle> PhysicsFactory::createCircle(CircleConfig config) {
   std::shared_ptr<Circle> ret = nullptr;
   try {
-    ret = std::shared_ptr<Circle>(new Circle(*world, config));
+    ret = std::shared_ptr<Circle>(new Circle(registry,*world, config));
   } catch (std::exception &e) {
     return nullptr;
   }
@@ -22,7 +22,7 @@ std::shared_ptr<Circle> PhysicsFactory::createCircle(CircleConfig config) {
 std::shared_ptr<Polygon> PhysicsFactory::createPolygon(PolygonConfig config) {
   std::shared_ptr<Polygon> ret = nullptr;
   try {
-    ret = std::shared_ptr<Polygon>(new Polygon(*world, config));
+    ret = std::shared_ptr<Polygon>(new Polygon(registry,*world, config));
   } catch (std::exception &e) {
     return nullptr;
   }
@@ -35,7 +35,7 @@ std::shared_ptr<Polygon> PhysicsFactory::createPolygon(PolygonConfig config) {
 std::shared_ptr<Capsule> PhysicsFactory::createCapsule(CapsuleConfig config) {
   std::shared_ptr<Capsule> ret = nullptr;
   try {
-    ret = std::shared_ptr<Capsule>(new Capsule(*world, config));
+    ret = std::shared_ptr<Capsule>(new Capsule(registry,*world, config));
   } catch (std::exception &e) {
     return nullptr;
   }
@@ -49,7 +49,7 @@ std::shared_ptr<RevoluteJoint>
 PhysicsFactory::createRevoluteJoint(RevoluteJointConfig config) {
     std::shared_ptr<RevoluteJoint> ret = nullptr;
   try {
-    ret = std::shared_ptr<RevoluteJoint>(new RevoluteJoint(*world, config));
+    ret = std::shared_ptr<RevoluteJoint>(new RevoluteJoint(registry,*world, config));
   } catch (std::exception &e) {
     return nullptr;
   }
@@ -63,7 +63,7 @@ std::shared_ptr<DistanceJoint>
 PhysicsFactory::createDistanceJoint(DistanceJointConfig config) {
     std::shared_ptr<DistanceJoint> ret = nullptr;
   try {
-    ret = std::shared_ptr<DistanceJoint>(new DistanceJoint(*world, config));
+    ret = std::shared_ptr<DistanceJoint>(new DistanceJoint(registry,*world, config));
   } catch (std::exception &e) {
     return nullptr;
   }

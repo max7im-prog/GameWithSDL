@@ -9,10 +9,13 @@ entt::entity Shape::getEntity() { return entity; }
 
 b2ShapeType Shape::getType() { return b2Shape_GetType(shapeId); }
 
-Shape::Shape() {}
+Shape::Shape(entt::registry& registry):registry(registry) {}
 
 Shape::~Shape() {
   if (b2Body_IsValid(bodyId)) {
     b2DestroyBody(bodyId);
+  }
+  if(registry.valid(entity)){
+    registry.destroy(entity);
   }
 }

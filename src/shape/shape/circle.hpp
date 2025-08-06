@@ -12,7 +12,7 @@ public:
 
 protected:
   Circle() = delete;
-  Circle(const World &world, const CircleConfig &config);
+  Circle(entt::registry& registry,const World &world, const CircleConfig &config);
 
   friend class PhysicsFactory;
 };

@@ -13,7 +13,7 @@ public:
 
 protected:
   Polygon() = delete;
-  Polygon(const World &world, const PolygonConfig &config);
+  Polygon(entt::registry& registry,const World &world, const PolygonConfig &config);
 
   friend class PhysicsFactory;
 };
