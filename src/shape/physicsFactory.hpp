@@ -19,6 +19,12 @@ public:
   PhysicsFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
 private:
+  PhysicsFactory() = delete;
+  PhysicsFactory(PhysicsFactory &other) = delete;
+  PhysicsFactory(PhysicsFactory &&other) = delete;
+  PhysicsFactory operator=(PhysicsFactory &other) = delete;
+  PhysicsFactory operator=(PhysicsFactory &&other) = delete;
+
   entt::registry &registry;
   const std::shared_ptr<World> world;
 };

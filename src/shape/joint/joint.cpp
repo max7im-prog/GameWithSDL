@@ -11,6 +11,10 @@ Joint::~Joint() {
   if (b2Joint_IsValid(jointId)) {
     b2DestroyJoint(jointId);
   }
+
+  if(entity != entt::null){
+    
+  }
 }
 
 Joint::Joint(){
