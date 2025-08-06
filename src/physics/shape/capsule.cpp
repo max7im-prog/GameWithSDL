@@ -19,8 +19,8 @@ CapsuleConfig CapsuleConfig::defaultConfig() {
   ret.shapeDef = b2DefaultShapeDef();
   ret.bodyDef = b2DefaultBodyDef();
   ret.radius = 1;
-  ret.center1 = {-1, -1};
-  ret.center2 = {1, 1};
+  ret.center1 = {0, 0};
+  ret.center2 = {0, -1};
   return ret;
 }
 

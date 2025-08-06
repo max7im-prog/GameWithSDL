@@ -4,10 +4,7 @@
 #include "physicsFactory.hpp"
 #include "shape.hpp"
 
-
 struct BodyPartConfig {
-  b2Vec2 position;
-  b2Rot rotation;
 };
 
 class BodyPart {
@@ -29,5 +26,5 @@ protected:
 private:
   entt::entity entity = entt::null;
   entt::registry &registry;
-  friend class PhysicsFactory;
+  friend class BodyFactory;
 };

@@ -2,8 +2,10 @@
 #include "physicsFactory.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
+#include"circleBody.hpp"
 class BodyFactory {
 public:
+  std::shared_ptr<CircleBody> createCircleBody(const CircleBodyConfig &config);
   BodyFactory(entt::registry &registry, const std::shared_ptr<World> world,
               const std::shared_ptr<PhysicsFactory> physicsFactory);
 
