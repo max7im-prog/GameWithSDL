@@ -16,13 +16,12 @@
 
 // Update
 #include "controllerUpdateSystem.hpp"
-#include "creatureControlSystem.hpp"
+// #include "creatureControlSystem.hpp"
 #include "worldUpdateSystem.hpp"
-#include "physicsBodyCreationSystem.hpp"
-#include "mouseJointSystem.hpp"
+// #include "mouseJointSystem.hpp"
 
 // Creatures
-#include "creatureUpdateSystem.hpp"
+// #include "creatureUpdateSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game
@@ -72,10 +71,9 @@ private:
     // Update systems
     WorldUpdateSystem worldUpdateSystem;
     ControllerUpdateSystem controllerUpdateSystem;
-    CreatureControlSystem creatureControlSystem;
-    // PhysicsBodyCreationSystem physicsBodyCreationSystem;
-    MouseJointSystem mouseJointSystem;
-    CreatureUpdateSystem creatureUpdateSystem;
+    // CreatureControlSystem creatureControlSystem;
+    // MouseJointSystem mouseJointSystem;
+    // CreatureUpdateSystem creatureUpdateSystem;
 
     // Render systems
     RenderBackgroundSystem renderBackgroundSystem;

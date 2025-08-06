@@ -1,7 +1,7 @@
 #include "creatureControlSystem.hpp"
 
 #include "controlComponents.hpp"
-#include "creatureComponents.hpp"
+// #include "creatureComponents.hpp"
 
 CreatureControlSystem::CreatureControlSystem()
 {

@@ -8,12 +8,12 @@
 #include "basicWorld.hpp"
 #include "box2d/types.h"
 #include "controlComponents.hpp"
-#include "creatureComponents.hpp"
+// #include "creatureComponents.hpp"
 #include "physicsComponents.hpp"
 #include "physicsFactory.hpp"
-#include "physicsUtils.hpp"
+// #include "physicsUtils.hpp"
 
-#include "humanoid.hpp"
+// #include "humanoid.hpp"
 #include "revoluteJoint.hpp"
 
 Game::Game(int w, int h, int fps)
@@ -48,15 +48,7 @@ bool Game::init() {
 
   this->running = true;
 
-  this->registry.on_destroy<PhysicsBody>()
-      .connect<&PhysicsUtils::cleanupPhysicsBody>();
-  this->registry.on_destroy<PhysicsWorld>()
-      .connect<&PhysicsUtils::cleanupPhysicsWorld>();
-  this->registry.on_destroy<PhysicsJoint>()
-      .connect<&PhysicsUtils::cleanupPhysicsJoint>();
-
   // init systems that require initilalization
-  this->mouseJointSystem = MouseJointSystem(this->registry);
 
   // TODO: remove temp testing code
 
@@ -74,12 +66,7 @@ bool Game::init() {
   worldComp.world = world;
 
   // some shapes
-  entt::entity ent;
-
-  ent = this->registry.create();
-  PhysicsUtils::createPolygonPhysicsBody(
-      registry, ent, worldComp.world->getWorldId(), (b2Vec2){1.0f, 1.0f},
-      {{0, 0}, {0, 0.5f}, {14, 0.5f}, {14, 0}}, std::nullopt, b2_staticBody);
+  
 
   auto factory =
       std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
@@ -142,10 +129,10 @@ void Game::handleEvents() {
 void Game::update() {
   // this->physicsBodyCreationSystem.update(this->registry);
   this->controllerUpdateSystem.update(this->registry);
-  this->creatureControlSystem.update(this->registry);
+  // this->creatureControlSystem.update(this->registry);
 
-  this->creatureUpdateSystem.update(this->registry, this->FPS);
-  this->mouseJointSystem.update(this->registry, this->renderContext);
+  // this->creatureUpdateSystem.update(this->registry, this->FPS);
+  // this->mouseJointSystem.update(this->registry, this->renderContext);
 
   this->worldUpdateSystem.update(this->registry, this->FPS);
 }
