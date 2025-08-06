@@ -1,4 +1,5 @@
 #pragma once
+#include "bodyPart.hpp"
 #include "joint.hpp"
 #include "shape.hpp"
 #include "world.hpp"
@@ -40,4 +41,8 @@ struct PendingPhysicsBody {
   b2BodyDef bodyDef;
   b2WorldId worldId;
   std::vector<std::pair<b2ShapeDef, ShapeVariant>> shapeDefs;
+};
+
+struct PhysicsBodyPart {
+  std::shared_ptr<BodyPart> bodyPart;
 };

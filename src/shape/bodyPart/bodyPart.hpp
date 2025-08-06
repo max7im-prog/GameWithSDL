@@ -9,20 +9,20 @@ class BodyPart {
 public:
   virtual void update([[maybe_unused]] float dt) {};
   entt::entity getEntity();
-  virtual ~BodyPart() = default;
+  virtual ~BodyPart();
 
 protected:
-  BodyPart(entt::registry &registry );
+  BodyPart(entt::registry &registry, const std::shared_ptr<World> world);
   BodyPart() = delete;
   BodyPart(BodyPart &other) = delete;
   BodyPart(BodyPart &&other) = delete;
   BodyPart operator=(BodyPart &other) = delete;
   BodyPart operator=(BodyPart &&other) = delete;
 
-  entt::entity entity = entt::null;
-  std::vector<std::shared_ptr<Joint>> joints;
-  std::vector<std::shared_ptr<Shape>> shapes;
-  entt::registry &registry;
+  const std::shared_ptr<World> world;
 
+private:
+  entt::entity entity = entt::null;
+  entt::registry &registry;
   friend class PhysicsFactory;
 };
