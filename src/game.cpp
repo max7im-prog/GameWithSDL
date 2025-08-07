@@ -45,8 +45,6 @@ bool Game::init() {
 
   this->running = true;
 
-  
-
   // TODO: remove temp testing code
 
   // world
@@ -58,14 +56,14 @@ bool Game::init() {
   // some shapes
   auto physicsFactory =
       std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
-    
-  auto bodyFatory = std::shared_ptr<BodyFactory>(new BodyFactory(registry,world,physicsFactory));
 
+  auto bodyFatory = std::shared_ptr<BodyFactory>(
+      new BodyFactory(registry, world, physicsFactory));
 
   {
     auto config = PolygonBodyConfig::defaultConfig();
     config.polygonConfig.radius = 0;
-    config.polygonConfig.vertices = {{0,0},{0,1},{14,1},{14,0}};
+    config.polygonConfig.vertices = {{0, 0}, {0, 1}, {14, 1}, {14, 0}};
     config.polygonConfig.bodyDef.type = b2_staticBody;
     config.polygonConfig.bodyDef.position = {1, 1};
     bodyFatory->createPolygonBody(config);
@@ -73,32 +71,44 @@ bool Game::init() {
 
   {
     auto config = CircleBodyConfig::defaultConfig();
-    config.circleConfig.bodyDef.position = {10,10};
+    config.circleConfig.bodyDef.position = {10, 10};
     config.circleConfig.bodyDef.type = b2_dynamicBody;
     config.circleConfig.radius = 1;
     bodyFatory->createCircleBody(config);
   }
 
   {
+    auto config = LimbBodyConfig::defaultConfig();
+    config.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
+    config.basePos = {3, 10};
+    config.rotation = b2MakeRot(-B2_PI / 4);
+    config.segments = {{.len = 1, .radius = 0.25},
+                       {.len = 1, .radius = 0.25},
+                       {.len = 1, .radius = 0.25},
+                       {.len = 1, .radius = 0.25}};
+    bodyFatory->createLimbBody(config);
+  }
+
+  {
     auto config = CapsuleBodyConfig::defaultConfig();
-    config.capsuleConfig.center1 = {0,0};
-    config.capsuleConfig.center2 = {0,-2};
+    config.capsuleConfig.center1 = {0, 0};
+    config.capsuleConfig.center2 = {0, -2};
     config.capsuleConfig.radius = 1;
     config.capsuleConfig.bodyDef.type = b2_dynamicBody;
-    config.capsuleConfig.bodyDef.position = {8,10};
-    config.capsuleConfig.bodyDef.rotation = b2MakeRot(-B2_PI/4);
+    config.capsuleConfig.bodyDef.position = {8, 10};
+    config.capsuleConfig.bodyDef.rotation = b2MakeRot(-B2_PI / 4);
     bodyFatory->createCapsuleBody(config);
   }
 
   {
     auto config = PolygonBodyConfig::defaultConfig();
     config.polygonConfig.radius = 0;
-    config.polygonConfig.vertices = {{0,0},{2,0},{1,-2}};
+    config.polygonConfig.vertices = {{0, 0}, {2, 0}, {1, -2}};
     config.polygonConfig.bodyDef.type = b2_dynamicBody;
-    config.polygonConfig.bodyDef.position = {5,10};
+    config.polygonConfig.bodyDef.position = {5, 10};
     bodyFatory->createPolygonBody(config);
   }
-  
+
   return true;
 }
 

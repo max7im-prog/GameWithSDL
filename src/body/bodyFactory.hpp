@@ -1,6 +1,7 @@
 #pragma once
 #include "capsuleBody.hpp"
 #include "circleBody.hpp"
+#include "limbBody.hpp"
 #include "physicsFactory.hpp"
 #include "polygonBody.hpp"
 #include "world.hpp"
@@ -12,6 +13,9 @@ public:
   createCapsuleBody(const CapsuleBodyConfig &config);
   std::shared_ptr<PolygonBody>
   createPolygonBody(const PolygonBodyConfig &config);
+
+  std::shared_ptr<LimbBody> createLimbBody(const LimbBodyConfig &config);
+
   BodyFactory(entt::registry &registry, const std::shared_ptr<World> world,
               const std::shared_ptr<PhysicsFactory> physicsFactory);
 

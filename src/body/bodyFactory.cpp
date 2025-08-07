@@ -50,3 +50,19 @@ BodyFactory::createPolygonBody(const PolygonBodyConfig &config) {
   comp.bodyPart = ret;
   return ret;
 }
+
+
+std::shared_ptr<LimbBody>
+BodyFactory::createLimbBody(const LimbBodyConfig &config) {
+  std::shared_ptr<LimbBody> ret = nullptr;
+  try {
+    ret = std::shared_ptr<LimbBody>(
+        new LimbBody(registry, world, config, physicsFactory));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  ret->entity = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
+  comp.bodyPart = ret;
+  return ret;
+}
