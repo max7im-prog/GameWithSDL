@@ -26,6 +26,10 @@ b2Vec2 Circle::getCenter() {
   return b2Body_GetWorldPoint(bodyId, circle.center);
 }
 
+b2Vec2 Circle::getLocalCenter() {
+  return b2Shape_GetCircle(shapeId).center;
+}
+
 float Circle::getRadius() {
   b2Circle circle = b2Shape_GetCircle(shapeId);
   return circle.radius;

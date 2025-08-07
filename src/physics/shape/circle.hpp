@@ -10,6 +10,7 @@ class Circle : public Shape {
 public:
   virtual ~Circle() = default;
   b2Vec2 getCenter();
+  b2Vec2 getLocalCenter();
   float getRadius();
 
 protected:

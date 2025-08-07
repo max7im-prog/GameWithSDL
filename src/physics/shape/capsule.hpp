@@ -13,6 +13,8 @@ public:
   virtual ~Capsule() = default;
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
+  b2Vec2 getLocalCenter1();
+  b2Vec2 getLocalCenter2();
   float getRadius();
 
 protected:

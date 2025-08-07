@@ -17,11 +17,12 @@ public:
   b2ShapeId getShapeId();
   entt::entity getEntity();
   b2ShapeType getType();
+  float getMass();
 
   virtual ~Shape();
 
   // Removes a shape from the registry if registered. Does not automatically
-  // delete the shape as shared pointers are responsible for deletion
+  // delete the shape as shared pointers are responsible for deletion.
   void remove();
 
 protected:

@@ -1,7 +1,9 @@
 #include "limbBody.hpp"
+#include "PIDVectorController.hpp"
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
+#include "kinematicUtils.hpp"
 #include "revoluteJoint.hpp"
 
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
@@ -43,7 +45,31 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   }
 
   // Create PID controllers
-  // TODO: implement
+  constexpr int CONTROLLERS_PER_SEGMENT = 2;
+  float gravity = b2Length(b2World_GetGravity(world->getWorldId()));
+  for (auto capsule : segments) {
+    float mass = capsule->getMass();
+    float force = mass * gravity / CONTROLLERS_PER_SEGMENT;
+    {
+      PIDVectorControllerConfig cfg;
+      cfg.constant = b2Vec2(0, 0);
+      cfg.kd = force * config.limbControlConfig.KDMultiplier;
+      cfg.kp = force * config.limbControlConfig.KPMultiplier;
+      cfg.ki = force * config.limbControlConfig.KIMultiplier;
+      cfg.maxForce = force * config.limbControlConfig.maxForceMultiplier;
+      PIDVectorController first(cfg);
+      PIDVectorController second(cfg);
+      controllers.push_back({.baseController = first, .endController = second});
+    }
+  }
+
+  // Compute lengths and other variables
+  segmentLengths = {};
+  length = 0;
+  for (auto el : segmentsConfig) {
+    segmentLengths.push_back(el.len);
+    length += el.len;
+  }
 }
 
 LimbBodyConfig LimbBodyConfig::defaultConfig() {
@@ -71,5 +97,58 @@ b2Vec2 LimbBody::getEndPos() {
   return segments.end()->get()->getCenter2();
 }
 
-void LimbBody::aimAt(b2Vec2 worldPoint) { /* TODO: implement */ }
-void LimbBody::update(float dt) { /* TODO: implement */ }
+const std::vector<float> &LimbBody::getSegmentLengths() {
+  return segmentLengths;
+}
+
+float LimbBody::getLength() { return length; };
+
+void LimbBody::setTracking(b2Vec2 worldPoint, bool isTracking) {
+  this->trackingContext.trackingPoint = worldPoint;
+  this->trackingContext.isTracking = isTracking;
+}
+
+bool LimbBody::getTracking() { return trackingContext.isTracking; }
+
+b2Vec2 LimbBody::getTrackingPoint() { return trackingContext.trackingPoint; }
+
+std::vector<b2Vec2> LimbBody::getJointsPos() {
+  if (segments.empty()) {
+    return {};
+  }
+  std::vector<b2Vec2> ret = {};
+  for (auto capsule : segments) {
+    ret.push_back(capsule->getCenter1());
+  }
+  ret.push_back(segments.end()->get()->getCenter2());
+  return ret;
+}
+
+void LimbBody::update(float dt) {
+  if (!trackingContext.isTracking) {
+    return;
+  }
+
+  auto oldPos = this->getJointsPos();
+
+  auto newPos = KinematicUtils::solveFABRIK(
+      getBasePos(), trackingContext.trackingPoint, oldPos, getSegmentLengths());
+
+  b2Vec2 correctingForce = {0, 0};
+  b2Vec2 firstError = {0, 0};
+  b2Vec2 secondError = b2Sub(newPos[0], oldPos[0]);
+  for (size_t i = 0; i < controllers.size(); i++) {
+    firstError = secondError;
+    secondError = b2Sub(newPos[i + 1], oldPos[i + 1]);
+    b2Vec2 firstForce = controllers[i].baseController.update(firstError, dt);
+    b2Vec2 secondForce = controllers[i].endController.update(secondError, dt);
+    b2BodyId bodyId = segments[i]->getBodyId();
+    b2Body_ApplyForce(bodyId, firstForce, oldPos[i], true);
+    b2Body_ApplyForce(bodyId, secondForce, oldPos[i + 1], true);
+    correctingForce = b2Sub(correctingForce, b2Add(firstForce, secondForce));
+  }
+
+  // Apply correcting force to stop limb from moving body it is connected to
+  b2Body_ApplyForce(segments[0]->getBodyId(), correctingForce, getBasePos(),
+                    true);
+}

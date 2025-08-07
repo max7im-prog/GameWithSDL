@@ -26,3 +26,7 @@ void Shape::remove() {
   }
   entity = entt::null;
 }
+
+float Shape::getMass(){
+  return b2Body_GetMass(bodyId);
+}

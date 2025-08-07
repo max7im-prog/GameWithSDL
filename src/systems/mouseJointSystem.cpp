@@ -74,7 +74,7 @@ void MouseJointSystem::update(
         config.jointDef.bodyIdB = b2Shape_GetBody(shapesAtMouse[0]);
         config.jointDef.target = mouseLocation;
         config.jointDef.hertz = 5.0f;
-        config.jointDef.dampingRatio = 0.7f; 
+        config.jointDef.dampingRatio = 0.7f;
         config.jointDef.maxForce = 1000.0f;
         mouseJoint = physicsFactory->createMouseJoint(config);
       }

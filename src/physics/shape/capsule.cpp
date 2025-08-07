@@ -34,6 +34,14 @@ b2Vec2 Capsule::getCenter2() {
   return b2Body_GetWorldPoint(bodyId, capsule.center2);
 }
 
+b2Vec2 Capsule::getLocalCenter1() {
+  return b2Shape_GetCapsule(shapeId).center1;
+}
+
+b2Vec2 Capsule::getLocalCenter2() {
+  return b2Shape_GetCapsule(shapeId).center2;
+}
+
 float Capsule::getRadius() {
   b2Capsule capsule = b2Shape_GetCapsule(shapeId);
   return capsule.radius;

@@ -5,14 +5,22 @@
 #include "revoluteJoint.hpp"
 
 struct LimbSegmentConfig {
-    float len;
-    float radius;
-  };
+  float len = 1;
+  float radius = 0.25;
+};
+
+struct LimbControlConfig {
+  float KIMultiplier = 1;
+  float KPMultiplier = 1;
+  float KDMultiplier = 1;
+  float maxForceMultiplier = 1;
+};
 
 struct LimbBodyConfig : public BodyPartConfig {
   static LimbBodyConfig defaultConfig();
   CapsuleConfig templateCapsuleConfig;
   RevoluteJointConfig templateJointConfig;
+  LimbControlConfig limbControlConfig;
 
   std::vector<LimbSegmentConfig> segments;
   b2Vec2 basePos;
@@ -23,7 +31,14 @@ class LimbBody : public BodyPart {
 public:
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
-  void aimAt(b2Vec2 worldPoint);
+  float getLength();
+  const std::vector<float> &getSegmentLengths();
+  std::vector<b2Vec2> getJointsPos();
+
+  void setTracking(b2Vec2 worldPoint,bool isTracking);
+  bool getTracking();
+  b2Vec2 getTrackingPoint();
+
   void update(float dt) override;
 
 protected:
@@ -40,7 +55,13 @@ protected:
   std::vector<std::shared_ptr<Capsule>> segments;
   std::vector<std::shared_ptr<RevoluteJoint>> joints;
   std::vector<SegmentController> controllers;
+  std::vector<float> segmentLengths;
+  float length;
   const std::vector<LimbSegmentConfig> segmentsConfig;
+  struct TrackingContext {
+    b2Vec2 trackingPoint = b2Vec2(0,0);
+    bool isTracking = false;
+  } trackingContext;
 
   friend class BodyFactory;
 };
