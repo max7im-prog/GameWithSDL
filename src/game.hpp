@@ -1,4 +1,5 @@
 #pragma once
+#include "bodyFactory.hpp"
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -18,7 +19,7 @@
 #include "controllerUpdateSystem.hpp"
 // #include "creatureControlSystem.hpp"
 #include "worldUpdateSystem.hpp"
-// #include "mouseJointSystem.hpp"
+#include "mouseJointSystem.hpp"
 
 // Creatures
 // #include "creatureUpdateSystem.hpp"
@@ -72,7 +73,7 @@ private:
     WorldUpdateSystem worldUpdateSystem;
     ControllerUpdateSystem controllerUpdateSystem;
     // CreatureControlSystem creatureControlSystem;
-    // MouseJointSystem mouseJointSystem;
+    MouseJointSystem mouseJointSystem;
     // CreatureUpdateSystem creatureUpdateSystem;
 
     // Render systems
@@ -83,6 +84,13 @@ private:
     entt::registry registry;
     entt::dispatcher eventDispatcher;
     RenderContext renderContext;
+
+    // Entity factories
+    std::shared_ptr<PhysicsFactory> physicsFactory;
+    std::shared_ptr<BodyFactory> bodyFactory;
+
+    // World
+    std::shared_ptr<World> world;
 };
 
 #endif // GAME_HPP

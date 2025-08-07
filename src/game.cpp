@@ -50,23 +50,23 @@ bool Game::init() {
   // world
   auto worldEnt = this->registry.create();
   auto &worldComp = this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
-  auto world = std::shared_ptr<World>(new BasicWorld);
+  world = std::shared_ptr<World>(new BasicWorld);
   worldComp.world = world;
 
-  // some shapes
-  auto physicsFactory =
+  // Initialize factories
+  physicsFactory =
       std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
-
-  auto bodyFatory = std::shared_ptr<BodyFactory>(
+  bodyFactory = std::shared_ptr<BodyFactory>(
       new BodyFactory(registry, world, physicsFactory));
 
+  // Some shapes
   {
     auto config = PolygonBodyConfig::defaultConfig();
     config.polygonConfig.radius = 0;
     config.polygonConfig.vertices = {{0, 0}, {0, 1}, {14, 1}, {14, 0}};
     config.polygonConfig.bodyDef.type = b2_staticBody;
     config.polygonConfig.bodyDef.position = {1, 1};
-    bodyFatory->createPolygonBody(config);
+    bodyFactory->createPolygonBody(config);
   }
 
   {
@@ -74,7 +74,7 @@ bool Game::init() {
     config.circleConfig.bodyDef.position = {10, 10};
     config.circleConfig.bodyDef.type = b2_dynamicBody;
     config.circleConfig.radius = 1;
-    bodyFatory->createCircleBody(config);
+    bodyFactory->createCircleBody(config);
   }
 
   {
@@ -86,7 +86,7 @@ bool Game::init() {
                        {.len = 1, .radius = 0.25},
                        {.len = 1, .radius = 0.25},
                        {.len = 1, .radius = 0.25}};
-    bodyFatory->createLimbBody(config);
+    bodyFactory->createLimbBody(config);
   }
 
   {
@@ -97,7 +97,7 @@ bool Game::init() {
     config.capsuleConfig.bodyDef.type = b2_dynamicBody;
     config.capsuleConfig.bodyDef.position = {8, 10};
     config.capsuleConfig.bodyDef.rotation = b2MakeRot(-B2_PI / 4);
-    bodyFatory->createCapsuleBody(config);
+    bodyFactory->createCapsuleBody(config);
   }
 
   {
@@ -106,7 +106,7 @@ bool Game::init() {
     config.polygonConfig.vertices = {{0, 0}, {2, 0}, {1, -2}};
     config.polygonConfig.bodyDef.type = b2_dynamicBody;
     config.polygonConfig.bodyDef.position = {5, 10};
-    bodyFatory->createPolygonBody(config);
+    bodyFactory->createPolygonBody(config);
   }
 
   return true;
@@ -129,7 +129,7 @@ void Game::update() {
   // this->creatureControlSystem.update(this->registry);
 
   // this->creatureUpdateSystem.update(this->registry, this->FPS);
-  // this->mouseJointSystem.update(this->registry, this->renderContext);
+  mouseJointSystem.update(registry, world, physicsFactory, renderContext);
 
   this->worldUpdateSystem.update(this->registry, this->FPS);
 }

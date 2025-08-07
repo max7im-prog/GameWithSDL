@@ -13,6 +13,10 @@ public:
   entt::entity getEntity();
   virtual ~Joint();
 
+  // Removes a joint from the registry if registered. Does not automatically
+  // delete the shape as shared pointers are responsible for deletion
+  void remove();
+
 protected:
   Joint() = delete;
   Joint(entt::registry &registry);

@@ -18,3 +18,10 @@ Joint::~Joint() {
 }
 
 Joint::Joint(entt::registry &registry) : registry(registry) {}
+
+void Joint::remove() {
+  if (registry.valid(entity)) {
+    registry.destroy(entity);
+  }
+  entity = entt::null;
+}

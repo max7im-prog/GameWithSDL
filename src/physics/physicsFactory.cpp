@@ -45,6 +45,19 @@ std::shared_ptr<Capsule> PhysicsFactory::createCapsule(CapsuleConfig config) {
   return ret;
 }
 
+std::shared_ptr<EmptyShape> PhysicsFactory::createEmptyShape(const EmptyShapeConfig& config) {
+  std::shared_ptr<EmptyShape> ret = nullptr;
+  try {
+    ret = std::shared_ptr<EmptyShape>(new EmptyShape(registry, *world, config));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  ret->entity = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsBody>(ret->entity);
+  comp.shape = ret;
+  return ret;
+}
+
 std::shared_ptr<RevoluteJoint>
 PhysicsFactory::createRevoluteJoint(RevoluteJointConfig config) {
   std::shared_ptr<RevoluteJoint> ret = nullptr;
@@ -66,6 +79,21 @@ PhysicsFactory::createDistanceJoint(DistanceJointConfig config) {
   try {
     ret = std::shared_ptr<DistanceJoint>(
         new DistanceJoint(registry, *world, config));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  ret->entity = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsJoint>(ret->entity);
+  comp.joint = ret;
+  return ret;
+}
+
+std::shared_ptr<MouseJoint>
+PhysicsFactory::createMouseJoint(MouseJointConfig config) {
+  std::shared_ptr<MouseJoint> ret = nullptr;
+  try {
+    ret = std::shared_ptr<MouseJoint>(
+        new MouseJoint(registry, *world, config));
   } catch (std::exception &e) {
     return nullptr;
   }

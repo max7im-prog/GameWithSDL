@@ -1,14 +1,12 @@
 #pragma once
-#include <entt/entt.hpp>
 #include <box2d/box2d.h>
+#include <entt/entt.hpp>
 
-// System that calls for step() in every physics world in a registry
-class WorldUpdateSystem{
+// System that calls step() in every physics world in a registry
+class WorldUpdateSystem {
 public:
+  WorldUpdateSystem();
+  ~WorldUpdateSystem();
 
-    WorldUpdateSystem();
-    ~WorldUpdateSystem();
-
-    void update(entt::registry& registry, int FPS);
-
+  void update(entt::registry &registry, int FPS);
 };

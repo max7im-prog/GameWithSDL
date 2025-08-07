@@ -20,6 +20,10 @@ public:
 
   virtual ~Shape();
 
+  // Removes a shape from the registry if registered. Does not automatically
+  // delete the shape as shared pointers are responsible for deletion
+  void remove();
+
 protected:
   Shape() = delete;
   Shape(entt::registry &registry);

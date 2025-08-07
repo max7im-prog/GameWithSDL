@@ -1,4 +1,6 @@
 #include "renderUtils.hpp"
+#include "box2d/box2d.h"
+#include "box2d/id.h"
 
 #include <vector>
 
@@ -23,7 +25,9 @@ std::pair<float, float> RenderUtils::pixelsToMeters(std::pair<int, int> pixels, 
 
 bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context)
 {
-
+    if(!b2Shape_IsValid(shapeId)){
+        return false;
+    }
     auto type = b2Shape_GetType(shapeId);
     auto bodyId = b2Shape_GetBody(shapeId);
 

@@ -1,17 +1,19 @@
+#pragma once
 #include "PIDVectorController.hpp"
 #include "bodyPart.hpp"
 #include "capsule.hpp"
 #include "revoluteJoint.hpp"
+
+struct LimbSegmentConfig {
+    float len;
+    float radius;
+  };
 
 struct LimbBodyConfig : public BodyPartConfig {
   static LimbBodyConfig defaultConfig();
   CapsuleConfig templateCapsuleConfig;
   RevoluteJointConfig templateJointConfig;
 
-  struct LimbSegmentConfig {
-    float len;
-    float radius;
-  };
   std::vector<LimbSegmentConfig> segments;
   b2Vec2 basePos;
   b2Rot rotation;
@@ -38,6 +40,7 @@ protected:
   std::vector<std::shared_ptr<Capsule>> segments;
   std::vector<std::shared_ptr<RevoluteJoint>> joints;
   std::vector<SegmentController> controllers;
+  const std::vector<LimbSegmentConfig> segmentsConfig;
 
   friend class BodyFactory;
 };

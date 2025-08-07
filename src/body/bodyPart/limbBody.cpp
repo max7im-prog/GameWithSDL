@@ -7,7 +7,7 @@
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const LimbBodyConfig &config,
                    const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : BodyPart(registry, world) {
+    : BodyPart(registry, world), segmentsConfig(config.segments) {
 
   b2Vec2 lastPos = config.basePos;
   b2Vec2 incrementDir = {0, -1};
@@ -41,6 +41,9 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     auto joint = physicsFactory->createRevoluteJoint(jointConfig);
     joints.push_back(joint);
   }
+
+  // Create PID controllers
+  // TODO: implement
 }
 
 LimbBodyConfig LimbBodyConfig::defaultConfig() {

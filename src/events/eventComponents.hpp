@@ -1,21 +1,20 @@
-
-
 #pragma once
 #include <SDL3/SDL.h>
+#include <utility>
 
-struct QuitEvent{};
+struct QuitEvent {};
 
-struct PlayerInput{};
+struct PlayerInput {};
 
-struct Mouse{};
+struct Mouse {};
 
 struct KeyPress {
-    SDL_Keycode key;  // e.g. SDLK_SPACE, SDLK_a, SDLK_RETURN
-    bool pressed;     // true if key down, false if key up
+  SDL_Keycode key; // e.g. SDLK_SPACE, SDLK_a, SDLK_RETURN
+  bool pressed;    // true if key down, false if key up
 };
 
 struct ButtonPress {
-    uint8_t button;   // SDL button code, e.g. SDL_BUTTON_LEFT, SDL_BUTTON_RIGHT
-    bool pressed;     // true if pressed, false if released
-    std::pair<int,int> location; // {x,y}
+  uint8_t button; // SDL button code, e.g. SDL_BUTTON_LEFT, SDL_BUTTON_RIGHT
+  bool pressed;   // True if pressed, false if released
+  std::pair<int, int> location; // {x,y}
 };

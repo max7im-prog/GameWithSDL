@@ -1,3 +1,4 @@
+#pragma once
 #include "bodyPart.hpp"
 #include "capsule.hpp"
 

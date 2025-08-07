@@ -14,4 +14,4 @@ void WorldUpdateSystem::update(entt::registry& registry, int FPS){
         auto& world = view.get<PhysicsWorld>(ent);
         b2World_Step(world.world->getWorldId(),float(1.0f)/float(FPS),1);
     }
-}
+} 
