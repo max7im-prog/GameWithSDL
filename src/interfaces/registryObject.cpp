@@ -13,6 +13,6 @@ void RegistryObject::remove() {
 
 RegistryObject::~RegistryObject() { remove(); }
 
-RegistryObject::RegistryObject(entt::registry &registry) : registry(registry) {}
+RegistryObject::RegistryObject(entt::registry &registry) : registry(registry), entity(entt::null) {}
 
 void RegistryObject::setEntity(entt::entity e) { entity = e; }

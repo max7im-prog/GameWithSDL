@@ -1,8 +1,7 @@
 #include "bodyPart.hpp"
+#include "registryObject.hpp"
 
 BodyPart::~BodyPart() {
-  remove();
-
   for (auto j : joints) {
     j->remove();
   }
@@ -12,17 +11,8 @@ BodyPart::~BodyPart() {
   }
 }
 
-entt::entity BodyPart::getEntity() { return entity; }
-
 BodyPart::BodyPart(entt::registry &registry, const std::shared_ptr<World> world)
-    : world(world), registry(registry) {}
-
-void BodyPart::remove() {
-  if (registry.valid(entity)) {
-    registry.destroy(entity);
-  }
-  entity = entt::null;
-}
+    : RegistryObject(registry), world(world) {}
 
 void BodyPart::registerShape(std::shared_ptr<Shape> shape) {
   shapes.push_back(shape);

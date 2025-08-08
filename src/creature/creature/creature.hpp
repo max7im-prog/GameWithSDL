@@ -1,5 +1,6 @@
 #pragma once
 #include "bodyPart.hpp"
+#include "registryObject.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 
@@ -9,7 +10,7 @@ enum CreatureAbilities {
   CAN_JUMP = 1 << 0,
 };
 
-class Creature {
+class Creature :RegistryObject{
 public:
   virtual ~Creature() = 0;
 
@@ -23,10 +24,6 @@ public:
   virtual void update(float dt);
 
   std::uint32_t getAbilities();
-
-  // Removes a creature from the registry. Does not automatically delete it as
-  // shared pointers are responsible for deletion
-  void remove();
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
@@ -46,9 +43,7 @@ protected:
   
 
 private:
-  entt::registry &registry;
   const std::shared_ptr<World> world;
-  entt::entity entity = entt::null;
 
   std::vector<std::shared_ptr<BodyPart>> bodyParts;
   std::vector<std::shared_ptr<Joint>> joints;

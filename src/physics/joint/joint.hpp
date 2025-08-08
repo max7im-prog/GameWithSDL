@@ -5,17 +5,15 @@
 #include "box2d/types.h"
 #include "entt/entity/entity.hpp"
 #include "entt/entt.hpp"
+#include "registryObject.hpp"
+
 struct JointConfig {};
-class Joint {
+
+class Joint : public RegistryObject {
 public:
   b2JointId getJointId();
   b2JointType getType();
-  entt::entity getEntity();
   virtual ~Joint();
-
-  // Removes a joint from the registry if registered. Does not automatically
-  // delete the shape as shared pointers are responsible for deletion
-  void remove();
 
 protected:
   Joint() = delete;
@@ -26,8 +24,6 @@ protected:
   Joint &operator=(Joint &&other) = delete;
 
   b2JointId jointId = b2_nullJointId;
-  entt::entity entity = entt::null;
-  entt::registry &registry;
 
   friend class PhysicsFactory;
 };

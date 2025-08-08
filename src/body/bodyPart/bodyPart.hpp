@@ -2,19 +2,16 @@
 #include "box2d/box2d.h"
 #include "joint.hpp"
 #include "physicsFactory.hpp"
+#include "registryObject.hpp"
 #include "shape.hpp"
 
 struct BodyPartConfig {};
 
-class BodyPart {
+class BodyPart : public RegistryObject{
 public:
   virtual void update([[maybe_unused]] float dt) {};
-  entt::entity getEntity();
   virtual ~BodyPart();
 
-  // Removes a BodyPart from the registry if registered. Does not automatically
-  // delete the shape as shared pointers are responsible for deletion.
-  void remove();
 
 protected:
   BodyPart(entt::registry &registry, const std::shared_ptr<World> world);
@@ -39,8 +36,5 @@ private:
   BodyPart(BodyPart &&other) = delete;
   BodyPart operator=(BodyPart &other) = delete;
   BodyPart operator=(BodyPart &&other) = delete;
-
-  entt::entity entity = entt::null;
-  entt::registry &registry;
   friend class BodyFactory;
 };
