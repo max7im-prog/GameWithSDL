@@ -25,9 +25,9 @@ void BodyPart::remove() {
 }
 
 void BodyPart::registerShape(std::shared_ptr<Shape> shape) {
-  shapes.insert(shape);
+  shapes.push_back(shape);
 }
 
 void BodyPart::registerJoint(std::shared_ptr<Joint> joint) {
-  joints.insert(joint);
+  joints.push_back(joint);
 }

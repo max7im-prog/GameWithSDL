@@ -38,6 +38,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
 
 set(EXTERNAL_LIBS
   box2d
@@ -57,6 +58,7 @@ set(GAME_ALL_SOURCES
   ${SYSTEMS_SRC}
   ${CREATURE_SRC}
   ${BODY_SRC}
+  ${INTERFACES_SRC}
   src/game.cpp
   src/game.hpp
   src/main.cpp
@@ -74,6 +76,7 @@ set(GAME_ALL_INCLUDE_DIRS
   ${SYSTEMS_INCLUDE_DIRS}
   ${BODY_INCLUDE_DIRS}
   ${CREATURE_INCLUDE_DIRS}
+  ${INTERFACES_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 

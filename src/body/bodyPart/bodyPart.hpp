@@ -31,8 +31,8 @@ protected:
   void registerJoint(std::shared_ptr<Joint> joint);
 
 private:
-  std::set<std::shared_ptr<Shape>> shapes;
-  std::set<std::shared_ptr<Joint>> joints;
+  std::vector<std::shared_ptr<Shape>> shapes;
+  std::vector<std::shared_ptr<Joint>> joints;
 
   BodyPart() = delete;
   BodyPart(BodyPart &other) = delete;
