@@ -21,3 +21,7 @@ CircleBodyConfig CircleBodyConfig::defaultConfig(){
   ret.circleConfig = CircleConfig::defaultConfig();
   return ret;
 }
+
+const std::shared_ptr<Circle> CircleBody::getCircle(){
+  return circle;
+}

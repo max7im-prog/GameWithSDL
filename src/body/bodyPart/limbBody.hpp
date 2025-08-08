@@ -33,9 +33,10 @@ public:
   b2Vec2 getEndPos();
   float getLength();
   const std::vector<float> &getSegmentLengths();
+  const std::vector<std::shared_ptr<Capsule>> &getSegments() const;
   std::vector<b2Vec2> getJointsPos();
 
-  void setTracking(b2Vec2 worldPoint,bool isTracking);
+  void setTracking(b2Vec2 worldPoint, bool isTracking);
   bool getTracking();
   b2Vec2 getTrackingPoint();
 
@@ -59,7 +60,7 @@ protected:
   float length;
   const std::vector<LimbSegmentConfig> segmentsConfig;
   struct TrackingContext {
-    b2Vec2 trackingPoint = b2Vec2(0,0);
+    b2Vec2 trackingPoint = b2Vec2(0, 0);
     bool isTracking = false;
   } trackingContext;
 

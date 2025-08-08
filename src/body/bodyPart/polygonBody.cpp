@@ -17,3 +17,7 @@ PolygonBodyConfig PolygonBodyConfig::defaultConfig() {
   ret.polygonConfig = PolygonConfig::defaultConfig();
   return ret;
 }
+
+const std::shared_ptr<Polygon> PolygonBody::getPolygon(){
+  return polygon;
+}

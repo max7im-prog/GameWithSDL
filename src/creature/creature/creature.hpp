@@ -4,13 +4,15 @@
 #include "world.hpp"
 #include <entt/entt.hpp>
 
-struct creatureConfig {};
+struct CreatureConfig {
+  b2Vec2 position;
+};
 
 enum CreatureAbilities {
   CAN_JUMP = 1 << 0,
 };
 
-class Creature :RegistryObject{
+class Creature :public RegistryObject{
 public:
   virtual ~Creature() = 0;
 

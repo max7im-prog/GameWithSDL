@@ -11,6 +11,7 @@ class CircleBody : public BodyPart {
 public:
   b2Vec2 getCenter();
   float getRadius();
+  const std::shared_ptr<Circle> getCircle();
 
 protected:
   CircleBody() = delete;

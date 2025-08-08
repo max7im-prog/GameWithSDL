@@ -9,12 +9,14 @@ struct PolygonBodyConfig : public BodyPartConfig {
 
 class PolygonBody : public BodyPart {
 public:
+  const std::shared_ptr<Polygon> getPolygon();
 
 protected:
   PolygonBody() = delete;
   PolygonBody(entt::registry &registry, const std::shared_ptr<World> world,
              const PolygonBodyConfig &config,
              const std::shared_ptr<PhysicsFactory> physicsFactory);
+             
   std::shared_ptr<Polygon> polygon;
 
   friend class BodyFactory;

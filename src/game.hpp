@@ -1,5 +1,6 @@
 #pragma once
 #include "bodyFactory.hpp"
+#include "creatureFactory.hpp"
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -88,6 +89,7 @@ private:
     // Entity factories
     std::shared_ptr<PhysicsFactory> physicsFactory;
     std::shared_ptr<BodyFactory> bodyFactory;
+    std::shared_ptr<CreatureFactory> creatureFactory;
 
     // World
     std::shared_ptr<World> world;

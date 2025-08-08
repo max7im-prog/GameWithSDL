@@ -102,3 +102,16 @@ PhysicsFactory::createMouseJoint(MouseJointConfig config) {
   comp.joint = ret;
   return ret;
 }
+
+
+int PhysicsFactory::getNextNegativeId()
+{
+    static int ret = -1;
+    return ret--;
+}
+
+int PhysicsFactory::getNextPositiveId()
+{
+    static int ret = 1;
+    return ret++;
+}

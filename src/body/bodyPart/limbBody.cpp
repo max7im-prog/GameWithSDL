@@ -154,3 +154,7 @@ void LimbBody::update(float dt) {
   b2Body_ApplyForce(segments[0]->getBodyId(), correctingForce, getBasePos(),
                     true);
 }
+
+const std::vector<std::shared_ptr<Capsule>> &LimbBody::getSegments() const {
+  return segments;
+}

@@ -39,6 +39,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/creature)
 
 set(EXTERNAL_LIBS
   box2d

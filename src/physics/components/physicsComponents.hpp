@@ -1,5 +1,6 @@
 #pragma once
 #include "bodyPart.hpp"
+#include "creature/creature/creature.hpp"
 #include "joint.hpp"
 #include "shape.hpp"
 #include "world.hpp"
@@ -23,4 +24,8 @@ struct PhysicsJoint {
 
 struct PhysicsBodyPart {
   std::shared_ptr<BodyPart> bodyPart;
+};
+
+struct PhysicsCreature{
+  std::shared_ptr<Creature> creature;
 };

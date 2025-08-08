@@ -23,6 +23,18 @@ public:
   createMouseJoint(MouseJointConfig config);
   
   PhysicsFactory(entt::registry &registry, const std::shared_ptr<World> world);
+
+  /**
+   * @brief Used to get a unique identifier for a group with disabled collision
+   * 
+   */
+  static int getNextNegativeId();
+
+  /**
+   * @brief Used to get a unique identifier for a group with enabled collision
+   * 
+   */
+  static int getNextPositiveId();
   
 
 private:

@@ -23,3 +23,7 @@ CapsuleBodyConfig CapsuleBodyConfig::defaultConfig(){
   ret.capsuleConfig = CapsuleConfig::defaultConfig();
   return ret;
 }
+
+const std::shared_ptr<Capsule> CapsuleBody::getCapsule(){
+  return capsule;
+}
