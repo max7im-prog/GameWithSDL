@@ -4,8 +4,7 @@
 #include "physicsFactory.hpp"
 #include "shape.hpp"
 
-struct BodyPartConfig {
-};
+struct BodyPartConfig {};
 
 class BodyPart {
 public:
@@ -15,15 +14,15 @@ public:
 
 protected:
   BodyPart(entt::registry &registry, const std::shared_ptr<World> world);
+  const std::shared_ptr<World> world;
+
+private:
   BodyPart() = delete;
   BodyPart(BodyPart &other) = delete;
   BodyPart(BodyPart &&other) = delete;
   BodyPart operator=(BodyPart &other) = delete;
   BodyPart operator=(BodyPart &&other) = delete;
 
-  const std::shared_ptr<World> world;
-
-private:
   entt::entity entity = entt::null;
   entt::registry &registry;
   friend class BodyFactory;
