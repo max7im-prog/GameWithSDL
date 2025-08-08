@@ -15,6 +15,7 @@ CapsuleBody::CapsuleBody(entt::registry &registry,
                        const std::shared_ptr<PhysicsFactory> physicsFactory)
     : BodyPart(registry, world) {
   capsule = physicsFactory->createCapsule(config.capsuleConfig);
+  registerShape(capsule);
 }
 
 CapsuleBodyConfig CapsuleBodyConfig::defaultConfig(){

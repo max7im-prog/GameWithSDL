@@ -69,14 +69,16 @@ bool Game::init() {
     bodyFactory->createPolygonBody(config);
   }
 
+  std::shared_ptr<BodyPart> b0;
   {
     auto config = CircleBodyConfig::defaultConfig();
     config.circleConfig.bodyDef.position = {10, 10};
     config.circleConfig.bodyDef.type = b2_dynamicBody;
     config.circleConfig.radius = 1;
-    bodyFactory->createCircleBody(config);
+    b0 =bodyFactory->createCircleBody(config);
   }
-
+  // b0->remove();
+  
   {
     auto config = LimbBodyConfig::defaultConfig();
     config.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
@@ -86,8 +88,9 @@ bool Game::init() {
                        {.len = 1, .radius = 0.25},
                        {.len = 1, .radius = 0.25},
                        {.len = 1, .radius = 0.25}};
-    bodyFactory->createLimbBody(config);
+    b0 = bodyFactory->createLimbBody(config);
   }
+  // b0->remove();
 
   {
     auto config = CapsuleBodyConfig::defaultConfig();
@@ -97,8 +100,9 @@ bool Game::init() {
     config.capsuleConfig.bodyDef.type = b2_dynamicBody;
     config.capsuleConfig.bodyDef.position = {8, 10};
     config.capsuleConfig.bodyDef.rotation = b2MakeRot(-B2_PI / 4);
-    bodyFactory->createCapsuleBody(config);
+    b0 = bodyFactory->createCapsuleBody(config);
   }
+  // b0->remove();
 
   {
     auto config = PolygonBodyConfig::defaultConfig();
@@ -106,8 +110,9 @@ bool Game::init() {
     config.polygonConfig.vertices = {{0, 0}, {2, 0}, {1, -2}};
     config.polygonConfig.bodyDef.type = b2_dynamicBody;
     config.polygonConfig.bodyDef.position = {5, 10};
-    bodyFactory->createPolygonBody(config);
+    b0 = bodyFactory->createPolygonBody(config);
   }
+  // b0->remove();
 
   return true;
 }

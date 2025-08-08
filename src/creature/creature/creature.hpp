@@ -26,17 +26,20 @@ public:
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
-  entt::registry &registry;
-  const std::shared_ptr<World> world;
+
   std::uint32_t abilitiesFlags = 0;
 
-  std::vector<std::shared_ptr<BodyPart>> bodyParts;
+  
   void registerBodyPart(std::shared_ptr<BodyPart> bodyPart);
-
-  std::vector<std::shared_ptr<Joint>> joints;
   void registerJoint(std::shared_ptr<Joint> joint);
 
 private:
+  entt::registry &registry;
+  const std::shared_ptr<World> world;
+
+  std::set<std::shared_ptr<BodyPart>> bodyParts;
+  std::set<std::shared_ptr<Joint>> joints;
+
   Creature() = delete;
   Creature(Creature &other) = delete;
   Creature(Creature &&other) = delete;

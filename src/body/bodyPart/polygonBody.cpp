@@ -9,6 +9,7 @@ PolygonBody::PolygonBody(entt::registry &registry,
                          const std::shared_ptr<PhysicsFactory> physicsFactory)
     : BodyPart(registry, world) {
   polygon = physicsFactory->createPolygon(config.polygonConfig);
+  registerShape(polygon);
 }
 
 PolygonBodyConfig PolygonBodyConfig::defaultConfig() {

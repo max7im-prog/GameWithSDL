@@ -15,9 +15,7 @@ Shape::~Shape() {
   if (b2Body_IsValid(bodyId)) {
     b2DestroyBody(bodyId);
   }
-  if (registry.valid(entity)) {
-    registry.destroy(entity);
-  }
+  remove();
 }
 
 void Shape::remove() {
