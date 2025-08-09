@@ -2,16 +2,8 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "*.cpp"
     "*.hpp"
 )
-
 set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-set(RENDER_SRC ${SOURCES} PARENT_SCOPE)
-
-set(RENDER_INCLUDE_DIRS
-    ${INCLUDE_DIRS}
-    PARENT_SCOPE
 )
 
 add_library(game_render_lib STATIC ${SOURCES})
