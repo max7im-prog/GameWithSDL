@@ -1,6 +1,5 @@
 #include "quitSystem.hpp"
 #include "eventComponents.hpp"
-#include "game.hpp"
 QuitSystem::QuitSystem()
 {
 }
@@ -9,11 +8,11 @@ QuitSystem::~QuitSystem()
 {
 }
 
-void QuitSystem::update(entt::registry &registry, Game &game)
+void QuitSystem::update(entt::registry &registry,bool& running)
 {
     auto view = registry.view<QuitEvent>();
     for(auto entity:view){
-        game.setRunning(false);
+        running = false;
         registry.destroy(entity);
     }
 }

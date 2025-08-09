@@ -5,7 +5,7 @@
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
 
-void DemoCreature::move(b2Vec2 dir, float intensity) {}
+void DemoCreature::move(b2Vec2 dir, float intensity) { /* TODO: Implement */ }
 
 DemoCreature::DemoCreature(entt::registry &registry,
                            const std::shared_ptr<World> world,

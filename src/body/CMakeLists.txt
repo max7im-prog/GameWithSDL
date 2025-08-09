@@ -3,10 +3,20 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "*.hpp"
 )
 
+set(INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/bodyPart
+)
+
 set(BODY_SRC ${SOURCES} PARENT_SCOPE)
 
 set(BODY_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/bodyPart
+    ${INCLUDE_DIRS}
     PARENT_SCOPE
 )
+
+add_library(game_body_lib STATIC ${SOURCES})
+target_include_directories(game_body_lib PUBLIC ${INCLUDE_DIRS})
+target_link_libraries(game_body_lib PUBLIC game_physics_lib game_interfaces_lib game_controls_lib)
+
+

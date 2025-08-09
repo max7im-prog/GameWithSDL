@@ -3,9 +3,17 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "*.hpp"
 )
 
+set(INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 set(RENDER_SRC ${SOURCES} PARENT_SCOPE)
 
 set(RENDER_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${INCLUDE_DIRS}
     PARENT_SCOPE
 )
+
+add_library(game_render_lib STATIC ${SOURCES})
+target_include_directories(game_render_lib PUBLIC ${INCLUDE_DIRS})
+target_link_libraries(game_render_lib PUBLIC SDL3-shared box2d)

@@ -1,5 +1,5 @@
 #include "bodyFactory.hpp"
-#include "creature/creature/demoCreature.hpp"
+#include "demoCreature.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 class CreatureFactory {

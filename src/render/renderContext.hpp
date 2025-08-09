@@ -1,5 +1,4 @@
-#ifndef RENDERCONTEXT_HPP
-#define RENDERCONTEXT_HPP
+#pragma once
 #include <SDL3/SDL.h>
 
 class RenderContext
@@ -17,5 +16,3 @@ public:
     // Conversion from box2d meters to pixels
     float pixelToMeterRatio;
 };
-
-#endif //RENDERCONTEXT_HPP

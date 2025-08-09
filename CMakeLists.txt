@@ -30,16 +30,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(entt)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/body)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/creature)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/body) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/creature) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems) # Done
 
 set(EXTERNAL_LIBS
   box2d
@@ -47,46 +47,33 @@ set(EXTERNAL_LIBS
   EnTT::EnTT
 )
 
-set(GAME_ALL_SOURCES
-  ${CONTROLS_SRC}
-  ${CREATURE_SRC}
-  ${DEBUG_SRC}
-  ${EVENTS_SRC}
-  ${MISC_SRC}
-  ${PHYSICS_SRC}
-  ${RENDER_SRC}
-  ${SHAPE_SRC}
-  ${SYSTEMS_SRC}
-  ${CREATURE_SRC}
-  ${BODY_SRC}
-  ${INTERFACES_SRC}
-  src/game.cpp
-  src/game.hpp
-  src/main.cpp
+set(GAME_LIBS
+  game_body_lib
+  game_controls_lib
+  game_creature_lib
+  game_debug_lib
+  game_events_lib
+  game_interfaces_lib
+  game_misc_lib
+  game_physics_lib
+  game_render_lib
+  game_systems_lib
 )
 
-set(GAME_ALL_INCLUDE_DIRS
-  ${CONTROLS_INCLUDE_DIRS}
-  ${CREATURE_INCLUDE_DIRS}
-  ${DEBUG_INCLUDE_DIRS}
-  ${EVENTS_INCLUDE_DIRS}
-  ${MISC_INCLUDE_DIRS}
-  ${PHYSICS_INCLUDE_DIRS}
-  ${RENDER_INCLUDE_DIRS}
-  ${SHAPE_INCLUDE_DIRS}
-  ${SYSTEMS_INCLUDE_DIRS}
-  ${BODY_INCLUDE_DIRS}
-  ${CREATURE_INCLUDE_DIRS}
-  ${INTERFACES_INCLUDE_DIRS}
+add_library(game_run_lib STATIC
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/game.hpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/game.cpp
+)
+target_include_directories(game_run_lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+target_link_libraries(game_run_lib PUBLIC ${GAME_LIBS} ${EXTERNAL_LIBS})
 
 add_executable(
   Game
-  ${GAME_ALL_SOURCES}
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
-target_link_libraries(Game PRIVATE ${EXTERNAL_LIBS})
-target_include_directories(Game PRIVATE ${GAME_ALL_INCLUDE_DIRS})
+target_link_libraries(Game PRIVATE game_run_lib)
 
 target_compile_options(Game PRIVATE
   $<$<CONFIG:Debug>:-Wall -Wextra -g -ggdb3 -fsanitize=address -fsanitize=undefined -fsanitize=leak>

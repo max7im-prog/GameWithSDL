@@ -140,7 +140,7 @@ void Game::clean() {
 
 void Game::handleEvents() {
   this->pollEventSystem.update(this->registry);
-  this->quitSystem.update(this->registry, *this);
+  this->quitSystem.update(this->registry, running);
 }
 
 void Game::update() {

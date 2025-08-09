@@ -3,9 +3,19 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
     "*.hpp"
 )
 
+set(INCLUDE_DIRS
+    ${CMAKE_CURRENT_SOURCE_DIR}
+
+)
+
 set(MISC_SRC ${SOURCES} PARENT_SCOPE)
 
 set(MISC_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${INCLUDE_DIRS}
     PARENT_SCOPE
 )
+
+add_library(game_misc_lib STATIC ${SOURCES})
+target_include_directories(game_misc_lib PUBLIC ${INCLUDE_DIRS})
+target_link_libraries(game_misc_lib PUBLIC EnTT::EnTT box2d)
+

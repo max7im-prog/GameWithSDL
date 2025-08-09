@@ -14,7 +14,7 @@ public:
     QuitSystem();
     ~QuitSystem();
 
-    void update(entt::registry &registry,Game& game);
+    void update(entt::registry &registry,bool& running);
 };
 
 

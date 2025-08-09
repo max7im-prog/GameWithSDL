@@ -1,5 +1,5 @@
 #include "creatureFactory.hpp"
-#include "physicsComponents.hpp"
+#include "creatureComponents.hpp"
 #include "physicsFactory.hpp"
 
 CreatureFactory::CreatureFactory(entt::registry &registry,

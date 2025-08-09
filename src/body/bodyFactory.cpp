@@ -1,5 +1,6 @@
 #include "bodyFactory.hpp"
 #include "physicsComponents.hpp"
+#include "bodyComponents.hpp"
 #include "physicsFactory.hpp"
 BodyFactory::BodyFactory(entt::registry &registry,
                          const std::shared_ptr<World> world,
