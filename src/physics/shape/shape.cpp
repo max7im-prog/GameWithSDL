@@ -16,7 +16,14 @@ Shape::~Shape() {
   }
 }
 
+float Shape::getMass() { return b2Body_GetMass(bodyId); }
 
-float Shape::getMass(){
-  return b2Body_GetMass(bodyId);
+float Shape::getRotationalInertia() {
+  return b2Body_GetRotationalInertia(bodyId);
+}
+
+b2Rot Shape::getRotation() { return b2Body_GetRotation(bodyId); }
+
+void Shape::applyTorque(float torque) {
+  b2Body_ApplyTorque(bodyId, torque, true);
 }

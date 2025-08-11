@@ -6,7 +6,6 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(game_misc_lib STATIC ${SOURCES})
-target_include_directories(game_misc_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_misc_lib PUBLIC EnTT::EnTT box2d)
+add_library(game_misc_lib INTERFACE)
+target_include_directories(game_misc_lib INTERFACE)
 

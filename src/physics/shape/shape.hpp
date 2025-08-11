@@ -12,14 +12,19 @@ struct ShapeConfig {
   b2ShapeDef shapeDef;
 };
 
-class Shape: public RegistryObject {
+class Shape : public RegistryObject {
 public:
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
   b2ShapeType getType();
   float getMass();
+  float getRotationalInertia();
+  b2Rot getRotation();
+
+  void applyTorque(float torque);
 
   virtual ~Shape();
+  void update([[maybe_unused]] float dt) override {};
 
 protected:
   Shape() = delete;

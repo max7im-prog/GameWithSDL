@@ -7,6 +7,12 @@ project(
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_STANDARD 17)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_Declare(
@@ -30,16 +36,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(entt)
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/body) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/creature) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug) # Done
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems) # Done
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/body)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/creature)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
 
 set(EXTERNAL_LIBS
   box2d

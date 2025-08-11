@@ -9,6 +9,7 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/misc
     ${CMAKE_CURRENT_SOURCE_DIR}/events
     ${CMAKE_CURRENT_SOURCE_DIR}/controls
+    ${CMAKE_CURRENT_SOURCE_DIR}/creature
 )
 
 add_library(game_systems_lib STATIC ${SOURCES})

@@ -1,4 +1,8 @@
 #include "demoCreature.hpp"
+#include "PIDScalarController.hpp"
+#include "PIDVectorController.hpp"
+#include "box2d/box2d.h"
+#include "box2d/math_functions.h"
 #include "box2d/types.h"
 #include "limbBody.hpp"
 #include "physicsFactory.hpp"
@@ -35,9 +39,16 @@ DemoCreature::DemoCreature(entt::registry &registry,
   auto limbConfig = LimbBodyConfig::defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
   limbConfig.templateCapsuleConfig.shapeDef.filter.groupIndex = groupId;
+  limbConfig.limbControlConfig = {.KPMultiplier = 7.0f,
+                                  .KIMultiplier = 0.3f,
+                                  .KDMultiplier = 10.0f,
+                                  .maxForceMultiplier = 15.0f};
+  limbConfig.templateJointConfig.jointDef.upperAngle = B2_PI / 4;
+  limbConfig.templateJointConfig.jointDef.lowerAngle = -B2_PI / 4;
+  limbConfig.templateJointConfig.jointDef.enableLimit = true;
 
   for (size_t i = 0; i < numSegments; i++) {
-    limbConfig.segments.push_back({.len = 0.25, .radius = segmentRadius});
+    limbConfig.segments.push_back({.len = segmentLen, .radius = segmentRadius});
   }
   {
     auto cfg = limbConfig;
@@ -45,14 +56,14 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.basePos =
         b2Add(config.position, b2Vec2(-torsoWidth / 2, torsoHeight / 2));
     leftArm = bodyFactory->createLimbBody(cfg);
-    registerBodyPart(leftArm);
+    registerChild(leftArm);
   }
   {
     auto cfg = limbConfig;
     cfg.rotation = b2MakeRot(-B2_PI / 4);
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
     leftLeg = bodyFactory->createLimbBody(cfg);
-    registerBodyPart(leftLeg);
+    registerChild(leftLeg);
   }
   {
     auto cfg = limbConfig;
@@ -60,20 +71,20 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.basePos =
         b2Add(config.position, b2Vec2(torsoWidth / 2, torsoHeight / 2));
     rightArm = bodyFactory->createLimbBody(cfg);
-    registerBodyPart(rightArm);
+    registerChild(rightArm);
   }
   {
     auto cfg = limbConfig;
     cfg.rotation = b2MakeRot(B2_PI / 4);
     cfg.basePos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
     rightLeg = bodyFactory->createLimbBody(cfg);
-    registerBodyPart(rightLeg);
+    registerChild(rightLeg);
   }
   {
     auto cfg = torsoConfig;
     cfg.polygonConfig.bodyDef.position = {config.position};
     torso = bodyFactory->createPolygonBody(cfg);
-    registerBodyPart(torso);
+    registerChild(torso);
   }
 
   // Create joints
@@ -85,7 +96,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.jointDef.localAnchorA = b2Vec2(-torsoWidth * 0.3, 0);
     cfg.jointDef.localAnchorB = {0, 0};
     leftHipJoint = physicsFactory->createRevoluteJoint(cfg);
-    registerJoint(leftHipJoint);
+    registerChild(leftHipJoint);
   }
   {
     auto cfg = jointConfig;
@@ -94,9 +105,8 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.jointDef.localAnchorA = {-torsoWidth / 2, torsoHeight / 2};
     cfg.jointDef.localAnchorB = {0, 0};
     leftShoulderJoint = physicsFactory->createRevoluteJoint(cfg);
-    registerJoint(leftShoulderJoint);
+    registerChild(leftShoulderJoint);
   }
-
   {
     auto cfg = jointConfig;
     cfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
@@ -104,7 +114,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
     cfg.jointDef.localAnchorB = {0, 0};
     rightHipJoint = physicsFactory->createRevoluteJoint(cfg);
-    registerJoint(rightHipJoint);
+    registerChild(rightHipJoint);
   }
   {
     auto cfg = jointConfig;
@@ -113,8 +123,21 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.jointDef.localAnchorA = {torsoWidth / 2, torsoHeight / 2};
     cfg.jointDef.localAnchorB = {0, 0};
     rightShoulderJoint = physicsFactory->createRevoluteJoint(cfg);
-    registerJoint(rightShoulderJoint);
+    registerChild(rightShoulderJoint);
   }
+
+  // Configure controllers
+  {
+    float inertia = torso->getPolygon()->getRotationalInertia();
+    PIDScalarControllerConfig cfg = {.kp = inertia * 40.0f,
+                                     .ki = 0.0f,
+                                     .kd = inertia * 0.5f,
+                                     .maxForce = inertia * 150};
+    torsoAngleController = PIDScalarController(cfg);
+  }
+
+  // Assign values
+  legHeight = segmentLen * 3;
 }
 
 DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
@@ -123,4 +146,28 @@ DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
   ret.sizeYMeters = 1;
   ret.position = {0, 0};
   return ret;
+}
+
+void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {
+  leftArm->setTracking(worldPoint, aim);
+  rightArm->setTracking(worldPoint, aim);
+}
+
+void DemoCreature::update(float dt) {
+  keepTorsoUpright(dt);
+  keepTorsoAboveTheGround(dt);
+  Creature::update(dt);
+}
+
+void DemoCreature::keepTorsoUpright(float dt) {
+  float error = -b2Rot_GetAngle(torso->getPolygon()->getRotation());
+  float torque = torsoAngleController.update(error, dt);
+  torso->getPolygon()->applyTorque(torque);
+}
+
+void DemoCreature::keepTorsoAboveTheGround(float dt) {
+  b2Vec2 translation ={0,-legHeight};
+  b2QueryFilter filter = b2DefaultQueryFilter();
+  // filter.maskBits
+  // TODO: implement
 }

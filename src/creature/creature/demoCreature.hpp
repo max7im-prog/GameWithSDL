@@ -1,4 +1,5 @@
 #pragma once
+#include "PIDScalarController.hpp"
 #include "bodyFactory.hpp"
 #include "creature.hpp"
 #include "limbBody.hpp"
@@ -15,6 +16,8 @@ struct DemoCreatureConfig : public CreatureConfig {
 class DemoCreature : public Creature {
 public:
   void move(b2Vec2 dir, float intensity) override;
+  void aim(b2Vec2 worldPoint, bool aim) override;
+  virtual void update(float dt) override;
   virtual ~DemoCreature() = default;
 
 protected:
@@ -35,5 +38,13 @@ protected:
   std::shared_ptr<RevoluteJoint> rightHipJoint = nullptr;
 
 private:
+
+  void keepTorsoUpright(float dt);
+  PIDScalarController torsoAngleController;
+
+  void keepTorsoAboveTheGround(float dt);
+  PIDScalarController torsoHeightController;
+  float legHeight = 0;
+
   friend class CreatureFactory;
 };

@@ -15,6 +15,8 @@ public:
   b2JointType getType();
   virtual ~Joint();
 
+  void update([[maybe_unused]] float dt) override {};
+
 protected:
   Joint() = delete;
   Joint(entt::registry &registry);

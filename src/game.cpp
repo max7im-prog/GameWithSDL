@@ -75,50 +75,14 @@ bool Game::init() {
     bodyFactory->createPolygonBody(config);
   }
 
-  // std::shared_ptr<BodyPart> b0;
-  // {
-  //   auto config = CircleBodyConfig::defaultConfig();
-  //   config.circleConfig.bodyDef.position = {10, 10};
-  //   config.circleConfig.bodyDef.type = b2_dynamicBody;
-  //   config.circleConfig.radius = 1;
-  //   b0 =bodyFactory->createCircleBody(config);
-  // }
-  // b0->remove();
+  {
+    auto config = CircleBodyConfig::defaultConfig();
+    config.circleConfig.radius = 0.25f;
+    config.circleConfig.bodyDef.position = {5, 5};
+    config.circleConfig.bodyDef.type = b2_staticBody;
+    bodyFactory->createCircleBody(config);
+  }
 
-  // {
-  //   auto config = LimbBodyConfig::defaultConfig();
-  //   config.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
-  //   config.basePos = {3, 10};
-  //   config.rotation = b2MakeRot(-B2_PI / 4);
-  //   config.segments = {{.len = 1, .radius = 0.25},
-  //                      {.len = 1, .radius = 0.25},
-  //                      {.len = 1, .radius = 0.25},
-  //                      {.len = 1, .radius = 0.25}};
-  //   b0 = bodyFactory->createLimbBody(config);
-  // }
-  // b0->remove();
-
-  // {
-  //   auto config = CapsuleBodyConfig::defaultConfig();
-  //   config.capsuleConfig.center1 = {0, 0};
-  //   config.capsuleConfig.center2 = {0, -2};
-  //   config.capsuleConfig.radius = 1;
-  //   config.capsuleConfig.bodyDef.type = b2_dynamicBody;
-  //   config.capsuleConfig.bodyDef.position = {8, 10};
-  //   config.capsuleConfig.bodyDef.rotation = b2MakeRot(-B2_PI / 4);
-  //   b0 = bodyFactory->createCapsuleBody(config);
-  // }
-  // b0->remove();
-
-  // {
-  //   auto config = PolygonBodyConfig::defaultConfig();
-  //   config.polygonConfig.radius = 0;
-  //   config.polygonConfig.vertices = {{0, 0}, {2, 0}, {1, -2}};
-  //   config.polygonConfig.bodyDef.type = b2_dynamicBody;
-  //   config.polygonConfig.bodyDef.position = {5, 10};
-  //   b0 = bodyFactory->createPolygonBody(config);
-  // }
-  // b0->remove();
   std::shared_ptr<Creature> c0;
   {
     auto config = DemoCreatureConfig::defaultConfig();
@@ -127,6 +91,17 @@ bool Game::init() {
     config.position = {5, 10};
     c0 = creatureFactory->createDemoCreature(config);
   }
+  c0->aim({5, 5}, true);
+  // c0->remove();
+
+  {
+    auto config = DemoCreatureConfig::defaultConfig();
+    config.sizeXMeters = 2;
+    config.sizeYMeters = 3;
+    config.position = {8, 6};
+    c0 = creatureFactory->createDemoCreature(config);
+  }
+  c0->aim({5, 5}, true);
   // c0->remove();
 
   return true;
@@ -148,7 +123,7 @@ void Game::update() {
   this->controllerUpdateSystem.update(this->registry);
   // this->creatureControlSystem.update(this->registry);
 
-  // this->creatureUpdateSystem.update(this->registry, this->FPS);
+  creatureUpdateSystem.update(this->registry, this->FPS);
   mouseJointSystem.update(registry, world, physicsFactory, renderContext);
 
   this->worldUpdateSystem.update(this->registry, this->FPS);

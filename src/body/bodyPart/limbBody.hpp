@@ -10,8 +10,8 @@ struct LimbSegmentConfig {
 };
 
 struct LimbControlConfig {
-  float KIMultiplier = 1;
   float KPMultiplier = 1;
+  float KIMultiplier = 1;
   float KDMultiplier = 1;
   float maxForceMultiplier = 1;
 };

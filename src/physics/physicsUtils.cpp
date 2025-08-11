@@ -15,8 +15,6 @@ std::vector<b2ShapeId> PhysicsUtils::getShapeAtPosition(b2WorldId worldId,
   aabb.upperBound = {position.x + epsilon, position.y + epsilon};
 
   b2QueryFilter filter = b2DefaultQueryFilter();
-  // filter.maskBits = 0xFFFF;
-  // filter.maskBits = filter.categoryBits;
 
   b2World_OverlapAABB(worldId, aabb, filter,
                       &PhysicsUtils::pointOverlapCallbackFunction, &potential);
@@ -36,4 +34,17 @@ bool PhysicsUtils::pointOverlapCallbackFunction(b2ShapeId shapeId,
       static_cast<std::vector<b2ShapeId> *>(context);
   shapes->push_back(shapeId);
   return true;
+}
+
+std::optional<b2Vec2> PhysicsUtils::getClosestPoint(const World &world,
+                                                    b2Vec2 origin,
+                                                    b2Vec2 translation,
+                                                    b2QueryFilter filter) {
+  auto res =
+      b2World_CastRayClosest(world.getWorldId(), origin, translation, filter);
+  std::optional<b2Vec2> ret = std::nullopt;
+  if (res.hit) {
+   ret = res.point;
+  } 
+  return ret;
 }

@@ -3,8 +3,8 @@
 
 struct PIDScalarControllerConfig {
   float kp = 0;
-  float kd = 0;
   float ki = 0;
+  float kd = 0;
   float maxForce = INFINITY;
   float constant = 0;
 };
