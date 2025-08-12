@@ -43,7 +43,7 @@ bool Game::init() {
   this->renderContext.y = 0;
   this->renderContext.w = this->WIDTH;
   this->renderContext.h = this->HEIGHT;
-  this->renderContext.pixelToMeterRatio = 50;
+  this->renderContext.pixelToMeterRatio = 12.5f;
 
   this->running = true;
 
@@ -69,7 +69,7 @@ bool Game::init() {
   {
     auto config = PolygonBodyConfig::defaultConfig();
     config.polygonConfig.radius = 0;
-    config.polygonConfig.vertices = {{0, 0}, {0, 1}, {14, 1}, {14, 0}};
+    config.polygonConfig.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
     config.polygonConfig.bodyDef.type = b2_staticBody;
     config.polygonConfig.bodyDef.position = {1, 1};
     bodyFactory->createPolygonBody(config);
@@ -78,7 +78,7 @@ bool Game::init() {
   {
     auto config = CircleBodyConfig::defaultConfig();
     config.circleConfig.radius = 0.25f;
-    config.circleConfig.bodyDef.position = {5, 5};
+    config.circleConfig.bodyDef.position = {30, 30};
     config.circleConfig.bodyDef.type = b2_staticBody;
     bodyFactory->createCircleBody(config);
   }
@@ -91,17 +91,17 @@ bool Game::init() {
     config.position = {5, 10};
     c0 = creatureFactory->createDemoCreature(config);
   }
-  c0->aim({5, 5}, true);
+  c0->aim({30, 30}, true);
   // c0->remove();
 
   {
     auto config = DemoCreatureConfig::defaultConfig();
     config.sizeXMeters = 2;
     config.sizeYMeters = 3;
-    config.position = {8, 6};
+    config.position = {35, 6};
     c0 = creatureFactory->createDemoCreature(config);
   }
-  c0->aim({5, 5}, true);
+  c0->aim({30, 30}, true);
   // c0->remove();
 
   return true;

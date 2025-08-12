@@ -14,6 +14,10 @@ enum CreatureAbilities {
   CAN_JUMP = 1 << 0,
 };
 
+enum CreatureState {
+
+};
+
 class Creature : public RegistryObject {
 public:
   virtual ~Creature() = 0;
