@@ -27,7 +27,7 @@ void PollEventSystem::update(entt::registry &registry) {
         justPressedKeys.erase(keycode);
         heldPressedKeys.insert(keycode);
         input.state = InputState::HELD_PRESSED;
-        std::cout << "moving to HELD_PRESSED " << keycode << std::endl;
+
         break;
       case InputState::HELD_PRESSED:
         // Do nothing
@@ -35,12 +35,12 @@ void PollEventSystem::update(entt::registry &registry) {
       case InputState::JUST_RELEASED:
         // Remove
         toRemove.push_back(keycode);
-        std::cout << "removing JUST_RELEASED " << keycode << std::endl;
+
         break;
       case InputState::SINGLE_FRAME_EVENT:
         // Remove
         toRemove.push_back(keycode);
-        std::cout << "removing SINGLE_FRAME_EVENT " << keycode << std::endl;
+
         break;
       }
     }
@@ -69,7 +69,7 @@ void PollEventSystem::update(entt::registry &registry) {
         justPressedButtons.erase(buttoncode);
         heldPressedButtons.insert(buttoncode);
         input.state = InputState::HELD_PRESSED;
-        std::cout << "moving to HELD_PRESSED " << buttoncode << std::endl;
+
         break;
       case InputState::HELD_PRESSED:
         // Do nothing
@@ -77,12 +77,12 @@ void PollEventSystem::update(entt::registry &registry) {
       case InputState::JUST_RELEASED:
         // Remove
         toRemove.push_back(buttoncode);
-        std::cout << "removing JUST_RELEASED " << buttoncode << std::endl;
+
         break;
       case InputState::SINGLE_FRAME_EVENT:
         // Remove
         toRemove.push_back(buttoncode);
-        std::cout << "removing SINGLE_FRAME_EVENT " << buttoncode << std::endl;
+
         break;
       }
     }
@@ -138,7 +138,6 @@ void PollEventSystem::update(entt::registry &registry) {
         kp.event = event;
         justPressedKeys.insert(keycode);
         keyMap[keycode] = ent;
-        std::cout << "registered JUST_PRESSED " << keycode << std::endl;
       }
     } else if (event.type == SDL_EVENT_KEY_UP) {
       auto keycode = event.key.key;
@@ -148,12 +147,10 @@ void PollEventSystem::update(entt::registry &registry) {
         if (justPressedKeys.contains(keycode)) {
           // Press and release on the same tick
           input.state = SINGLE_FRAME_EVENT;
-          std::cout << "registered SINGLE_FRAME_EVENT " << keycode << std::endl;
 
         } else if (heldPressedKeys.contains(keycode)) {
           // Released after being held
           input.state = JUST_RELEASED;
-          std::cout << "registered JUST_RELEASED " << keycode << std::endl;
         }
       }
     } else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
@@ -166,7 +163,6 @@ void PollEventSystem::update(entt::registry &registry) {
         bp.event = event;
         justPressedButtons.insert(buttoncode);
         buttonMap[buttoncode] = ent;
-        std::cout << "registered JUST_PRESSED " << buttoncode << std::endl;
       }
     } else if (event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
       auto buttoncode = event.button.button;
@@ -176,13 +172,9 @@ void PollEventSystem::update(entt::registry &registry) {
         if (justPressedButtons.contains(buttoncode)) {
           // Press and release on the same tick
           input.state = SINGLE_FRAME_EVENT;
-          std::cout << "registered SINGLE_FRAME_EVENT " << buttoncode
-                    << std::endl;
-
         } else if (heldPressedButtons.contains(buttoncode)) {
           // Released after being held
           input.state = JUST_RELEASED;
-          std::cout << "registered JUST_RELEASED " << buttoncode << std::endl;
         }
       }
     }
