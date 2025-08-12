@@ -1,11 +1,13 @@
 #pragma once
 #include "bodyPart.hpp"
+#include "box2d/types.h"
 #include "registryObject.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 
 struct CreatureConfig {
   b2Vec2 position;
+  static b2Filter defaultFilter();
 };
 
 enum CreatureAbilities {
@@ -34,10 +36,9 @@ protected:
 
   std::uint32_t abilitiesFlags = 0;
 
-private:
   const std::shared_ptr<World> world;
 
-
+private:
   Creature() = delete;
   Creature(Creature &other) = delete;
   Creature(Creature &&other) = delete;

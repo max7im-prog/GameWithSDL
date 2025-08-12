@@ -43,7 +43,8 @@ private:
   PIDScalarController torsoAngleController;
 
   void keepTorsoAboveTheGround(float dt);
-  PIDScalarController torsoHeightController;
+  PIDScalarController leftLegHeightController;
+  PIDScalarController rightLegHeightController;
   float legHeight = 0;
 
   friend class CreatureFactory;

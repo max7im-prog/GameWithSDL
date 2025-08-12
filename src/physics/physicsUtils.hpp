@@ -21,3 +21,9 @@ private:
   // Context should be a pointer to std::vector<b2ShapeId>
   static bool pointOverlapCallbackFunction(b2ShapeId shapeId, void *context);
 };
+
+enum ObjectCategory {
+  GENERAL = 1 << 0,
+  CREATURE = 1 << 1,
+  TERRAIN = 1 << 2,
+};
