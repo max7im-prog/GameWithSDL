@@ -22,7 +22,7 @@ void MouseJointSystem::update(
   //   mouseLocation = {meters.first, meters.second};
   // }
 
-  // // Move Shape to desired location if button has not been released
+  // Move Shape to desired location if button has not been released
   // if (buttonPressed && jointExists) {
 
   //   b2BodyId bodyId = mouseShape->getBodyId();
