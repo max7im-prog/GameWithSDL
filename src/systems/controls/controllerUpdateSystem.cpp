@@ -2,62 +2,51 @@
 
 #include <iostream>
 
+#include "SDL3/SDL_keycode.h"
+#include "box2d/math_functions.h"
 #include "controlComponents.hpp"
 #include "eventComponents.hpp"
 
-ControllerUpdateSystem::ControllerUpdateSystem()
-{
-}
+ControllerUpdateSystem::ControllerUpdateSystem() {}
 
-ControllerUpdateSystem::~ControllerUpdateSystem()
-{
-}
+ControllerUpdateSystem::~ControllerUpdateSystem() {}
 
-void ControllerUpdateSystem::update(entt::registry &registry)
-{
-    
-    // entt::entity ent;
-    // {
-    //     auto v = registry.view<Controller>();
-    //     if (v.size() != 0)
-    //     {
-    //         for (auto i : v)
-    //         {
-    //             ent = i;
-    //             break;
-    //         }
-    //     }
-    //     else
-    //     {
-    //         ent = registry.create();
-    //         registry.emplace_or_replace<Controller>(ent);
-    //     }
-    // }
+void ControllerUpdateSystem::update(entt::registry &registry) {
 
-    // auto &controller = registry.get<Controller>(ent);
-    // {
-    //     auto view = registry.view<const PlayerInput, KeyPress>();
-    //     for (auto [ent, press] : view.each())
-    //     {
-    //         if (press.key == SDLK_RIGHT && press.pressed)
-    //         {
-    //             controller.moveDirection = {1, 0};
-    //             // std::cout << "right" << std::endl;
-    //         }
-    //         else if (press.key == SDLK_LEFT && press.pressed)
-    //         {
-    //             controller.moveDirection = {-1, 0};
-    //             // std::cout << "left" << std::endl;
-    //         }else if (press.key == SDLK_RIGHT && !press.pressed)
-    //         {
-    //             controller.moveDirection = {0, 0};
-    //             // std::cout << "right" << std::endl;
-    //         }
-    //         else if (press.key == SDLK_LEFT && !press.pressed)
-    //         {
-    //             controller.moveDirection = {0, 0};
-    //             // std::cout << "left" << std::endl;
-    //         }
-    //     }
-    // }
+  auto controllerView = registry.view<Controller>();
+  auto keyPressView = registry.view<PlayerInput, KeyPressEvent>();
+  auto buttonPressView = registry.view<PlayerInput, ButtonPressEvent>();
+
+  std::set<SDL_Keycode> pressedKeys = {};
+  for (auto [ent, input, kp] : keyPressView.each()) {
+    pressedKeys.insert(kp.event.key.key);
+  }
+
+  for (auto [ent, controller] : controllerView.each()) {
+    Controller newController;
+    newController.creature = controller.creature;
+    b2Vec2 movementDir = {0, 0};
+    for (auto key : pressedKeys) {
+      switch (key) {
+      case SDLK_W:
+        movementDir = b2Add(movementDir, {0, 1});
+        newController.jump = true;
+        break;
+      case SDLK_A:
+        movementDir = b2Add(movementDir, {-1, 0});
+        break;
+      case SDLK_S:
+        movementDir = b2Add(movementDir, {0, -1});
+        break;
+      case SDLK_D:
+        movementDir = b2Add(movementDir, {1, 0});
+        break;
+      }
+    }
+    movementDir = b2Normalize(movementDir);
+    newController.moveContext.moveDir = movementDir;
+    newController.moveContext.moveIntensity = 10; // TODO: magic number
+    newController.moveContext.update = true;
+    controller = newController;
+  }
 }

@@ -4,7 +4,7 @@
 #include "physicsUtils.hpp"
 #include "registryObject.hpp"
 
-std::uint32_t Creature::getAbilities() { return abilitiesFlags; }
+std::uint32_t Creature::getAbilities() { return creatureAbilities; }
 
 Creature::Creature(entt::registry &registry, const std::shared_ptr<World> world)
     : RegistryObject(registry), world(world) {}

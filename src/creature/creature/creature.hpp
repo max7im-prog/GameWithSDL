@@ -15,7 +15,9 @@ enum CreatureAbilities {
 };
 
 enum CreatureState {
-
+  ON_GROUND,
+  IN_AIR,
+  FLYING
 };
 
 class Creature : public RegistryObject {
@@ -38,7 +40,8 @@ public:
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
 
-  std::uint32_t abilitiesFlags = 0;
+  std::uint32_t creatureAbilities = 0;
+  CreatureState creatureState;
 
   const std::shared_ptr<World> world;
 

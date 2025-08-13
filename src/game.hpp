@@ -1,5 +1,6 @@
 #pragma once
 #include "bodyFactory.hpp"
+#include "creatureControlSystem.hpp"
 #include "creatureFactory.hpp"
 #include "creatureUpdateSystem.hpp"
 #ifndef GAME_HPP
@@ -74,7 +75,7 @@ private:
     // Update systems
     WorldUpdateSystem worldUpdateSystem;
     ControllerUpdateSystem controllerUpdateSystem;
-    // CreatureControlSystem creatureControlSystem;
+    CreatureControlSystem creatureControlSystem;
     MouseJointSystem mouseJointSystem;
     CreatureUpdateSystem creatureUpdateSystem;
 

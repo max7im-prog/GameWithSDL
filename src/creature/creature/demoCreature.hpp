@@ -6,6 +6,7 @@
 #include "physicsFactory.hpp"
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
+#include <chrono>
 
 struct DemoCreatureConfig : public CreatureConfig {
   static DemoCreatureConfig defaultConfig();
@@ -17,6 +18,7 @@ class DemoCreature : public Creature {
 public:
   void move(b2Vec2 dir, float intensity) override;
   void aim(b2Vec2 worldPoint, bool aim) override;
+  void jump() override;
   virtual void update(float dt) override;
   virtual ~DemoCreature() = default;
 
@@ -38,14 +40,33 @@ protected:
   std::shared_ptr<RevoluteJoint> rightHipJoint = nullptr;
 
 private:
-
   void keepTorsoUpright(float dt);
   PIDScalarController torsoAngleController;
 
   void keepTorsoAboveTheGround(float dt);
   PIDScalarController leftLegHeightController;
   PIDScalarController rightLegHeightController;
+
+  void dampHorizontalMovement(float dt);
+  PIDScalarController horizontalDampingController;
   float legHeight = 0;
+
+  void updateJump(float dt);
+  struct JumpContext {
+    std::chrono::system_clock::time_point lastJumpCall = {};
+    enum JumpState { ON_GROUND, IN_AIR } jumpState = JumpState::ON_GROUND;
+    bool jump = false;
+  } jumpContext;
+
+  void updateMove(float dt);
+  PIDScalarController horizontalSpeedController;
+  struct MoveContext{
+    float intensity;
+    b2Vec2 dir;
+    bool move;
+    float maxSpeedMultiplier = 1;
+    float defalutSpeedMpS = 10;
+  }moveContext;
 
   friend class CreatureFactory;
 };

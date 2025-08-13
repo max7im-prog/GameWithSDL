@@ -12,8 +12,8 @@ public:
                                                    b2Vec2 position);
 
   static std::optional<b2Vec2> getClosestPoint(const World &world,
-                                               b2Vec2 beginPoint,
-                                               b2Vec2 endPoint,
+                                               b2Vec2 origin,
+                                               b2Vec2 translation,
                                                b2QueryFilter filter);
 
 private:

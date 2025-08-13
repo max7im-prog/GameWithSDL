@@ -5,20 +5,24 @@
 struct PlayerControlled {};
 
 struct Controller {
-  entt::entity creature;
-  b2Vec2 moveDir;
-  float moveIntensity;
+  entt::entity creature = entt::null;
+
   bool jump = false;
   bool attack = false;
   bool defend = false;
-  struct AimContext{
-    b2Vec2 worldPoint;
-    bool aim;
-    bool update;
-  }aimContext;
-  struct LookContext{
-    b2Vec2 worldPoint;
-    bool look;
-    bool update;
-  }lookContext;
+  struct AimContext {
+    b2Vec2 worldPoint = {0, 0};
+    bool aim = false;
+    bool update = false;
+  } aimContext;
+  struct LookContext {
+    b2Vec2 worldPoint = {0, 0};
+    bool look = false;
+    bool update = false;
+  } lookContext;
+  struct MoveContext {
+    b2Vec2 moveDir = {0, 0};
+    float moveIntensity = 0;
+    bool update = false;
+  } moveContext;
 };

@@ -24,9 +24,12 @@ void CreatureControlSystem::update(entt::registry &registry) {
           creature->aim(controller.aimContext.worldPoint,
                         controller.aimContext.aim);
         }
-        if (controller.aimContext.update) {
+        if (controller.lookContext.update) {
           creature->lookAt(controller.lookContext.worldPoint,
                            controller.lookContext.look);
+        }
+        if(controller.moveContext.update){
+          creature->move(controller.moveContext.moveDir,controller.moveContext.moveIntensity);
         }
       }
     }

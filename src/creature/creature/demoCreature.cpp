@@ -1,5 +1,6 @@
 #include "demoCreature.hpp"
 #include "PIDScalarController.hpp"
+#include "box2d/base.h"
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
@@ -9,8 +10,14 @@
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
+#include <chrono>
+#include <sys/types.h>
 
-void DemoCreature::move(b2Vec2 dir, float intensity) { /* TODO: Implement */ }
+void DemoCreature::move(b2Vec2 dir, float intensity) {
+  moveContext.intensity = intensity;
+  moveContext.dir = dir;
+  moveContext.move = true;
+}
 
 DemoCreature::DemoCreature(entt::registry &registry,
                            const std::shared_ptr<World> world,
@@ -31,7 +38,6 @@ DemoCreature::DemoCreature(entt::registry &registry,
   // Create bodies
   auto torsoConfig = PolygonBodyConfig::defaultConfig();
   torsoConfig.polygonConfig.bodyDef.type = b2_dynamicBody;
-  torsoConfig.polygonConfig.bodyDef.linearDamping = 0.8;
   torsoConfig.polygonConfig.shapeDef.filter = CreatureConfig::defaultFilter();
   torsoConfig.polygonConfig.shapeDef.filter.groupIndex = groupId;
   torsoConfig.polygonConfig.vertices = {{(-torsoWidth / 2), (0)},
@@ -136,23 +142,45 @@ DemoCreature::DemoCreature(entt::registry &registry,
     float inertia = torso->getPolygon()->getRotationalInertia();
     PIDScalarControllerConfig cfg = {.kp = inertia * 40.0f,
                                      .ki = 0.0f,
-                                     .kd = inertia * 0.5f,
+                                     .kd = inertia * 8.0f,
                                      .maxForce = inertia * 150};
     torsoAngleController = PIDScalarController(cfg);
   }
   {
     float force = torso->getPolygon()->getMass() *
                   b2Length(b2World_GetGravity(world->getWorldId()));
-    PIDScalarControllerConfig cfg = {.kp = force * 5.0f,
+    PIDScalarControllerConfig cfg = {.kp = force * 2.0f,
                                      .ki = force * 0.5f,
-                                     .kd = force * 8.0f,
+                                     .kd = force * 16.0f,
                                      .maxForce = force * 3};
     leftLegHeightController = PIDScalarController(cfg);
     rightLegHeightController = PIDScalarController(cfg);
   }
+  {
+    float force = torso->getPolygon()->getMass() *
+                  b2Length(b2World_GetGravity(world->getWorldId()));
+    PIDScalarControllerConfig cfg = {.kp = force * 5.0f,
+                                     .ki = 0.0f,
+                                     .kd = force * 16.0f,
+                                     .maxForce = force * 3};
+    horizontalDampingController = PIDScalarController(cfg);
+  }
+  {
+    float force = torso->getPolygon()->getMass() *
+                  b2Length(b2World_GetGravity(world->getWorldId()));
+    PIDScalarControllerConfig cfg = {.kp = force * 5.0f,
+                                     .ki = 0.0f,
+                                     .kd = force * 16.0f,
+                                     .maxForce = force * 10};
+    horizontalSpeedController = PIDScalarController(cfg);
+  }
 
   // Assign values
   legHeight = segmentLen * 3.5f;
+  creatureState = CreatureState::ON_GROUND;
+  creatureAbilities = CreatureAbilities::CAN_JUMP;
+  moveContext.maxSpeedMultiplier = 3;
+  moveContext.defalutSpeedMpS = 3;
 }
 
 DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
@@ -171,6 +199,9 @@ void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {
 void DemoCreature::update(float dt) {
   keepTorsoUpright(dt);
   keepTorsoAboveTheGround(dt);
+  dampHorizontalMovement(dt);
+  updateJump(dt);
+  updateMove(dt);
   Creature::update(dt);
 }
 
@@ -218,6 +249,75 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
       }
     } else {
       rightLegHeightController.reset();
+    }
+  }
+}
+
+void DemoCreature::dampHorizontalMovement(float dt) {
+  if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
+    auto bodyId = torso->getPolygon()->getBodyId();
+    auto error = 0 - b2Body_GetLinearVelocity(bodyId).x;
+    auto force = horizontalDampingController.update(error, dt);
+    b2Body_ApplyForceToCenter(bodyId, b2MulSV(force, {1, 0}), true);
+  }
+}
+
+void DemoCreature::jump() { jumpContext.jump = true; }
+
+void DemoCreature::updateJump(float dt) {
+  constexpr uint jumpPeriodms = 500;
+
+  auto now = std::chrono::system_clock::now();
+  auto duration = now - jumpContext.lastJumpCall;
+  auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+  if (ms.count() > jumpPeriodms) {
+    // Raycast down to figure out if we should update jumpState
+    {
+      b2Vec2 castOrigin =
+          b2MulSV(0.5f, b2Add(leftLeg->getBasePos(), rightLeg->getBasePos()));
+      b2Vec2 castTranslation = b2MulSV(legHeight * 1.2f, {0, -1});
+      b2QueryFilter filter = b2DefaultQueryFilter();
+      filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
+      auto res = b2World_CastRayClosest(world->getWorldId(), castOrigin,
+                                        castTranslation, filter);
+      if (res.hit) {
+        jumpContext.jumpState = JumpContext::JumpState::ON_GROUND;
+      } else {
+        jumpContext.jumpState = JumpContext::JumpState::IN_AIR;
+      }
+    }
+
+    // Jump
+    if (jumpContext.jump) {
+      jumpContext.jump = false;
+      if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
+        jumpContext.jumpState = JumpContext::JumpState::IN_AIR;
+        jumpContext.lastJumpCall = std::chrono::system_clock::now();
+        float gravForce = b2Length(b2World_GetGravity(world->getWorldId())) *
+                          torso->getPolygon()->getMass();
+        b2Vec2 impulse = b2MulSV(gravForce * 1.5, {0, 1});
+        b2Body_ApplyLinearImpulseToCenter(torso->getPolygon()->getBodyId(),
+                                          impulse, true);
+      }
+    }
+  }
+}
+
+void DemoCreature::updateMove(float dt) {
+  // TODO: implement
+  if (moveContext.move) {
+    moveContext.move = false;
+    if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
+      auto normDir = b2Normalize(moveContext.dir);
+      float desiredHorizontalSpeed =
+          moveContext.defalutSpeedMpS *
+          std::max(moveContext.maxSpeedMultiplier, moveContext.intensity) *
+          normDir.x;
+      auto error = desiredHorizontalSpeed -
+                   b2Body_GetLinearVelocity(torso->getPolygon()->getBodyId()).x;
+      float forceVal = horizontalSpeedController.update(error, dt);
+      b2Vec2 force = b2MulSV(forceVal,{1,0});
+      b2Body_ApplyForceToCenter(torso->getPolygon()->getBodyId(),force,true);
     }
   }
 }

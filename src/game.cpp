@@ -9,6 +9,7 @@
 #include "bodyFactory.hpp"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
+#include "controlComponents.hpp"
 #include "creature.hpp"
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
@@ -92,7 +93,10 @@ bool Game::init() {
     c0 = creatureFactory->createDemoCreature(config);
   }
   c0->aim({30, 30}, true);
+  
   // c0->remove();
+
+  
 
   {
     auto config = DemoCreatureConfig::defaultConfig();
@@ -103,6 +107,13 @@ bool Game::init() {
   }
   c0->aim({30, 30}, true);
   // c0->remove();
+
+  // Controller for the creature
+  {
+    auto ent = registry.create();
+    auto& controller = registry.emplace_or_replace<Controller>(ent);
+    controller.creature = c0->getEntity();
+  }
 
   return true;
 }
@@ -119,9 +130,8 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-  // this->physicsBodyCreationSystem.update(this->registry);
   this->controllerUpdateSystem.update(this->registry);
-  // this->creatureControlSystem.update(this->registry);
+  this->creatureControlSystem.update(this->registry);
 
   creatureUpdateSystem.update(this->registry, this->FPS);
   mouseJointSystem.update(registry, world, physicsFactory, renderContext);
