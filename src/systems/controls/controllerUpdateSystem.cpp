@@ -45,7 +45,7 @@ void ControllerUpdateSystem::update(entt::registry &registry) {
     }
     movementDir = b2Normalize(movementDir);
     newController.moveContext.moveDir = movementDir;
-    newController.moveContext.moveIntensity = 10; // TODO: magic number
+    newController.moveContext.moveIntensity = 1; // TODO: magic number
     newController.moveContext.update = true;
     controller = newController;
   }

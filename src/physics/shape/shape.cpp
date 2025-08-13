@@ -27,3 +27,7 @@ b2Rot Shape::getRotation() { return b2Body_GetRotation(bodyId); }
 void Shape::applyTorque(float torque) {
   b2Body_ApplyTorque(bodyId, torque, true);
 }
+
+b2Vec2 Shape::getLinearVelocity(){
+  return b2Body_GetLinearVelocity(bodyId);
+}

@@ -10,6 +10,7 @@
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
+#include "world.hpp"
 #include <chrono>
 #include <sys/types.h>
 
@@ -73,6 +74,8 @@ DemoCreature::DemoCreature(entt::registry &registry,
     auto cfg = limbConfig;
     cfg.rotation = b2MakeRot(-B2_PI / 4);
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
+    cfg.limbControlConfig.KPMultiplier = 100;
+    cfg.limbControlConfig.KDMultiplier = 100;
     leftLeg = bodyFactory->createLimbBody(cfg);
     registerChild(leftLeg);
   }
@@ -88,6 +91,8 @@ DemoCreature::DemoCreature(entt::registry &registry,
     auto cfg = limbConfig;
     cfg.rotation = b2MakeRot(B2_PI / 4);
     cfg.basePos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
+    cfg.limbControlConfig.KPMultiplier = 100;
+    cfg.limbControlConfig.KDMultiplier = 100;
     rightLeg = bodyFactory->createLimbBody(cfg);
     registerChild(rightLeg);
   }
@@ -202,6 +207,7 @@ void DemoCreature::update(float dt) {
   dampHorizontalMovement(dt);
   updateJump(dt);
   updateMove(dt);
+  updateFeet(dt);
   Creature::update(dt);
 }
 
@@ -278,9 +284,9 @@ void DemoCreature::updateJump(float dt) {
       b2Vec2 castTranslation = b2MulSV(legHeight * 1.2f, {0, -1});
       b2QueryFilter filter = b2DefaultQueryFilter();
       filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
-      auto res = b2World_CastRayClosest(world->getWorldId(), castOrigin,
-                                        castTranslation, filter);
-      if (res.hit) {
+      auto res = PhysicsUtils::getClosestPoint(*world, castOrigin,
+                                               castTranslation, filter);
+      if (res) {
         jumpContext.jumpState = JumpContext::JumpState::ON_GROUND;
       } else {
         jumpContext.jumpState = JumpContext::JumpState::IN_AIR;
@@ -316,8 +322,79 @@ void DemoCreature::updateMove(float dt) {
       auto error = desiredHorizontalSpeed -
                    b2Body_GetLinearVelocity(torso->getPolygon()->getBodyId()).x;
       float forceVal = horizontalSpeedController.update(error, dt);
-      b2Vec2 force = b2MulSV(forceVal,{1,0});
-      b2Body_ApplyForceToCenter(torso->getPolygon()->getBodyId(),force,true);
+      b2Vec2 force = b2MulSV(forceVal, {1, 0});
+      b2Body_ApplyForceToCenter(torso->getPolygon()->getBodyId(), force, true);
+    }
+  }
+}
+
+void DemoCreature::updateFeet(float dt) {
+  Direction direction = STANDING;
+  constexpr float epsilon = 0.01;
+  if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
+
+    // Find direction of movement
+    b2Vec2 dir = b2Normalize(torso->getPolygon()->getLinearVelocity());
+    if (dir.x > epsilon) {
+      direction = RIGHT;
+    } else if (dir.x < -epsilon) {
+      direction = LEFT;
+    } else {
+      direction = STANDING;
+    }
+  }
+
+  updateLeg(dt, leftFootContext, leftLeg, direction);
+  updateLeg(dt, rightFootContext, rightLeg, direction);
+}
+
+void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
+                             const std::shared_ptr<LimbBody> leg,
+                             Direction moveDir) {
+  b2Vec2 legBase = leg->getBasePos();
+  if (b2Distance(legBase, context.trackingPoint) > leg->getLength()*1.2f) {
+    leg->setTracking({0, 0}, false);
+    std::vector<b2Vec2> groundPoints = {};
+    b2Vec2 defaultTranslation = {0, -leg->getLength()};
+    b2QueryFilter filter = b2DefaultQueryFilter();
+    filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
+    float stepSize = B2_PI / 36;
+    float numOffsets = 10;
+
+    for (int i = -numOffsets; i <= numOffsets; i++) {
+      b2Rot rotation = b2MakeRot(stepSize * i);
+      b2Vec2 translation = b2RotateVector(rotation, defaultTranslation);
+      auto point =
+          PhysicsUtils::getClosestPoint((*world), legBase, translation, filter);
+      if (point) {
+        groundPoints.push_back(*point);
+      }
+    }
+    if (!groundPoints.empty()) {
+      b2Vec2 newTrackingPoint = groundPoints[0];
+      switch (moveDir) {
+      case LEFT:
+        for (auto p : groundPoints) {
+          if (p.x < newTrackingPoint.x)
+            newTrackingPoint = p;
+        }
+        break;
+      case RIGHT:
+        for (auto p : groundPoints) {
+          if (p.x > newTrackingPoint.x)
+            newTrackingPoint = p;
+        }
+        break;
+      case STANDING:
+        for (auto p : groundPoints) {
+          if (std::abs(p.x - legBase.x) <
+              std::abs(newTrackingPoint.x - legBase.x))
+            newTrackingPoint = p;
+        }
+        break;
+      }
+      leg->setTracking(newTrackingPoint, true);
+      context.trackingPoint = newTrackingPoint;
     }
   }
 }

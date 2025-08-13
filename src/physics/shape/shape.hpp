@@ -20,6 +20,7 @@ public:
   float getMass();
   float getRotationalInertia();
   b2Rot getRotation();
+  b2Vec2 getLinearVelocity();
 
   void applyTorque(float torque);
 

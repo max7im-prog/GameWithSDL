@@ -8,6 +8,8 @@
 #include "revoluteJoint.hpp"
 #include <chrono>
 
+enum Direction { LEFT, RIGHT, STANDING };
+
 struct DemoCreatureConfig : public CreatureConfig {
   static DemoCreatureConfig defaultConfig();
   float sizeXMeters = 1;
@@ -60,13 +62,20 @@ private:
 
   void updateMove(float dt);
   PIDScalarController horizontalSpeedController;
-  struct MoveContext{
+  struct MoveContext {
     float intensity;
     b2Vec2 dir;
     bool move;
     float maxSpeedMultiplier = 1;
     float defalutSpeedMpS = 10;
-  }moveContext;
+  } moveContext;
+
+  void updateFeet(float dt);
+  struct FootContext {
+    b2Vec2 trackingPoint = {999999, 999999};
+  } leftFootContext, rightFootContext;
+  void updateLeg(float dt, FootContext &context,
+                 const std::shared_ptr<LimbBody> leg, Direction moveDir);
 
   friend class CreatureFactory;
 };
