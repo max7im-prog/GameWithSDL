@@ -10,7 +10,6 @@
 class MouseJointSystem {
 public:
   MouseJointSystem() = default;
-  ;
   ~MouseJointSystem() = default;
   void update(entt::registry &registry, const std::shared_ptr<World> world,
               const std::shared_ptr<PhysicsFactory> physicsFactory,

@@ -1,17 +1,17 @@
 #include "controllerUpdateSystem.hpp"
 
-#include <iostream>
-
 #include "SDL3/SDL_keycode.h"
 #include "box2d/math_functions.h"
 #include "controlComponents.hpp"
 #include "eventComponents.hpp"
+#include "renderUtils.hpp"
 
 ControllerUpdateSystem::ControllerUpdateSystem() {}
 
 ControllerUpdateSystem::~ControllerUpdateSystem() {}
 
-void ControllerUpdateSystem::update(entt::registry &registry) {
+void ControllerUpdateSystem::update(entt::registry &registry,
+                                    const RenderContext &renderContext) {
 
   auto controllerView = registry.view<Controller>();
   auto keyPressView = registry.view<PlayerInput, KeyPressEvent>();
@@ -20,6 +20,20 @@ void ControllerUpdateSystem::update(entt::registry &registry) {
   std::set<SDL_Keycode> pressedKeys = {};
   for (auto [ent, input, kp] : keyPressView.each()) {
     pressedKeys.insert(kp.event.key.key);
+  }
+
+  std::set<Uint8> pressedButtons = {};
+  for (auto [ent, input, bp] : buttonPressView.each()) {
+    pressedButtons.insert(bp.event.button.button);
+  }
+
+  b2Vec2 mouseLocation;
+  {
+    float mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+    auto meters =
+        RenderUtils::screenPosTob2Vec({mouseX, mouseY}, renderContext);
+    mouseLocation = {meters.x, meters.y};
   }
 
   for (auto [ent, controller] : controllerView.each()) {
@@ -41,8 +55,24 @@ void ControllerUpdateSystem::update(entt::registry &registry) {
       case SDLK_D:
         movementDir = b2Add(movementDir, {1, 0});
         break;
+      default:
+        break;
       }
     }
+    
+    newController.aimContext.update = true;
+    for (auto button : pressedButtons) {
+      switch (button) {
+      case SDL_BUTTON_LEFT:
+        newController.aimContext.worldPoint = mouseLocation;
+        newController.aimContext.aim = true;
+        newController.aimContext.update = true;
+        break;
+      default:
+        break;
+      }
+    }
+
     movementDir = b2Normalize(movementDir);
     newController.moveContext.moveDir = movementDir;
     newController.moveContext.moveIntensity = 1; // TODO: magic number

@@ -100,8 +100,8 @@ bool Game::init() {
 
   {
     auto config = DemoCreatureConfig::defaultConfig();
-    config.sizeXMeters = 5;
-    config.sizeYMeters = 8;
+    config.sizeXMeters = 3;
+    config.sizeYMeters = 4;
     config.position = {35, 6};
     c0 = creatureFactory->createDemoCreature(config);
   }
@@ -130,7 +130,7 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-  this->controllerUpdateSystem.update(this->registry);
+  this->controllerUpdateSystem.update(this->registry,renderContext);
   this->creatureControlSystem.update(this->registry);
 
   creatureUpdateSystem.update(this->registry, this->FPS);
