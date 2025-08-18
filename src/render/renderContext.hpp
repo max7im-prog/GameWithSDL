@@ -8,10 +8,10 @@ public:
     SDL_Window *window;
 
     // Position of bottom left point of a window in box2d meters
-    double x,y;
+    float x,y;
 
     // Width and height of a window in pixels
-    int w,h;
+    float w,h;
 
     // Conversion from box2d meters to pixels
     float pixelToMeterRatio;

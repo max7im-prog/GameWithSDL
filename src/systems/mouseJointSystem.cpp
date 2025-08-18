@@ -19,7 +19,7 @@ void MouseJointSystem::update(
     float mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
     auto meters = RenderUtils::pixelsToMeters({mouseX, mouseY}, renderContext);
-    mouseLocation = {meters.first, meters.second};
+    mouseLocation = {meters.x, meters.y};
   }
 
   auto view = registry.view<ButtonPressEvent, PlayerInput>();

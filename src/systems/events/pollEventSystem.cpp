@@ -8,10 +8,6 @@
 #include "eventComponents.hpp"
 #include "eventUtils.hpp"
 
-#include <cstdint>
-#include <iostream>
-
-// TODO: remove console output
 
 void PollEventSystem::update(entt::registry &registry) {
 
@@ -110,24 +106,6 @@ void PollEventSystem::update(entt::registry &registry) {
       elem.state = InputState::SINGLE_FRAME_EVENT;
       singleFrameEvents.push_back(ent);
     }
-    // else if (event.type == SDL_EVENT_KEY_DOWN ||
-    //            event.type == SDL_EVENT_KEY_UP) {
-    //   auto ent = registry.create();
-    //   registry.emplace<PlayerInput>(ent);
-
-    //   auto &kp = registry.emplace<KeyPress>(ent);
-    //   kp.key = event.key.key; // SDL_Keycode
-    //   kp.pressed = (event.type == SDL_EVENT_KEY_DOWN);
-    // } else if (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN ||
-    //            event.type == SDL_EVENT_MOUSE_BUTTON_UP) {
-    //   auto ent = registry.create();
-    //   registry.emplace<PlayerInput>(ent);
-
-    //   auto &bp = registry.emplace<ButtonPress>(ent);
-    //   bp.button = event.button.button; // SDL button code
-    //   bp.pressed = (event.type == SDL_EVENT_MOUSE_BUTTON_DOWN);
-    //   bp.location = {event.button.x, event.button.y};
-    // }
     else if (event.type == SDL_EVENT_KEY_DOWN) {
       auto keycode = event.key.key;
       if (!keyMap.contains(keycode)) {
