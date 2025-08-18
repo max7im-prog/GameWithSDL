@@ -18,7 +18,7 @@ void MouseJointSystem::update(
   {
     float mouseX, mouseY;
     SDL_GetMouseState(&mouseX, &mouseY);
-    auto meters = RenderUtils::pixelsToMeters({mouseX, mouseY}, renderContext);
+    auto meters = RenderUtils::screenPosTob2Vec({mouseX, mouseY}, renderContext);
     mouseLocation = {meters.x, meters.y};
   }
 

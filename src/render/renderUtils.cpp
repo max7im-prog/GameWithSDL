@@ -6,7 +6,7 @@
 
 #include <vector>
 
-screenPos RenderUtils::metersToPixels(b2Vec2 meters,
+screenPos RenderUtils::b2VecToScreenPos(b2Vec2 meters,
                                       const RenderContext &context) {
   screenPos ret = {0, 0};
   ret.x = (meters.x - context.x) * context.pixelToMeterRatio;
@@ -18,7 +18,7 @@ screenPos RenderUtils::metersToPixels(b2Vec2 meters,
 }
 
 b2Vec2
-RenderUtils::pixelsToMeters(screenPos pixels,
+RenderUtils::screenPosTob2Vec(screenPos pixels,
                             const RenderContext &context) {
   b2Vec2 ret = {0, 0}; // first - x, second - y
   ret.x = context.x + pixels.x / context.pixelToMeterRatio;
@@ -40,7 +40,7 @@ bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context) {
     b2Vec2 worldCenter = b2TransformPoint(transform, circle.center);
 
     screenPos pixelCenter =
-        metersToPixels({worldCenter.x, worldCenter.y}, context);
+        b2VecToScreenPos({worldCenter.x, worldCenter.y}, context);
     int pixelRadius = circle.radius * context.pixelToMeterRatio;
 
     renderCircle(pixelCenter, pixelRadius, {255, 0, 0, 255}, context);
@@ -49,8 +49,8 @@ bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context) {
     auto transform = b2Body_GetTransform(bodyId);
     b2Vec2 worldPoint1 = b2TransformPoint(transform, capsule.center1);
     b2Vec2 worldPoint2 = b2TransformPoint(transform, capsule.center2);
-    auto pixelPoint1 = metersToPixels({worldPoint1.x, worldPoint1.y}, context);
-    auto pixelPoint2 = metersToPixels({worldPoint2.x, worldPoint2.y}, context);
+    auto pixelPoint1 = b2VecToScreenPos({worldPoint1.x, worldPoint1.y}, context);
+    auto pixelPoint2 = b2VecToScreenPos({worldPoint2.x, worldPoint2.y}, context);
     float pixelRadius = capsule.radius * context.pixelToMeterRatio;
     renderCapsule(pixelPoint1, pixelPoint2, pixelRadius, {255, 0, 255, 255},
                   context);
@@ -59,8 +59,8 @@ bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context) {
     auto transform = b2Body_GetTransform(bodyId);
     b2Vec2 worldPoint1 = b2TransformPoint(transform, segment.point1);
     b2Vec2 worldPoint2 = b2TransformPoint(transform, segment.point2);
-    auto pixelPoint1 = metersToPixels({worldPoint1.x, worldPoint1.y}, context);
-    auto pixelPoint2 = metersToPixels({worldPoint2.x, worldPoint2.y}, context);
+    auto pixelPoint1 = b2VecToScreenPos({worldPoint1.x, worldPoint1.y}, context);
+    auto pixelPoint2 = b2VecToScreenPos({worldPoint2.x, worldPoint2.y}, context);
     renderSegment(pixelPoint1, pixelPoint2, {0, 255, 0, 255}, context);
   } else if (type == b2_polygonShape) {
     auto polygon = b2Shape_GetPolygon(shapeId);
@@ -68,7 +68,7 @@ bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context) {
     std::vector<screenPos> points = {};
     for (int i = 0; i < polygon.count; i++) {
       b2Vec2 worldPoint = b2TransformPoint(transform, polygon.vertices[i]);
-      auto pixelPoint = metersToPixels({worldPoint.x, worldPoint.y}, context);
+      auto pixelPoint = b2VecToScreenPos({worldPoint.x, worldPoint.y}, context);
       points.push_back(pixelPoint);
     }
     renderPolygon(points, {0, 0, 255, 255}, context);
@@ -165,17 +165,17 @@ bool RenderUtils::renderJoint(b2JointId jointId, const RenderContext &context) {
   b2Vec2 worldPointB = b2Body_GetWorldPoint(bodyBId, localPointB);
 
   if (type == b2JointType::b2_distanceJoint) {
-    auto pixelPointA = metersToPixels({worldPointA.x, worldPointA.y}, context);
-    auto pixelPointB = metersToPixels({worldPointB.x, worldPointB.y}, context);
+    auto pixelPointA = b2VecToScreenPos({worldPointA.x, worldPointA.y}, context);
+    auto pixelPointB = b2VecToScreenPos({worldPointB.x, worldPointB.y}, context);
     renderSegment(pixelPointA, pixelPointB, {100, 100, 100, 255}, context);
   }
   if (type == b2JointType::b2_mouseJoint) {
-    auto pixelPointA = metersToPixels({worldPointA.x, worldPointA.y}, context);
-    auto pixelPointB = metersToPixels({worldPointB.x, worldPointB.y}, context);
+    auto pixelPointA = b2VecToScreenPos({worldPointA.x, worldPointA.y}, context);
+    auto pixelPointB = b2VecToScreenPos({worldPointB.x, worldPointB.y}, context);
     renderSegment(pixelPointA, pixelPointB, {50, 50, 50, 255}, context);
   } else if (type == b2JointType::b2_revoluteJoint) {
-    auto pixelPointA = metersToPixels({worldPointA.x, worldPointA.y}, context);
-    auto pixelPointB = metersToPixels({worldPointB.x, worldPointB.y}, context);
+    auto pixelPointA = b2VecToScreenPos({worldPointA.x, worldPointA.y}, context);
+    auto pixelPointB = b2VecToScreenPos({worldPointB.x, worldPointB.y}, context);
     renderCircle(pixelPointA, 1, {255, 0, 0, 255}, context);
     renderCircle(pixelPointB, 2, {0, 255, 0, 255}, context);
   } else {
