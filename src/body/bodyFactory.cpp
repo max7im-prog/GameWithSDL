@@ -1,11 +1,12 @@
 #include "bodyFactory.hpp"
-#include "physicsComponents.hpp"
 #include "bodyComponents.hpp"
 #include "physicsFactory.hpp"
+#include "registryObjectFactory.hpp"
 BodyFactory::BodyFactory(entt::registry &registry,
                          const std::shared_ptr<World> world,
                          const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : registry(registry), world(world), physicsFactory(physicsFactory) {}
+    : RegistryObjectFactory(registry), world(world),
+      physicsFactory(physicsFactory) {}
 
 std::shared_ptr<CircleBody>
 BodyFactory::createCircleBody(const CircleBodyConfig &config) {
@@ -16,9 +17,7 @@ BodyFactory::createCircleBody(const CircleBodyConfig &config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
-  comp.bodyPart = ret;
+  registerBody(ret);
   return ret;
 }
 
@@ -31,9 +30,7 @@ BodyFactory::createCapsuleBody(const CapsuleBodyConfig &config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
-  comp.bodyPart = ret;
+  registerBody(ret);
   return ret;
 }
 
@@ -46,12 +43,9 @@ BodyFactory::createPolygonBody(const PolygonBodyConfig &config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
-  comp.bodyPart = ret;
+  registerBody(ret);
   return ret;
 }
-
 
 std::shared_ptr<LimbBody>
 BodyFactory::createLimbBody(const LimbBodyConfig &config) {
@@ -62,8 +56,13 @@ BodyFactory::createLimbBody(const LimbBodyConfig &config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ret->entity);
-  comp.bodyPart = ret;
+  registerBody(ret);
   return ret;
+}
+
+void BodyFactory::registerBody(std::shared_ptr<BodyPart> body) {
+  auto ent = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ent);
+  comp.bodyPart = body;
+  body->setEntity(ent);
 }

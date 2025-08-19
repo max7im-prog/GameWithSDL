@@ -6,7 +6,7 @@
 #include "polygonBody.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
-class BodyFactory {
+class BodyFactory : public RegistryObjectFactory {
 public:
   std::shared_ptr<CircleBody> createCircleBody(const CircleBodyConfig &config);
   std::shared_ptr<CapsuleBody>
@@ -20,13 +20,8 @@ public:
               const std::shared_ptr<PhysicsFactory> physicsFactory);
 
 private:
-  BodyFactory() = delete;
-  BodyFactory(BodyFactory &other) = delete;
-  BodyFactory(BodyFactory &&other) = delete;
-  BodyFactory operator=(BodyFactory &other) = delete;
-  BodyFactory operator=(BodyFactory &&other) = delete;
+  void registerBody(std::shared_ptr<BodyPart> body);
 
-  entt::registry &registry;
   const std::shared_ptr<World> world;
   const std::shared_ptr<PhysicsFactory> physicsFactory;
 };

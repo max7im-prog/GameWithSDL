@@ -6,8 +6,8 @@ CreatureFactory::CreatureFactory(entt::registry &registry,
                                  std::shared_ptr<World> world,
                                  std::shared_ptr<PhysicsFactory> physicsFactory,
                                  std::shared_ptr<BodyFactory> bodyFactory)
-    : registry(registry), world(world), physicsFactory(physicsFactory),
-      bodyFactory(bodyFactory) {}
+    : RegistryObjectFactory(registry), world(world),
+      physicsFactory(physicsFactory), bodyFactory(bodyFactory) {}
 
 std::shared_ptr<DemoCreature>
 CreatureFactory::createDemoCreature(const DemoCreatureConfig &config) {
@@ -18,8 +18,13 @@ CreatureFactory::createDemoCreature(const DemoCreatureConfig &config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsCreature>(ret->entity);
-  comp.creature = ret;
+  registerCreature(ret);
   return ret;
+}
+
+void CreatureFactory::registerCreature(std::shared_ptr<Creature> creature) {
+  auto ent = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsCreature>(ent);
+  comp.creature = creature;
+  creature->setEntity(ent);
 }

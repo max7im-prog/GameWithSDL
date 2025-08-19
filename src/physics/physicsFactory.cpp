@@ -1,10 +1,11 @@
 #include "physicsFactory.hpp"
 #include "physicsComponents.hpp"
+#include "registryObjectFactory.hpp"
 #include "revoluteJoint.hpp"
 
 PhysicsFactory::PhysicsFactory(entt::registry &registry,
                                const std::shared_ptr<World> world)
-    : registry(registry), world(world) {}
+    : RegistryObjectFactory(registry), world(world) {}
 
 std::shared_ptr<Circle> PhysicsFactory::createCircle(CircleConfig config) {
   std::shared_ptr<Circle> ret = nullptr;
@@ -13,9 +14,7 @@ std::shared_ptr<Circle> PhysicsFactory::createCircle(CircleConfig config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBody>(ret->entity);
-  comp.shape = ret;
+  registerShape(ret);
   return ret;
 }
 
@@ -26,9 +25,7 @@ std::shared_ptr<Polygon> PhysicsFactory::createPolygon(PolygonConfig config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBody>(ret->entity);
-  comp.shape = ret;
+  registerShape(ret);
   return ret;
 }
 
@@ -39,22 +36,19 @@ std::shared_ptr<Capsule> PhysicsFactory::createCapsule(CapsuleConfig config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBody>(ret->entity);
-  comp.shape = ret;
+  registerShape(ret);
   return ret;
 }
 
-std::shared_ptr<EmptyShape> PhysicsFactory::createEmptyShape(const EmptyShapeConfig& config) {
+std::shared_ptr<EmptyShape>
+PhysicsFactory::createEmptyShape(const EmptyShapeConfig &config) {
   std::shared_ptr<EmptyShape> ret = nullptr;
   try {
     ret = std::shared_ptr<EmptyShape>(new EmptyShape(registry, *world, config));
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBody>(ret->entity);
-  comp.shape = ret;
+  registerShape(ret);
   return ret;
 }
 
@@ -67,9 +61,7 @@ PhysicsFactory::createRevoluteJoint(RevoluteJointConfig config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsJoint>(ret->entity);
-  comp.joint = ret;
+  registerJoint(ret);
   return ret;
 }
 
@@ -82,9 +74,7 @@ PhysicsFactory::createDistanceJoint(DistanceJointConfig config) {
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsJoint>(ret->entity);
-  comp.joint = ret;
+  registerJoint(ret);
   return ret;
 }
 
@@ -92,26 +82,35 @@ std::shared_ptr<MouseJoint>
 PhysicsFactory::createMouseJoint(MouseJointConfig config) {
   std::shared_ptr<MouseJoint> ret = nullptr;
   try {
-    ret = std::shared_ptr<MouseJoint>(
-        new MouseJoint(registry, *world, config));
+    ret = std::shared_ptr<MouseJoint>(new MouseJoint(registry, *world, config));
   } catch (std::exception &e) {
     return nullptr;
   }
-  ret->entity = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsJoint>(ret->entity);
-  comp.joint = ret;
+  registerJoint(ret);
   return ret;
 }
 
-
-int PhysicsFactory::getNextNegativeId()
-{
-    static int ret = -1;
-    return ret--;
+int PhysicsFactory::getNextNegativeId() {
+  static int ret = -1;
+  return ret--;
 }
 
-int PhysicsFactory::getNextPositiveId()
-{
-    static int ret = 1;
-    return ret++;
+int PhysicsFactory::getNextPositiveId() {
+  static int ret = 1;
+  return ret++;
+}
+
+
+void PhysicsFactory::registerJoint(std::shared_ptr<Joint> joint){
+  auto ent = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsJoint>(ent);
+  comp.joint = joint;
+  joint->setEntity(ent);
+}
+
+void PhysicsFactory::registerShape(std::shared_ptr<Shape> shape){
+  auto ent = registry.create();
+  auto &comp = registry.emplace_or_replace<PhysicsBody>(ent);
+  comp.shape = shape;
+  shape->setEntity(ent);
 }

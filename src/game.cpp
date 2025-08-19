@@ -71,7 +71,7 @@ bool Game::init() {
   terrainFactory = std::shared_ptr<TerrainFactory>(
       new TerrainFactory(registry, world, physicsFactory, bodyFactory));
 
-  // Some shapes
+  // Some terrain
   {
     auto config = PolygonTerrainConfig::defaultConfig();
     config.polygonConfig.polygonConfig.vertices = {
@@ -80,7 +80,6 @@ bool Game::init() {
 
     terrainFactory->createPolygonTerrain(config);
   }
-
   {
     auto config = PolygonTerrainConfig::defaultConfig();
     config.polygonConfig.polygonConfig.vertices = {
@@ -89,14 +88,6 @@ bool Game::init() {
 
     terrainFactory->createPolygonTerrain(config);
   }
-
-  // {
-  //   auto config = CircleBodyConfig::defaultConfig();
-  //   config.circleConfig.radius = 0.25f;
-  //   config.circleConfig.bodyDef.position = {30, 30};
-  //   config.circleConfig.bodyDef.type = b2_staticBody;
-  //   bodyFactory->createCircleBody(config);
-  // }
 
   // Some creatures
   std::shared_ptr<Creature> c0;
@@ -108,7 +99,7 @@ bool Game::init() {
     c0 = creatureFactory->createDemoCreature(config);
   }
   c0->aim({30, 30}, true);
-  // c0->remove();
+  c0->remove();
 
   {
     auto config = DemoCreatureConfig::defaultConfig();
