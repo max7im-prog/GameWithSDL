@@ -46,6 +46,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/terrain)
 
 set(EXTERNAL_LIBS
   box2d
@@ -64,6 +65,7 @@ set(GAME_LIBS
   game_physics_lib
   game_render_lib
   game_systems_lib
+  game_terrain_lib
 )
 
 add_library(game_run_lib STATIC

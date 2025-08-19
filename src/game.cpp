@@ -14,7 +14,9 @@
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
 #include "physicsFactory.hpp"
+#include "polygonTerrain.hpp"
 #include "revoluteJoint.hpp"
+#include "terrainFactory.hpp"
 
 Game::Game(int w, int h, int fps)
     : WIDTH(w), HEIGHT(h), FPS(fps), running(false) {}
@@ -66,24 +68,37 @@ bool Game::init() {
   creatureFactory = std::shared_ptr<CreatureFactory>(
       new CreatureFactory(registry, world, physicsFactory, bodyFactory));
 
+  terrainFactory = std::shared_ptr<TerrainFactory>(
+      new TerrainFactory(registry, world, physicsFactory, bodyFactory));
+
   // Some shapes
   {
-    auto config = PolygonBodyConfig::defaultConfig();
-    config.polygonConfig.radius = 0;
-    config.polygonConfig.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
-    config.polygonConfig.bodyDef.type = b2_staticBody;
-    config.polygonConfig.bodyDef.position = {1, 1};
-    bodyFactory->createPolygonBody(config);
+    auto config = PolygonTerrainConfig::defaultConfig();
+    config.polygonConfig.polygonConfig.vertices = {
+        {0, 0}, {0, 1}, {60, 1}, {60, 0}};
+    config.position = {2, 3};
+
+    terrainFactory->createPolygonTerrain(config);
   }
 
   {
-    auto config = CircleBodyConfig::defaultConfig();
-    config.circleConfig.radius = 0.25f;
-    config.circleConfig.bodyDef.position = {30, 30};
-    config.circleConfig.bodyDef.type = b2_staticBody;
-    bodyFactory->createCircleBody(config);
+    auto config = PolygonTerrainConfig::defaultConfig();
+    config.polygonConfig.polygonConfig.vertices = {
+        {-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    config.position = {30, 30};
+
+    terrainFactory->createPolygonTerrain(config);
   }
 
+  // {
+  //   auto config = CircleBodyConfig::defaultConfig();
+  //   config.circleConfig.radius = 0.25f;
+  //   config.circleConfig.bodyDef.position = {30, 30};
+  //   config.circleConfig.bodyDef.type = b2_staticBody;
+  //   bodyFactory->createCircleBody(config);
+  // }
+
+  // Some creatures
   std::shared_ptr<Creature> c0;
   {
     auto config = DemoCreatureConfig::defaultConfig();
@@ -93,10 +108,7 @@ bool Game::init() {
     c0 = creatureFactory->createDemoCreature(config);
   }
   c0->aim({30, 30}, true);
-  
   // c0->remove();
-
-  
 
   {
     auto config = DemoCreatureConfig::defaultConfig();
@@ -111,7 +123,7 @@ bool Game::init() {
   // Controller for the creature
   {
     auto ent = registry.create();
-    auto& controller = registry.emplace_or_replace<Controller>(ent);
+    auto &controller = registry.emplace_or_replace<Controller>(ent);
     controller.creature = c0->getEntity();
   }
 
@@ -130,7 +142,7 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-  this->controllerUpdateSystem.update(this->registry,renderContext);
+  this->controllerUpdateSystem.update(this->registry, renderContext);
   this->creatureControlSystem.update(this->registry);
 
   creatureUpdateSystem.update(this->registry, this->FPS);

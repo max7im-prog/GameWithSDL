@@ -9,7 +9,7 @@ struct BodyPartConfig {};
 
 class BodyPart : public RegistryObject {
 public:
-  virtual void update([[maybe_unused]] float dt) {};
+  virtual void update([[maybe_unused]] float dt) override {};
   virtual ~BodyPart();
 
 protected:

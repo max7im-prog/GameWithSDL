@@ -17,8 +17,12 @@ public:
                                                b2QueryFilter filter);
 
 private:
-  // Used in getShapeAtPosition to get a callback from a b2World_OverlapAABB.
-  // Context should be a pointer to std::vector<b2ShapeId>
+  /**
+   * @brief Used in getShapeAtPosition to get a callback from a
+   * b2World_OverlapAABB.
+   *
+   * @param context A pointer to std::vector<b2ShapeId>
+   */
   static bool pointOverlapCallbackFunction(b2ShapeId shapeId, void *context);
 };
 

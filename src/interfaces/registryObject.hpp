@@ -51,8 +51,11 @@ protected:
   entt::entity entity;
 
 private:
-  // The value is a unique pointer to avoid additional memory allocation for
-  // objects with no children.
+  /**
+   * @brief This value is a unique pointer to avoid additional memory allocation
+   * for objects with no children.
+   *
+   */
   std::unique_ptr<std::vector<std::shared_ptr<RegistryObject>>> children;
 
   RegistryObject() = delete;
