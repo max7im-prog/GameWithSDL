@@ -5,7 +5,7 @@
 #include "terrain.hpp"
 
 struct SegmentTerrainConfig : public TerrainConfig {
-  SegmentBodyConfig bodyCfg;
+  SegmentBodyConfig templateBodyCfg;
   b2Vec2 point1, point2;
   static SegmentTerrainConfig defaultConfig();
 };

@@ -6,7 +6,7 @@
 #include "terrain.hpp"
 
 struct CapsuleTerrainConfig : public TerrainConfig {
-  CapsuleBodyConfig bodyCfg;
+  CapsuleBodyConfig templateBodyCfg;
   b2Vec2 point1, point2;
   float radius;
   static CapsuleTerrainConfig defaultConfig();

@@ -11,7 +11,7 @@ SegmentTerrain::SegmentTerrain(
 
   // A single segment
   {
-    auto bodyCfg = config.bodyCfg;
+    auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.localPoint1 = config.point1;
     bodyCfg.shapeCfg.localPoint2 = config.point2;
     bodyCfg.shapeCfg.bodyDef.position = config.position;
@@ -24,11 +24,11 @@ SegmentTerrain::SegmentTerrain(
 
 SegmentTerrainConfig SegmentTerrainConfig::defaultConfig() {
   SegmentTerrainConfig ret;
-  ret.bodyCfg = SegmentBodyConfig::defaultConfig();
+  ret.templateBodyCfg = SegmentBodyConfig::defaultConfig();
   ret.point1 = {0,0};
   ret.point1 = {1,0};
-  ret.bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   ret.position = {0, 0};
   return ret;
 }

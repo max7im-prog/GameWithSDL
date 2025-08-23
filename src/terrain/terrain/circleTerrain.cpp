@@ -11,7 +11,7 @@ CircleTerrain::CircleTerrain(
 
   // A single circle
   {
-    auto bodyCfg = config.bodyCfg;
+    auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.radius = config.radius;
     bodyCfg.shapeCfg.bodyDef.position = config.position;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
@@ -23,10 +23,10 @@ CircleTerrain::CircleTerrain(
 
 CircleTerrainConfig CircleTerrainConfig::defaultConfig() {
   CircleTerrainConfig ret;
-  ret.bodyCfg = CircleBodyConfig::defaultConfig();
+  ret.templateBodyCfg = CircleBodyConfig::defaultConfig();
   ret.position = {0, 0};
   ret.radius = 1;
-  ret.bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   return ret;
 }

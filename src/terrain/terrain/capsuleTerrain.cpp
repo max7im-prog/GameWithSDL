@@ -11,7 +11,7 @@ CapsuleTerrain::CapsuleTerrain(
 
   // A single capsule
   {
-    auto bodyCfg = config.bodyCfg;
+    auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.center1 = config.point1;
     bodyCfg.shapeCfg.center2 = config.point2;
     bodyCfg.shapeCfg.radius = config.radius;
@@ -25,12 +25,12 @@ CapsuleTerrain::CapsuleTerrain(
 
 CapsuleTerrainConfig CapsuleTerrainConfig::defaultConfig() {
   CapsuleTerrainConfig ret;
-  ret.bodyCfg = CapsuleBodyConfig::defaultConfig();
+  ret.templateBodyCfg = CapsuleBodyConfig::defaultConfig();
   ret.point1 = {0,0};
   ret.point1 = {1,0};
   ret.position = {0, 0};
   ret.radius = 0.25;
-  ret.bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   return ret;
 }

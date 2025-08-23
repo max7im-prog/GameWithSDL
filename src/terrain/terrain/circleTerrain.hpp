@@ -4,7 +4,7 @@
 #include "terrain.hpp"
 
 struct CircleTerrainConfig : public TerrainConfig {
-  CircleBodyConfig bodyCfg;
+  CircleBodyConfig templateBodyCfg;
   float radius;
   static CircleTerrainConfig defaultConfig();
 };
