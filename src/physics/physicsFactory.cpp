@@ -105,6 +105,18 @@ PhysicsFactory::createMouseJoint(const MouseJointConfig &config) {
   return ret;
 }
 
+std::shared_ptr<WeldJoint>
+PhysicsFactory::createWeldJoint(const WeldJointConfig &config) {
+  std::shared_ptr<WeldJoint> ret = nullptr;
+  try {
+    ret = std::shared_ptr<WeldJoint>(new WeldJoint(registry, *world, config));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  registerJoint(ret);
+  return ret;
+}
+
 int PhysicsFactory::getNextNegativeId() {
   static int ret = -1;
   return ret--;

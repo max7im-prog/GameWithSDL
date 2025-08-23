@@ -8,6 +8,7 @@
 #include "registryObjectFactory.hpp"
 #include "revoluteJoint.hpp"
 #include "segment.hpp"
+#include "weldJoint.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 
@@ -24,6 +25,7 @@ public:
   std::shared_ptr<DistanceJoint>
   createDistanceJoint(const DistanceJointConfig &config);
   std::shared_ptr<MouseJoint> createMouseJoint(const MouseJointConfig &config);
+  std::shared_ptr<WeldJoint> createWeldJoint(const WeldJointConfig &config);
 
   PhysicsFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
