@@ -1,11 +1,13 @@
 #pragma once
 #include "bodyFactory.hpp"
+#include "box2d/math_functions.h"
 #include "physicsFactory.hpp"
 #include "polygonBody.hpp"
 #include "terrain.hpp"
 
 struct PolygonTerrainConfig : public TerrainConfig {
-  PolygonBodyConfig bodyCfg;
+  PolygonBodyConfig templateBodyCfg;
+  std::vector<b2Vec2> vertices;
   static PolygonTerrainConfig defaultConfig();
 };
 class PolygonTerrain : public Terrain {

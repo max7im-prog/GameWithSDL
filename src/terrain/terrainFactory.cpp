@@ -36,6 +36,19 @@ TerrainFactory::createSegmentTerrain(const SegmentTerrainConfig &config) {
   return ret;
 }
 
+std::shared_ptr<CapsuleTerrain>
+TerrainFactory::createCapsuleTerrain(const CapsuleTerrainConfig &config) {
+  std::shared_ptr<CapsuleTerrain> ret = nullptr;
+  try {
+    ret = std::shared_ptr<CapsuleTerrain>(new CapsuleTerrain(
+        registry, world, config, physicsFactory, bodyFactory));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  registerTerrain(ret);
+  return ret;
+}
+
 void TerrainFactory::registerTerrain(std::shared_ptr<Terrain> terrain) {
   auto ent = registry.create();
   auto &comp = registry.emplace_or_replace<PhysicsTerrain>(ent);

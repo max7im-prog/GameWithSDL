@@ -72,73 +72,79 @@ bool Game::init() {
   // Some terrain
   {
     auto config = PolygonTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.vertices = {
-        {0, 0}, {0, 1}, {60, 1}, {60, 0}};
+    config.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
     config.position = {2, 3};
 
     terrainFactory->createPolygonTerrain(config);
   }
   {
     auto config = PolygonTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.vertices = {
-        {-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    config.vertices = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     config.position = {30, 30};
 
     terrainFactory->createPolygonTerrain(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
-    config.bodyCfg.shapeCfg.localPoint2 = {20,20};
+    config.point1 = {0, 0};
+    config.point2 = {20, 20};
     config.position = {62, 3};
 
     terrainFactory->createSegmentTerrain(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
-    config.bodyCfg.shapeCfg.localPoint2 = {20,0};
+    config.point1 = {0, 0};
+    config.point2 = {20, 0};
     config.position = {82, 23};
 
     terrainFactory->createSegmentTerrain(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
-    config.bodyCfg.shapeCfg.localPoint2 = {0,20};
+    config.point1 = {0, 0};
+    config.point2 = {0, 20};
     config.position = {102, 23};
 
     terrainFactory->createSegmentTerrain(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
-    config.bodyCfg.shapeCfg.localPoint2 = {0,60};
+    config.point1 = {0, 0};
+    config.point2 = {0, 60};
     config.position = {2, 4};
     terrainFactory->createSegmentTerrain(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
-    config.bodyCfg.shapeCfg.localPoint2 = {100,-21};
+    config.point1 = {0, 0};
+    config.point2 = {100, -21};
     config.position = {2, 64};
     terrainFactory->createSegmentTerrain(config);
   }
   {
     auto config = PolygonTerrainConfig::defaultConfig();
-    config.bodyCfg.shapeCfg.vertices = {
-        {0, 0}, {0, 1}, {60, 1}, {60, 0}};
+    config.vertices = {{0, 0}, {0, 1}, {30, 1}, {30, 0}};
     config.position = {10, 25};
 
     terrainFactory->createPolygonTerrain(config);
+  }
+  {
+    auto config = CapsuleTerrainConfig::defaultConfig();
+    config.point1 = {-10,0};
+    config.point2 = {10,0};
+    config.radius = 1;
+    config.position = {55, 25};
+
+    terrainFactory->createCapsuleTerrain(config);
   }
 
   // Some creatures
   std::shared_ptr<Creature> c0;
   {
     auto config = DemoCreatureConfig::defaultConfig();
-    config.sizeXMeters = 1;
-    config.sizeYMeters = 1;
+    config.sizeXMeters = 2;
+    config.sizeYMeters = 2;
     config.position = {5, 10};
     c0 = creatureFactory->createDemoCreature(config);
   }

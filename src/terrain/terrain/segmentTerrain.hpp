@@ -1,10 +1,12 @@
 #pragma once
 #include "bodyFactory.hpp"
+#include "box2d/math_functions.h"
 #include "physicsFactory.hpp"
 #include "terrain.hpp"
 
 struct SegmentTerrainConfig : public TerrainConfig {
   SegmentBodyConfig bodyCfg;
+  b2Vec2 point1, point2;
   static SegmentTerrainConfig defaultConfig();
 };
 class SegmentTerrain : public Terrain {

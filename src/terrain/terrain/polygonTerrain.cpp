@@ -12,7 +12,8 @@ PolygonTerrain::PolygonTerrain(
 
   // A single polygon
   {
-    auto bodyCfg = config.bodyCfg;
+    auto bodyCfg = config.templateBodyCfg;
+    bodyCfg.shapeCfg.vertices = config.vertices;
     bodyCfg.shapeCfg.bodyDef.position = config.position;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
@@ -23,9 +24,10 @@ PolygonTerrain::PolygonTerrain(
 
 PolygonTerrainConfig PolygonTerrainConfig::defaultConfig() {
   PolygonTerrainConfig ret;
-  ret.bodyCfg = PolygonBodyConfig::defaultConfig();
-  ret.bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  ret.vertices = {{0,0},{1,0},{1,1},{0,1}};
+  ret.templateBodyCfg = PolygonBodyConfig::defaultConfig();
+  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   ret.position = {0, 0};
   return ret;
 }
