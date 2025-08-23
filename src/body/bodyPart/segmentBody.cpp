@@ -6,7 +6,7 @@ SegmentBody::SegmentBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
                          const SegmentBodyConfig &config,
                          const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : BodyPart(registry, world) {
+    : Body(registry, world) {
   segment = physicsFactory->createSegment(config.shapeCfg);
   registerChild(segment);
 }

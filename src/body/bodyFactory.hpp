@@ -23,7 +23,7 @@ public:
               const std::shared_ptr<PhysicsFactory> physicsFactory);
 
 private:
-  void registerBody(std::shared_ptr<BodyPart> body);
+  void registerBody(std::shared_ptr<Body> body);
 
   const std::shared_ptr<World> world;
   const std::shared_ptr<PhysicsFactory> physicsFactory;

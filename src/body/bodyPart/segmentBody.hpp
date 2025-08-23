@@ -2,12 +2,12 @@
 #include "bodyPart.hpp"
 #include "segment.hpp"
 
-struct SegmentBodyConfig : public BodyPartConfig {
+struct SegmentBodyConfig : public BodyConfig {
   static SegmentBodyConfig defaultConfig();
   SegmentConfig shapeCfg;
 };
 
-class SegmentBody : public BodyPart {
+class SegmentBody : public Body {
 public:
   const std::shared_ptr<Segment> getSegment();
 

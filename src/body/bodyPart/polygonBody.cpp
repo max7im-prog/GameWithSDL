@@ -7,7 +7,7 @@ PolygonBody::PolygonBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
                          const PolygonBodyConfig &config,
                          const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : BodyPart(registry, world) {
+    : Body(registry, world) {
   polygon = physicsFactory->createPolygon(config.shapeCfg);
   registerChild(polygon);
 }

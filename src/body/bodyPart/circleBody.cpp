@@ -11,7 +11,7 @@ CircleBody::CircleBody(entt::registry &registry,
                        const std::shared_ptr<World> world,
                        const CircleBodyConfig &config,
                        const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : BodyPart(registry, world) {
+    : Body(registry, world) {
   circle = physicsFactory->createCircle(config.shapeCfg);
   registerChild(circle);
 }

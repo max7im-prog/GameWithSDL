@@ -9,7 +9,7 @@
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const LimbBodyConfig &config,
                    const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : BodyPart(registry, world), segmentsConfig(config.segments) {
+    : Body(registry, world), segmentsConfig(config.segments) {
 
   b2Vec2 lastPos = config.basePos;
   b2Vec2 incrementDir = {0, -1};

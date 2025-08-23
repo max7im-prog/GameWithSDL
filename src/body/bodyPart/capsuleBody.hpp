@@ -2,12 +2,12 @@
 #include "bodyPart.hpp"
 #include "capsule.hpp"
 
-struct CapsuleBodyConfig : public BodyPartConfig {
+struct CapsuleBodyConfig : public BodyConfig {
   static CapsuleBodyConfig defaultConfig();
   CapsuleConfig shapeCfg;
 };
 
-class CapsuleBody : public BodyPart {
+class CapsuleBody : public Body {
 public:
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();

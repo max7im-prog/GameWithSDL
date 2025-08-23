@@ -2,12 +2,12 @@
 #include "bodyPart.hpp"
 #include "polygon.hpp"
 
-struct PolygonBodyConfig : public BodyPartConfig {
+struct PolygonBodyConfig : public BodyConfig {
   static PolygonBodyConfig defaultConfig();
   PolygonConfig shapeCfg;
 };
 
-class PolygonBody : public BodyPart {
+class PolygonBody : public Body {
 public:
   const std::shared_ptr<Polygon> getPolygon();
 

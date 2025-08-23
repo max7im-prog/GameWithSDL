@@ -1,8 +1,8 @@
 #include "bodyPart.hpp"
 #include "registryObject.hpp"
 
-BodyPart::~BodyPart() {
+Body::~Body() {
 }
 
-BodyPart::BodyPart(entt::registry &registry, const std::shared_ptr<World> world)
+Body::Body(entt::registry &registry, const std::shared_ptr<World> world)
     : RegistryObject(registry), world(world) {}

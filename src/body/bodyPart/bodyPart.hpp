@@ -5,22 +5,22 @@
 #include "registryObject.hpp"
 #include "shape.hpp"
 
-struct BodyPartConfig {};
+struct BodyConfig {};
 
-class BodyPart : public RegistryObject {
+class Body : public RegistryObject {
 public:
   virtual void update([[maybe_unused]] float dt) override {};
-  virtual ~BodyPart();
+  virtual ~Body();
 
 protected:
-  BodyPart(entt::registry &registry, const std::shared_ptr<World> world);
+  Body(entt::registry &registry, const std::shared_ptr<World> world);
   const std::shared_ptr<World> world;
 
 private:
-  BodyPart() = delete;
-  BodyPart(BodyPart &other) = delete;
-  BodyPart(BodyPart &&other) = delete;
-  BodyPart operator=(BodyPart &other) = delete;
-  BodyPart operator=(BodyPart &&other) = delete;
+  Body() = delete;
+  Body(Body &other) = delete;
+  Body(Body &&other) = delete;
+  Body operator=(Body &other) = delete;
+  Body operator=(Body &&other) = delete;
   friend class BodyFactory;
 };

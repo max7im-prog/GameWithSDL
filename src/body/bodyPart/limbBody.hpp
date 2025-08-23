@@ -16,7 +16,7 @@ struct LimbControlConfig {
   float maxForceMultiplier = 1;
 };
 
-struct LimbBodyConfig : public BodyPartConfig {
+struct LimbBodyConfig : public BodyConfig {
   static LimbBodyConfig defaultConfig();
   CapsuleConfig templateCapsuleConfig;
   RevoluteJointConfig templateJointConfig;
@@ -27,7 +27,7 @@ struct LimbBodyConfig : public BodyPartConfig {
   b2Rot rotation;
 };
 
-class LimbBody : public BodyPart {
+class LimbBody : public Body {
 public:
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();

@@ -2,12 +2,12 @@
 #include "bodyPart.hpp"
 #include "circle.hpp"
 
-struct CircleBodyConfig : public BodyPartConfig {
+struct CircleBodyConfig : public BodyConfig {
   static CircleBodyConfig defaultConfig();
   CircleConfig shapeCfg;
 };
 
-class CircleBody : public BodyPart {
+class CircleBody : public Body {
 public:
   b2Vec2 getCenter();
   float getRadius();
