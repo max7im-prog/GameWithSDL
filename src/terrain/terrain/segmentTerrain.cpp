@@ -1,6 +1,5 @@
 #include "segmentTerrain.hpp"
 #include "box2d/types.h"
-#include "polygonBody.hpp"
 #include "terrain.hpp"
 
 SegmentTerrain::SegmentTerrain(
@@ -12,23 +11,20 @@ SegmentTerrain::SegmentTerrain(
 
   // A single segment
   {
-    // auto cfg = SegmentBodyConfig::defaultConfig();
-    // cfg.segmentConfig.
-    // cfg.polygonConfig.bodyDef.position = config.position;
-    // cfg.polygonConfig.vertices = config.polygonConfig.polygonConfig.vertices;
-    // cfg.polygonConfig.bodyDef.type = b2_staticBody;
-    // cfg.polygonConfig.shapeDef.filter = TerrainConfig::defaultFilter();
-    // polygonBody = bodyFactory->createPolygonBody(cfg);
-    // registerChild(polygonBody);
+    auto bodyCfg = config.bodyCfg;
+    bodyCfg.shapeCfg.bodyDef.position = config.position;
+    bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+    bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+    segmentBody = bodyFactory->createSegmentBody(bodyCfg);
+    registerChild(segmentBody);
   }
 }
 
-
-SegmentTerrainConfig SegmentTerrainConfig::defaultConfig(){
+SegmentTerrainConfig SegmentTerrainConfig::defaultConfig() {
   SegmentTerrainConfig ret;
-  ret.segmentConfig = SegmentBodyConfig::defaultConfig();
-  ret.segmentConfig.segmentConfig.bodyDef.type = b2_staticBody;
-  ret.segmentConfig.segmentConfig.shapeDef.filter = TerrainConfig::defaultFilter();
-  ret.position = {0,0};
+  ret.bodyCfg = SegmentBodyConfig::defaultConfig();
+  ret.bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  ret.bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  ret.position = {0, 0};
   return ret;
 }

@@ -5,7 +5,7 @@
 #include "terrain.hpp"
 
 struct PolygonTerrainConfig : public TerrainConfig {
-  PolygonBodyConfig polygonConfig;
+  PolygonBodyConfig bodyCfg;
   static PolygonTerrainConfig defaultConfig();
 };
 class PolygonTerrain : public Terrain {

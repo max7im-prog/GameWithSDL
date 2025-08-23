@@ -38,10 +38,10 @@ DemoCreature::DemoCreature(entt::registry &registry,
 
   // Create bodies
   auto torsoConfig = PolygonBodyConfig::defaultConfig();
-  torsoConfig.polygonConfig.bodyDef.type = b2_dynamicBody;
-  torsoConfig.polygonConfig.shapeDef.filter = CreatureConfig::defaultFilter();
-  torsoConfig.polygonConfig.shapeDef.filter.groupIndex = groupId;
-  torsoConfig.polygonConfig.vertices = {{(-torsoWidth / 2), (0)},
+  torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
+  torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
+  torsoConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
+  torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 2), (0)},
                                         {(-torsoWidth / 2), (torsoHeight)},
                                         {(torsoWidth / 2), (torsoHeight)},
                                         {(torsoWidth / 2), (0)}};
@@ -98,7 +98,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
   }
   {
     auto cfg = torsoConfig;
-    cfg.polygonConfig.bodyDef.position = {config.position};
+    cfg.shapeCfg.bodyDef.position = {config.position};
     torso = bodyFactory->createPolygonBody(cfg);
     registerChild(torso);
   }
@@ -185,7 +185,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
   creatureState = CreatureState::ON_GROUND;
   creatureAbilities = CreatureAbilities::CAN_JUMP;
   moveContext.maxSpeedMultiplier = 3;
-  moveContext.defalutSpeedMpS = 3;
+  moveContext.defaultSpeedMpS = 5;
 }
 
 DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
@@ -316,7 +316,7 @@ void DemoCreature::updateMove(float dt) {
     if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
       auto normDir = b2Normalize(moveContext.dir);
       float desiredHorizontalSpeed =
-          moveContext.defalutSpeedMpS *
+          moveContext.defaultSpeedMpS *
           std::max(moveContext.maxSpeedMultiplier, moveContext.intensity) *
           normDir.x;
       auto error = desiredHorizontalSpeed -

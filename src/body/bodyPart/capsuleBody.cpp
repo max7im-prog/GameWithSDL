@@ -14,13 +14,13 @@ CapsuleBody::CapsuleBody(entt::registry &registry,
                        const CapsuleBodyConfig &config,
                        const std::shared_ptr<PhysicsFactory> physicsFactory)
     : BodyPart(registry, world) {
-  capsule = physicsFactory->createCapsule(config.capsuleConfig);
+  capsule = physicsFactory->createCapsule(config.shapeCfg);
   registerChild(capsule);
 }
 
 CapsuleBodyConfig CapsuleBodyConfig::defaultConfig(){
   CapsuleBodyConfig ret;
-  ret.capsuleConfig = CapsuleConfig::defaultConfig();
+  ret.shapeCfg = CapsuleConfig::defaultConfig();
   return ret;
 }
 

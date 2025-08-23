@@ -4,7 +4,7 @@
 #include "terrain.hpp"
 
 struct SegmentTerrainConfig : public TerrainConfig {
-  SegmentBodyConfig segmentConfig;
+  SegmentBodyConfig bodyCfg;
   static SegmentTerrainConfig defaultConfig();
 };
 class SegmentTerrain : public Terrain {

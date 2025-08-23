@@ -4,7 +4,7 @@
 
 struct CircleBodyConfig : public BodyPartConfig {
   static CircleBodyConfig defaultConfig();
-  CircleConfig circleConfig;
+  CircleConfig shapeCfg;
 };
 
 class CircleBody : public BodyPart {

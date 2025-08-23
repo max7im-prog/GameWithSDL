@@ -8,14 +8,12 @@
 #include "basicWorld.hpp"
 #include "bodyFactory.hpp"
 #include "box2d/math_functions.h"
-#include "box2d/types.h"
 #include "controlComponents.hpp"
 #include "creature.hpp"
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
 #include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
-#include "revoluteJoint.hpp"
 #include "terrainFactory.hpp"
 
 Game::Game(int w, int h, int fps)
@@ -74,7 +72,7 @@ bool Game::init() {
   // Some terrain
   {
     auto config = PolygonTerrainConfig::defaultConfig();
-    config.polygonConfig.polygonConfig.vertices = {
+    config.bodyCfg.shapeCfg.vertices = {
         {0, 0}, {0, 1}, {60, 1}, {60, 0}};
     config.position = {2, 3};
 
@@ -82,9 +80,55 @@ bool Game::init() {
   }
   {
     auto config = PolygonTerrainConfig::defaultConfig();
-    config.polygonConfig.polygonConfig.vertices = {
+    config.bodyCfg.shapeCfg.vertices = {
         {-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     config.position = {30, 30};
+
+    terrainFactory->createPolygonTerrain(config);
+  }
+  {
+    auto config = SegmentTerrainConfig::defaultConfig();
+    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
+    config.bodyCfg.shapeCfg.localPoint2 = {20,20};
+    config.position = {62, 3};
+
+    terrainFactory->createSegmentTerrain(config);
+  }
+  {
+    auto config = SegmentTerrainConfig::defaultConfig();
+    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
+    config.bodyCfg.shapeCfg.localPoint2 = {20,0};
+    config.position = {82, 23};
+
+    terrainFactory->createSegmentTerrain(config);
+  }
+  {
+    auto config = SegmentTerrainConfig::defaultConfig();
+    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
+    config.bodyCfg.shapeCfg.localPoint2 = {0,20};
+    config.position = {102, 23};
+
+    terrainFactory->createSegmentTerrain(config);
+  }
+  {
+    auto config = SegmentTerrainConfig::defaultConfig();
+    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
+    config.bodyCfg.shapeCfg.localPoint2 = {0,60};
+    config.position = {2, 4};
+    terrainFactory->createSegmentTerrain(config);
+  }
+  {
+    auto config = SegmentTerrainConfig::defaultConfig();
+    config.bodyCfg.shapeCfg.localPoint1 = {0,0};
+    config.bodyCfg.shapeCfg.localPoint2 = {100,-21};
+    config.position = {2, 64};
+    terrainFactory->createSegmentTerrain(config);
+  }
+  {
+    auto config = PolygonTerrainConfig::defaultConfig();
+    config.bodyCfg.shapeCfg.vertices = {
+        {0, 0}, {0, 1}, {60, 1}, {60, 0}};
+    config.position = {10, 25};
 
     terrainFactory->createPolygonTerrain(config);
   }

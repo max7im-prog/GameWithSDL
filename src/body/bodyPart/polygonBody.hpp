@@ -4,7 +4,7 @@
 
 struct PolygonBodyConfig : public BodyPartConfig {
   static PolygonBodyConfig defaultConfig();
-  PolygonConfig polygonConfig;
+  PolygonConfig shapeCfg;
 };
 
 class PolygonBody : public BodyPart {

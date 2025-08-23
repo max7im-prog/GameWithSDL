@@ -1,5 +1,6 @@
 #include "terrainFactory.hpp"
 #include "registryObjectFactory.hpp"
+#include "segmentTerrain.hpp"
 #include "terrainComponents.hpp"
 
 TerrainFactory::TerrainFactory(entt::registry &registry,
@@ -14,6 +15,19 @@ TerrainFactory::createPolygonTerrain(const PolygonTerrainConfig &config) {
   std::shared_ptr<PolygonTerrain> ret = nullptr;
   try {
     ret = std::shared_ptr<PolygonTerrain>(new PolygonTerrain(
+        registry, world, config, physicsFactory, bodyFactory));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  registerTerrain(ret);
+  return ret;
+}
+
+std::shared_ptr<SegmentTerrain>
+TerrainFactory::createSegmentTerrain(const SegmentTerrainConfig &config) {
+  std::shared_ptr<SegmentTerrain> ret = nullptr;
+  try {
+    ret = std::shared_ptr<SegmentTerrain>(new SegmentTerrain(
         registry, world, config, physicsFactory, bodyFactory));
   } catch (std::exception &e) {
     return nullptr;

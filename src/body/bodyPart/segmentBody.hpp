@@ -4,7 +4,7 @@
 
 struct SegmentBodyConfig : public BodyPartConfig {
   static SegmentBodyConfig defaultConfig();
-  SegmentConfig segmentConfig;
+  SegmentConfig shapeCfg;
 };
 
 class SegmentBody : public BodyPart {

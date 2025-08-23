@@ -7,13 +7,13 @@ SegmentBody::SegmentBody(entt::registry &registry,
                          const SegmentBodyConfig &config,
                          const std::shared_ptr<PhysicsFactory> physicsFactory)
     : BodyPart(registry, world) {
-  segment = physicsFactory->createSegment(config.segmentConfig);
+  segment = physicsFactory->createSegment(config.shapeCfg);
   registerChild(segment);
 }
 
 SegmentBodyConfig SegmentBodyConfig::defaultConfig() {
   SegmentBodyConfig ret;
-  ret.segmentConfig = SegmentConfig::defaultConfig();
+  ret.shapeCfg = SegmentConfig::defaultConfig();
   return ret;
 }
 

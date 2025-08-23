@@ -7,7 +7,7 @@
 #include "game.hpp"
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
-  Game game(800, 600, 60);
+  Game game(1400, 900, 60);
 
   if (!game.init()) {
     std::cerr << "Failed to initialize game" << std::endl;

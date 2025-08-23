@@ -67,7 +67,7 @@ private:
     b2Vec2 dir;
     bool move;
     float maxSpeedMultiplier = 1;
-    float defalutSpeedMpS = 10;
+    float defaultSpeedMpS = 10;
   } moveContext;
 
   void updateFeet(float dt);

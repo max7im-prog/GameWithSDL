@@ -4,7 +4,7 @@
 
 struct CapsuleBodyConfig : public BodyPartConfig {
   static CapsuleBodyConfig defaultConfig();
-  CapsuleConfig capsuleConfig;
+  CapsuleConfig shapeCfg;
 };
 
 class CapsuleBody : public BodyPart {

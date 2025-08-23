@@ -12,13 +12,13 @@ CircleBody::CircleBody(entt::registry &registry,
                        const CircleBodyConfig &config,
                        const std::shared_ptr<PhysicsFactory> physicsFactory)
     : BodyPart(registry, world) {
-  circle = physicsFactory->createCircle(config.circleConfig);
+  circle = physicsFactory->createCircle(config.shapeCfg);
   registerChild(circle);
 }
 
 CircleBodyConfig CircleBodyConfig::defaultConfig(){
   CircleBodyConfig ret;
-  ret.circleConfig = CircleConfig::defaultConfig();
+  ret.shapeCfg = CircleConfig::defaultConfig();
   return ret;
 }
 
