@@ -1,5 +1,5 @@
 #include "capsuleBody.hpp"
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
 

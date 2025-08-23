@@ -1,5 +1,5 @@
 #pragma once
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "circle.hpp"
 
 struct CircleBodyConfig : public BodyConfig {

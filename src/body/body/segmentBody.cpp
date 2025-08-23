@@ -1,5 +1,5 @@
 #include "segmentBody.hpp"
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "segment.hpp"
 
 SegmentBody::SegmentBody(entt::registry &registry,

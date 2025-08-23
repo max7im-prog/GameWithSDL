@@ -1,4 +1,4 @@
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "registryObject.hpp"
 
 Body::~Body() {

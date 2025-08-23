@@ -1,5 +1,5 @@
 #pragma once
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "polygon.hpp"
 
 struct PolygonBodyConfig : public BodyConfig {

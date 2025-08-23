@@ -1,5 +1,5 @@
 #pragma once
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "box2d/types.h"
 #include "registryObject.hpp"
 #include "world.hpp"

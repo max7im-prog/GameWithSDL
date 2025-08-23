@@ -1,6 +1,6 @@
 #pragma once
 #include "PIDVectorController.hpp"
-#include "bodyPart.hpp"
+#include "body.hpp"
 #include "capsule.hpp"
 #include "revoluteJoint.hpp"
 
