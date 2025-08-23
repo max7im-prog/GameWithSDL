@@ -75,7 +75,7 @@ BodyFactory::createSegmentBody(const SegmentBodyConfig &config) {
 
 void BodyFactory::registerBody(std::shared_ptr<BodyPart> body) {
   auto ent = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ent);
-  comp.bodyPart = body;
+  auto &comp = registry.emplace_or_replace<PhysicsBody>(ent);
+  comp.body = body;
   body->setEntity(ent);
 }

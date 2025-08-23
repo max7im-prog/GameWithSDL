@@ -12,7 +12,7 @@ struct PhysicsWorld {
   std::shared_ptr<World> world;
 };
 
-struct PhysicsBody {
+struct PhysicsShape {
   std::shared_ptr<Shape> shape;
 };
 

@@ -1,5 +1,5 @@
 #include "bodyPart.hpp"
 
-struct PhysicsBodyPart {
-  std::shared_ptr<BodyPart> bodyPart;
+struct PhysicsBody {
+  std::shared_ptr<BodyPart> body;
 };

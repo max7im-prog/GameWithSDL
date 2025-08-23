@@ -124,7 +124,7 @@ void PhysicsFactory::registerJoint(std::shared_ptr<Joint> joint) {
 
 void PhysicsFactory::registerShape(std::shared_ptr<Shape> shape) {
   auto ent = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBody>(ent);
+  auto &comp = registry.emplace_or_replace<PhysicsShape>(ent);
   comp.shape = shape;
   shape->setEntity(ent);
 }

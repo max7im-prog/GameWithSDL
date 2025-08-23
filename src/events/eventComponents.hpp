@@ -2,7 +2,6 @@
 #include "SDL3/SDL_events.h"
 #include "eventUtils.hpp"
 #include <SDL3/SDL.h>
-#include <utility>
 
 struct PlayerInput {
   InputState state;
