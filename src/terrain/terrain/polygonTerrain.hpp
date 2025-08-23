@@ -16,6 +16,8 @@ protected:
                  const std::shared_ptr<PhysicsFactory> physicsFactory,
                  const std::shared_ptr<BodyFactory> bodyFactory);
 
+  std::shared_ptr<PolygonBody> polygonBody;
+
 private:
   friend class TerrainFactory;
 };

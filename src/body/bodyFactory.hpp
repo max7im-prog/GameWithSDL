@@ -4,6 +4,7 @@
 #include "limbBody.hpp"
 #include "physicsFactory.hpp"
 #include "polygonBody.hpp"
+#include "segmentBody.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 class BodyFactory : public RegistryObjectFactory {
@@ -13,6 +14,8 @@ public:
   createCapsuleBody(const CapsuleBodyConfig &config);
   std::shared_ptr<PolygonBody>
   createPolygonBody(const PolygonBodyConfig &config);
+  std::shared_ptr<SegmentBody>
+  createSegmentBody(const SegmentBodyConfig &config);
 
   std::shared_ptr<LimbBody> createLimbBody(const LimbBodyConfig &config);
 

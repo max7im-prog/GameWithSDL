@@ -60,6 +60,19 @@ BodyFactory::createLimbBody(const LimbBodyConfig &config) {
   return ret;
 }
 
+std::shared_ptr<SegmentBody>
+BodyFactory::createSegmentBody(const SegmentBodyConfig &config) {
+  std::shared_ptr<SegmentBody> ret = nullptr;
+  try {
+    ret = std::shared_ptr<SegmentBody>(
+        new SegmentBody(registry, world, config, physicsFactory));
+  } catch (std::exception &e) {
+    return nullptr;
+  }
+  registerBody(ret);
+  return ret;
+}
+
 void BodyFactory::registerBody(std::shared_ptr<BodyPart> body) {
   auto ent = registry.create();
   auto &comp = registry.emplace_or_replace<PhysicsBodyPart>(ent);

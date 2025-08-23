@@ -12,13 +12,14 @@ PolygonTerrain::PolygonTerrain(
 
   // A single polygon
   {
-    auto cfg = PolygonBodyConfig::defaultConfig();
-    cfg.polygonConfig.bodyDef.position = config.position;
-    cfg.polygonConfig.vertices = config.polygonConfig.polygonConfig.vertices;
-    cfg.polygonConfig.bodyDef.type = b2_staticBody;
-    cfg.polygonConfig.shapeDef.filter = TerrainConfig::defaultFilter();
-    auto polygon = bodyFactory->createPolygonBody(cfg);
-    registerChild(polygon);
+    auto bodyCfg = PolygonBodyConfig::defaultConfig();
+
+    bodyCfg.polygonConfig.bodyDef.position = config.position;
+    bodyCfg.polygonConfig.vertices = config.polygonConfig.polygonConfig.vertices;
+    bodyCfg.polygonConfig.bodyDef.type = b2_staticBody;
+    bodyCfg.polygonConfig.shapeDef.filter = TerrainConfig::defaultFilter();
+    polygonBody = bodyFactory->createPolygonBody(bodyCfg);
+    registerChild(polygonBody);
   }
 }
 
@@ -26,6 +27,7 @@ PolygonTerrain::PolygonTerrain(
 PolygonTerrainConfig PolygonTerrainConfig::defaultConfig(){
   PolygonTerrainConfig ret;
   ret.polygonConfig = PolygonBodyConfig::defaultConfig();
+  ret.polygonConfig.polygonConfig.bodyDef.type = b2_staticBody;
   ret.polygonConfig.polygonConfig.shapeDef.filter = TerrainConfig::defaultFilter();
   ret.position = {0,0};
   return ret;
