@@ -126,17 +126,39 @@ bool Game::init() {
     auto config = PolygonTerrainConfig::defaultConfig();
     config.vertices = {{0, 0}, {0, 1}, {30, 1}, {30, 0}};
     config.position = {10, 25};
-
     terrainFactory->createPolygonTerrain(config);
   }
   {
     auto config = CapsuleTerrainConfig::defaultConfig();
-    config.point1 = {-10,0};
-    config.point2 = {10,0};
+    config.point1 = {-10, 0};
+    config.point2 = {10, 0};
     config.radius = 1;
     config.position = {55, 25};
-
     terrainFactory->createCapsuleTerrain(config);
+  }
+  {
+    auto config = CircleTerrainConfig::defaultConfig();
+    config.radius = 1;
+    config.position = {82, 23};
+    terrainFactory->createCircleTerrain(config);
+  }
+  {
+    auto config = CircleTerrainConfig::defaultConfig();
+    config.radius = 1;
+    config.position = {85, 23};
+    terrainFactory->createCircleTerrain(config);
+  }
+  {
+    auto config = CircleTerrainConfig::defaultConfig();
+    config.radius = 1;
+    config.position = {89, 23};
+    terrainFactory->createCircleTerrain(config);
+  }
+  {
+    auto config = CircleTerrainConfig::defaultConfig();
+    config.radius = 1;
+    config.position = {90, 23};
+    terrainFactory->createCircleTerrain(config);
   }
 
   // Some creatures

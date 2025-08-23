@@ -1,0 +1,23 @@
+#pragma once
+#include "bodyFactory.hpp"
+#include "physicsFactory.hpp"
+#include "terrain.hpp"
+
+struct CircleTerrainConfig : public TerrainConfig {
+  CircleBodyConfig bodyCfg;
+  float radius;
+  static CircleTerrainConfig defaultConfig();
+};
+class CircleTerrain : public Terrain {
+public:
+protected:
+  CircleTerrain(entt::registry &registry, const std::shared_ptr<World> world,
+                const CircleTerrainConfig &config,
+                const std::shared_ptr<PhysicsFactory> physicsFactory,
+                const std::shared_ptr<BodyFactory> bodyFactory);
+
+  std::shared_ptr<CircleBody> circleBody;
+
+private:
+  friend class TerrainFactory;
+};

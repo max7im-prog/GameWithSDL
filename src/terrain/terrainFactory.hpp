@@ -1,6 +1,7 @@
 #pragma once
 #include "bodyFactory.hpp"
 #include "capsuleTerrain.hpp"
+#include "circleTerrain.hpp"
 #include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
 #include "segmentTerrain.hpp"
@@ -19,6 +20,8 @@ public:
   createSegmentTerrain(const SegmentTerrainConfig &config);
   std::shared_ptr<CapsuleTerrain>
   createCapsuleTerrain(const CapsuleTerrainConfig &config);
+  std::shared_ptr<CircleTerrain>
+  createCircleTerrain(const CircleTerrainConfig &config);
 
 private:
   void registerTerrain(std::shared_ptr<Terrain> terrain);

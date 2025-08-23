@@ -35,7 +35,7 @@ public:
   /**
    * @brief Unregisters an object from the child of an object. Registering an
    * object as a child propagates the removal of entities to the children upon
-   * removal and destruction.
+   * removal and destruction of a parent.
    *
    */
   void unregisterChild(std::shared_ptr<RegistryObject> child);
