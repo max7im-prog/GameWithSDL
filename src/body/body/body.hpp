@@ -17,10 +17,5 @@ protected:
   const std::shared_ptr<World> world;
 
 private:
-  Body() = delete;
-  Body(Body &other) = delete;
-  Body(Body &&other) = delete;
-  Body operator=(Body &other) = delete;
-  Body operator=(Body &&other) = delete;
   friend class BodyFactory;
 };
