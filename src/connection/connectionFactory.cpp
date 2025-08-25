@@ -35,8 +35,8 @@ std::shared_ptr<RevoluteConnection> ConnectionFactory::createRevoluteConnection(
   return ret;
 }
 
-std::shared_ptr<WeldConnection> ConnectionFactory::createWeldConnection(
-    const WeldConnectionConfig &config) {
+std::shared_ptr<WeldConnection>
+ConnectionFactory::createWeldConnection(const WeldConnectionConfig &config) {
   std::shared_ptr<WeldConnection> ret = nullptr;
   try {
     ret = std::shared_ptr<WeldConnection>(

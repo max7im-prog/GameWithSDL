@@ -4,7 +4,7 @@
 
 struct DistanceConnectionConfig : ConnectionConfig {
   DistanceJointConfig templateJointCfg;
-  DistanceConnectionConfig defaultConfig();
+  static DistanceConnectionConfig defaultConfig();
 };
 class DistanceConnection : public Connection {
 public:

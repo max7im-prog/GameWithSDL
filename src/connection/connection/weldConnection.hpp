@@ -4,7 +4,7 @@
 
 struct WeldConnectionConfig : ConnectionConfig {
   WeldJointConfig templateJointCfg;
-  WeldConnectionConfig defaultConfig();
+  static WeldConnectionConfig defaultConfig();
 };
 class WeldConnection : public Connection {
 public:

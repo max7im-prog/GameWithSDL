@@ -4,7 +4,7 @@
 
 struct RevoluteConnectionConfig : ConnectionConfig {
   RevoluteJointConfig templateJointCfg;
-  RevoluteConnectionConfig defaultConfig();
+  static RevoluteConnectionConfig defaultConfig();
 };
 class RevoluteConnection : public Connection {
 public:

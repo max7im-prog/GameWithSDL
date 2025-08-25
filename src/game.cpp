@@ -8,6 +8,7 @@
 #include "basicWorld.hpp"
 #include "bodyFactory.hpp"
 #include "box2d/math_functions.h"
+#include "connectionFactory.hpp"
 #include "controlComponents.hpp"
 #include "creature.hpp"
 #include "creature/creature/demoCreature.hpp"
@@ -63,8 +64,11 @@ bool Game::init() {
   bodyFactory = std::shared_ptr<BodyFactory>(
       new BodyFactory(registry, world, physicsFactory));
 
+  connectionFactory = std::shared_ptr<ConnectionFactory>{
+      new ConnectionFactory(registry, world, physicsFactory)};
+
   creatureFactory = std::shared_ptr<CreatureFactory>(
-      new CreatureFactory(registry, world, physicsFactory, bodyFactory));
+      new CreatureFactory(registry, world,bodyFactory,connectionFactory));
 
   terrainFactory = std::shared_ptr<TerrainFactory>(
       new TerrainFactory(registry, world, physicsFactory, bodyFactory));

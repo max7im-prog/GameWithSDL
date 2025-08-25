@@ -1,9 +1,9 @@
 #pragma once
 #include "PIDScalarController.hpp"
 #include "bodyFactory.hpp"
+#include "connectionFactory.hpp"
 #include "creature.hpp"
 #include "limbBody.hpp"
-#include "physicsFactory.hpp"
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
 #include <chrono>
@@ -27,8 +27,8 @@ public:
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
                const DemoCreatureConfig &config,
-               const std::shared_ptr<PhysicsFactory> physicsFactory,
-               const std::shared_ptr<BodyFactory> bodyFactory);
+               const std::shared_ptr<BodyFactory> bodyFactory,
+               const std::shared_ptr<ConnectionFactory> connectionFactory);
 
   std::shared_ptr<LimbBody> leftArm = nullptr;
   std::shared_ptr<LimbBody> rightArm = nullptr;
@@ -36,10 +36,10 @@ protected:
   std::shared_ptr<LimbBody> rightLeg = nullptr;
   std::shared_ptr<PolygonBody> torso = nullptr;
 
-  std::shared_ptr<RevoluteJoint> leftShoulderJoint = nullptr;
-  std::shared_ptr<RevoluteJoint> rightShoulderJoint = nullptr;
-  std::shared_ptr<RevoluteJoint> leftHipJoint = nullptr;
-  std::shared_ptr<RevoluteJoint> rightHipJoint = nullptr;
+  std::shared_ptr<RevoluteConnection> leftShoulderJoint = nullptr;
+  std::shared_ptr<RevoluteConnection> rightShoulderJoint = nullptr;
+  std::shared_ptr<RevoluteConnection> leftHipJoint = nullptr;
+  std::shared_ptr<RevoluteConnection> rightHipJoint = nullptr;
 
 private:
   void keepTorsoUpright(float dt);

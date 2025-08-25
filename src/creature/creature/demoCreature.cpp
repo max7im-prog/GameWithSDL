@@ -23,8 +23,8 @@ void DemoCreature::move(b2Vec2 dir, float intensity) {
 DemoCreature::DemoCreature(entt::registry &registry,
                            const std::shared_ptr<World> world,
                            const DemoCreatureConfig &config,
-                           const std::shared_ptr<PhysicsFactory> physicsFactory,
-                           const std::shared_ptr<BodyFactory> bodyFactory)
+                           const std::shared_ptr<BodyFactory> bodyFactory,
+                          const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Creature(registry, world) {
 
   // Calculate stuff
@@ -104,41 +104,41 @@ DemoCreature::DemoCreature(entt::registry &registry,
   }
 
   // Create joints
-  auto jointConfig = RevoluteJointConfig::defaultConfig();
+  auto jointConfig = RevoluteConnectionConfig::defaultConfig();
   {
     auto cfg = jointConfig;
-    cfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.jointDef.bodyIdB = leftLeg->getSegments()[0]->getBodyId();
-    cfg.jointDef.localAnchorA = b2Vec2(-torsoWidth * 0.3, 0);
-    cfg.jointDef.localAnchorB = {0, 0};
-    leftHipJoint = physicsFactory->createRevoluteJoint(cfg);
+    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
+    cfg.templateJointCfg.jointDef.bodyIdB = leftLeg->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(-torsoWidth * 0.3, 0);
+    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
+    leftHipJoint = connectionFactory->createRevoluteConnection(cfg);
     registerChild(leftHipJoint);
   }
   {
     auto cfg = jointConfig;
-    cfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.jointDef.bodyIdB = leftArm->getSegments()[0]->getBodyId();
-    cfg.jointDef.localAnchorA = {-torsoWidth / 2, torsoHeight / 2};
-    cfg.jointDef.localAnchorB = {0, 0};
-    leftShoulderJoint = physicsFactory->createRevoluteJoint(cfg);
+    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
+    cfg.templateJointCfg.jointDef.bodyIdB = leftArm->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.localAnchorA = {-torsoWidth / 2, torsoHeight / 2};
+    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
+    leftShoulderJoint = connectionFactory->createRevoluteConnection(cfg);
     registerChild(leftShoulderJoint);
   }
   {
     auto cfg = jointConfig;
-    cfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.jointDef.bodyIdB = rightLeg->getSegments()[0]->getBodyId();
-    cfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
-    cfg.jointDef.localAnchorB = {0, 0};
-    rightHipJoint = physicsFactory->createRevoluteJoint(cfg);
+    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
+    cfg.templateJointCfg.jointDef.bodyIdB = rightLeg->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
+    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
+    rightHipJoint = connectionFactory->createRevoluteConnection(cfg);
     registerChild(rightHipJoint);
   }
   {
     auto cfg = jointConfig;
-    cfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.jointDef.bodyIdB = rightArm->getSegments()[0]->getBodyId();
-    cfg.jointDef.localAnchorA = {torsoWidth / 2, torsoHeight / 2};
-    cfg.jointDef.localAnchorB = {0, 0};
-    rightShoulderJoint = physicsFactory->createRevoluteJoint(cfg);
+    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
+    cfg.templateJointCfg.jointDef.bodyIdB = rightArm->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.localAnchorA = {torsoWidth / 2, torsoHeight / 2};
+    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
+    rightShoulderJoint = connectionFactory->createRevoluteConnection(cfg);
     registerChild(rightShoulderJoint);
   }
 
