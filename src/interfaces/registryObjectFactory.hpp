@@ -70,9 +70,10 @@ protected:
    *
    * Has to be implemented by derived classes for creation to
    * work. Sample implementation looks like this:
+   * @code{.cpp}
    * {auto &comp = registry.emplace_or_replace<PhysicsConnection>(ent);
    * comp.connection = object;}
-   *
+   * @endcode
    *
    * @tparam T Class that is being created
    * @param object Instance of a class T that has been created in create()
@@ -87,8 +88,10 @@ protected:
    *
    * Has to be implemented by derived classes for creation to
    * work. Sample implementation looks like this:
+   * @code {.cpp}
    * {return std::shared_ptr<T>(new T(registry, world, config, shapeFactory,
    * jointFactory));}
+   * @endcode
    *
    * @tparam T Class that is being created
    * @param config A configuration defined in T as T::Config
