@@ -29,6 +29,7 @@ struct LimbBodyConfig : public BodyConfig {
 
 class LimbBody : public Body {
 public:
+  using Config = LimbBodyConfig;
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
   float getLength();

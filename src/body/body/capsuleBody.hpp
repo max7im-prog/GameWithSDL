@@ -9,6 +9,7 @@ struct CapsuleBodyConfig : public BodyConfig {
 
 class CapsuleBody : public Body {
 public:
+  using Config = CapsuleBodyConfig;
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
   float getRadius();
@@ -17,8 +18,8 @@ public:
 protected:
   CapsuleBody() = delete;
   CapsuleBody(entt::registry &registry, const std::shared_ptr<World> world,
-             const CapsuleBodyConfig &config,
-             const std::shared_ptr<PhysicsFactory> physicsFactory);
+              const CapsuleBodyConfig &config,
+              const std::shared_ptr<PhysicsFactory> physicsFactory);
   std::shared_ptr<Capsule> capsule;
 
   friend class BodyFactory;

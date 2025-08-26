@@ -2,6 +2,7 @@
 #include "bodyComponents.hpp"
 #include "physicsFactory.hpp"
 #include "registryObjectFactory.hpp"
+#include "segmentBody.hpp"
 BodyFactory::BodyFactory(entt::registry &registry,
                          const std::shared_ptr<World> world,
                          const std::shared_ptr<PhysicsFactory> physicsFactory)
@@ -10,72 +11,25 @@ BodyFactory::BodyFactory(entt::registry &registry,
 
 std::shared_ptr<CircleBody>
 BodyFactory::createCircleBody(const CircleBodyConfig &config) {
-  std::shared_ptr<CircleBody> ret = nullptr;
-  try {
-    ret = std::shared_ptr<CircleBody>(
-        new CircleBody(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerBody(ret);
-  return ret;
+  return create<CircleBody>(config);
 }
 
 std::shared_ptr<CapsuleBody>
 BodyFactory::createCapsuleBody(const CapsuleBodyConfig &config) {
-  std::shared_ptr<CapsuleBody> ret = nullptr;
-  try {
-    ret = std::shared_ptr<CapsuleBody>(
-        new CapsuleBody(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerBody(ret);
-  return ret;
+  return create<CapsuleBody>(config);
 }
 
 std::shared_ptr<PolygonBody>
 BodyFactory::createPolygonBody(const PolygonBodyConfig &config) {
-  std::shared_ptr<PolygonBody> ret = nullptr;
-  try {
-    ret = std::shared_ptr<PolygonBody>(
-        new PolygonBody(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerBody(ret);
-  return ret;
+  return create<PolygonBody>(config);
 }
 
 std::shared_ptr<LimbBody>
 BodyFactory::createLimbBody(const LimbBodyConfig &config) {
-  std::shared_ptr<LimbBody> ret = nullptr;
-  try {
-    ret = std::shared_ptr<LimbBody>(
-        new LimbBody(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerBody(ret);
-  return ret;
+  return create<LimbBody>(config);
 }
 
 std::shared_ptr<SegmentBody>
 BodyFactory::createSegmentBody(const SegmentBodyConfig &config) {
-  std::shared_ptr<SegmentBody> ret = nullptr;
-  try {
-    ret = std::shared_ptr<SegmentBody>(
-        new SegmentBody(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerBody(ret);
-  return ret;
-}
-
-void BodyFactory::registerBody(std::shared_ptr<Body> body) {
-  auto ent = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsBody>(ent);
-  comp.body = body;
-  body->setEntity(ent);
+  return create<SegmentBody>(config);
 }

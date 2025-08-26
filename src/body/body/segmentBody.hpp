@@ -9,6 +9,7 @@ struct SegmentBodyConfig : public BodyConfig {
 
 class SegmentBody : public Body {
 public:
+  using Config = SegmentBodyConfig;
   const std::shared_ptr<Segment> getSegment();
 
 protected:

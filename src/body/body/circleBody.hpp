@@ -9,6 +9,7 @@ struct CircleBodyConfig : public BodyConfig {
 
 class CircleBody : public Body {
 public:
+  using Config = CircleBodyConfig;
   b2Vec2 getCenter();
   float getRadius();
   const std::shared_ptr<Circle> getCircle();
