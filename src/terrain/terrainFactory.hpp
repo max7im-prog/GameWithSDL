@@ -25,6 +25,11 @@ public:
   std::shared_ptr<CircleTerrain>
   createCircleTerrain(const CircleTerrainConfig &config);
 
+  template <typename T> static constexpr bool supports() {
+    return std::is_same_v<T, PolygonTerrain> || std::is_same_v<T, SegmentTerrain> ||
+           std::is_same_v<T, CapsuleTerrain> || std::is_same_v<T, CircleTerrain>;
+  }
+
 protected:
   template <typename T>
   void attach(std::shared_ptr<T> object, entt::entity ent) {

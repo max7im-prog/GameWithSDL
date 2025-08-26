@@ -13,6 +13,10 @@ public:
   std::shared_ptr<DemoCreature>
   createDemoCreature(const DemoCreatureConfig &config);
 
+  template <typename T> static constexpr bool supports() {
+    return std::is_same_v<T, DemoCreature>;
+  }
+
 protected:
   template <typename T>
   void attach(std::shared_ptr<T> object, entt::entity ent) {

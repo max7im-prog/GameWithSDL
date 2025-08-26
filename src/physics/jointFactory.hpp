@@ -17,6 +17,11 @@ public:
 
   JointFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
+  template <typename T> static constexpr bool supports() {
+    return std::is_same_v<T, WeldJoint> || std::is_same_v<T, DistanceJoint> ||
+           std::is_same_v<T, MouseJoint> || std::is_same_v<T, RevoluteJoint> ;
+  }
+
 protected:
   template <typename T>
   void attach(std::shared_ptr<T> object, entt::entity ent) {

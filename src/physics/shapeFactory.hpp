@@ -18,6 +18,12 @@ public:
 
   ShapeFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
+  template <typename T> static constexpr bool supports() {
+    return std::is_same_v<T, Circle> || std::is_same_v<T, Polygon> ||
+           std::is_same_v<T, Capsule> || std::is_same_v<T, Segment> ||
+           std::is_same_v<T, EmptyShape>;
+  }
+
   /**
    * @brief Used to get a unique identifier for a group with disabled collision
    *

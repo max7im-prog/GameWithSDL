@@ -25,6 +25,12 @@ public:
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory);
 
+  template <typename T> static constexpr bool supports() {
+    return std::is_same_v<T, CircleBody> || std::is_same_v<T, CapsuleBody> ||
+           std::is_same_v<T, PolygonBody> || std::is_same_v<T, LimbBody> ||
+           std::is_same_v<T, SegmentBody>;
+  }
+
 protected:
   template <typename T>
   void attach(std::shared_ptr<T> object, entt::entity ent) {
@@ -33,7 +39,8 @@ protected:
   }
 
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
-    return std::shared_ptr<T>(new T(registry, world, config, shapeFactory, jointFactory));
+    return std::shared_ptr<T>(
+        new T(registry, world, config, shapeFactory, jointFactory));
   }
 
 private:

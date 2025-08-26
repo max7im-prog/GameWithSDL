@@ -2,6 +2,18 @@
 #include <entt/entt.hpp>
 
 /**
+ * @brief A concept to enforce creation constraints onto a factory.
+ *
+ * @tparam T An object being created
+ * @tparam Factory A factory that creates an object
+ */
+template <typename T, typename Factory>
+concept FactoryConstructable = requires {
+  typename T::Config;
+  { Factory::template supports<T>() } -> std::convertible_to<bool>;
+} && Factory::template supports<T>();
+
+/**
  * @brief Factory interface for all factories that have to create
  * registryObjects.
  *
@@ -24,7 +36,9 @@ public:
    * @tparam T Class that is beig created
    * @param config A configuration defined in T as T::Config
    */
-  template <typename T> std::shared_ptr<T> create(const T::Config &config) {
+  template <typename T>
+    requires FactoryConstructable<T, Derived>
+  std::shared_ptr<T> create(const T::Config &config) {
     std::shared_ptr<T> ret = nullptr;
     try {
       ret = derived().template tryCreate<T>(config);
@@ -34,6 +48,17 @@ public:
     derived().template registerObject<T>(ret);
     return ret;
   }
+
+  /**
+   * @brief Determines whether a type T is allowed to be created by the factory.
+   *
+   * This function must be implemented by each CRTP-derived factory class.
+   * It is used by `create<T>()` to enforce compile-time constraints.
+   *
+   * @tparam T The type of object to check.
+   * @return true if T can be created by the factory, false otherwise.
+   */
+  template <typename T> static constexpr bool supports();
 
 protected:
   RegistryObjectFactory(entt::registry &registry) : registry(registry) {}
