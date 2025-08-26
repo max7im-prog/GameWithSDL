@@ -3,12 +3,12 @@
 #include "registryObjectFactory.hpp"
 #include "segmentTerrain.hpp"
 
-TerrainFactory::TerrainFactory(entt::registry &registry,
-                               std::shared_ptr<World> world,
-                               std::shared_ptr<PhysicsFactory> physicsFactory,
-                               std::shared_ptr<BodyFactory> bodyFactory)
-    : RegistryObjectFactory(registry), world(world),
-      physicsFactory(physicsFactory), bodyFactory(bodyFactory) {}
+TerrainFactory::TerrainFactory(
+    entt::registry &registry, std::shared_ptr<World> world,
+    std::shared_ptr<BodyFactory> bodyFactory,
+    std::shared_ptr<ConnectionFactory> connectionFactory)
+    : RegistryObjectFactory(registry), world(world), bodyFactory(bodyFactory),
+      connectionFactory(connectionFactory) {}
 
 std::shared_ptr<PolygonTerrain>
 TerrainFactory::createPolygonTerrain(const PolygonTerrainConfig &config) {

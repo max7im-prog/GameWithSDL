@@ -6,8 +6,8 @@
 PolygonTerrain::PolygonTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
     const PolygonTerrainConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory,
-    const std::shared_ptr<BodyFactory> bodyFactory)
+    const std::shared_ptr<BodyFactory> bodyFactory,
+    const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
 
   // A single polygon
@@ -24,7 +24,7 @@ PolygonTerrain::PolygonTerrain(
 
 PolygonTerrainConfig PolygonTerrainConfig::defaultConfig() {
   PolygonTerrainConfig ret;
-  ret.vertices = {{0,0},{1,0},{1,1},{0,1}};
+  ret.vertices = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
   ret.templateBodyCfg = PolygonBodyConfig::defaultConfig();
   ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();

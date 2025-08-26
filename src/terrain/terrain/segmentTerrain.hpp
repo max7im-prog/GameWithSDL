@@ -1,6 +1,7 @@
 #pragma once
 #include "bodyFactory.hpp"
 #include "box2d/math_functions.h"
+#include "connectionFactory.hpp"
 #include "physicsFactory.hpp"
 #include "terrain.hpp"
 
@@ -16,8 +17,8 @@ public:
 protected:
   SegmentTerrain(entt::registry &registry, const std::shared_ptr<World> world,
                  const SegmentTerrainConfig &config,
-                 const std::shared_ptr<PhysicsFactory> physicsFactory,
-                 const std::shared_ptr<BodyFactory> bodyFactory);
+                 const std::shared_ptr<BodyFactory> bodyFactory,
+                 const std::shared_ptr<ConnectionFactory> connectionFactory);
 
   std::shared_ptr<SegmentBody> segmentBody;
 

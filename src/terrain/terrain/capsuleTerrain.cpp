@@ -5,8 +5,8 @@
 CapsuleTerrain::CapsuleTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
     const CapsuleTerrainConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory,
-    const std::shared_ptr<BodyFactory> bodyFactory)
+    const std::shared_ptr<BodyFactory> bodyFactory,
+    const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
 
   // A single capsule
@@ -26,8 +26,8 @@ CapsuleTerrain::CapsuleTerrain(
 CapsuleTerrainConfig CapsuleTerrainConfig::defaultConfig() {
   CapsuleTerrainConfig ret;
   ret.templateBodyCfg = CapsuleBodyConfig::defaultConfig();
-  ret.point1 = {0,0};
-  ret.point1 = {1,0};
+  ret.point1 = {0, 0};
+  ret.point1 = {1, 0};
   ret.position = {0, 0};
   ret.radius = 0.25;
   ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;

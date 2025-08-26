@@ -2,7 +2,7 @@
 #include "circle.hpp"
 
 ShapeFactory::ShapeFactory(entt::registry &registry,
-                               const std::shared_ptr<World> world)
+                           const std::shared_ptr<World> world)
     : RegistryObjectFactory(registry), world(world) {}
 
 std::shared_ptr<Circle> ShapeFactory::createCircle(const CircleConfig &config) {
@@ -23,4 +23,14 @@ ShapeFactory::createSegment(const SegmentConfig &config) {
 std::shared_ptr<EmptyShape>
 ShapeFactory::createEmptyShape(const EmptyShapeConfig &config) {
   return create<EmptyShape>(config);
+}
+
+int ShapeFactory::getNextNegativeId() {
+  static int ret = -1;
+  return ret--;
+}
+
+int ShapeFactory::getNextPositiveId() {
+  static int ret = 1;
+  return ret++;
 }

@@ -2,6 +2,7 @@
 #include "bodyFactory.hpp"
 #include "capsuleTerrain.hpp"
 #include "circleTerrain.hpp"
+#include "connectionFactory.hpp"
 #include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
 #include "registryObjectFactory.hpp"
@@ -13,8 +14,8 @@
 class TerrainFactory : public RegistryObjectFactory<TerrainFactory> {
 public:
   TerrainFactory(entt::registry &registry, std::shared_ptr<World> world,
-                 std::shared_ptr<PhysicsFactory> physicsFactory,
-                 std::shared_ptr<BodyFactory> bodyFactory);
+                 std::shared_ptr<BodyFactory> bodyFactory,
+                 std::shared_ptr<ConnectionFactory> connectionFactory);
 
   std::shared_ptr<PolygonTerrain>
   createPolygonTerrain(const PolygonTerrainConfig &config);
@@ -34,13 +35,13 @@ protected:
 
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
     return std::shared_ptr<T>(
-        new T(registry, world, config, physicsFactory, bodyFactory));
+        new T(registry, world, config, bodyFactory, connectionFactory));
   }
 
 private:
   const std::shared_ptr<World> world;
-  const std::shared_ptr<PhysicsFactory> physicsFactory;
   const std::shared_ptr<BodyFactory> bodyFactory;
+  const std::shared_ptr<ConnectionFactory> connectionFactory;
 
   template <typename Derived> friend class RegistryObjectFactory;
 };

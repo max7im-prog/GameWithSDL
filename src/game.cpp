@@ -78,7 +78,7 @@ bool Game::init() {
       new CreatureFactory(registry, world, bodyFactory, connectionFactory));
 
   terrainFactory = std::shared_ptr<TerrainFactory>(
-      new TerrainFactory(registry, world, physicsFactory, bodyFactory));
+      new TerrainFactory(registry, world, bodyFactory, connectionFactory));
 
   // Some terrain
   {

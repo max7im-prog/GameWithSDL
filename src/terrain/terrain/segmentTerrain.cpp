@@ -5,8 +5,8 @@
 SegmentTerrain::SegmentTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
     const SegmentTerrainConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory,
-    const std::shared_ptr<BodyFactory> bodyFactory)
+    const std::shared_ptr<BodyFactory> bodyFactory,
+    const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
 
   // A single segment
@@ -25,8 +25,8 @@ SegmentTerrain::SegmentTerrain(
 SegmentTerrainConfig SegmentTerrainConfig::defaultConfig() {
   SegmentTerrainConfig ret;
   ret.templateBodyCfg = SegmentBodyConfig::defaultConfig();
-  ret.point1 = {0,0};
-  ret.point1 = {1,0};
+  ret.point1 = {0, 0};
+  ret.point1 = {1, 0};
   ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   ret.position = {0, 0};

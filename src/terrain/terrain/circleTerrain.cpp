@@ -5,8 +5,8 @@
 CircleTerrain::CircleTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
     const CircleTerrainConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory,
-    const std::shared_ptr<BodyFactory> bodyFactory)
+    const std::shared_ptr<BodyFactory> bodyFactory,
+    const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
 
   // A single circle
