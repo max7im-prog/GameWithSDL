@@ -12,6 +12,8 @@ struct PolygonTerrainConfig : public TerrainConfig {
 };
 class PolygonTerrain : public Terrain {
 public:
+  using Config = PolygonTerrainConfig;
+
 protected:
   PolygonTerrain(entt::registry &registry, const std::shared_ptr<World> world,
                  const PolygonTerrainConfig &config,

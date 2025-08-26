@@ -11,6 +11,8 @@ struct SegmentTerrainConfig : public TerrainConfig {
 };
 class SegmentTerrain : public Terrain {
 public:
+  using Config = SegmentTerrainConfig;
+
 protected:
   SegmentTerrain(entt::registry &registry, const std::shared_ptr<World> world,
                  const SegmentTerrainConfig &config,

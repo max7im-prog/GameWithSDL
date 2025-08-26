@@ -13,6 +13,8 @@ struct CapsuleTerrainConfig : public TerrainConfig {
 };
 class CapsuleTerrain : public Terrain {
 public:
+  using Config = CapsuleTerrainConfig;
+
 protected:
   CapsuleTerrain(entt::registry &registry, const std::shared_ptr<World> world,
                  const CapsuleTerrainConfig &config,

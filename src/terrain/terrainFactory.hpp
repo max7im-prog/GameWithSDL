@@ -4,7 +4,9 @@
 #include "circleTerrain.hpp"
 #include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
+#include "registryObjectFactory.hpp"
 #include "segmentTerrain.hpp"
+#include "terrainComponents.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 #include <memory>
@@ -23,10 +25,25 @@ public:
   std::shared_ptr<CircleTerrain>
   createCircleTerrain(const CircleTerrainConfig &config);
 
+protected:
+  template <typename T>
+  void attach(std::shared_ptr<T> object, entt::entity ent) {
+    auto &comp = registry.emplace_or_replace<PhysicsTerrain>(ent);
+    comp.terrain = object;
+  }
+
+  template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
+    return std::shared_ptr<T>(
+        new T(registry, world, config, physicsFactory, bodyFactory));
+  }
+
 private:
-  void registerTerrain(std::shared_ptr<Terrain> terrain);
 
   const std::shared_ptr<World> world;
   const std::shared_ptr<PhysicsFactory> physicsFactory;
   const std::shared_ptr<BodyFactory> bodyFactory;
+
+
+  template<typename Derived>
+  friend class RegistryObjectFactory;
 };
