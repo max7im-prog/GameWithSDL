@@ -17,6 +17,5 @@ protected:
   Polygon(entt::registry &registry, const World &world,
           const PolygonConfig &config);
 
-  friend class PhysicsFactory;
   friend class ShapeFactory;
 };

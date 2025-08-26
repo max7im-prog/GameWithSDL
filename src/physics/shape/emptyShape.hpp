@@ -19,6 +19,5 @@ protected:
   EmptyShape(entt::registry &registry, const World &world,
              const EmptyShapeConfig &config);
 
-  friend class PhysicsFactory;
   friend class ShapeFactory;
 };

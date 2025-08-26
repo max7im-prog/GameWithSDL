@@ -27,6 +27,5 @@ protected:
 
   b2JointId jointId = b2_nullJointId;
 
-  friend class PhysicsFactory;
   friend class JointFactory;
 };

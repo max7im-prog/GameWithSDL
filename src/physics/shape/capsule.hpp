@@ -23,6 +23,5 @@ protected:
   Capsule(entt::registry &registry, const World &world,
           const CapsuleConfig &config);
 
-  friend class PhysicsFactory;
   friend class ShapeFactory;
 };

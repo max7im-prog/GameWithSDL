@@ -19,6 +19,5 @@ protected:
   WeldJoint(entt::registry &registry, const World &world,
             const WeldJointConfig &config);
 
-  friend class PhysicsFactory;
   friend class JointFactory;
 };

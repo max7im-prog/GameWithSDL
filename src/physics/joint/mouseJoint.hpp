@@ -18,6 +18,5 @@ protected:
   MouseJoint() = delete;
   MouseJoint(entt::registry &registry,const World &world, const MouseJointConfig &config);
 
-  friend class PhysicsFactory;
   friend class JointFactory;
 };

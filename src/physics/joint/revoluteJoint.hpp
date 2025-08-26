@@ -19,6 +19,5 @@ protected:
   RevoluteJoint(entt::registry &registry, const World &world,
                 const RevoluteJointConfig &config);
 
-  friend class PhysicsFactory;
   friend class JointFactory;
 };

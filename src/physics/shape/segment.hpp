@@ -19,6 +19,5 @@ protected:
   Segment(entt::registry &registry, const World &world,
           const SegmentConfig &config);
 
-  friend class PhysicsFactory;
   friend class ShapeFactory;
 };

@@ -18,6 +18,5 @@ protected:
   DistanceJoint() = delete;
   DistanceJoint(entt::registry &registry,const World &world, const DistanceJointConfig &config);
 
-  friend class PhysicsFactory;
   friend class JointFactory;
 };

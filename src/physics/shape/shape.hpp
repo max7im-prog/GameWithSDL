@@ -38,6 +38,5 @@ protected:
   b2BodyId bodyId = b2_nullBodyId;
   b2ShapeId shapeId = b2_nullShapeId;
 
-  friend class PhysicsFactory;
   friend class ShapeFactory;
 };
