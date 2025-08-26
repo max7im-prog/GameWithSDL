@@ -11,6 +11,7 @@ struct RevoluteJointConfig : public JointConfig {
 
 class RevoluteJoint : public Joint {
 public:
+  using Config = RevoluteJointConfig;
   ~RevoluteJoint() = default;
 
 protected:
@@ -19,4 +20,5 @@ protected:
                 const RevoluteJointConfig &config);
 
   friend class PhysicsFactory;
+  friend class JointFactory;
 };

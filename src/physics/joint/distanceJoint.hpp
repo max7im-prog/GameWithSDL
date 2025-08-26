@@ -11,6 +11,7 @@ struct DistanceJointConfig : public JointConfig {
 
 class DistanceJoint : public Joint {
 public:
+  using Config = DistanceJointConfig;
   ~DistanceJoint() = default;
 
 protected:
@@ -18,4 +19,5 @@ protected:
   DistanceJoint(entt::registry &registry,const World &world, const DistanceJointConfig &config);
 
   friend class PhysicsFactory;
+  friend class JointFactory;
 };

@@ -11,11 +11,14 @@ struct WeldJointConfig : public JointConfig {
 
 class WeldJoint : public Joint {
 public:
+  using Config = WeldJointConfig;
   ~WeldJoint() = default;
 
 protected:
   WeldJoint() = delete;
-  WeldJoint(entt::registry &registry,const World &world, const WeldJointConfig &config);
+  WeldJoint(entt::registry &registry, const World &world,
+            const WeldJointConfig &config);
 
   friend class PhysicsFactory;
+  friend class JointFactory;
 };

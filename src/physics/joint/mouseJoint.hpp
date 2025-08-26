@@ -11,6 +11,7 @@ struct MouseJointConfig : public JointConfig {
 
 class MouseJoint : public Joint {
 public:
+  using Config = MouseJointConfig;
   ~MouseJoint() = default;
 
 protected:
@@ -18,4 +19,5 @@ protected:
   MouseJoint(entt::registry &registry,const World &world, const MouseJointConfig &config);
 
   friend class PhysicsFactory;
+  friend class JointFactory;
 };
