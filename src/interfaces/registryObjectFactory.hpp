@@ -1,23 +1,23 @@
 #pragma once
 #include <entt/entt.hpp>
 
-class RegistryObjectFactory {
+template <typename Derived> class RegistryObjectFactory {
 public:
-  virtual ~RegistryObjectFactory() = 0;
+  virtual ~RegistryObjectFactory() = default;
 
   template <typename T> std::shared_ptr<T> create(const T::Config &config) {
     std::shared_ptr<T> ret = nullptr;
     try {
-      ret = tryCreate<T>(config);
+      ret = derived().template tryCreate<T>(config);
     } catch (std::exception &e) {
       return nullptr;
     }
-    registerObject<T>(ret);
+    derived().template registerObject<T>(ret);
     return ret;
   }
 
 protected:
-  RegistryObjectFactory(entt::registry &registry);
+  RegistryObjectFactory(entt::registry &registry) : registry(registry) {}
   entt::registry &registry;
 
   template <typename T>
@@ -28,7 +28,7 @@ protected:
 private:
   template <typename T> void registerObject(const std::shared_ptr<T> object) {
     auto ent = registry.create();
-    attach<T>(object, ent);
+    derived().template attach<T>(object, ent);
     object->setEntity(ent);
   }
   RegistryObjectFactory() = delete;
@@ -36,4 +36,7 @@ private:
   RegistryObjectFactory(RegistryObjectFactory &&other) = delete;
   RegistryObjectFactory operator=(RegistryObjectFactory &other) = delete;
   RegistryObjectFactory operator=(RegistryObjectFactory &&other) = delete;
+
+private:
+  Derived &derived() { return static_cast<Derived &>(*this); }
 };

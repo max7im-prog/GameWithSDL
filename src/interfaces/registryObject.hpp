@@ -65,5 +65,6 @@ private:
   RegistryObject &operator=(RegistryObject &other) = delete;
   RegistryObject &operator=(RegistryObject &&other) = delete;
 
+  template <typename Derived>
   friend class RegistryObjectFactory;
 };

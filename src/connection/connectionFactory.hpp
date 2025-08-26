@@ -7,7 +7,7 @@
 #include "weldConnection.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
-class ConnectionFactory : public RegistryObjectFactory {
+class ConnectionFactory : public RegistryObjectFactory<ConnectionFactory> {
 public:
   std::shared_ptr<DistanceConnection>
   createDistanceConnection(const DistanceConnectionConfig &config);

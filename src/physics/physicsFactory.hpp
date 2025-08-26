@@ -12,7 +12,7 @@
 #include "world.hpp"
 #include <entt/entt.hpp>
 
-class PhysicsFactory : public RegistryObjectFactory {
+class PhysicsFactory : public RegistryObjectFactory<PhysicsFactory> {
 public:
   std::shared_ptr<Circle> createCircle(const CircleConfig &config);
   std::shared_ptr<Polygon> createPolygon(const PolygonConfig &config);

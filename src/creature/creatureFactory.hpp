@@ -4,7 +4,7 @@
 #include "demoCreature.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
-class CreatureFactory : public RegistryObjectFactory {
+class CreatureFactory : public RegistryObjectFactory<CreatureFactory> {
 public:
   CreatureFactory(entt::registry &registry, std::shared_ptr<World> world,
                   std::shared_ptr<BodyFactory> bodyFactory,
@@ -29,4 +29,7 @@ private:
   const std::shared_ptr<World> world;
   const std::shared_ptr<BodyFactory> bodyFactory;
   const std::shared_ptr<ConnectionFactory> connectionFactory;
+
+  template <typename>
+friend class RegistryObjectFactory;
 };

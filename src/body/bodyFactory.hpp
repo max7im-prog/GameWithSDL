@@ -7,7 +7,7 @@
 #include "segmentBody.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
-class BodyFactory : public RegistryObjectFactory {
+class BodyFactory : public RegistryObjectFactory<BodyFactory> {
 public:
   std::shared_ptr<CircleBody> createCircleBody(const CircleBodyConfig &config);
   std::shared_ptr<CapsuleBody>

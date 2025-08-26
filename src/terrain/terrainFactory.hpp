@@ -8,7 +8,7 @@
 #include "world.hpp"
 #include <entt/entt.hpp>
 #include <memory>
-class TerrainFactory : public RegistryObjectFactory {
+class TerrainFactory : public RegistryObjectFactory<TerrainFactory> {
 public:
   TerrainFactory(entt::registry &registry, std::shared_ptr<World> world,
                  std::shared_ptr<PhysicsFactory> physicsFactory,
