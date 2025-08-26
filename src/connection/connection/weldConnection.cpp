@@ -1,17 +1,17 @@
 #include "weldConnection.hpp"
 #include "weldJoint.hpp"
 
-WeldConnection::WeldConnection(
-    entt::registry &registry, const std::shared_ptr<World> world,
-    const WeldConnectionConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory)
+WeldConnection::WeldConnection(entt::registry &registry,
+                               const std::shared_ptr<World> world,
+                               const WeldConnectionConfig &config,
+                               const std::shared_ptr<ShapeFactory> shapeFactory,
+                               const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
-  weldJoint = physicsFactory->createWeldJoint(config.templateJointCfg);
+  weldJoint = jointFactory->createWeldJoint(config.templateJointCfg);
   registerChild(weldJoint);
 }
 
-const std::shared_ptr<WeldJoint>
-WeldConnection::getWeldJoint() const {
+const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
   return weldJoint;
 }
 

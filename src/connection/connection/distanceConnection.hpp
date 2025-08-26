@@ -1,6 +1,8 @@
 #include "connection.hpp"
 #include "distanceJoint.hpp"
+#include "jointFactory.hpp"
 #include "physicsFactory.hpp"
+#include "shapeFactory.hpp"
 
 struct DistanceConnectionConfig : ConnectionConfig {
   DistanceJointConfig templateJointCfg;
@@ -15,7 +17,8 @@ protected:
   DistanceConnection(entt::registry &registry,
                      const std::shared_ptr<World> world,
                      const DistanceConnectionConfig &config,
-                     const std::shared_ptr<PhysicsFactory> physicsFactory);
+                     const std::shared_ptr<ShapeFactory> shapeFactory,
+                     const std::shared_ptr<JointFactory> jointFactory);
   std::shared_ptr<DistanceJoint> distanceJoint;
 
   friend class ConnectionFactory;

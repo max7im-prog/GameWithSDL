@@ -4,9 +4,10 @@
 DistanceConnection::DistanceConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
     const DistanceConnectionConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory)
+    const std::shared_ptr<ShapeFactory> shapeFactory,
+    const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
-  distanceJoint = physicsFactory->createDistanceJoint(config.templateJointCfg);
+  distanceJoint = jointFactory->createDistanceJoint(config.templateJointCfg);
   registerChild(distanceJoint);
 }
 

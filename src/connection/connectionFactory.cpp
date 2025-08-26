@@ -1,13 +1,12 @@
 // TODO: rewrite
 #include "connectionFactory.hpp"
-#include "connectionComponents.hpp"
-#include "physicsFactory.hpp"
 #include "registryObjectFactory.hpp"
 ConnectionFactory::ConnectionFactory(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : RegistryObjectFactory(registry), world(world),
-      physicsFactory(physicsFactory) {}
+    const std::shared_ptr<ShapeFactory> shapeFactory,
+    const std::shared_ptr<JointFactory> jointFactory)
+    : RegistryObjectFactory(registry), world(world), shapeFactory(shapeFactory),
+      jointFactory(jointFactory) {}
 
 std::shared_ptr<DistanceConnection> ConnectionFactory::createDistanceConnection(
     const DistanceConnectionConfig &config) {
@@ -23,4 +22,3 @@ std::shared_ptr<WeldConnection>
 ConnectionFactory::createWeldConnection(const WeldConnectionConfig &config) {
   return create<WeldConnection>(config);
 }
-

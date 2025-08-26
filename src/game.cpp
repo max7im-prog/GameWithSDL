@@ -72,7 +72,7 @@ bool Game::init() {
       new BodyFactory(registry, world, physicsFactory));
 
   connectionFactory = std::shared_ptr<ConnectionFactory>{
-      new ConnectionFactory(registry, world, physicsFactory)};
+      new ConnectionFactory(registry, world,shapeFactory,jointFactory)};
 
   creatureFactory = std::shared_ptr<CreatureFactory>(
       new CreatureFactory(registry, world, bodyFactory, connectionFactory));

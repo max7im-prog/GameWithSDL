@@ -4,9 +4,10 @@
 RevoluteConnection::RevoluteConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
     const RevoluteConnectionConfig &config,
-    const std::shared_ptr<PhysicsFactory> physicsFactory)
+    const std::shared_ptr<ShapeFactory> shapeFactory,
+    const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
-  revoluteJoint = physicsFactory->createRevoluteJoint(config.templateJointCfg);
+  revoluteJoint = jointFactory->createRevoluteJoint(config.templateJointCfg);
   registerChild(revoluteJoint);
 }
 

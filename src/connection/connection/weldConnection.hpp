@@ -1,5 +1,7 @@
 #include "connection.hpp"
+#include "jointFactory.hpp"
 #include "physicsFactory.hpp"
+#include "shapeFactory.hpp"
 #include "weldJoint.hpp"
 
 struct WeldConnectionConfig : ConnectionConfig {
@@ -14,7 +16,8 @@ public:
 protected:
   WeldConnection(entt::registry &registry, const std::shared_ptr<World> world,
                  const WeldConnectionConfig &config,
-                 const std::shared_ptr<PhysicsFactory> physicsFactory);
+                 const std::shared_ptr<ShapeFactory> shapeFactory,
+                 const std::shared_ptr<JointFactory> jointFactory);
   std::shared_ptr<WeldJoint> weldJoint;
 
   friend class ConnectionFactory;
