@@ -6,7 +6,6 @@
 #include "box2d/types.h"
 #include "creature.hpp"
 #include "limbBody.hpp"
-#include "physicsFactory.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
@@ -34,7 +33,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
   float segmentRadius = segmentLen / 8;
   float torsoWidth = config.sizeXMeters;
   float torsoHeight = config.sizeYMeters;
-  auto groupId = PhysicsFactory::getNextNegativeId();
+  auto groupId = ShapeFactory::getNextNegativeId();
 
   // Create bodies
   auto torsoConfig = PolygonBodyConfig::defaultConfig();

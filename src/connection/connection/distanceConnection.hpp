@@ -1,7 +1,6 @@
 #include "connection.hpp"
 #include "distanceJoint.hpp"
 #include "jointFactory.hpp"
-#include "physicsFactory.hpp"
 #include "shapeFactory.hpp"
 
 struct DistanceConnectionConfig : ConnectionConfig {

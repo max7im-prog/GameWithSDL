@@ -2,7 +2,6 @@
 #include "bodyFactory.hpp"
 #include "box2d/math_functions.h"
 #include "connectionFactory.hpp"
-#include "physicsFactory.hpp"
 #include "polygonBody.hpp"
 #include "terrain.hpp"
 

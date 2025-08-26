@@ -18,17 +18,6 @@ public:
 
   ShapeFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
-protected:
-  template <typename T>
-  void attach(std::shared_ptr<T> object, entt::entity ent) {
-    auto &comp = registry.emplace_or_replace<PhysicsShape>(ent);
-    comp.shape = object;
-  }
-
-  template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
-    return std::shared_ptr<T>(new T(registry, *world, config));
-  }
-
   /**
    * @brief Used to get a unique identifier for a group with disabled collision
    *
@@ -40,6 +29,17 @@ protected:
    *
    */
   static int getNextPositiveId();
+
+protected:
+  template <typename T>
+  void attach(std::shared_ptr<T> object, entt::entity ent) {
+    auto &comp = registry.emplace_or_replace<PhysicsShape>(ent);
+    comp.shape = object;
+  }
+
+  template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
+    return std::shared_ptr<T>(new T(registry, *world, config));
+  }
 
 private:
   const std::shared_ptr<World> world;

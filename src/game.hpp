@@ -89,7 +89,6 @@ private:
     RenderContext renderContext;
 
     // Entity factories
-    std::shared_ptr<PhysicsFactory> physicsFactory;
     std::shared_ptr<BodyFactory> bodyFactory;
     std::shared_ptr<ConnectionFactory> connectionFactory;
     std::shared_ptr<CreatureFactory> creatureFactory;

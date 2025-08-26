@@ -2,7 +2,6 @@
 #include "connectionFactory.hpp"
 #include "creatureComponents.hpp"
 #include "demoCreature.hpp"
-#include "physicsFactory.hpp"
 
 CreatureFactory::CreatureFactory(
     entt::registry &registry, std::shared_ptr<World> world,

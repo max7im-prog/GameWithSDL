@@ -5,13 +5,16 @@
 #include "emptyShape.hpp"
 #include "eventComponents.hpp"
 #include "eventUtils.hpp"
+#include "jointFactory.hpp"
 #include "mouseJoint.hpp"
 #include "physicsUtils.hpp"
 #include "renderUtils.hpp"
+#include "shapeFactory.hpp"
 
 void MouseJointSystem::update(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const std::shared_ptr<PhysicsFactory> physicsFactory,
+    const std::shared_ptr<ShapeFactory> shapeFactory,
+    const std::shared_ptr<JointFactory> jointFactory,
     const RenderContext &renderContext) {
 
   b2Vec2 mouseLocation;
@@ -37,7 +40,7 @@ void MouseJointSystem::update(
               auto config = EmptyShapeConfig::defaultConfig();
               config.bodyDef.position = mouseLocation;
               config.bodyDef.type = b2_staticBody;
-              mouseShape = physicsFactory->createEmptyShape(config);
+              mouseShape = shapeFactory->createEmptyShape(config);
             }
             // Mouse joint
             {
@@ -48,7 +51,7 @@ void MouseJointSystem::update(
               config.jointDef.hertz = 5.0f;
               config.jointDef.dampingRatio = 0.7f;
               config.jointDef.maxForce = 1000.0f;
-              mouseJoint = physicsFactory->createMouseJoint(config);
+              mouseJoint = jointFactory->createMouseJoint(config);
             }
           }
         }

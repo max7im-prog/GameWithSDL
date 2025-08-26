@@ -3,7 +3,6 @@
 #include "box2d/math_functions.h"
 #include "capsuleBody.hpp"
 #include "connectionFactory.hpp"
-#include "physicsFactory.hpp"
 #include "terrain.hpp"
 
 struct CapsuleTerrainConfig : public TerrainConfig {

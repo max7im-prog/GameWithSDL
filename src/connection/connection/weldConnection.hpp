@@ -1,6 +1,5 @@
 #include "connection.hpp"
 #include "jointFactory.hpp"
-#include "physicsFactory.hpp"
 #include "shapeFactory.hpp"
 #include "weldJoint.hpp"
 

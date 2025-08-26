@@ -1,7 +1,6 @@
 #pragma once
 #include "box2d/box2d.h"
 #include "joint.hpp"
-#include "physicsFactory.hpp"
 #include "registryObject.hpp"
 #include "shape.hpp"
 

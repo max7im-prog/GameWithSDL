@@ -4,7 +4,6 @@
 #include "connectionComponents.hpp"
 #include "distanceConnection.hpp"
 #include "jointFactory.hpp"
-#include "physicsFactory.hpp"
 #include "revoluteConnection.hpp"
 #include "shapeFactory.hpp"
 #include "weldConnection.hpp"

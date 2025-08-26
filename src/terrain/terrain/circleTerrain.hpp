@@ -1,7 +1,6 @@
 #pragma once
 #include "bodyFactory.hpp"
 #include "connectionFactory.hpp"
-#include "physicsFactory.hpp"
 #include "terrain.hpp"
 
 struct CircleTerrainConfig : public TerrainConfig {

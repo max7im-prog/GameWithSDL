@@ -13,7 +13,6 @@
 #include "creature.hpp"
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
-#include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
@@ -59,8 +58,6 @@ bool Game::init() {
   worldComp.world = world;
 
   // Initialize factories
-  physicsFactory =
-      std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
 
   shapeFactory =
       std::shared_ptr<ShapeFactory>(new ShapeFactory(registry, world));
@@ -69,7 +66,7 @@ bool Game::init() {
       std::shared_ptr<JointFactory>(new JointFactory(registry, world));
 
   bodyFactory = std::shared_ptr<BodyFactory>(
-      new BodyFactory(registry, world,  shapeFactory, jointFactory));
+      new BodyFactory(registry, world, shapeFactory, jointFactory));
 
   connectionFactory = std::shared_ptr<ConnectionFactory>{
       new ConnectionFactory(registry, world, shapeFactory, jointFactory)};
@@ -220,7 +217,8 @@ void Game::update() {
   this->creatureControlSystem.update(this->registry);
 
   creatureUpdateSystem.update(this->registry, this->FPS);
-  mouseJointSystem.update(registry, world, physicsFactory, renderContext);
+  mouseJointSystem.update(registry, world, shapeFactory, jointFactory,
+                          renderContext);
 
   this->worldUpdateSystem.update(this->registry, this->FPS);
 }

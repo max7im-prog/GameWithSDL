@@ -3,7 +3,6 @@
 #include "capsuleTerrain.hpp"
 #include "circleTerrain.hpp"
 #include "connectionFactory.hpp"
-#include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
 #include "registryObjectFactory.hpp"
 #include "segmentTerrain.hpp"
