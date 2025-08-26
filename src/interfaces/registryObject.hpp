@@ -1,5 +1,6 @@
 #pragma once
 #include "entt/entt.hpp"
+#include "registryObjectFactory.hpp"
 
 /**
  * @brief Interface to store objects that have to be registered in
@@ -63,4 +64,6 @@ private:
   RegistryObject(RegistryObject &&other) = delete;
   RegistryObject &operator=(RegistryObject &other) = delete;
   RegistryObject &operator=(RegistryObject &&other) = delete;
+
+  friend class RegistryObjectFactory;
 };

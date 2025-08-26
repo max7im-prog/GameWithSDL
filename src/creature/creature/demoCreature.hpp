@@ -18,6 +18,8 @@ struct DemoCreatureConfig : public CreatureConfig {
 
 class DemoCreature : public Creature {
 public:
+  using Config = DemoCreatureConfig;
+
   void move(b2Vec2 dir, float intensity) override;
   void aim(b2Vec2 worldPoint, bool aim) override;
   void jump() override;

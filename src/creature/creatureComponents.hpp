@@ -1,3 +1,4 @@
+# pragma once
 #include "creature.hpp"
 
 struct PhysicsCreature{
