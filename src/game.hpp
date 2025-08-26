@@ -3,9 +3,10 @@
 #include "creatureControlSystem.hpp"
 #include "creatureFactory.hpp"
 #include "creatureUpdateSystem.hpp"
+#include "jointFactory.hpp"
+#include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
-#ifndef GAME_HPP
-#define GAME_HPP
+
 
 #include <entt/entt.hpp>
 
@@ -21,12 +22,10 @@
 
 // Update
 #include "controllerUpdateSystem.hpp"
-// #include "creatureControlSystem.hpp"
 #include "worldUpdateSystem.hpp"
 #include "mouseJointSystem.hpp"
 
-// Creatures
-// #include "creatureUpdateSystem.hpp"
+
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game
@@ -95,9 +94,9 @@ private:
     std::shared_ptr<ConnectionFactory> connectionFactory;
     std::shared_ptr<CreatureFactory> creatureFactory;
     std::shared_ptr<TerrainFactory> terrainFactory;
+    std::shared_ptr<JointFactory> jointFactory;
+    std::shared_ptr<ShapeFactory> shapeFactory;
 
     // World
     std::shared_ptr<World> world;
 };
-
-#endif // GAME_HPP

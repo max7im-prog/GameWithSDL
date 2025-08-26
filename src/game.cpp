@@ -15,6 +15,7 @@
 #include "physicsComponents.hpp"
 #include "physicsFactory.hpp"
 #include "polygonTerrain.hpp"
+#include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
 Game::Game(int w, int h, int fps)
@@ -61,6 +62,12 @@ bool Game::init() {
   physicsFactory =
       std::shared_ptr<PhysicsFactory>(new PhysicsFactory(registry, world));
 
+  shapeFactory =
+      std::shared_ptr<ShapeFactory>(new ShapeFactory(registry, world));
+      
+  jointFactory =
+      std::shared_ptr<JointFactory>(new JointFactory(registry, world));
+
   bodyFactory = std::shared_ptr<BodyFactory>(
       new BodyFactory(registry, world, physicsFactory));
 
@@ -68,7 +75,7 @@ bool Game::init() {
       new ConnectionFactory(registry, world, physicsFactory)};
 
   creatureFactory = std::shared_ptr<CreatureFactory>(
-      new CreatureFactory(registry, world,bodyFactory,connectionFactory));
+      new CreatureFactory(registry, world, bodyFactory, connectionFactory));
 
   terrainFactory = std::shared_ptr<TerrainFactory>(
       new TerrainFactory(registry, world, physicsFactory, bodyFactory));

@@ -1,5 +1,4 @@
 #include "jointFactory.hpp"
-#include "physicsComponents.hpp"
 #include "registryObjectFactory.hpp"
 #include "revoluteJoint.hpp"
 

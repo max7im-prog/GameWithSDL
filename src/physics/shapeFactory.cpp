@@ -1,5 +1,10 @@
 #include "shapeFactory.hpp"
 #include "circle.hpp"
+
+ShapeFactory::ShapeFactory(entt::registry &registry,
+                               const std::shared_ptr<World> world)
+    : RegistryObjectFactory(registry), world(world) {}
+
 std::shared_ptr<Circle> ShapeFactory::createCircle(const CircleConfig &config) {
   return create<Circle>(config);
 }
