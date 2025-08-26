@@ -1,6 +1,6 @@
 #include "connection.hpp"
-#include "revoluteJoint.hpp"
 #include "physicsFactory.hpp"
+#include "revoluteJoint.hpp"
 
 struct RevoluteConnectionConfig : ConnectionConfig {
   RevoluteJointConfig templateJointCfg;
@@ -8,6 +8,7 @@ struct RevoluteConnectionConfig : ConnectionConfig {
 };
 class RevoluteConnection : public Connection {
 public:
+  using Config = RevoluteConnectionConfig;
   const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;
 
 protected:

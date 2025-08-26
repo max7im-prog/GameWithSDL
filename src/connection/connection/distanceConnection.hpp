@@ -8,6 +8,7 @@ struct DistanceConnectionConfig : ConnectionConfig {
 };
 class DistanceConnection : public Connection {
 public:
+  using Config = DistanceConnectionConfig;
   const std::shared_ptr<DistanceJoint> getDistanceJoint() const;
 
 protected:

@@ -38,12 +38,9 @@ protected:
   }
 
 private:
-
   const std::shared_ptr<World> world;
   const std::shared_ptr<PhysicsFactory> physicsFactory;
   const std::shared_ptr<BodyFactory> bodyFactory;
 
-
-  template<typename Derived>
-  friend class RegistryObjectFactory;
+  template <typename Derived> friend class RegistryObjectFactory;
 };

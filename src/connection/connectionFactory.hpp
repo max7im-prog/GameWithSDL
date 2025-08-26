@@ -1,6 +1,7 @@
 #pragma once
 
 #include "connection.hpp"
+#include "connectionComponents.hpp"
 #include "distanceConnection.hpp"
 #include "physicsFactory.hpp"
 #include "revoluteConnection.hpp"
@@ -19,9 +20,20 @@ public:
                     const std::shared_ptr<World> world,
                     const std::shared_ptr<PhysicsFactory> physicsFactory);
 
-private:
-  void registerConnection(std::shared_ptr<Connection> Connection);
+protected:
+  template <typename T>
+  void attach(std::shared_ptr<T> object, entt::entity ent) {
+    auto &comp = registry.emplace_or_replace<PhysicsConnection>(ent);
+    comp.connection = object;
+  }
 
+  template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
+    return std::shared_ptr<T>(new T(registry, world, config, physicsFactory));
+  }
+
+private:
   const std::shared_ptr<World> world;
   const std::shared_ptr<PhysicsFactory> physicsFactory;
+
+  template <typename Derived> friend class RegistryObjectFactory;
 };

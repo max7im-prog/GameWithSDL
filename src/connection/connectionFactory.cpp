@@ -11,47 +11,16 @@ ConnectionFactory::ConnectionFactory(
 
 std::shared_ptr<DistanceConnection> ConnectionFactory::createDistanceConnection(
     const DistanceConnectionConfig &config) {
-  std::shared_ptr<DistanceConnection> ret = nullptr;
-  try {
-    ret = std::shared_ptr<DistanceConnection>(
-        new DistanceConnection(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerConnection(ret);
-  return ret;
+  return create<DistanceConnection>(config);
 }
 
 std::shared_ptr<RevoluteConnection> ConnectionFactory::createRevoluteConnection(
     const RevoluteConnectionConfig &config) {
-  std::shared_ptr<RevoluteConnection> ret = nullptr;
-  try {
-    ret = std::shared_ptr<RevoluteConnection>(
-        new RevoluteConnection(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerConnection(ret);
-  return ret;
+  return create<RevoluteConnection>(config);
 }
 
 std::shared_ptr<WeldConnection>
 ConnectionFactory::createWeldConnection(const WeldConnectionConfig &config) {
-  std::shared_ptr<WeldConnection> ret = nullptr;
-  try {
-    ret = std::shared_ptr<WeldConnection>(
-        new WeldConnection(registry, world, config, physicsFactory));
-  } catch (std::exception &e) {
-    return nullptr;
-  }
-  registerConnection(ret);
-  return ret;
+  return create<WeldConnection>(config);
 }
 
-void ConnectionFactory::registerConnection(
-    std::shared_ptr<Connection> connection) {
-  auto ent = registry.create();
-  auto &comp = registry.emplace_or_replace<PhysicsConnection>(ent);
-  comp.connection = connection;
-  connection->setEntity(ent);
-}
