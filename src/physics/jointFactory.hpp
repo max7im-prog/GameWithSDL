@@ -1,3 +1,4 @@
+#pragma once
 #include "distanceJoint.hpp"
 #include "mouseJoint.hpp"
 #include "physicsComponents.hpp"

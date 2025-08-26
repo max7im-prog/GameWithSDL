@@ -9,6 +9,7 @@ struct SegmentConfig : public ShapeConfig {
 
 class Segment : public Shape {
 public:
+  using Config = SegmentConfig;
   virtual ~Segment() = default;
   b2Vec2 getPoint1();
   b2Vec2 getPoint2();
@@ -16,7 +17,8 @@ public:
 protected:
   Segment() = delete;
   Segment(entt::registry &registry, const World &world,
-         const SegmentConfig &config);
+          const SegmentConfig &config);
 
   friend class PhysicsFactory;
+  friend class ShapeFactory;
 };

@@ -8,6 +8,7 @@ struct CircleConfig : public ShapeConfig {
 
 class Circle : public Shape {
 public:
+  using Config = CircleConfig;
   virtual ~Circle() = default;
   b2Vec2 getCenter();
   b2Vec2 getLocalCenter();
@@ -19,4 +20,5 @@ protected:
          const CircleConfig &config);
 
   friend class PhysicsFactory;
+  friend class ShapeFactory;
 };

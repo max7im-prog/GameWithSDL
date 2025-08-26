@@ -9,11 +9,14 @@ struct PolygonConfig : public ShapeConfig {
 
 class Polygon : public Shape {
 public:
+  using Config = PolygonConfig;
   virtual ~Polygon() = default;
 
 protected:
   Polygon() = delete;
-  Polygon(entt::registry& registry,const World &world, const PolygonConfig &config);
+  Polygon(entt::registry &registry, const World &world,
+          const PolygonConfig &config);
 
   friend class PhysicsFactory;
+  friend class ShapeFactory;
 };

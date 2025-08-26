@@ -10,6 +10,7 @@ struct CapsuleConfig : public ShapeConfig {
 
 class Capsule : public Shape {
 public:
+  using Config = CapsuleConfig;
   virtual ~Capsule() = default;
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
@@ -23,4 +24,5 @@ protected:
           const CapsuleConfig &config);
 
   friend class PhysicsFactory;
+  friend class ShapeFactory;
 };

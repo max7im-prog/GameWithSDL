@@ -11,6 +11,7 @@ private:
 
 class EmptyShape : public Shape {
 public:
+  using Config = EmptyShapeConfig;
   virtual ~EmptyShape() = default;
 
 protected:
@@ -19,4 +20,5 @@ protected:
              const EmptyShapeConfig &config);
 
   friend class PhysicsFactory;
+  friend class ShapeFactory;
 };
