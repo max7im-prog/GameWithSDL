@@ -8,7 +8,8 @@
 
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const LimbBodyConfig &config,
-                   const std::shared_ptr<PhysicsFactory> physicsFactory)
+                   const std::shared_ptr<ShapeFactory> shapeFactory,
+                   const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world), segmentsConfig(config.segments) {
 
   b2Vec2 lastPos = config.basePos;
@@ -22,7 +23,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     capsuleConfig.center1 = {0, 0};
     capsuleConfig.center2 = b2MulSV(seg.len, incrementDir);
     capsuleConfig.radius = seg.radius;
-    auto capsule = physicsFactory->createCapsule(capsuleConfig);
+    auto capsule = shapeFactory->createCapsule(capsuleConfig);
     registerChild(capsule);
     segments.push_back(capsule);
     lastPos = capsule->getCenter2();
@@ -41,7 +42,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     jointConfig.jointDef.localAnchorB =
         b2Body_GetLocalPoint(bodyB, segments[i]->getCenter1());
 
-    auto joint = physicsFactory->createRevoluteJoint(jointConfig);
+    auto joint = jointFactory->createRevoluteJoint(jointConfig);
     registerChild(joint);
     joints.push_back(joint);
   }

@@ -10,18 +10,17 @@ float CircleBody::getRadius() { return circle->getRadius(); }
 CircleBody::CircleBody(entt::registry &registry,
                        const std::shared_ptr<World> world,
                        const CircleBodyConfig &config,
-                       const std::shared_ptr<PhysicsFactory> physicsFactory)
+                       const std::shared_ptr<ShapeFactory> shapeFactory,
+                       const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
-  circle = physicsFactory->createCircle(config.shapeCfg);
+  circle = shapeFactory->createCircle(config.shapeCfg);
   registerChild(circle);
 }
 
-CircleBodyConfig CircleBodyConfig::defaultConfig(){
+CircleBodyConfig CircleBodyConfig::defaultConfig() {
   CircleBodyConfig ret;
   ret.shapeCfg = CircleConfig::defaultConfig();
   return ret;
 }
 
-const std::shared_ptr<Circle> CircleBody::getCircle(){
-  return circle;
-}
+const std::shared_ptr<Circle> CircleBody::getCircle() { return circle; }

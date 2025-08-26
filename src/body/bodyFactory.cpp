@@ -1,13 +1,12 @@
 #include "bodyFactory.hpp"
-#include "bodyComponents.hpp"
-#include "physicsFactory.hpp"
 #include "registryObjectFactory.hpp"
 #include "segmentBody.hpp"
 BodyFactory::BodyFactory(entt::registry &registry,
                          const std::shared_ptr<World> world,
-                         const std::shared_ptr<PhysicsFactory> physicsFactory)
-    : RegistryObjectFactory(registry), world(world),
-      physicsFactory(physicsFactory) {}
+                         const std::shared_ptr<ShapeFactory> shapeFactory,
+                         const std::shared_ptr<JointFactory> jointFactory)
+    : RegistryObjectFactory(registry), world(world), shapeFactory(shapeFactory),
+      jointFactory(jointFactory) {}
 
 std::shared_ptr<CircleBody>
 BodyFactory::createCircleBody(const CircleBodyConfig &config) {

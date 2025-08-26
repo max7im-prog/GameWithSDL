@@ -5,9 +5,10 @@
 SegmentBody::SegmentBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
                          const SegmentBodyConfig &config,
-                         const std::shared_ptr<PhysicsFactory> physicsFactory)
+                         const std::shared_ptr<ShapeFactory> shapeFactory,
+                         const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
-  segment = physicsFactory->createSegment(config.shapeCfg);
+  segment = shapeFactory->createSegment(config.shapeCfg);
   registerChild(segment);
 }
 
@@ -17,6 +18,4 @@ SegmentBodyConfig SegmentBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::shared_ptr<Segment> SegmentBody::getSegment(){
-  return segment;
-}
+const std::shared_ptr<Segment> SegmentBody::getSegment() { return segment; }

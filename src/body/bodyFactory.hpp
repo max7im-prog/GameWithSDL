@@ -2,10 +2,11 @@
 #include "bodyComponents.hpp"
 #include "capsuleBody.hpp"
 #include "circleBody.hpp"
+#include "jointFactory.hpp"
 #include "limbBody.hpp"
-#include "physicsFactory.hpp"
 #include "polygonBody.hpp"
 #include "segmentBody.hpp"
+#include "shapeFactory.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 class BodyFactory : public RegistryObjectFactory<BodyFactory> {
@@ -21,7 +22,8 @@ public:
   std::shared_ptr<LimbBody> createLimbBody(const LimbBodyConfig &config);
 
   BodyFactory(entt::registry &registry, const std::shared_ptr<World> world,
-              const std::shared_ptr<PhysicsFactory> physicsFactory);
+              const std::shared_ptr<ShapeFactory> shapeFactory,
+              const std::shared_ptr<JointFactory> jointFactory);
 
 protected:
   template <typename T>
@@ -31,12 +33,13 @@ protected:
   }
 
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
-    return std::shared_ptr<T>(new T(registry, world, config, physicsFactory));
+    return std::shared_ptr<T>(new T(registry, world, config, shapeFactory, jointFactory));
   }
 
 private:
   const std::shared_ptr<World> world;
-  const std::shared_ptr<PhysicsFactory> physicsFactory;
+  const std::shared_ptr<ShapeFactory> shapeFactory;
+  const std::shared_ptr<JointFactory> jointFactory;
 
   template <typename Derived> friend class RegistryObjectFactory;
 };

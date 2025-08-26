@@ -6,9 +6,10 @@
 PolygonBody::PolygonBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
                          const PolygonBodyConfig &config,
-                         const std::shared_ptr<PhysicsFactory> physicsFactory)
+                         const std::shared_ptr<ShapeFactory> shapeFactory,
+                         const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
-  polygon = physicsFactory->createPolygon(config.shapeCfg);
+  polygon = shapeFactory->createPolygon(config.shapeCfg);
   registerChild(polygon);
 }
 
@@ -18,6 +19,4 @@ PolygonBodyConfig PolygonBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::shared_ptr<Polygon> PolygonBody::getPolygon(){
-  return polygon;
-}
+const std::shared_ptr<Polygon> PolygonBody::getPolygon() { return polygon; }

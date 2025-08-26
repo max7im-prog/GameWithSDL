@@ -64,15 +64,15 @@ bool Game::init() {
 
   shapeFactory =
       std::shared_ptr<ShapeFactory>(new ShapeFactory(registry, world));
-      
+
   jointFactory =
       std::shared_ptr<JointFactory>(new JointFactory(registry, world));
 
   bodyFactory = std::shared_ptr<BodyFactory>(
-      new BodyFactory(registry, world, physicsFactory));
+      new BodyFactory(registry, world,  shapeFactory, jointFactory));
 
   connectionFactory = std::shared_ptr<ConnectionFactory>{
-      new ConnectionFactory(registry, world,shapeFactory,jointFactory)};
+      new ConnectionFactory(registry, world, shapeFactory, jointFactory)};
 
   creatureFactory = std::shared_ptr<CreatureFactory>(
       new CreatureFactory(registry, world, bodyFactory, connectionFactory));

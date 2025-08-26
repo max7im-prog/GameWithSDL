@@ -1,6 +1,8 @@
 #pragma once
 #include "body.hpp"
 #include "circle.hpp"
+#include "jointFactory.hpp"
+#include "shapeFactory.hpp"
 
 struct CircleBodyConfig : public BodyConfig {
   static CircleBodyConfig defaultConfig();
@@ -18,7 +20,8 @@ protected:
   CircleBody() = delete;
   CircleBody(entt::registry &registry, const std::shared_ptr<World> world,
              const CircleBodyConfig &config,
-             const std::shared_ptr<PhysicsFactory> physicsFactory);
+             const std::shared_ptr<ShapeFactory> shapeFactory,
+             const std::shared_ptr<JointFactory> jointFactory);
   std::shared_ptr<Circle> circle;
 
   friend class BodyFactory;

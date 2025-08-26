@@ -2,7 +2,9 @@
 #include "PIDVectorController.hpp"
 #include "body.hpp"
 #include "capsule.hpp"
+#include "jointFactory.hpp"
 #include "revoluteJoint.hpp"
+#include "shapeFactory.hpp"
 
 struct LimbSegmentConfig {
   float len = 1;
@@ -47,7 +49,8 @@ protected:
   LimbBody() = delete;
   LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
            const LimbBodyConfig &config,
-           const std::shared_ptr<PhysicsFactory> physicsFactory);
+           const std::shared_ptr<ShapeFactory> shapeFactory,
+           const std::shared_ptr<JointFactory> jointFactory);
 
   struct SegmentController {
     PIDVectorController baseController;

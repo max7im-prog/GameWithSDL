@@ -10,20 +10,19 @@ b2Vec2 CapsuleBody::getCenter2() { return capsule->getCenter2(); }
 float CapsuleBody::getRadius() { return capsule->getRadius(); }
 
 CapsuleBody::CapsuleBody(entt::registry &registry,
-                       const std::shared_ptr<World> world,
-                       const CapsuleBodyConfig &config,
-                       const std::shared_ptr<PhysicsFactory> physicsFactory)
+                         const std::shared_ptr<World> world,
+                         const CapsuleBodyConfig &config,
+                         const std::shared_ptr<ShapeFactory> shapeFactory,
+                         const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
-  capsule = physicsFactory->createCapsule(config.shapeCfg);
+  capsule = shapeFactory->createCapsule(config.shapeCfg);
   registerChild(capsule);
 }
 
-CapsuleBodyConfig CapsuleBodyConfig::defaultConfig(){
+CapsuleBodyConfig CapsuleBodyConfig::defaultConfig() {
   CapsuleBodyConfig ret;
   ret.shapeCfg = CapsuleConfig::defaultConfig();
   return ret;
 }
 
-const std::shared_ptr<Capsule> CapsuleBody::getCapsule(){
-  return capsule;
-}
+const std::shared_ptr<Capsule> CapsuleBody::getCapsule() { return capsule; }
