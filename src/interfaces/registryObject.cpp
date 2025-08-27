@@ -11,6 +11,7 @@ void RegistryObject::remove() {
       ch->remove();
     }
   }
+  children = nullptr;
 
   if (isValid()) {
     registry.destroy(entity);

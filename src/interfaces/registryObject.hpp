@@ -13,7 +13,7 @@ public:
   entt::entity getEntity();
 
   /**
-   * @brief Checks if an object is a valid entry in registry
+   * @brief Checks if an object is a valid entry in a registry
    *
    */
   bool isValid() const;
@@ -26,17 +26,19 @@ public:
   void remove();
 
   /**
-   * @brief Registers an object as the child. Registering an object as a child
-   * propagates the removal of entities to the children upon removal and
-   * destruction.
+   * @brief Registers an object as the child.
+   *
+   * Registering an object as a child propagates the removal of entities to the
+   * children upon removal and destruction.
    *
    */
   void registerChild(std::shared_ptr<RegistryObject> child);
 
   /**
-   * @brief Unregisters an object from the child of an object. Registering an
-   * object as a child propagates the removal of entities to the children upon
-   * removal and destruction of a parent.
+   * @brief Unregisters an object from the child of an object.
+   *
+   * Registering an object as a child propagates the removal of entities to the
+   * children upon removal and destruction of a parent.
    *
    */
   void unregisterChild(std::shared_ptr<RegistryObject> child);
@@ -65,6 +67,5 @@ private:
   RegistryObject &operator=(RegistryObject &other) = delete;
   RegistryObject &operator=(RegistryObject &&other) = delete;
 
-  template <typename Derived>
-  friend class RegistryObjectFactory;
+  template <typename Derived> friend class RegistryObjectFactory;
 };
