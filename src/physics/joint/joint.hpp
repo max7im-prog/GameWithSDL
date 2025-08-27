@@ -5,11 +5,11 @@
 #include "box2d/types.h"
 #include "entt/entity/entity.hpp"
 #include "entt/entt.hpp"
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 
 struct JointConfig {};
 
-class Joint : public RegistryObject {
+class Joint : public RegistryComposite {
 public:
   b2JointId getJointId();
   b2JointType getType();

@@ -1,61 +1,39 @@
 #pragma once
-#include "entt/entt.hpp"
-#include "registryBase.hpp"
-#include "registryObjectFactory.hpp"
+
+#include <entt/entt.hpp>
 
 /**
- * @brief Interface to store composite objects that have to be registered in
+ * @brief Interface to store objects that have to be registered in
  * entt::registry.
  *
  */
-class RegistryObject : public RegistryBase {
+class RegistryObject {
 public:
   virtual ~RegistryObject();
+  entt::entity getEntity();
 
   /**
-   * @brief Removes object's entry from registry. Propagates the removal to
-   * children if has children.
+   * @brief Checks if an object is a valid entry in a registry
    *
    */
-  void remove();
+  bool isValid() const;
 
   /**
-   * @brief Removes all children of an object from the registry. Removal is
-   * propagated to children's children.
+   * @brief removes object's entry from registry.
    *
    */
-  void removeChildren();
-
-  /**
-   * @brief Registers an object as the child.
-   *
-   * Registering an object as a child propagates the removal of entities to the
-   * children upon removal and destruction.
-   *
-   */
-  void registerChild(std::shared_ptr<RegistryObject> child);
-
-  /**
-   * @brief Unregisters an object from the child of an object.
-   *
-   * Registering an object as a child propagates the removal of entities to the
-   * children upon removal and destruction of a parent.
-   *
-   */
-  void unregisterChild(std::shared_ptr<RegistryObject> child);
-
-  virtual void update(float dt);
+  virtual void remove();
 
 protected:
   RegistryObject(entt::registry &registry);
+  void setEntity(entt::entity e);
+  entt::registry &registry;
+  entt::entity entity;
 
 private:
-  /**
-   * @brief This value is a unique pointer to avoid additional memory allocation
-   * for objects with no children.
-   *
-   */
-  std::unique_ptr<std::vector<std::shared_ptr<RegistryObject>>> children;
-
-  template <typename Derived> friend class RegistryObjectFactory;
+  RegistryObject() = delete;
+  RegistryObject(RegistryObject &other) = delete;
+  RegistryObject(RegistryObject &&other) = delete;
+  RegistryObject &operator=(RegistryObject &other) = delete;
+  RegistryObject &operator=(RegistryObject &&other) = delete;
 };

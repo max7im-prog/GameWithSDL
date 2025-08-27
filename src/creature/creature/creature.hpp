@@ -1,7 +1,7 @@
 #pragma once
 #include "body.hpp"
 #include "box2d/types.h"
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 
@@ -20,7 +20,7 @@ enum CreatureState {
   FLYING
 };
 
-class Creature : public RegistryObject {
+class Creature : public RegistryComposite {
 public:
   virtual ~Creature() = 0;
 

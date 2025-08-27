@@ -1,0 +1,61 @@
+#pragma once
+#include "entt/entt.hpp"
+#include "registryObject.hpp"
+#include "registryObjectFactory.hpp"
+
+/**
+ * @brief Interface to store composite objects that have to be registered in
+ * entt::registry.
+ *
+ */
+class RegistryComposite : public RegistryObject {
+public:
+  virtual ~RegistryComposite();
+
+  /**
+   * @brief Removes object's entry from registry. Propagates the removal to
+   * children if has children.
+   *
+   */
+  void remove();
+
+  /**
+   * @brief Removes all children of an object from the registry. Removal is
+   * propagated to children's children.
+   *
+   */
+  void removeChildren();
+
+  /**
+   * @brief Registers an object as the child.
+   *
+   * Registering an object as a child propagates the removal of entities to the
+   * children upon removal and destruction.
+   *
+   */
+  void registerChild(std::shared_ptr<RegistryComposite> child);
+
+  /**
+   * @brief Unregisters an object from the child of an object.
+   *
+   * Registering an object as a child propagates the removal of entities to the
+   * children upon removal and destruction of a parent.
+   *
+   */
+  void unregisterChild(std::shared_ptr<RegistryComposite> child);
+
+  virtual void update(float dt);
+
+protected:
+  RegistryComposite(entt::registry &registry);
+
+private:
+  /**
+   * @brief This value is a unique pointer to avoid additional memory allocation
+   * for objects with no children.
+   *
+   */
+  std::unique_ptr<std::vector<std::shared_ptr<RegistryComposite>>> children;
+
+  template <typename Derived> friend class RegistryObjectFactory;
+};

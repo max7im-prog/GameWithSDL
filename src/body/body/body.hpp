@@ -1,12 +1,12 @@
 #pragma once
 #include "box2d/box2d.h"
 #include "joint.hpp"
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 #include "shape.hpp"
 
 struct BodyConfig {};
 
-class Body : public RegistryObject {
+class Body : public RegistryComposite {
 public:
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Body();

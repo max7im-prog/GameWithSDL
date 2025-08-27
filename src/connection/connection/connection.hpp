@@ -2,12 +2,12 @@
 
 
 
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 #include "world.hpp"
 
 struct ConnectionConfig {};
 
-class Connection : public RegistryObject {
+class Connection : public RegistryComposite {
 public:
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Connection();

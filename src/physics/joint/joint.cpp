@@ -1,6 +1,6 @@
 #include "joint.hpp"
 #include "box2d/box2d.h"
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 
 b2JointId Joint::getJointId() { return jointId; }
 
@@ -13,4 +13,4 @@ Joint::~Joint() {
   }
 }
 
-Joint::Joint(entt::registry &registry) : RegistryObject(registry){}
+Joint::Joint(entt::registry &registry) : RegistryComposite(registry){}

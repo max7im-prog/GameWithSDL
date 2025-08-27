@@ -1,5 +1,5 @@
 #pragma once
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
 
@@ -8,7 +8,7 @@ struct TerrainConfig {
   static b2Filter defaultFilter();
 };
 
-class Terrain : public RegistryObject {
+class Terrain : public RegistryComposite {
 public:
   virtual void update(float dt) override;
   virtual ~Terrain() = 0;

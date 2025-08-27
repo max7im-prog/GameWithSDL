@@ -1,6 +1,6 @@
 #pragma once
 #include "box2d/id.h"
-#include "registryObject.hpp"
+#include "registryComposite.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
 #include <box2d/types.h>
@@ -12,7 +12,7 @@ struct ShapeConfig {
   b2ShapeDef shapeDef;
 };
 
-class Shape : public RegistryObject {
+class Shape : public RegistryComposite {
 public:
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
