@@ -49,7 +49,7 @@ bool Game::init() {
 
   this->running = true;
 
-  // world and worldFactory
+  // World and worldFactory
   worldFactory = std::shared_ptr<WorldFactory>(new WorldFactory(registry));
   {
     auto config = BasicWorld::Config::defaultConfig();
@@ -57,7 +57,6 @@ bool Game::init() {
   }
 
   // Initialize factories
-
   shapeFactory =
       std::shared_ptr<ShapeFactory>(new ShapeFactory(registry, world));
 

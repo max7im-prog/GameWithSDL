@@ -31,8 +31,9 @@ protected:
   }
 
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
-    return std::shared_ptr<T>(
+    auto ret = std::shared_ptr<T>(
         new T(registry, world, config, bodyFactory, connectionFactory));
+    return ret;
   }
 
 private:
