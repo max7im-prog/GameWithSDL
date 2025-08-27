@@ -11,12 +11,6 @@
 #include <entt/entt.hpp>
 class ConnectionFactory : public RegistryObjectFactory<ConnectionFactory> {
 public:
-  std::shared_ptr<DistanceConnection>
-  createDistanceConnection(const DistanceConnectionConfig &config);
-  std::shared_ptr<RevoluteConnection>
-  createRevoluteConnection(const RevoluteConnectionConfig &config);
-  std::shared_ptr<WeldConnection>
-  createWeldConnection(const WeldConnectionConfig &config);
   ConnectionFactory(entt::registry &registry,
                     const std::shared_ptr<World> world,
                     const std::shared_ptr<ShapeFactory> shapeFactory,

@@ -17,7 +17,7 @@ PolygonTerrain::PolygonTerrain(
     bodyCfg.shapeCfg.bodyDef.position = config.position;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-    polygonBody = bodyFactory->createPolygonBody(bodyCfg);
+    polygonBody = bodyFactory->create<PolygonBody>(bodyCfg);
     registerChild(polygonBody);
   }
 }

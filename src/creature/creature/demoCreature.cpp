@@ -66,7 +66,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.rotation = b2MakeRot(-B2_PI / 4);
     cfg.basePos =
         b2Add(config.position, b2Vec2(-torsoWidth / 2, torsoHeight / 2));
-    leftArm = bodyFactory->createLimbBody(cfg);
+    leftArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftArm);
   }
   {
@@ -75,7 +75,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
     cfg.limbControlConfig.KPMultiplier = 100;
     cfg.limbControlConfig.KDMultiplier = 100;
-    leftLeg = bodyFactory->createLimbBody(cfg);
+    leftLeg = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftLeg);
   }
   {
@@ -83,7 +83,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.rotation = b2MakeRot(B2_PI / 4);
     cfg.basePos =
         b2Add(config.position, b2Vec2(torsoWidth / 2, torsoHeight / 2));
-    rightArm = bodyFactory->createLimbBody(cfg);
+    rightArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(rightArm);
   }
   {
@@ -92,13 +92,13 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.basePos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
     cfg.limbControlConfig.KPMultiplier = 100;
     cfg.limbControlConfig.KDMultiplier = 100;
-    rightLeg = bodyFactory->createLimbBody(cfg);
+    rightLeg = bodyFactory->create<LimbBody>(cfg);
     registerChild(rightLeg);
   }
   {
     auto cfg = torsoConfig;
     cfg.shapeCfg.bodyDef.position = {config.position};
-    torso = bodyFactory->createPolygonBody(cfg);
+    torso = bodyFactory->create<PolygonBody>(cfg);
     registerChild(torso);
   }
 
@@ -110,7 +110,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.templateJointCfg.jointDef.bodyIdB = leftLeg->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(-torsoWidth * 0.3, 0);
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    leftHipJoint = connectionFactory->createRevoluteConnection(cfg);
+    leftHipJoint = connectionFactory->create<RevoluteConnection>(cfg);
     registerChild(leftHipJoint);
   }
   {
@@ -119,7 +119,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.templateJointCfg.jointDef.bodyIdB = leftArm->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = {-torsoWidth / 2, torsoHeight / 2};
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    leftShoulderJoint = connectionFactory->createRevoluteConnection(cfg);
+    leftShoulderJoint = connectionFactory->create<RevoluteConnection>(cfg);
     registerChild(leftShoulderJoint);
   }
   {
@@ -128,7 +128,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.templateJointCfg.jointDef.bodyIdB = rightLeg->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    rightHipJoint = connectionFactory->createRevoluteConnection(cfg);
+    rightHipJoint = connectionFactory->create<RevoluteConnection>(cfg);
     registerChild(rightHipJoint);
   }
   {
@@ -137,7 +137,7 @@ DemoCreature::DemoCreature(entt::registry &registry,
     cfg.templateJointCfg.jointDef.bodyIdB = rightArm->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = {torsoWidth / 2, torsoHeight / 2};
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    rightShoulderJoint = connectionFactory->createRevoluteConnection(cfg);
+    rightShoulderJoint = connectionFactory->create<RevoluteConnection>(cfg);
     registerChild(rightShoulderJoint);
   }
 

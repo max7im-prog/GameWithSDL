@@ -40,7 +40,7 @@ void MouseJointSystem::update(
               auto config = EmptyShapeConfig::defaultConfig();
               config.bodyDef.position = mouseLocation;
               config.bodyDef.type = b2_staticBody;
-              mouseShape = shapeFactory->createEmptyShape(config);
+              mouseShape = shapeFactory->create<EmptyShape>(config);
             }
             // Mouse joint
             {
@@ -51,7 +51,7 @@ void MouseJointSystem::update(
               config.jointDef.hertz = 5.0f;
               config.jointDef.dampingRatio = 0.7f;
               config.jointDef.maxForce = 1000.0f;
-              mouseJoint = jointFactory->createMouseJoint(config);
+              mouseJoint = jointFactory->create<MouseJoint>(config);
             }
           }
         }

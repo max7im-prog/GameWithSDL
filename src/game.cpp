@@ -83,14 +83,14 @@ bool Game::init() {
     config.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
     config.position = {2, 3};
 
-    terrainFactory->createPolygonTerrain(config);
+    terrainFactory->create<PolygonTerrain>(config);
   }
   {
     auto config = PolygonTerrainConfig::defaultConfig();
     config.vertices = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     config.position = {30, 30};
 
-    terrainFactory->createPolygonTerrain(config);
+    terrainFactory->create<PolygonTerrain>(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
@@ -98,7 +98,7 @@ bool Game::init() {
     config.point2 = {20, 20};
     config.position = {62, 3};
 
-    terrainFactory->createSegmentTerrain(config);
+    terrainFactory->create<SegmentTerrain>(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
@@ -106,7 +106,7 @@ bool Game::init() {
     config.point2 = {20, 0};
     config.position = {82, 23};
 
-    terrainFactory->createSegmentTerrain(config);
+    terrainFactory->create<SegmentTerrain>(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
@@ -114,27 +114,27 @@ bool Game::init() {
     config.point2 = {0, 20};
     config.position = {102, 23};
 
-    terrainFactory->createSegmentTerrain(config);
+    terrainFactory->create<SegmentTerrain>(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {0, 60};
     config.position = {2, 4};
-    terrainFactory->createSegmentTerrain(config);
+    terrainFactory->create<SegmentTerrain>(config);
   }
   {
     auto config = SegmentTerrainConfig::defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {100, -21};
     config.position = {2, 64};
-    terrainFactory->createSegmentTerrain(config);
+    terrainFactory->create<SegmentTerrain>(config);
   }
   {
     auto config = PolygonTerrainConfig::defaultConfig();
     config.vertices = {{0, 0}, {0, 1}, {30, 1}, {30, 0}};
     config.position = {10, 25};
-    terrainFactory->createPolygonTerrain(config);
+    terrainFactory->create<PolygonTerrain>(config);
   }
   {
     auto config = CapsuleTerrainConfig::defaultConfig();
@@ -142,31 +142,31 @@ bool Game::init() {
     config.point2 = {10, 0};
     config.radius = 1;
     config.position = {55, 25};
-    terrainFactory->createCapsuleTerrain(config);
+    terrainFactory->create<CapsuleTerrain>(config);
   }
   {
     auto config = CircleTerrainConfig::defaultConfig();
     config.radius = 1;
     config.position = {82, 23};
-    terrainFactory->createCircleTerrain(config);
+    terrainFactory->create<CircleTerrain>(config);
   }
   {
     auto config = CircleTerrainConfig::defaultConfig();
     config.radius = 1;
     config.position = {85, 23};
-    terrainFactory->createCircleTerrain(config);
+    terrainFactory->create<CircleTerrain>(config);
   }
   {
     auto config = CircleTerrainConfig::defaultConfig();
     config.radius = 1;
     config.position = {89, 23};
-    terrainFactory->createCircleTerrain(config);
+    terrainFactory->create<CircleTerrain>(config);
   }
   {
     auto config = CircleTerrainConfig::defaultConfig();
     config.radius = 1;
     config.position = {90, 23};
-    terrainFactory->createCircleTerrain(config);
+    terrainFactory->create<CircleTerrain>(config);
   }
 
   // Some creatures
@@ -176,7 +176,7 @@ bool Game::init() {
     config.sizeXMeters = 2;
     config.sizeYMeters = 2;
     config.position = {5, 10};
-    c0 = creatureFactory->createDemoCreature(config);
+    c0 = creatureFactory->create<DemoCreature>(config);
   }
   c0->aim({30, 30}, true);
   c0->remove();
@@ -186,7 +186,7 @@ bool Game::init() {
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
     config.position = {35, 6};
-    c0 = creatureFactory->createDemoCreature(config);
+    c0 = creatureFactory->create<DemoCreature>(config);
   }
   c0->aim({30, 30}, true);
   // c0->remove();

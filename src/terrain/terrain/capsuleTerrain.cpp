@@ -18,7 +18,7 @@ CapsuleTerrain::CapsuleTerrain(
     bodyCfg.shapeCfg.bodyDef.position = config.position;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-    capsuleBody = bodyFactory->createCapsuleBody(bodyCfg);
+    capsuleBody = bodyFactory->create<CapsuleBody>(bodyCfg);
     registerChild(capsuleBody);
   }
 }

@@ -10,12 +10,6 @@
 
 class ShapeFactory : public RegistryObjectFactory<ShapeFactory> {
 public:
-  std::shared_ptr<Circle> createCircle(const CircleConfig &config);
-  std::shared_ptr<Polygon> createPolygon(const PolygonConfig &config);
-  std::shared_ptr<Capsule> createCapsule(const CapsuleConfig &config);
-  std::shared_ptr<Segment> createSegment(const SegmentConfig &config);
-  std::shared_ptr<EmptyShape> createEmptyShape(const EmptyShapeConfig &config);
-
   ShapeFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
   template <typename T> static constexpr bool supports() {

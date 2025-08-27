@@ -16,18 +16,11 @@ public:
                  std::shared_ptr<BodyFactory> bodyFactory,
                  std::shared_ptr<ConnectionFactory> connectionFactory);
 
-  std::shared_ptr<PolygonTerrain>
-  createPolygonTerrain(const PolygonTerrainConfig &config);
-  std::shared_ptr<SegmentTerrain>
-  createSegmentTerrain(const SegmentTerrainConfig &config);
-  std::shared_ptr<CapsuleTerrain>
-  createCapsuleTerrain(const CapsuleTerrainConfig &config);
-  std::shared_ptr<CircleTerrain>
-  createCircleTerrain(const CircleTerrainConfig &config);
-
   template <typename T> static constexpr bool supports() {
-    return std::is_same_v<T, PolygonTerrain> || std::is_same_v<T, SegmentTerrain> ||
-           std::is_same_v<T, CapsuleTerrain> || std::is_same_v<T, CircleTerrain>;
+    return std::is_same_v<T, PolygonTerrain> ||
+           std::is_same_v<T, SegmentTerrain> ||
+           std::is_same_v<T, CapsuleTerrain> ||
+           std::is_same_v<T, CircleTerrain>;
   }
 
 protected:

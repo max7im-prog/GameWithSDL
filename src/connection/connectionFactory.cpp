@@ -7,18 +7,3 @@ ConnectionFactory::ConnectionFactory(
     const std::shared_ptr<JointFactory> jointFactory)
     : RegistryObjectFactory(registry), world(world), shapeFactory(shapeFactory),
       jointFactory(jointFactory) {}
-
-std::shared_ptr<DistanceConnection> ConnectionFactory::createDistanceConnection(
-    const DistanceConnectionConfig &config) {
-  return create<DistanceConnection>(config);
-}
-
-std::shared_ptr<RevoluteConnection> ConnectionFactory::createRevoluteConnection(
-    const RevoluteConnectionConfig &config) {
-  return create<RevoluteConnection>(config);
-}
-
-std::shared_ptr<WeldConnection>
-ConnectionFactory::createWeldConnection(const WeldConnectionConfig &config) {
-  return create<WeldConnection>(config);
-}

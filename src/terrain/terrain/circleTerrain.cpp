@@ -16,7 +16,7 @@ CircleTerrain::CircleTerrain(
     bodyCfg.shapeCfg.bodyDef.position = config.position;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-    circleBody = bodyFactory->createCircleBody(bodyCfg);
+    circleBody = bodyFactory->create<CircleBody>(bodyCfg);
     registerChild(circleBody);
   }
 }

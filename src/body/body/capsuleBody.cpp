@@ -15,7 +15,7 @@ CapsuleBody::CapsuleBody(entt::registry &registry,
                          const std::shared_ptr<ShapeFactory> shapeFactory,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
-  capsule = shapeFactory->createCapsule(config.shapeCfg);
+  capsule = shapeFactory->create<Capsule>(config.shapeCfg);
   registerChild(capsule);
 }
 

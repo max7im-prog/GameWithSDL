@@ -11,16 +11,6 @@
 #include <entt/entt.hpp>
 class BodyFactory : public RegistryObjectFactory<BodyFactory> {
 public:
-  std::shared_ptr<CircleBody> createCircleBody(const CircleBodyConfig &config);
-  std::shared_ptr<CapsuleBody>
-  createCapsuleBody(const CapsuleBodyConfig &config);
-  std::shared_ptr<PolygonBody>
-  createPolygonBody(const PolygonBodyConfig &config);
-  std::shared_ptr<SegmentBody>
-  createSegmentBody(const SegmentBodyConfig &config);
-
-  std::shared_ptr<LimbBody> createLimbBody(const LimbBodyConfig &config);
-
   BodyFactory(entt::registry &registry, const std::shared_ptr<World> world,
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory);

@@ -1,7 +1,5 @@
 #include "creatureFactory.hpp"
 #include "connectionFactory.hpp"
-#include "creatureComponents.hpp"
-#include "demoCreature.hpp"
 
 CreatureFactory::CreatureFactory(
     entt::registry &registry, std::shared_ptr<World> world,
@@ -9,10 +7,3 @@ CreatureFactory::CreatureFactory(
     std::shared_ptr<ConnectionFactory> connectionFactory)
     : RegistryObjectFactory(registry), world(world), bodyFactory(bodyFactory),
       connectionFactory(connectionFactory) {}
-
-std::shared_ptr<DemoCreature>
-CreatureFactory::createDemoCreature(const DemoCreatureConfig &config) {
-  return create<DemoCreature>(config);
-}
-
-

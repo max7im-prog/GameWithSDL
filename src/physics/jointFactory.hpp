@@ -8,18 +8,11 @@
 #include <entt/entt.hpp>
 class JointFactory : public RegistryObjectFactory<JointFactory> {
 public:
-  std::shared_ptr<RevoluteJoint>
-  createRevoluteJoint(const RevoluteJointConfig &config);
-  std::shared_ptr<DistanceJoint>
-  createDistanceJoint(const DistanceJointConfig &config);
-  std::shared_ptr<MouseJoint> createMouseJoint(const MouseJointConfig &config);
-  std::shared_ptr<WeldJoint> createWeldJoint(const WeldJointConfig &config);
-
   JointFactory(entt::registry &registry, const std::shared_ptr<World> world);
 
   template <typename T> static constexpr bool supports() {
     return std::is_same_v<T, WeldJoint> || std::is_same_v<T, DistanceJoint> ||
-           std::is_same_v<T, MouseJoint> || std::is_same_v<T, RevoluteJoint> ;
+           std::is_same_v<T, MouseJoint> || std::is_same_v<T, RevoluteJoint>;
   }
 
 protected:

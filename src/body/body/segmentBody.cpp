@@ -8,7 +8,7 @@ SegmentBody::SegmentBody(entt::registry &registry,
                          const std::shared_ptr<ShapeFactory> shapeFactory,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
-  segment = shapeFactory->createSegment(config.shapeCfg);
+  segment = shapeFactory->create<Segment>(config.shapeCfg);
   registerChild(segment);
 }
 

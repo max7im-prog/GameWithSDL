@@ -7,7 +7,7 @@ WeldConnection::WeldConnection(entt::registry &registry,
                                const std::shared_ptr<ShapeFactory> shapeFactory,
                                const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
-  weldJoint = jointFactory->createWeldJoint(config.templateJointCfg);
+  weldJoint = jointFactory->create<WeldJoint>(config.templateJointCfg);
   registerChild(weldJoint);
 }
 

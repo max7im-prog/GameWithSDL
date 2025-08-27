@@ -17,7 +17,7 @@ SegmentTerrain::SegmentTerrain(
     bodyCfg.shapeCfg.bodyDef.position = config.position;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-    segmentBody = bodyFactory->createSegmentBody(bodyCfg);
+    segmentBody = bodyFactory->create<SegmentBody>(bodyCfg);
     registerChild(segmentBody);
   }
 }
