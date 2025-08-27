@@ -22,6 +22,7 @@
 
 // Update
 #include "controllerUpdateSystem.hpp"
+#include "worldFactory.hpp"
 #include "worldUpdateSystem.hpp"
 #include "mouseJointSystem.hpp"
 
@@ -95,6 +96,7 @@ private:
     std::shared_ptr<TerrainFactory> terrainFactory;
     std::shared_ptr<JointFactory> jointFactory;
     std::shared_ptr<ShapeFactory> shapeFactory;
+    std::shared_ptr<WorldFactory> worldFactory;
 
     // World
     std::shared_ptr<World> world;

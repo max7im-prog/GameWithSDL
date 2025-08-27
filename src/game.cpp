@@ -49,13 +49,12 @@ bool Game::init() {
 
   this->running = true;
 
-  // TODO: remove temp testing code
-
-  // world
-  auto worldEnt = this->registry.create();
-  auto &worldComp = this->registry.emplace_or_replace<PhysicsWorld>(worldEnt);
-  world = std::shared_ptr<World>(new BasicWorld);
-  worldComp.world = world;
+  // world and worldFactory
+  worldFactory = std::shared_ptr<WorldFactory>(new WorldFactory(registry));
+  {
+    auto config = BasicWorld::Config::defaultConfig();
+    world = worldFactory->create<BasicWorld>(config);
+  }
 
   // Initialize factories
 
@@ -76,6 +75,8 @@ bool Game::init() {
 
   terrainFactory = std::shared_ptr<TerrainFactory>(
       new TerrainFactory(registry, world, bodyFactory, connectionFactory));
+
+  // TODO: remove temp testing code
 
   // Some terrain
   {

@@ -1,10 +1,16 @@
 #pragma once
 #include "world.hpp"
 
+struct BasicWorldConfig : public WorldConfig {
+  static BasicWorldConfig defaultConfig();
+};
+
 class BasicWorld : public World {
 public:
-  BasicWorld();
-  ~BasicWorld();
+  using Config = BasicWorldConfig;
+  BasicWorld(entt::registry &registry, const BasicWorldConfig &config);
+  ~BasicWorld() = default;
 
-protected:
+private:
+  friend class WorldFactory;
 };
