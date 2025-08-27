@@ -2,9 +2,14 @@
 
 #include <entt/entt.hpp>
 
+/**
+ * @brief Interface to store objects that have to be registered in
+ * entt::registry.
+ *
+ */
 class RegistryBase {
 public:
-  virtual ~RegistryBase() = 0;
+  virtual ~RegistryBase();
   entt::entity getEntity();
 
   /**
@@ -12,6 +17,12 @@ public:
    *
    */
   bool isValid() const;
+
+  /**
+   * @brief removes object's entry from registry.
+   *
+   */
+  virtual void remove();
 
 protected:
   RegistryBase(entt::registry &registry);

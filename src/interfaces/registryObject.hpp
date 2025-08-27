@@ -1,29 +1,30 @@
 #pragma once
 #include "entt/entt.hpp"
+#include "registryBase.hpp"
 #include "registryObjectFactory.hpp"
 
 /**
- * @brief Interface to store objects that have to be registered in
- * entt::registry. Provides composition capabilities.
+ * @brief Interface to store composite objects that have to be registered in
+ * entt::registry.
  *
  */
-class RegistryObject {
+class RegistryObject : public RegistryBase {
 public:
-  virtual ~RegistryObject() = 0;
-  entt::entity getEntity();
+  virtual ~RegistryObject();
 
   /**
-   * @brief Checks if an object is a valid entry in a registry
-   *
-   */
-  bool isValid() const;
-
-  /**
-   * @brief removes object's entry from registry. Propagates the removal to
+   * @brief Removes object's entry from registry. Propagates the removal to
    * children if has children.
    *
    */
   void remove();
+
+  /**
+   * @brief Removes all children of an object from the registry. Removal is
+   * propagated to children's children.
+   *
+   */
+  void removeChildren();
 
   /**
    * @brief Registers an object as the child.
@@ -48,11 +49,6 @@ public:
 protected:
   RegistryObject(entt::registry &registry);
 
-  void setEntity(entt::entity e);
-
-  entt::registry &registry;
-  entt::entity entity;
-
 private:
   /**
    * @brief This value is a unique pointer to avoid additional memory allocation
@@ -60,12 +56,6 @@ private:
    *
    */
   std::unique_ptr<std::vector<std::shared_ptr<RegistryObject>>> children;
-
-  RegistryObject() = delete;
-  RegistryObject(RegistryObject &other) = delete;
-  RegistryObject(RegistryObject &&other) = delete;
-  RegistryObject &operator=(RegistryObject &other) = delete;
-  RegistryObject &operator=(RegistryObject &&other) = delete;
 
   template <typename Derived> friend class RegistryObjectFactory;
 };

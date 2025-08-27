@@ -1,35 +1,15 @@
 #include "registryObject.hpp"
 #include <memory>
 
-entt::entity RegistryObject::getEntity() { return entity; }
-
-bool RegistryObject::isValid() const { return registry.valid(entity); }
-
 void RegistryObject::remove() {
-  if (children != nullptr) {
-    for (auto &ch : *children) {
-      ch->remove();
-    }
-  }
-  children = nullptr;
-
-  if (isValid()) {
-    registry.destroy(entity);
-  }
-  entity = entt::null;
+  removeChildren();
+  RegistryBase::remove();
 }
 
-RegistryObject::~RegistryObject() { remove(); }
+RegistryObject::~RegistryObject() { removeChildren(); }
 
 RegistryObject::RegistryObject(entt::registry &registry)
-    : registry(registry), entity(entt::null) {}
-
-void RegistryObject::setEntity(entt::entity e) {
-  if (isValid()) {
-    registry.destroy(entity);
-  }
-  entity = e;
-}
+    : RegistryBase(registry) {}
 
 void RegistryObject::registerChild(std::shared_ptr<RegistryObject> child) {
   if (children == nullptr) {
@@ -52,4 +32,13 @@ void RegistryObject::update(float dt) {
       ch->update(dt);
     }
   }
+}
+
+void RegistryObject::removeChildren() {
+  if (children != nullptr) {
+    for (auto &ch : *children) {
+      ch->remove();
+    }
+  }
+  children = nullptr;
 }
