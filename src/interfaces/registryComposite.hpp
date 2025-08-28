@@ -17,7 +17,7 @@ public:
    * children if has children.
    *
    */
-  void remove();
+  virtual void remove();
 
   /**
    * @brief Removes all children of an object from the registry. Removal is
