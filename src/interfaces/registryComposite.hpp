@@ -56,6 +56,4 @@ private:
    *
    */
   std::unique_ptr<std::vector<std::shared_ptr<RegistryComposite>>> children;
-
-  template <typename Derived> friend class RegistryObjectFactory;
 };

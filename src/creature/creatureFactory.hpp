@@ -19,6 +19,7 @@ protected:
   void attach(std::shared_ptr<T> object, entt::entity ent) {
     auto &comp = registry.emplace_or_replace<PhysicsCreature>(ent);
     comp.creature = object;
+    world->addObject(std::static_pointer_cast<RegistryObject>(object));
   }
 
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {

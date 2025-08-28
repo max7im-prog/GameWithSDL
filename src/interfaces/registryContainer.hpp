@@ -8,8 +8,8 @@ public:
   /**
    * @brief Registers an object in a container.
    */
-  void addObject(std::shared_ptr<RegistryObject> object);
-  void addObject(std::weak_ptr<RegistryObject> object);
+  void addObject(const std::shared_ptr<RegistryObject> &object);
+  void addObject(const std::weak_ptr<RegistryObject> &object);
 
   /**
    * @brief Removes object from a container by calling remove() on an object.

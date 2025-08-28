@@ -6,7 +6,7 @@ RegistryContainer::RegistryContainer(entt::registry &registry)
 
 RegistryContainer::~RegistryContainer() { clear(); }
 
-void RegistryContainer::addObject(std::shared_ptr<RegistryObject> object) {
+void RegistryContainer::addObject(const std::shared_ptr<RegistryObject> &object) {
   if (!object)
     return;
   auto raw = object.get();
@@ -22,7 +22,7 @@ void RegistryContainer::addObject(std::shared_ptr<RegistryObject> object) {
   }
 }
 
-void RegistryContainer::addObject(std::weak_ptr<RegistryObject> object) {
+void RegistryContainer::addObject(const std::weak_ptr<RegistryObject> &object) {
   addObject(object.lock());
 }
 
