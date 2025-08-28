@@ -6,6 +6,7 @@ project(
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
@@ -35,6 +36,13 @@ FetchContent_Declare(
   GIT_TAG v3.15.0
 )
 FetchContent_MakeAvailable(entt)
+
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG v1.17.x
+)
+FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
@@ -74,9 +82,11 @@ add_library(game_run_lib STATIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src/game.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/game.cpp
 )
+
 target_include_directories(game_run_lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+
 target_link_libraries(game_run_lib PUBLIC ${GAME_LIBS} ${EXTERNAL_LIBS})
 
 add_executable(
@@ -93,4 +103,8 @@ target_compile_options(Game PRIVATE
 target_link_options(Game PRIVATE
   $<$<CONFIG:Debug>:-fsanitize=address -fsanitize=undefined -fsanitize=leak>
 )
+
+include(CTest)
+include(GoogleTest)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
