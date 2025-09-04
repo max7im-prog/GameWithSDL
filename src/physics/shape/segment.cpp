@@ -19,7 +19,7 @@ SegmentConfig SegmentConfig::defaultConfig() {
   ret.shapeDef = b2DefaultShapeDef();
   ret.bodyDef = b2DefaultBodyDef();
   ret.localPoint1 = {0,0};
-  ret.localPoint2 = {0,0};
+  ret.localPoint2 = {1,0};
   return ret;
 }
 
