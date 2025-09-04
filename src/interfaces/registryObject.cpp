@@ -12,9 +12,11 @@ void RegistryObject::setEntity(entt::entity e) {
 bool RegistryObject::isValid() const { return registry.valid(entity); }
 
 void RegistryObject::remove() {
-  if (isValid()) {
-    registry.destroy(entity);
+  if (!registry.valid(entity)) {
+    entity = entt::null;
+    return;
   }
+  registry.destroy(entity);
   entity = entt::null;
 }
 

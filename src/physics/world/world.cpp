@@ -10,10 +10,9 @@ World::World(entt::registry &registry)
 World::~World() {
   if (b2World_IsValid(worldId)) {
     b2DestroyWorld(worldId);
-    worldId = b2_nullWorldId;
   }
+
+  worldId = b2_nullWorldId;
 }
 
-void World::step(float dt){
-  b2World_Step(worldId, dt, substepCount);
-}
+void World::step(float dt) { b2World_Step(worldId, dt, substepCount); }
