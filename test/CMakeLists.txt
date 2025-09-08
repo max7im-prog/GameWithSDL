@@ -2,11 +2,9 @@
 enable_testing()
 
 # List all test sources
-set(TEST_SOURCES
-    mainTest.cpp
-    physics/world/testWorld.cpp
-    registry/registryTest.cpp
-    registry/registryTestUtils.hpp
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
+    "*.cpp"
+    "*.hpp"
 )
 
 # Create the test executable
