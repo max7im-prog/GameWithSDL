@@ -27,7 +27,7 @@ CapsuleTerrainConfig CapsuleTerrainConfig::defaultConfig() {
   CapsuleTerrainConfig ret;
   ret.templateBodyCfg = CapsuleBodyConfig::defaultConfig();
   ret.point1 = {0, 0};
-  ret.point1 = {1, 0};
+  ret.point2= {1, 0};
   ret.position = {0, 0};
   ret.radius = 0.25;
   ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
