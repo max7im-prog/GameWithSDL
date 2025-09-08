@@ -1,5 +1,8 @@
+
+#include "connection.hpp"
 #include "box2d/types.h"
 #include "circle.hpp"
+#include "connectionFactory.hpp"
 #include "distanceJoint.hpp"
 #include "jointFactory.hpp"
 #include "mouseJoint.hpp"
@@ -9,7 +12,7 @@
 // 3 entities for world and 2 shapes
 constexpr size_t INIT_SHAPE_COUNT = 3;
 
-template <typename TObject> class JointEntityTest : public WorldRegistryTest {
+template <typename TObject> class ConnectionEntityTest : public WorldRegistryTest {
 public:
   using Component = PhysicsJoint;
   using Factory = JointFactory;
@@ -36,12 +39,12 @@ protected:
 };
 
 // List of (Factory, Object, Component) triples to test
-using JointEntityTypes =
-    ::testing::Types<RevoluteJoint, DistanceJoint, MouseJoint, WeldJoint>;
+using SimpleConnectionEntityTypes =
+    ::testing::Types<DistanceConnection, RevoluteConnection, WeldConnection>;
 
-TYPED_TEST_SUITE(JointEntityTest, JointEntityTypes);
+TYPED_TEST_SUITE(ConnectionEntityTest, SimpleConnectionEntityTypes);
 
-TYPED_TEST(JointEntityTest, InitDeinit) {
+TYPED_TEST(ConnectionEntityTest, InitDeinit) {
 
   using Factory = typename TestFixture::Factory;
   using Object = typename TestFixture::Object;
@@ -49,9 +52,9 @@ TYPED_TEST(JointEntityTest, InitDeinit) {
 
   ASSERT_EQ(WorldRegistryTest::registrySize(this->registry), INIT_SHAPE_COUNT);
   auto cfg = Object::Config::defaultConfig();
-  cfg.jointDef.bodyIdA = this->shape1->getBodyId();
-  cfg.jointDef.bodyIdB = this->shape2->getBodyId();
-  auto obj = this->jointFactory->template create<Object>(cfg);
+  cfg.templateJointCfg.jointDef.bodyIdA = this->shape1->getBodyId();
+  cfg.templateJointCfg.jointDef.bodyIdB = this->shape2->getBodyId();
+  auto obj = this->connectionFactory->template create<Object>(cfg);
   ASSERT_TRUE(obj);
   EXPECT_EQ(this->registry.template view<Component>().size(), 1);
   obj->remove();
