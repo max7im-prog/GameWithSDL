@@ -2,22 +2,43 @@
 #include "basicWorld.hpp"
 #include "bodyComponents.hpp"
 #include "bodyFactory.hpp"
+#include "box2d/types.h"
 #include "capsuleBody.hpp"
 #include "connectionFactory.hpp"
+#include "creatureComponents.hpp"
+#include "demoCreature.hpp"
 #include "entt/entity/fwd.hpp"
 #include "game.hpp"
 #include "jointFactory.hpp"
 #include "limbBody.hpp"
+#include "physicsComponents.hpp"
+#include "polygon.hpp"
 #include "polygonBody.hpp"
 #include "segment.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 #include "worldFactory.hpp"
+#include "gtest/gtest.h"
 #include <gtest/gtest.h>
 #include <memory>
 
+bool registryIsEmpty(entt::registry &registry) {
+  for (auto ent : registry.view<entt::entity>()) {
+    return false;
+  }
+  return true;
+};
+
+size_t registrySize(entt::registry &registry) {
+  size_t s = 0;
+  for (auto ent : registry.view<entt::entity>()) {
+    s++;
+  }
+  return s;
+};
+
 // Base fixture: sets up registry + all factories
-class BaseRegistryTest : public ::testing::Test {
+class WorldRegistryTest : public ::testing::Test {
 protected:
   static void SetUpTestSuite() {} // <- corrected name
   static void TearDownTestSuite() {}
@@ -75,43 +96,43 @@ private:
 };
 template <>
 inline std::shared_ptr<WorldFactory>
-BaseRegistryTest::getFactory<WorldFactory>() {
+WorldRegistryTest::getFactory<WorldFactory>() {
   return worldFactory;
 }
 
 template <>
 inline std::shared_ptr<ShapeFactory>
-BaseRegistryTest::getFactory<ShapeFactory>() {
+WorldRegistryTest::getFactory<ShapeFactory>() {
   return shapeFactory;
 }
 
 template <>
 inline std::shared_ptr<JointFactory>
-BaseRegistryTest::getFactory<JointFactory>() {
+WorldRegistryTest::getFactory<JointFactory>() {
   return jointFactory;
 }
 
 template <>
 inline std::shared_ptr<BodyFactory>
-BaseRegistryTest::getFactory<BodyFactory>() {
+WorldRegistryTest::getFactory<BodyFactory>() {
   return bodyFactory;
 }
 
 template <>
 inline std::shared_ptr<ConnectionFactory>
-BaseRegistryTest::getFactory<ConnectionFactory>() {
+WorldRegistryTest::getFactory<ConnectionFactory>() {
   return connectionFactory;
 }
 
 template <>
 inline std::shared_ptr<CreatureFactory>
-BaseRegistryTest::getFactory<CreatureFactory>() {
+WorldRegistryTest::getFactory<CreatureFactory>() {
   return creatureFactory;
 }
 
 template <>
 inline std::shared_ptr<TerrainFactory>
-BaseRegistryTest::getFactory<TerrainFactory>() {
+WorldRegistryTest::getFactory<TerrainFactory>() {
   return terrainFactory;
 }
 // Traits: bind Factory, Object, and Component together
@@ -123,7 +144,7 @@ struct RegistryObjectTraits {
 };
 
 // Fixture that uses traits
-template <typename Traits> class RegistryObjectTest : public BaseRegistryTest {
+template <typename Traits> class RegistryObjectTest : public WorldRegistryTest {
 public:
   using Factory = typename Traits::Factory;
   using Object = typename Traits::Object;
@@ -132,18 +153,37 @@ public:
 
 // List of (Factory, Object, Component) triples to test
 using TestTypes = ::testing::Types<
+
+    RegistryObjectTraits<ShapeFactory, Circle, PhysicsShape>,
+    RegistryObjectTraits<ShapeFactory, Polygon, PhysicsShape>,
+    RegistryObjectTraits<ShapeFactory, Segment, PhysicsShape>,
+    RegistryObjectTraits<ShapeFactory, Capsule, PhysicsShape>,
+    RegistryObjectTraits<ShapeFactory, EmptyShape, PhysicsShape>,
+
+    
     RegistryObjectTraits<BodyFactory, CircleBody, PhysicsBody>,
     RegistryObjectTraits<BodyFactory, CapsuleBody, PhysicsBody>,
     RegistryObjectTraits<BodyFactory, LimbBody, PhysicsBody>,
     RegistryObjectTraits<BodyFactory, SegmentBody, PhysicsBody>,
-    RegistryObjectTraits<BodyFactory, PolygonBody, PhysicsBody>>;
+    RegistryObjectTraits<BodyFactory, PolygonBody, PhysicsBody>,
+
+    RegistryObjectTraits<CreatureFactory, DemoCreature, PhysicsCreature>,
+
+    RegistryObjectTraits<TerrainFactory, CircleTerrain, PhysicsTerrain>,
+    RegistryObjectTraits<TerrainFactory, PolygonTerrain, PhysicsTerrain>,
+    RegistryObjectTraits<TerrainFactory, SegmentTerrain, PhysicsTerrain>,
+    RegistryObjectTraits<TerrainFactory, CapsuleTerrain, PhysicsTerrain>
+    >;
 
 TYPED_TEST_SUITE(RegistryObjectTest, TestTypes);
 
-TYPED_TEST(RegistryObjectTest, InitTest) {
+TYPED_TEST(RegistryObjectTest, InitDeinit) {
   using Factory = typename TestFixture::Factory;
   using Object = typename TestFixture::Object;
   using Component = typename TestFixture::Component;
+
+  // 1 entity for world
+  ASSERT_EQ(registrySize(this->registry), 1);
 
   auto cfg = Object::Config::defaultConfig();
   auto obj = this->template getFactory<Factory>()->template create<Object>(cfg);
@@ -153,6 +193,9 @@ TYPED_TEST(RegistryObjectTest, InitTest) {
   EXPECT_EQ(this->registry.template view<Component>().size(), 1);
   obj->remove();
   obj.reset();
-
   EXPECT_EQ(this->registry.template view<Component>().size(), 0);
+  
+  // 1 entity for world
+  ASSERT_EQ(registrySize(this->registry), 1);
+
 }

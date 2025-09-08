@@ -26,7 +26,7 @@ SegmentTerrainConfig SegmentTerrainConfig::defaultConfig() {
   SegmentTerrainConfig ret;
   ret.templateBodyCfg = SegmentBodyConfig::defaultConfig();
   ret.point1 = {0, 0};
-  ret.point1 = {1, 0};
+  ret.point2 = {1, 0};
   ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   ret.position = {0, 0};
