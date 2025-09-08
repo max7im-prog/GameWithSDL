@@ -6,7 +6,7 @@ set(TEST_SOURCES
     mainTest.cpp
     physics/world/testWorld.cpp
     registry/registryTest.cpp
-    registry/registryUtils.hpp
+    registry/registryTestUtils.hpp
 )
 
 # Create the test executable

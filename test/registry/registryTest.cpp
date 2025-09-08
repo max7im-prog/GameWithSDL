@@ -8,7 +8,7 @@
 #include "physicsComponents.hpp"
 #include "polygon.hpp"
 #include "polygonBody.hpp"
-#include "registryUtils.hpp"
+#include "registryTestUtils.hpp"
 #include "segment.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
