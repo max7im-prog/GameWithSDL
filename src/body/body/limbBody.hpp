@@ -1,13 +1,14 @@
 #pragma once
 #include "PIDVectorController.hpp"
 #include "body.hpp"
+#include "box2d/math_functions.h"
 #include "capsule.hpp"
 #include "jointFactory.hpp"
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 
 struct LimbSegmentConfig {
-  float len = 1;
+  b2Vec2 endPos = {0,0};
   float radius = 0.25;
 };
 
@@ -26,7 +27,6 @@ struct LimbBodyConfig : public BodyConfig {
 
   std::vector<LimbSegmentConfig> segments;
   b2Vec2 basePos;
-  b2Rot rotation;
 };
 
 class LimbBody : public Body {

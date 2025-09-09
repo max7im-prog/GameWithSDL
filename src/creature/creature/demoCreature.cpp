@@ -19,11 +19,11 @@ void DemoCreature::move(b2Vec2 dir, float intensity) {
   moveContext.move = true;
 }
 
-DemoCreature::DemoCreature(entt::registry &registry,
-                           const std::shared_ptr<World> world,
-                           const DemoCreatureConfig &config,
-                           const std::shared_ptr<BodyFactory> bodyFactory,
-                          const std::shared_ptr<ConnectionFactory> connectionFactory)
+DemoCreature::DemoCreature(
+    entt::registry &registry, const std::shared_ptr<World> world,
+    const DemoCreatureConfig &config,
+    const std::shared_ptr<BodyFactory> bodyFactory,
+    const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Creature(registry, world) {
 
   // Calculate stuff
@@ -41,9 +41,9 @@ DemoCreature::DemoCreature(entt::registry &registry,
   torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   torsoConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
   torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 2), (0)},
-                                        {(-torsoWidth / 2), (torsoHeight)},
-                                        {(torsoWidth / 2), (torsoHeight)},
-                                        {(torsoWidth / 2), (0)}};
+                                   {(-torsoWidth / 2), (torsoHeight)},
+                                   {(torsoWidth / 2), (torsoHeight)},
+                                   {(torsoWidth / 2), (0)}};
 
   auto limbConfig = LimbBodyConfig::defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
@@ -58,38 +58,75 @@ DemoCreature::DemoCreature(entt::registry &registry,
   limbConfig.templateJointConfig.jointDef.lowerAngle = -B2_PI / 4;
   limbConfig.templateJointConfig.jointDef.enableLimit = true;
 
-  for (size_t i = 0; i < numSegments; i++) {
-    limbConfig.segments.push_back({.len = segmentLen, .radius = segmentRadius});
-  }
   {
     auto cfg = limbConfig;
-    cfg.rotation = b2MakeRot(-B2_PI / 4);
+    cfg.segments.clear();
     cfg.basePos =
         b2Add(config.position, b2Vec2(-torsoWidth / 2, torsoHeight / 2));
+    {
+      auto lastPos = cfg.basePos;
+      for (size_t i = 0; i < numSegments; i++) {
+        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
+        b2Rot q = b2MakeRot(-B2_PI/4);
+        incr = b2RotateVector(q,incr);
+        auto newPos = b2Add(incr, lastPos);
+        cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
+        lastPos = newPos;
+      }
+    }
     leftArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftArm);
   }
   {
     auto cfg = limbConfig;
-    cfg.rotation = b2MakeRot(-B2_PI / 4);
+    cfg.segments.clear();
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
-    cfg.limbControlConfig.KPMultiplier = 100;
-    cfg.limbControlConfig.KDMultiplier = 100;
+    {
+      auto lastPos = cfg.basePos;
+      for (size_t i = 0; i < numSegments; i++) {
+        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
+        b2Rot q = b2MakeRot(-B2_PI/4);
+        incr = b2RotateVector(q,incr);
+        auto newPos = b2Add(incr, lastPos);
+        cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
+        lastPos = newPos;
+      }
+    }
     leftLeg = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftLeg);
   }
   {
     auto cfg = limbConfig;
-    cfg.rotation = b2MakeRot(B2_PI / 4);
     cfg.basePos =
         b2Add(config.position, b2Vec2(torsoWidth / 2, torsoHeight / 2));
+    {
+      auto lastPos = cfg.basePos;
+      for (size_t i = 0; i < numSegments; i++) {
+        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
+        b2Rot q = b2MakeRot(B2_PI/4);
+        incr = b2RotateVector(q,incr);
+        auto newPos = b2Add(incr, lastPos);
+        cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
+        lastPos = newPos;
+      }
+    }
     rightArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(rightArm);
   }
   {
     auto cfg = limbConfig;
-    cfg.rotation = b2MakeRot(B2_PI / 4);
     cfg.basePos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
+    {
+      auto lastPos = cfg.basePos;
+      for (size_t i = 0; i < numSegments; i++) {
+        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
+        b2Rot q = b2MakeRot(B2_PI/4);
+        incr = b2RotateVector(q,incr);
+        auto newPos = b2Add(incr, lastPos);
+        cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
+        lastPos = newPos;
+      }
+    }
     cfg.limbControlConfig.KPMultiplier = 100;
     cfg.limbControlConfig.KDMultiplier = 100;
     rightLeg = bodyFactory->create<LimbBody>(cfg);
@@ -107,7 +144,8 @@ DemoCreature::DemoCreature(entt::registry &registry,
   {
     auto cfg = jointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB = leftLeg->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.bodyIdB =
+        leftLeg->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(-torsoWidth * 0.3, 0);
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
     leftHipJoint = connectionFactory->create<RevoluteConnection>(cfg);
@@ -116,8 +154,10 @@ DemoCreature::DemoCreature(entt::registry &registry,
   {
     auto cfg = jointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB = leftArm->getSegments()[0]->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = {-torsoWidth / 2, torsoHeight / 2};
+    cfg.templateJointCfg.jointDef.bodyIdB =
+        leftArm->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.localAnchorA = {-torsoWidth / 2,
+                                                  torsoHeight / 2};
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
     leftShoulderJoint = connectionFactory->create<RevoluteConnection>(cfg);
     registerChild(leftShoulderJoint);
@@ -125,7 +165,8 @@ DemoCreature::DemoCreature(entt::registry &registry,
   {
     auto cfg = jointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB = rightLeg->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.bodyIdB =
+        rightLeg->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
     rightHipJoint = connectionFactory->create<RevoluteConnection>(cfg);
@@ -134,8 +175,10 @@ DemoCreature::DemoCreature(entt::registry &registry,
   {
     auto cfg = jointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB = rightArm->getSegments()[0]->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = {torsoWidth / 2, torsoHeight / 2};
+    cfg.templateJointCfg.jointDef.bodyIdB =
+        rightArm->getSegments()[0]->getBodyId();
+    cfg.templateJointCfg.jointDef.localAnchorA = {torsoWidth / 2,
+                                                  torsoHeight / 2};
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
     rightShoulderJoint = connectionFactory->create<RevoluteConnection>(cfg);
     registerChild(rightShoulderJoint);
@@ -351,7 +394,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
                              const std::shared_ptr<LimbBody> leg,
                              Direction moveDir) {
   b2Vec2 legBase = leg->getBasePos();
-  if (b2Distance(legBase, context.trackingPoint) > leg->getLength()*1.2f) {
+  if (b2Distance(legBase, context.trackingPoint) > leg->getLength() * 1.2f) {
     leg->setTracking({0, 0}, false);
     std::vector<b2Vec2> groundPoints = {};
     b2Vec2 defaultTranslation = {0, -leg->getLength()};

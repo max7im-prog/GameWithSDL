@@ -185,7 +185,7 @@ bool Game::init() {
     auto config = DemoCreatureConfig::defaultConfig();
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
-    config.position = {35, 6};
+    config.position = {35, 8};
     c0 = creatureFactory->create<DemoCreature>(config);
   }
   c0->aim({30, 30}, true);

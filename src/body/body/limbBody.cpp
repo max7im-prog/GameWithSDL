@@ -14,14 +14,26 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
 
   b2Vec2 lastPos = config.basePos;
   b2Vec2 incrementDir = {0, -1};
+  b2Rot adjustmentRot = b2MakeRot(B2_PI / 2);
 
   // Create capsules
-  auto capsuleConfig = config.templateCapsuleConfig;
+  segmentLengths = {};
+  length = 0;
   for (auto seg : config.segments) {
+    auto capsuleConfig = config.templateCapsuleConfig;
     capsuleConfig.bodyDef.position = lastPos;
-    capsuleConfig.bodyDef.rotation = config.rotation;
+    b2Vec2 offset = b2Sub(seg.endPos, lastPos);
+    float len = b2Length(offset);
+    b2Vec2 norm = b2Normalize(offset);
+    float angle = b2Atan2(norm.y, norm.x);
+
+    b2Rot rot = b2MakeRot(angle);
+    b2Rot relativeRot = b2MulRot(rot, adjustmentRot);
+    segmentLengths.push_back(len);
+    length += len;
+    capsuleConfig.bodyDef.rotation = relativeRot;
     capsuleConfig.center1 = {0, 0};
-    capsuleConfig.center2 = b2MulSV(seg.len, incrementDir);
+    capsuleConfig.center2 = b2MulSV(len, incrementDir);
     capsuleConfig.radius = seg.radius;
     auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
     registerChild(capsule);
@@ -65,14 +77,6 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
       controllers.push_back({.baseController = first, .endController = second});
     }
   }
-
-  // Compute lengths and other variables
-  segmentLengths = {};
-  length = 0;
-  for (auto el : segmentsConfig) {
-    segmentLengths.push_back(el.len);
-    length += el.len;
-  }
 }
 
 LimbBodyConfig LimbBodyConfig::defaultConfig() {
@@ -80,7 +84,6 @@ LimbBodyConfig LimbBodyConfig::defaultConfig() {
   ret.templateCapsuleConfig = CapsuleConfig::defaultConfig();
   ret.templateJointConfig = RevoluteJointConfig::defaultConfig();
   ret.basePos = {0, 0};
-  ret.rotation = b2MakeRot(0);
   ret.segments = {};
 
   return ret;
