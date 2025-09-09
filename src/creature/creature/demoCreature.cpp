@@ -64,11 +64,16 @@ DemoCreature::DemoCreature(
     cfg.basePos =
         b2Add(config.position, b2Vec2(-torsoWidth / 2, torsoHeight / 2));
     {
+
       auto lastPos = cfg.basePos;
+      b2Rot baseRot = b2MakeRot(-B2_PI / 4);
+      b2Rot incrRot = b2MakeRot(-B2_PI / 3);
+      b2Rot q = baseRot;
+      
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        b2Rot q = b2MakeRot(-B2_PI/4);
-        incr = b2RotateVector(q,incr);
+        q = b2MulRot(q,incrRot);
+        incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
         lastPos = newPos;
@@ -83,10 +88,14 @@ DemoCreature::DemoCreature(
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
     {
       auto lastPos = cfg.basePos;
+      b2Rot baseRot = b2MakeRot(-B2_PI / 4);
+      b2Rot incrRot = b2MakeRot(-B2_PI / 4);
+      b2Rot q = baseRot;
+      
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        b2Rot q = b2MakeRot(-B2_PI/4);
-        incr = b2RotateVector(q,incr);
+        q = b2MulRot(q,incrRot);
+        incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
         lastPos = newPos;
@@ -103,8 +112,8 @@ DemoCreature::DemoCreature(
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        b2Rot q = b2MakeRot(B2_PI/4);
-        incr = b2RotateVector(q,incr);
+        b2Rot q = b2MakeRot(B2_PI / 4);
+        incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
         lastPos = newPos;
@@ -120,8 +129,8 @@ DemoCreature::DemoCreature(
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        b2Rot q = b2MakeRot(B2_PI/4);
-        incr = b2RotateVector(q,incr);
+        b2Rot q = b2MakeRot(B2_PI / 4);
+        incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
         lastPos = newPos;
