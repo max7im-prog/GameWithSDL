@@ -3,7 +3,7 @@
 #include "jointFactory.hpp"
 #include "shapeFactory.hpp"
 
-struct DistanceConnectionConfig : ConnectionConfig {
+struct DistanceConnectionConfig : public ConnectionConfig {
   DistanceJointConfig templateJointCfg;
   static DistanceConnectionConfig defaultConfig();
 };
