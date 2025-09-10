@@ -16,7 +16,9 @@
 #include <memory>
 
 struct GirdleConnectionConfig : public ConnectionConfig {
-  GirdleConnectionConfig defaultConfig();
+  static GirdleConnectionConfig defaultConfig();
+
+  struct{
   DistanceJointConfig templateJointCfg;
   CircleConfig leftShoulderTemplateConfig;
   CircleConfig rightShoulderTemplateConfig;
@@ -25,13 +27,14 @@ struct GirdleConnectionConfig : public ConnectionConfig {
   RevoluteJointConfig leftAttachTemplateConfig;
   RevoluteJointConfig rightAttachTemplateConfig;
   WeldJointConfig centerAttachJointTemplateConfig;
+  } configs;
 
   b2Vec2 rotationAxis;
   float girdleWidth;
   b2Rot initial3DRotation;
   struct {
-    std::shared_ptr<Shape> shape;
-    b2Vec2 localPoint;
+    std::shared_ptr<Shape> shape = nullptr;
+    b2Vec2 localPoint = {0,0};
   } leftAttach, rightAttach, centerAttach;
 };
 
