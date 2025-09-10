@@ -3,10 +3,12 @@
 #include "connection.hpp"
 #include "connectionComponents.hpp"
 #include "distanceConnection.hpp"
+#include "girdleConnection.hpp"
 #include "jointFactory.hpp"
 #include "revoluteConnection.hpp"
 #include "shapeFactory.hpp"
 #include "weldConnection.hpp"
+#include "girdleConnection.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 class ConnectionFactory : public RegistryObjectFactory<ConnectionFactory> {
@@ -19,6 +21,7 @@ public:
   template <typename T> static constexpr bool supports() {
     return std::is_same_v<T, DistanceConnection> ||
            std::is_same_v<T, RevoluteConnection> ||
+           std::is_same_v<T, GirdleConnection> ||
            std::is_same_v<T, WeldConnection>;
   }
 

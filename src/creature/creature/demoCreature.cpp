@@ -5,6 +5,7 @@
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
 #include "creature.hpp"
+#include "girdleConnection.hpp"
 #include "limbBody.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
@@ -148,7 +149,7 @@ DemoCreature::DemoCreature(
     registerChild(torso);
   }
 
-  // Create joints
+  // Create connections
   auto jointConfig = RevoluteConnectionConfig::defaultConfig();
   {
     auto cfg = jointConfig;
@@ -164,17 +165,6 @@ DemoCreature::DemoCreature(
     auto cfg = jointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
     cfg.templateJointCfg.jointDef.bodyIdB =
-        leftArm->getSegments()[0]->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = {-torsoWidth / 2,
-                                                  torsoHeight / 2};
-    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    leftShoulderJoint = connectionFactory->create<RevoluteConnection>(cfg);
-    registerChild(leftShoulderJoint);
-  }
-  {
-    auto cfg = jointConfig;
-    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB =
         rightLeg->getSegments()[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
@@ -182,15 +172,16 @@ DemoCreature::DemoCreature(
     registerChild(rightHipJoint);
   }
   {
-    auto cfg = jointConfig;
-    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB =
-        rightArm->getSegments()[0]->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = {torsoWidth / 2,
-                                                  torsoHeight / 2};
-    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    rightShoulderJoint = connectionFactory->create<RevoluteConnection>(cfg);
-    registerChild(rightShoulderJoint);
+    auto cfg = GirdleConnectionConfig::defaultConfig();
+    cfg.centerAttach = {.shape = torso->getPolygon(),.localPoint = {0,15}};
+    cfg.configs.centerTemplateConfig.bodyDef.type = b2_dynamicBody;
+    cfg.configs.leftShoulderTemplateConfig.bodyDef.type = b2_dynamicBody;
+    cfg.configs.rightShoulderTemplateConfig.bodyDef.type = b2_dynamicBody;
+    cfg.leftAttach = {.shape = leftArm->getSegments()[0],.localPoint = leftArm->getSegments()[0]->getLocalCenter1()};
+    cfg.rightAttach = {.shape = rightArm->getSegments()[0],.localPoint = rightArm->getSegments()[0]->getLocalCenter1()};
+    cfg.girdleWidth = 15;
+    shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
+    registerChild(shoulderConnection);
   }
 
   // Configure controllers

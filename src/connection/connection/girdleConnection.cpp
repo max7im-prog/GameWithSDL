@@ -8,7 +8,8 @@
 #include "revoluteJoint.hpp"
 #include "weldJoint.hpp"
 #include <stdexcept>
-
+// TODO: add filter configuration
+// TODO: add rotate() and update() functions
 GirdleConnection::GirdleConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
     const GirdleConnectionConfig &config,
@@ -41,17 +42,20 @@ GirdleConnection::GirdleConnection(
   {
     auto cfg = config.configs.centerTemplateConfig;
     cfg.bodyDef.position = globalCenter;
-    center = shapeFactory->create<EmptyShape>(cfg);
+    center = shapeFactory->create<Circle>(cfg);
+    registerChild(center);
   }
   {
     auto cfg = config.configs.leftShoulderTemplateConfig;
     cfg.bodyDef.position = globalLeft;
     leftShoulder = shapeFactory->create<Circle>(cfg);
+    registerChild(leftShoulder);
   }
   {
     auto cfg = config.configs.rightShoulderTemplateConfig;
     cfg.bodyDef.position = globalRight;
     rightShoulder = shapeFactory->create<Circle>(cfg);
+    registerChild(rightShoulder);
   }
 
   // Connect shapes
@@ -61,7 +65,9 @@ GirdleConnection::GirdleConnection(
     cfg.jointDef.bodyIdB = leftShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachTop);
     cfg.jointDef.localAnchorB = {0, 0};
+    cfg.jointDef.length = b2Distance(globalCenterAttachTop, globalLeft);
     leftTopDistance = jointFactory->create<DistanceJoint>(cfg);
+    registerChild(leftTopDistance);
   }
   {
     auto cfg = config.configs.distanceJointTemplateConfig;
@@ -69,7 +75,10 @@ GirdleConnection::GirdleConnection(
     cfg.jointDef.bodyIdB = leftShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachBot);
     cfg.jointDef.localAnchorB = {0, 0};
+
+    cfg.jointDef.length = b2Distance(globalCenterAttachBot, globalLeft);
     leftBottomDistance = jointFactory->create<DistanceJoint>(cfg);
+    registerChild(leftBottomDistance);
   }
 
   {
@@ -78,7 +87,10 @@ GirdleConnection::GirdleConnection(
     cfg.jointDef.bodyIdB = rightShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachTop);
     cfg.jointDef.localAnchorB = {0, 0};
-    rightBottomDistance = jointFactory->create<DistanceJoint>(cfg);
+    cfg.jointDef.length = b2Distance(globalCenterAttachTop, globalRight);
+    rightTopDistance = jointFactory->create<DistanceJoint>(cfg);
+
+    registerChild(rightTopDistance);
   }
   {
     auto cfg = config.configs.distanceJointTemplateConfig;
@@ -86,15 +98,9 @@ GirdleConnection::GirdleConnection(
     cfg.jointDef.bodyIdB = rightShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachBot);
     cfg.jointDef.localAnchorB = {0, 0};
+    cfg.jointDef.length = b2Distance(globalCenterAttachBot, globalRight);
     rightBottomDistance = jointFactory->create<DistanceJoint>(cfg);
-  }
-  {
-    auto cfg = config.configs.distanceJointTemplateConfig;
-    cfg.jointDef.bodyIdA = leftShoulder->getBodyId();
-    cfg.jointDef.bodyIdB = rightShoulder->getBodyId();
-    cfg.jointDef.localAnchorA = {0, 0};
-    cfg.jointDef.localAnchorB = {0, 0};
-    rightBottomDistance = jointFactory->create<DistanceJoint>(cfg);
+    registerChild(rightBottomDistance);
   }
 
   // Connect external
@@ -105,6 +111,7 @@ GirdleConnection::GirdleConnection(
     cfg.jointDef.localAnchorA = {0, 0};
     cfg.jointDef.localAnchorB = config.leftAttach.localPoint;
     leftAttach = jointFactory->create<RevoluteJoint>(cfg);
+    registerChild(leftAttach);
   }
   {
     auto cfg = config.configs.rightAttachTemplateConfig;
@@ -113,24 +120,17 @@ GirdleConnection::GirdleConnection(
     cfg.jointDef.localAnchorA = {0, 0};
     cfg.jointDef.localAnchorB = config.rightAttach.localPoint;
     rightAttach = jointFactory->create<RevoluteJoint>(cfg);
+    registerChild(rightAttach);
   }
   {
     auto cfg = config.configs.centerAttachJointTemplateConfig;
     cfg.jointDef.bodyIdA = center->getBodyId();
     cfg.jointDef.bodyIdB = config.centerAttach.shape->getBodyId();
-    cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachTop);
+    cfg.jointDef.localAnchorA = {0,0};
     cfg.jointDef.localAnchorB =
-        config.centerAttach.shape->getLocalPoint(globalCenterAttachTop);
+        config.centerAttach.shape->getLocalPoint(globalCenter);
     topCenterAttach = jointFactory->create<WeldJoint>(cfg);
-  }
-  {
-    auto cfg = config.configs.centerAttachJointTemplateConfig;
-    cfg.jointDef.bodyIdA = center->getBodyId();
-    cfg.jointDef.bodyIdB = config.centerAttach.shape->getBodyId();
-    cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachBot);
-    cfg.jointDef.localAnchorB =
-        config.centerAttach.shape->getLocalPoint(globalCenterAttachBot);
-    bottomCenterAttach = jointFactory->create<WeldJoint>(cfg);
+    registerChild(topCenterAttach);
   }
 }
 
@@ -146,7 +146,7 @@ GirdleConnectionConfig GirdleConnectionConfig::defaultConfig() {
   ret.configs.rightAttachTemplateConfig = RevoluteJointConfig::defaultConfig();
 
   // Shapes
-  ret.configs.centerTemplateConfig = EmptyShapeConfig::defaultConfig();
+  ret.configs.centerTemplateConfig = CircleConfig::defaultConfig();
   ret.configs.leftShoulderTemplateConfig = CircleConfig::defaultConfig();
   ret.configs.rightShoulderTemplateConfig = CircleConfig::defaultConfig();
 

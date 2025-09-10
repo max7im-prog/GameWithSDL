@@ -13,20 +13,21 @@
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 #include "weldJoint.hpp"
+#include "world.hpp"
 #include <memory>
 
 struct GirdleConnectionConfig : public ConnectionConfig {
   static GirdleConnectionConfig defaultConfig();
 
-  struct{
-  DistanceJointConfig templateJointCfg;
-  CircleConfig leftShoulderTemplateConfig;
-  CircleConfig rightShoulderTemplateConfig;
-  EmptyShapeConfig centerTemplateConfig;
-  DistanceJointConfig distanceJointTemplateConfig;
-  RevoluteJointConfig leftAttachTemplateConfig;
-  RevoluteJointConfig rightAttachTemplateConfig;
-  WeldJointConfig centerAttachJointTemplateConfig;
+  struct {
+    DistanceJointConfig templateJointCfg;
+    CircleConfig leftShoulderTemplateConfig;
+    CircleConfig rightShoulderTemplateConfig;
+    CircleConfig centerTemplateConfig;
+    DistanceJointConfig distanceJointTemplateConfig;
+    RevoluteJointConfig leftAttachTemplateConfig;
+    RevoluteJointConfig rightAttachTemplateConfig;
+    WeldJointConfig centerAttachJointTemplateConfig;
   } configs;
 
   b2Vec2 rotationAxis;
@@ -34,7 +35,7 @@ struct GirdleConnectionConfig : public ConnectionConfig {
   b2Rot initial3DRotation;
   struct {
     std::shared_ptr<Shape> shape = nullptr;
-    b2Vec2 localPoint = {0,0};
+    b2Vec2 localPoint = {0, 0};
   } leftAttach, rightAttach, centerAttach;
 };
 
@@ -42,9 +43,9 @@ class GirdleConnection : public Connection {
 public:
   using Config = GirdleConnectionConfig;
 
-  virtual void update(float dt) override;
-  void rotateAroundAxis(float angle);
-  void rotateAroundAxis(b2Rot rot);
+  // virtual void update(float dt) override;
+  // void rotateAroundAxis(float angle);
+  // void rotateAroundAxis(b2Rot rot);
 
 protected:
   GirdleConnection(entt::registry &registry, const std::shared_ptr<World> world,
@@ -55,7 +56,7 @@ protected:
   // Internal shapes
   std::shared_ptr<Circle> leftShoulder;
   std::shared_ptr<Circle> rightShoulder;
-  std::shared_ptr<EmptyShape> center;
+  std::shared_ptr<Circle> center;
 
   // Internal joints
   std::shared_ptr<DistanceJoint> leftTopDistance;
@@ -74,4 +75,5 @@ protected:
   b2Rot current3DRotation;
 
 private:
+  friend class ConnectionFactory;
 };

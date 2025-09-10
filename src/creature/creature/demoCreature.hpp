@@ -3,6 +3,7 @@
 #include "bodyFactory.hpp"
 #include "connectionFactory.hpp"
 #include "creature.hpp"
+#include "girdleConnection.hpp"
 #include "limbBody.hpp"
 #include "polygonBody.hpp"
 #include "revoluteJoint.hpp"
@@ -38,10 +39,9 @@ protected:
   std::shared_ptr<LimbBody> rightLeg = nullptr;
   std::shared_ptr<PolygonBody> torso = nullptr;
 
-  std::shared_ptr<RevoluteConnection> leftShoulderJoint = nullptr;
-  std::shared_ptr<RevoluteConnection> rightShoulderJoint = nullptr;
   std::shared_ptr<RevoluteConnection> leftHipJoint = nullptr;
   std::shared_ptr<RevoluteConnection> rightHipJoint = nullptr;
+  std::shared_ptr<GirdleConnection> shoulderConnection = nullptr;
 
 private:
   void keepTorsoUpright(float dt);
