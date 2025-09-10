@@ -5,6 +5,8 @@
 #include "circle.hpp"
 #include "distanceJoint.hpp"
 #include "emptyShape.hpp"
+#include "revoluteJoint.hpp"
+#include "weldJoint.hpp"
 #include <stdexcept>
 
 GirdleConnection::GirdleConnection(
@@ -20,6 +22,7 @@ GirdleConnection::GirdleConnection(
   if (b2Length(config.rotationAxis) == 0) {
     throw std::invalid_argument("rotation axis has length of 0");
   }
+
   // Calculate stuff
   b2Vec2 globalCenter =
       config.centerAttach.shape->getWorldPoint(config.centerAttach.localPoint);
@@ -51,51 +54,80 @@ GirdleConnection::GirdleConnection(
     rightShoulder = shapeFactory->create<Circle>(cfg);
   }
 
-  // Connect shapes TODO: implement
+  // Connect shapes
   {
     auto cfg = config.distanceJointTemplateConfig;
-    cfg.jointDef.bodyIdA = center->getBodyId(); 
-    cfg.jointDef.bodyIdB= leftShoulder->getBodyId(); 
+    cfg.jointDef.bodyIdA = center->getBodyId();
+    cfg.jointDef.bodyIdB = leftShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachTop);
-    cfg.jointDef.localAnchorB = {0,0};
+    cfg.jointDef.localAnchorB = {0, 0};
     leftTopDistance = jointFactory->create<DistanceJoint>(cfg);
   }
   {
     auto cfg = config.distanceJointTemplateConfig;
-    cfg.jointDef.bodyIdA = center->getBodyId(); 
-    cfg.jointDef.bodyIdB= leftShoulder->getBodyId(); 
+    cfg.jointDef.bodyIdA = center->getBodyId();
+    cfg.jointDef.bodyIdB = leftShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachBot);
-    cfg.jointDef.localAnchorB = {0,0};
+    cfg.jointDef.localAnchorB = {0, 0};
     leftBottomDistance = jointFactory->create<DistanceJoint>(cfg);
   }
 
   {
     auto cfg = config.distanceJointTemplateConfig;
-    cfg.jointDef.bodyIdA = center->getBodyId(); 
-    cfg.jointDef.bodyIdB= rightShoulder->getBodyId(); 
+    cfg.jointDef.bodyIdA = center->getBodyId();
+    cfg.jointDef.bodyIdB = rightShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachTop);
-    cfg.jointDef.localAnchorB = {0,0};
-    rightBottomDistance= jointFactory->create<DistanceJoint>(cfg);
+    cfg.jointDef.localAnchorB = {0, 0};
+    rightBottomDistance = jointFactory->create<DistanceJoint>(cfg);
   }
   {
     auto cfg = config.distanceJointTemplateConfig;
-    cfg.jointDef.bodyIdA = center->getBodyId(); 
-    cfg.jointDef.bodyIdB= rightShoulder->getBodyId(); 
+    cfg.jointDef.bodyIdA = center->getBodyId();
+    cfg.jointDef.bodyIdB = rightShoulder->getBodyId();
     cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachBot);
-    cfg.jointDef.localAnchorB = {0,0};
-    rightBottomDistance= jointFactory->create<DistanceJoint>(cfg);
+    cfg.jointDef.localAnchorB = {0, 0};
+    rightBottomDistance = jointFactory->create<DistanceJoint>(cfg);
   }
-
   {
     auto cfg = config.distanceJointTemplateConfig;
-    cfg.jointDef.bodyIdA = leftShoulder->getBodyId(); 
-    cfg.jointDef.bodyIdB= rightShoulder->getBodyId(); 
-    cfg.jointDef.localAnchorA = {0,0};
-    cfg.jointDef.localAnchorB = {0,0};
-    rightBottomDistance= jointFactory->create<DistanceJoint>(cfg);
+    cfg.jointDef.bodyIdA = leftShoulder->getBodyId();
+    cfg.jointDef.bodyIdB = rightShoulder->getBodyId();
+    cfg.jointDef.localAnchorA = {0, 0};
+    cfg.jointDef.localAnchorB = {0, 0};
+    rightBottomDistance = jointFactory->create<DistanceJoint>(cfg);
   }
 
-  
-  
-  // Connect external shapes TODO: implement
+  // Connect external 
+  {
+    auto cfg = config.leftAttachTemplateConfig;
+    cfg.jointDef.bodyIdA = leftShoulder->getBodyId();
+    cfg.jointDef.bodyIdB = config.leftAttach.shape->getBodyId();
+    cfg.jointDef.localAnchorA = {0,0};
+    cfg.jointDef.localAnchorB = config.leftAttach.localPoint;
+    leftAttach = jointFactory->create<RevoluteJoint>(cfg);
+  }
+  {
+    auto cfg = config.rightAttachTemplateConfig;
+    cfg.jointDef.bodyIdA = rightShoulder->getBodyId();
+    cfg.jointDef.bodyIdB = config.rightAttach.shape->getBodyId();
+    cfg.jointDef.localAnchorA = {0,0};
+    cfg.jointDef.localAnchorB = config.rightAttach.localPoint;
+    rightAttach = jointFactory->create<RevoluteJoint>(cfg);
+  }
+  {
+    auto cfg = config.centerAttachJointTemplateConfig;
+    cfg.jointDef.bodyIdA = center->getBodyId();
+    cfg.jointDef.bodyIdB = config.centerAttach.shape->getBodyId();
+    cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachTop);
+    cfg.jointDef.localAnchorB =  config.centerAttach.shape->getLocalPoint(globalCenterAttachTop);
+    topCenterAttach = jointFactory->create<WeldJoint>(cfg);
+  }
+  {
+    auto cfg = config.centerAttachJointTemplateConfig;
+    cfg.jointDef.bodyIdA = center->getBodyId();
+    cfg.jointDef.bodyIdB = config.centerAttach.shape->getBodyId();
+    cfg.jointDef.localAnchorA = center->getLocalPoint(globalCenterAttachBot);
+    cfg.jointDef.localAnchorB =  config.centerAttach.shape->getLocalPoint(globalCenterAttachBot);
+    bottomCenterAttach = jointFactory->create<WeldJoint>(cfg);
+  }
 }

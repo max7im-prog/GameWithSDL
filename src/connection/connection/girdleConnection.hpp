@@ -13,6 +13,7 @@
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 #include "weldJoint.hpp"
+#include <memory>
 
 struct GirdleConnectionConfig : public ConnectionConfig {
   GirdleConnectionConfig defaultConfig();
@@ -48,14 +49,23 @@ protected:
                    const std::shared_ptr<ShapeFactory> shapeFactory,
                    const std::shared_ptr<JointFactory> jointFactory);
 
+  // Internal shapes
   std::shared_ptr<Circle> leftShoulder;
   std::shared_ptr<Circle> rightShoulder;
   std::shared_ptr<EmptyShape> center;
+
+  // Internal joints
   std::shared_ptr<DistanceJoint> leftTopDistance;
   std::shared_ptr<DistanceJoint> leftBottomDistance;
   std::shared_ptr<DistanceJoint> rightTopDistance;
   std::shared_ptr<DistanceJoint> rightBottomDistance;
   std::shared_ptr<DistanceJoint> relativeDistance;
+
+  // External attachments
+  std::shared_ptr<RevoluteJoint> leftAttach;
+  std::shared_ptr<RevoluteJoint> rightAttach;
+  std::shared_ptr<WeldJoint> topCenterAttach;
+  std::shared_ptr<WeldJoint> bottomCenterAttach;
 
   float girdleWidth;
   b2Rot current3DRotation;
