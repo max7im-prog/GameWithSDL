@@ -21,6 +21,8 @@ public:
   float getRotationalInertia();
   b2Rot getRotation();
   b2Vec2 getLinearVelocity();
+  b2Vec2 getLocalPoint(b2Vec2 worldPoint);
+  b2Vec2 getWorldPoint(b2Vec2 localPoint);
 
   void applyTorque(float torque);
 

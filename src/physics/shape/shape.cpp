@@ -1,5 +1,6 @@
 #include "shape.hpp"
 #include "box2d/box2d.h"
+#include "box2d/id.h"
 #include "registryComposite.hpp"
 
 b2BodyId Shape::getBodyId() { return bodyId; }
@@ -14,6 +15,8 @@ Shape::~Shape() {
   if (b2Body_IsValid(bodyId)) {
     b2DestroyBody(bodyId);
   }
+  bodyId = b2_nullBodyId;
+  shapeId = b2_nullShapeId;
 }
 
 float Shape::getMass() { return b2Body_GetMass(bodyId); }
@@ -28,6 +31,12 @@ void Shape::applyTorque(float torque) {
   b2Body_ApplyTorque(bodyId, torque, true);
 }
 
-b2Vec2 Shape::getLinearVelocity(){
-  return b2Body_GetLinearVelocity(bodyId);
+b2Vec2 Shape::getLinearVelocity() { return b2Body_GetLinearVelocity(bodyId); }
+
+b2Vec2 Shape::getLocalPoint(b2Vec2 worldPoint) {
+  return b2Body_GetLocalPoint(bodyId, worldPoint);
+}
+
+b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) {
+  return b2Body_GetWorldPoint(bodyId, localPoint);
 }
