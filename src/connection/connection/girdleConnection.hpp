@@ -18,16 +18,13 @@
 
 struct GirdleConnectionConfig : public ConnectionConfig {
   static GirdleConnectionConfig defaultConfig();
+  b2Filter filter;
 
   struct {
-    DistanceJointConfig templateJointCfg;
-    CircleConfig leftShoulderTemplateConfig;
-    CircleConfig rightShoulderTemplateConfig;
-    CircleConfig centerTemplateConfig;
-    DistanceJointConfig distanceJointTemplateConfig;
-    RevoluteJointConfig leftAttachTemplateConfig;
-    RevoluteJointConfig rightAttachTemplateConfig;
-    WeldJointConfig centerAttachJointTemplateConfig;
+    CircleConfig leftTemplate;
+    CircleConfig rightTemplate;
+    CircleConfig centerTemplate;
+    PrismaticJointConfig prismTemplate;
   } configs;
 
   b2Vec2 rotationAxis;
@@ -36,13 +33,18 @@ struct GirdleConnectionConfig : public ConnectionConfig {
   struct {
     std::shared_ptr<Shape> shape = nullptr;
     b2Vec2 localPoint = {0, 0};
-  } leftAttach, rightAttach, centerAttach;
-};
+    RevoluteJointConfig attachTemplate;
+  } leftAttach, rightAttach;
 
+  struct {
+    std::shared_ptr<Shape> shape = nullptr;
+    b2Vec2 localPoint = {0, 0};
+    WeldJointConfig attachTemplate;
+  } centerAttach;
+};
 class GirdleConnection : public Connection {
 public:
   using Config = GirdleConnectionConfig;
-
   // virtual void update(float dt) override;
   // void rotateAroundAxis(float angle);
   // void rotateAroundAxis(b2Rot rot);
@@ -54,22 +56,18 @@ protected:
                    const std::shared_ptr<JointFactory> jointFactory);
 
   // Internal shapes
-  std::shared_ptr<Circle> leftShoulder;
-  std::shared_ptr<Circle> rightShoulder;
+  std::shared_ptr<Circle> left;
+  std::shared_ptr<Circle> right;
   std::shared_ptr<Circle> center;
 
   // Internal joints
-  std::shared_ptr<DistanceJoint> leftTopDistance;
-  std::shared_ptr<DistanceJoint> leftBottomDistance;
-  std::shared_ptr<DistanceJoint> rightTopDistance;
-  std::shared_ptr<DistanceJoint> rightBottomDistance;
-  std::shared_ptr<DistanceJoint> relativeDistance;
+  std::shared_ptr<PrismaticJoint> leftPrism;
+  std::shared_ptr<PrismaticJoint> rightPrism;
 
   // External attachments
   std::shared_ptr<RevoluteJoint> leftAttach;
   std::shared_ptr<RevoluteJoint> rightAttach;
-  std::shared_ptr<WeldJoint> topCenterAttach;
-  std::shared_ptr<WeldJoint> bottomCenterAttach;
+  std::shared_ptr<WeldJoint> centerAttach;
 
   float girdleWidth;
   b2Rot current3DRotation;

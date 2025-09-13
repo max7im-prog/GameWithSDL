@@ -70,10 +70,10 @@ DemoCreature::DemoCreature(
       b2Rot baseRot = b2MakeRot(-B2_PI / 4);
       b2Rot incrRot = b2MakeRot(-B2_PI / 3);
       b2Rot q = baseRot;
-      
+
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        q = b2MulRot(q,incrRot);
+        q = b2MulRot(q, incrRot);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
@@ -92,10 +92,10 @@ DemoCreature::DemoCreature(
       b2Rot baseRot = b2MakeRot(-B2_PI / 4);
       b2Rot incrRot = b2MakeRot(-B2_PI / 4);
       b2Rot q = baseRot;
-      
+
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        q = b2MulRot(q,incrRot);
+        q = b2MulRot(q, incrRot);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
@@ -173,12 +173,20 @@ DemoCreature::DemoCreature(
   }
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
-    cfg.centerAttach = {.shape = torso->getPolygon(),.localPoint = {0,15}};
-    cfg.configs.centerTemplateConfig.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftShoulderTemplateConfig.bodyDef.type = b2_dynamicBody;
-    cfg.configs.rightShoulderTemplateConfig.bodyDef.type = b2_dynamicBody;
-    cfg.leftAttach = {.shape = leftArm->getSegments()[0],.localPoint = leftArm->getSegments()[0]->getLocalCenter1()};
-    cfg.rightAttach = {.shape = rightArm->getSegments()[0],.localPoint = rightArm->getSegments()[0]->getLocalCenter1()};
+cfg.filter = CreatureConfig::defaultFilter();
+cfg.filter.groupIndex = groupId;
+    cfg.centerAttach.shape = torso->getPolygon();
+    cfg.centerAttach.localPoint = {0, 15};
+
+    cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
+
+    cfg.leftAttach.shape = leftArm->getSegments()[0];
+    cfg.leftAttach.localPoint = leftArm->getSegments()[0]->getLocalCenter1();
+
+    cfg.rightAttach.shape = rightArm->getSegments()[0];
+    cfg.rightAttach.localPoint = rightArm->getSegments()[0]->getLocalCenter1();
     cfg.girdleWidth = 15;
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(shoulderConnection);
