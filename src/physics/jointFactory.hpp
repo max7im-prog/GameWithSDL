@@ -2,6 +2,7 @@
 #include "distanceJoint.hpp"
 #include "mouseJoint.hpp"
 #include "physicsComponents.hpp"
+#include "prismaticJoint.hpp"
 #include "revoluteJoint.hpp"
 #include "weldJoint.hpp"
 #include "world.hpp"
@@ -12,7 +13,7 @@ public:
 
   template <typename T> static constexpr bool supports() {
     return std::is_same_v<T, WeldJoint> || std::is_same_v<T, DistanceJoint> ||
-           std::is_same_v<T, MouseJoint> || std::is_same_v<T, RevoluteJoint>;
+           std::is_same_v<T, MouseJoint> || std::is_same_v<T, RevoluteJoint> || std::is_same_v<T, PrismaticJoint>;
   }
 
 protected:
