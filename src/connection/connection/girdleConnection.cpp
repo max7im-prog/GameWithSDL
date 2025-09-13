@@ -62,7 +62,32 @@ GirdleConnection::GirdleConnection(
   }
 
   // Connect shapes
-
+  {
+    auto prismCfg = config.configs.prismTemplate;
+    prismCfg.jointDef.bodyIdA = center->getBodyId();
+    prismCfg.jointDef.localAnchorA = {0, 0};
+    prismCfg.jointDef.localAxisA = {1, 0};
+    prismCfg.jointDef.enableLimit = true;
+    prismCfg.jointDef.upperTranslation = config.girdleWidth/2;
+    prismCfg.jointDef.lowerTranslation = -config.girdleWidth/2;
+    prismCfg.jointDef.enableSpring= true;
+    {
+      auto cfg = prismCfg;
+      cfg.jointDef.bodyIdB = left->getBodyId();
+      cfg.jointDef.localAnchorB = {0, 0};
+      cfg.jointDef.targetTranslation = -config.girdleWidth/2;
+      leftPrism = jointFactory->create<PrismaticJoint>(cfg);
+      registerChild(leftPrism);
+    }
+    {
+      auto cfg = prismCfg;
+      cfg.jointDef.bodyIdB = right->getBodyId();
+      cfg.jointDef.localAnchorB = {0, 0};
+      cfg.jointDef.targetTranslation = config.girdleWidth/2;
+      rightPrism = jointFactory->create<PrismaticJoint>(cfg);
+      registerChild(rightPrism);
+    }
+  }
   // Connect external
   {
     auto cfg = config.leftAttach.attachTemplate;

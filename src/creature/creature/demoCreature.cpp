@@ -173,14 +173,20 @@ DemoCreature::DemoCreature(
   }
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
-cfg.filter = CreatureConfig::defaultFilter();
-cfg.filter.groupIndex = groupId;
+    cfg.filter = CreatureConfig::defaultFilter();
+    cfg.filter.groupIndex = groupId;
+    cfg.configs.prismTemplate.jointDef.hertz = 2;
     cfg.centerAttach.shape = torso->getPolygon();
     cfg.centerAttach.localPoint = {0, 15};
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.centerTemplate.radius = 0.8;
+    
+    cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.rightTemplate.radius = 0.1;
+
     cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.leftTemplate.radius = 0.1;
 
     cfg.leftAttach.shape = leftArm->getSegments()[0];
     cfg.leftAttach.localPoint = leftArm->getSegments()[0]->getLocalCenter1();
