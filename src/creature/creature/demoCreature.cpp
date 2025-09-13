@@ -63,7 +63,7 @@ DemoCreature::DemoCreature(
     auto cfg = limbConfig;
     cfg.segments.clear();
     cfg.basePos =
-        b2Add(config.position, b2Vec2(-torsoWidth / 2, torsoHeight / 2));
+        b2Add(config.position, b2Vec2(-torsoWidth *0.7, torsoHeight / 2));
     {
 
       auto lastPos = cfg.basePos;
@@ -108,7 +108,7 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.basePos =
-        b2Add(config.position, b2Vec2(torsoWidth / 2, torsoHeight / 2));
+        b2Add(config.position, b2Vec2(torsoWidth *0.7, torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -177,23 +177,23 @@ DemoCreature::DemoCreature(
     cfg.filter.groupIndex = groupId;
     cfg.configs.prismTemplate.jointDef.hertz = 2;
     cfg.centerAttach.shape = torso->getPolygon();
-    cfg.centerAttach.localPoint = {0, 15};
+    cfg.centerAttach.localPoint = {0, torsoHeight/2};
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
     cfg.configs.centerTemplate.radius = 0.8;
     
     cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.rightTemplate.radius = 0.1;
+    cfg.configs.rightTemplate.radius = 0.4;
 
     cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftTemplate.radius = 0.1;
+    cfg.configs.leftTemplate.radius = 0.4;
 
     cfg.leftAttach.shape = leftArm->getSegments()[0];
     cfg.leftAttach.localPoint = leftArm->getSegments()[0]->getLocalCenter1();
 
     cfg.rightAttach.shape = rightArm->getSegments()[0];
     cfg.rightAttach.localPoint = rightArm->getSegments()[0]->getLocalCenter1();
-    cfg.girdleWidth = 15;
+    cfg.girdleWidth = torsoWidth*1.4f;
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(shoulderConnection);
   }
