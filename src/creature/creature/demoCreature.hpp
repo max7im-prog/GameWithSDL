@@ -27,6 +27,9 @@ public:
   virtual void update(float dt) override;
   virtual ~DemoCreature() = default;
 
+  void rotate3D(b2Rot rot);
+  void rotate3D(float angle);
+
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
                const DemoCreatureConfig &config,

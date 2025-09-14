@@ -181,15 +181,17 @@ bool Game::init() {
   c0->aim({30, 30}, true);
   c0->remove();
 
+  
+  std::shared_ptr<DemoCreature> d0; 
   {
     auto config = DemoCreatureConfig::defaultConfig();
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
     config.position = {35, 8};
-    c0 = creatureFactory->create<DemoCreature>(config);
+    d0 = creatureFactory->create<DemoCreature>(config);
   }
-  c0->aim({30, 30}, true);
-  // c0->remove();
+  d0->rotate3D(B2_PI/4*3); 
+  // d0->remove();
 
   // Controller for the creature
   {

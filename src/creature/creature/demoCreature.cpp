@@ -175,9 +175,10 @@ DemoCreature::DemoCreature(
     auto cfg = GirdleConnectionConfig::defaultConfig();
     cfg.filter = CreatureConfig::defaultFilter();
     cfg.filter.groupIndex = groupId;
-    cfg.configs.prismTemplate.jointDef.hertz = 2;
+    cfg.configs.prismTemplate.jointDef.hertz = 10;
     cfg.centerAttach.shape = torso->getPolygon();
     cfg.centerAttach.localPoint = {0, torsoHeight/2};
+    cfg.rotationSpeedRadPerSec = 1;
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
     cfg.configs.centerTemplate.radius = 0.8;
@@ -186,7 +187,7 @@ DemoCreature::DemoCreature(
     cfg.configs.rightTemplate.radius = 0.4;
 
     cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftTemplate.radius = 0.4;
+    cfg.configs.leftTemplate.radius = 0.6;
 
     cfg.leftAttach.shape = leftArm->getSegments()[0];
     cfg.leftAttach.localPoint = leftArm->getSegments()[0]->getLocalCenter1();
@@ -453,4 +454,13 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
       context.trackingPoint = newTrackingPoint;
     }
   }
+}
+
+
+void DemoCreature::rotate3D(float angle){
+  rotate3D(b2MakeRot(angle));
+}
+
+void DemoCreature::rotate3D(b2Rot rot){
+  shoulderConnection->rotateAroundAxis(rot);
 }

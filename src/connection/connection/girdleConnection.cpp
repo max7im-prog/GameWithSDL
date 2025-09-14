@@ -15,7 +15,8 @@ GirdleConnection::GirdleConnection(
     const GirdleConnectionConfig &config,
     const std::shared_ptr<ShapeFactory> shapeFactory,
     const std::shared_ptr<JointFactory> jointFactory)
-    : Connection(registry, world) {
+    : Connection(registry, world), girdleWidth(config.girdleWidth),
+      rotationSpeedRadPerSec(config.rotationSpeedRadPerSec),current3DRotation(config.initial3DRotation) {
   if (!config.centerAttach.shape || !config.rightAttach.shape ||
       !config.leftAttach.shape) {
     throw std::invalid_argument("One of the attachments is missing");
@@ -155,20 +156,17 @@ void GirdleConnection::updateRotation(float dt) {
   if (std::abs(b2Rot_GetAngle(target3DRotation) -
                b2Rot_GetAngle(current3DRotation)) > ROTATIONAL_SENSITIVITY) {
     // Calculate new angle
-    b2Rot error = b2MulRot(target3DRotation,
-                           b2MakeRot(-b2Rot_GetAngle(current3DRotation)));
+    b2Rot error = b2InvMulRot(current3DRotation, target3DRotation);
     float angleError = b2Rot_GetAngle(error);
     float angleIncr =
-        std::min(dt * rotationSpeedRadPerSec / 1000, std::abs(angleError));
+        std::min(dt * rotationSpeedRadPerSec, std::abs(angleError));
     b2Rot rotIncr;
-
     if (b2Rot_GetAngle(error) < 0) {
       rotIncr = b2MakeRot(-angleIncr);
     } else {
       rotIncr = b2MakeRot(angleIncr);
     }
     current3DRotation = b2MulRot(current3DRotation, rotIncr);
-
     // Change target offsets of the prismatic joints in a girdle
     float newOffset = girdleWidth / 2 * current3DRotation.c;
     rightPrism->setTargetTranslation(newOffset);
@@ -177,9 +175,7 @@ void GirdleConnection::updateRotation(float dt) {
 }
 
 void GirdleConnection::rotateAroundAxis(float angle) {
-  target3DRotation = b2MulRot(target3DRotation, b2MakeRot(angle));
+  target3DRotation = b2MakeRot(angle);
 }
 
-void GirdleConnection::rotateAroundAxis(b2Rot rot) {
-  target3DRotation = b2MulRot(target3DRotation, rot);
-}
+void GirdleConnection::rotateAroundAxis(b2Rot rot) { target3DRotation = rot; }
