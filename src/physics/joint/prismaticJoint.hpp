@@ -14,6 +14,8 @@ class PrismaticJoint : public Joint {
 public:
   using Config = PrismaticJointConfig;
   ~PrismaticJoint() = default;
+  float getTargetTranslation();
+  void setTargetTranslation(float translation);
 
 protected:
   PrismaticJoint() = delete;

@@ -9,7 +9,6 @@ struct ConnectionConfig {};
 
 class Connection : public RegistryComposite {
 public:
-  virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Connection();
 
 protected:

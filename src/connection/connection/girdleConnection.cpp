@@ -68,14 +68,14 @@ GirdleConnection::GirdleConnection(
     prismCfg.jointDef.localAnchorA = {0, 0};
     prismCfg.jointDef.localAxisA = {1, 0};
     prismCfg.jointDef.enableLimit = true;
-    prismCfg.jointDef.upperTranslation = config.girdleWidth/2;
-    prismCfg.jointDef.lowerTranslation = -config.girdleWidth/2;
-    prismCfg.jointDef.enableSpring= true;
+    prismCfg.jointDef.upperTranslation = config.girdleWidth / 2;
+    prismCfg.jointDef.lowerTranslation = -config.girdleWidth / 2;
+    prismCfg.jointDef.enableSpring = true;
     {
       auto cfg = prismCfg;
       cfg.jointDef.bodyIdB = left->getBodyId();
       cfg.jointDef.localAnchorB = {0, 0};
-      cfg.jointDef.targetTranslation = -config.girdleWidth/2;
+      cfg.jointDef.targetTranslation = -config.girdleWidth / 2;
       leftPrism = jointFactory->create<PrismaticJoint>(cfg);
       registerChild(leftPrism);
     }
@@ -83,7 +83,7 @@ GirdleConnection::GirdleConnection(
       auto cfg = prismCfg;
       cfg.jointDef.bodyIdB = right->getBodyId();
       cfg.jointDef.localAnchorB = {0, 0};
-      cfg.jointDef.targetTranslation = config.girdleWidth/2;
+      cfg.jointDef.targetTranslation = config.girdleWidth / 2;
       rightPrism = jointFactory->create<PrismaticJoint>(cfg);
       registerChild(rightPrism);
     }
@@ -140,6 +140,46 @@ GirdleConnectionConfig GirdleConnectionConfig::defaultConfig() {
   ret.girdleWidth = 1;
   ret.rotationAxis = {0, 1};
   ret.initial3DRotation = b2MakeRot(0);
+  ret.rotationSpeedRadPerSec = 1;
   ret.filter = b2DefaultFilter();
   return ret;
+}
+
+void GirdleConnection::update(float dt) {
+  updateRotation(dt);
+  Connection::update(dt);
+}
+
+void GirdleConnection::updateRotation(float dt) {
+  constexpr float ROTATIONAL_SENSITIVITY = 0.01;
+  if (std::abs(b2Rot_GetAngle(target3DRotation) -
+               b2Rot_GetAngle(current3DRotation)) > ROTATIONAL_SENSITIVITY) {
+    // Calculate new angle
+    b2Rot error = b2MulRot(target3DRotation,
+                           b2MakeRot(-b2Rot_GetAngle(current3DRotation)));
+    float angleError = b2Rot_GetAngle(error);
+    float angleIncr =
+        std::min(dt * rotationSpeedRadPerSec / 1000, std::abs(angleError));
+    b2Rot rotIncr;
+
+    if (b2Rot_GetAngle(error) < 0) {
+      rotIncr = b2MakeRot(-angleIncr);
+    } else {
+      rotIncr = b2MakeRot(angleIncr);
+    }
+    current3DRotation = b2MulRot(current3DRotation, rotIncr);
+
+    // Change target offsets of the prismatic joints in a girdle
+    float newOffset = girdleWidth / 2 * current3DRotation.c;
+    rightPrism->setTargetTranslation(newOffset);
+    leftPrism->setTargetTranslation(-newOffset);
+  }
+}
+
+void GirdleConnection::rotateAroundAxis(float angle) {
+  target3DRotation = b2MulRot(target3DRotation, b2MakeRot(angle));
+}
+
+void GirdleConnection::rotateAroundAxis(b2Rot rot) {
+  target3DRotation = b2MulRot(target3DRotation, rot);
 }

@@ -27,9 +27,6 @@ struct GirdleConnectionConfig : public ConnectionConfig {
     PrismaticJointConfig prismTemplate;
   } configs;
 
-  b2Vec2 rotationAxis;
-  float girdleWidth;
-  b2Rot initial3DRotation;
   struct {
     std::shared_ptr<Shape> shape = nullptr;
     b2Vec2 localPoint = {0, 0};
@@ -41,13 +38,19 @@ struct GirdleConnectionConfig : public ConnectionConfig {
     b2Vec2 localPoint = {0, 0};
     WeldJointConfig attachTemplate;
   } centerAttach;
+
+  b2Vec2 rotationAxis;
+  float girdleWidth;
+  b2Rot initial3DRotation;
+  float rotationSpeedRadPerSec;
 };
+
 class GirdleConnection : public Connection {
 public:
   using Config = GirdleConnectionConfig;
-  // virtual void update(float dt) override;
-  // void rotateAroundAxis(float angle);
-  // void rotateAroundAxis(b2Rot rot);
+  virtual void update(float dt) override;
+  void rotateAroundAxis(float angle);
+  void rotateAroundAxis(b2Rot rot);
 
 protected:
   GirdleConnection(entt::registry &registry, const std::shared_ptr<World> world,
@@ -71,7 +74,11 @@ protected:
 
   float girdleWidth;
   b2Rot current3DRotation;
+  b2Rot target3DRotation;
+  float rotationSpeedRadPerSec;
+
 
 private:
+  void updateRotation(float dt);
   friend class ConnectionFactory;
 };
