@@ -28,10 +28,10 @@ DemoCreature::DemoCreature(
     : Creature(registry, world) {
 
   // Calculate stuff
-  constexpr size_t numSegments = 4;
+  constexpr size_t numSegments = 2;
   float segmentLen = b2Length(b2Vec2(config.sizeXMeters, config.sizeYMeters)) *
                      0.7f / numSegments;
-  float segmentRadius = segmentLen / 8;
+  float segmentRadius = segmentLen / 16;
   float torsoWidth = config.sizeXMeters;
   float torsoHeight = config.sizeYMeters;
   auto groupId = ShapeFactory::getNextNegativeId();
@@ -41,10 +41,10 @@ DemoCreature::DemoCreature(
   torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   torsoConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
-  torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 2), (0)},
-                                   {(-torsoWidth / 2), (torsoHeight)},
-                                   {(torsoWidth / 2), (torsoHeight)},
-                                   {(torsoWidth / 2), (0)}};
+  torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 4), (0)},
+                                   {(-torsoWidth / 4), (torsoHeight)},
+                                   {(torsoWidth / 4), (torsoHeight)},
+                                   {(torsoWidth / 4), (0)}};
 
   auto limbConfig = LimbBodyConfig::defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
@@ -63,7 +63,7 @@ DemoCreature::DemoCreature(
     auto cfg = limbConfig;
     cfg.segments.clear();
     cfg.basePos =
-        b2Add(config.position, b2Vec2(-torsoWidth * 0.7, torsoHeight / 2));
+        b2Add(config.position, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
     {
 
       auto lastPos = cfg.basePos;
@@ -108,7 +108,7 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.basePos =
-        b2Add(config.position, b2Vec2(torsoWidth * 0.7, torsoHeight / 2));
+        b2Add(config.position, b2Vec2(torsoWidth * 0.5 , torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -162,13 +162,13 @@ DemoCreature::DemoCreature(
     cfg.centerAttach.localPoint = {0,0};
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.centerTemplate.radius = 0.4;
+    cfg.configs.centerTemplate.radius = segmentRadius*5;
 
     cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.rightTemplate.radius = 0.4;
+    cfg.configs.rightTemplate.radius = segmentRadius*3;
 
     cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftTemplate.radius = 0.4;
+    cfg.configs.leftTemplate.radius = segmentRadius*3;
 
     cfg.leftAttach.shape = leftLeg->getSegments()[0];
     cfg.leftAttach.localPoint = leftLeg->getSegments()[0]->getLocalCenter1();
@@ -194,20 +194,20 @@ DemoCreature::DemoCreature(
     cfg.centerAttach.localPoint = {0, torsoHeight / 2};
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.centerTemplate.radius = 0.8;
+    cfg.configs.centerTemplate.radius = segmentRadius*8;
 
     cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.rightTemplate.radius = 0.4;
+    cfg.configs.rightTemplate.radius = segmentRadius*4;
 
     cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftTemplate.radius = 0.6;
+    cfg.configs.leftTemplate.radius = segmentRadius*6;
 
     cfg.leftAttach.shape = leftArm->getSegments()[0];
     cfg.leftAttach.localPoint = leftArm->getSegments()[0]->getLocalCenter1();
 
     cfg.rightAttach.shape = rightArm->getSegments()[0];
     cfg.rightAttach.localPoint = rightArm->getSegments()[0]->getLocalCenter1();
-    cfg.girdleWidth = torsoWidth * 1.4f;
+    cfg.girdleWidth = torsoWidth * 1.0f;
 
     cfg.configs.rotationControlTemplate.kp = 1.0f;
     cfg.configs.rotationControlTemplate.kd = 0.0f;
@@ -218,7 +218,7 @@ DemoCreature::DemoCreature(
   // Configure controllers
   {
     float inertia = torso->getPolygon()->getRotationalInertia();
-    PIDScalarControllerConfig cfg = {.kp = inertia * 40.0f,
+    PIDScalarControllerConfig cfg = {.kp = inertia * 80.0f,
                                      .ki = 0.0f,
                                      .kd = inertia * 8.0f,
                                      .maxForce = inertia * 150};
@@ -254,7 +254,7 @@ DemoCreature::DemoCreature(
   }
 
   // Assign values
-  legHeight = segmentLen * 3.5f;
+  legHeight = segmentLen * numSegments*0.9;
   creatureState = CreatureState::ON_GROUND;
   creatureAbilities = CreatureAbilities::CAN_JUMP;
   moveContext.maxSpeedMultiplier = 3;
@@ -479,7 +479,7 @@ void DemoCreature::rotate3D(b2Rot rot) {
 }
 
 void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
-  constexpr float planeDist = 5;
+  constexpr float planeDist = 15;
 
   b2Vec2 creaturePos = getWorldPos();
 

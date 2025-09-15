@@ -179,7 +179,7 @@ bool Game::init() {
     c0 = creatureFactory->create<DemoCreature>(config);
   }
   c0->aim({30, 30}, true);
-  c0->remove();
+  // c0->remove();
 
   
   {
