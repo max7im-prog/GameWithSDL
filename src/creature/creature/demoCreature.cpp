@@ -178,7 +178,6 @@ DemoCreature::DemoCreature(
     cfg.configs.prismTemplate.jointDef.hertz = 10;
     cfg.centerAttach.shape = torso->getPolygon();
     cfg.centerAttach.localPoint = {0, torsoHeight/2};
-    cfg.rotationSpeedRadPerSec = 1;
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
     cfg.configs.centerTemplate.radius = 0.8;
@@ -195,6 +194,10 @@ DemoCreature::DemoCreature(
     cfg.rightAttach.shape = rightArm->getSegments()[0];
     cfg.rightAttach.localPoint = rightArm->getSegments()[0]->getLocalCenter1();
     cfg.girdleWidth = torsoWidth*1.4f;
+
+    cfg.configs.rotationControlTemplate.kp = 0.0f;
+    cfg.configs.rotationControlTemplate.kd = 0.0f;
+    cfg.configs.rotationControlTemplate.ki = 0.01f;
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(shoulderConnection);
   }

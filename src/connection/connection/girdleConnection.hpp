@@ -15,6 +15,7 @@
 #include "weldJoint.hpp"
 #include "world.hpp"
 #include <memory>
+#include "PIDRotController.hpp"
 
 struct GirdleConnectionConfig : public ConnectionConfig {
   static GirdleConnectionConfig defaultConfig();
@@ -25,6 +26,7 @@ struct GirdleConnectionConfig : public ConnectionConfig {
     CircleConfig rightTemplate;
     CircleConfig centerTemplate;
     PrismaticJointConfig prismTemplate;
+    PIDRotControllerConfig rotationControlTemplate;
   } configs;
 
   struct {
@@ -42,14 +44,13 @@ struct GirdleConnectionConfig : public ConnectionConfig {
   b2Vec2 rotationAxis;
   float girdleWidth;
   b2Rot initial3DRotation;
-  float rotationSpeedRadPerSec;
 };
 
 class GirdleConnection : public Connection {
 public:
   using Config = GirdleConnectionConfig;
   virtual void update(float dt) override;
-  void rotateAroundAxis(float angle);
+  void rotate3D(float angle);
   void rotateAroundAxis(b2Rot rot);
 
 protected:
@@ -77,6 +78,7 @@ protected:
   b2Rot target3DRotation;
   float rotationSpeedRadPerSec;
 
+  PIDRotController rotationController;
 
 private:
   void updateRotation(float dt);

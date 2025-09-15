@@ -16,7 +16,7 @@ GirdleConnection::GirdleConnection(
     const std::shared_ptr<ShapeFactory> shapeFactory,
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world), girdleWidth(config.girdleWidth),
-      rotationSpeedRadPerSec(config.rotationSpeedRadPerSec),current3DRotation(config.initial3DRotation) {
+      current3DRotation(config.initial3DRotation) {
   if (!config.centerAttach.shape || !config.rightAttach.shape ||
       !config.leftAttach.shape) {
     throw std::invalid_argument("One of the attachments is missing");
@@ -118,6 +118,9 @@ GirdleConnection::GirdleConnection(
     centerAttach = jointFactory->create<WeldJoint>(cfg);
     registerChild(centerAttach);
   }
+
+  // Configure controllers
+  rotationController = PIDRotController(config.configs.rotationControlTemplate);
 }
 
 GirdleConnectionConfig GirdleConnectionConfig::defaultConfig() {
@@ -141,8 +144,9 @@ GirdleConnectionConfig GirdleConnectionConfig::defaultConfig() {
   ret.girdleWidth = 1;
   ret.rotationAxis = {0, 1};
   ret.initial3DRotation = b2MakeRot(0);
-  ret.rotationSpeedRadPerSec = 1;
   ret.filter = b2DefaultFilter();
+  ret.configs.rotationControlTemplate.kp = 1;
+
   return ret;
 }
 
@@ -155,18 +159,12 @@ void GirdleConnection::updateRotation(float dt) {
   constexpr float ROTATIONAL_SENSITIVITY = 0.01;
   if (std::abs(b2Rot_GetAngle(target3DRotation) -
                b2Rot_GetAngle(current3DRotation)) > ROTATIONAL_SENSITIVITY) {
-    // Calculate new angle
+
+    // Calculate the error
     b2Rot error = b2InvMulRot(current3DRotation, target3DRotation);
-    float angleError = b2Rot_GetAngle(error);
-    float angleIncr =
-        std::min(dt * rotationSpeedRadPerSec, std::abs(angleError));
-    b2Rot rotIncr;
-    if (b2Rot_GetAngle(error) < 0) {
-      rotIncr = b2MakeRot(-angleIncr);
-    } else {
-      rotIncr = b2MakeRot(angleIncr);
-    }
+    b2Rot rotIncr = rotationController.update(error,dt);
     current3DRotation = b2MulRot(current3DRotation, rotIncr);
+
     // Change target offsets of the prismatic joints in a girdle
     float newOffset = girdleWidth / 2 * current3DRotation.c;
     rightPrism->setTargetTranslation(newOffset);
@@ -174,7 +172,7 @@ void GirdleConnection::updateRotation(float dt) {
   }
 }
 
-void GirdleConnection::rotateAroundAxis(float angle) {
+void GirdleConnection::rotate3D(float angle) {
   target3DRotation = b2MakeRot(angle);
 }
 

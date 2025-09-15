@@ -190,14 +190,14 @@ bool Game::init() {
     config.position = {35, 8};
     d0 = creatureFactory->create<DemoCreature>(config);
   }
-  d0->rotate3D(B2_PI/4*3); 
+  d0->rotate3D(B2_PI); 
   // d0->remove();
 
   // Controller for the creature
   {
     auto ent = registry.create();
     auto &controller = registry.emplace_or_replace<Controller>(ent);
-    controller.creature = c0->getEntity();
+    controller.creature = d0->getEntity();
   }
 
   return true;
