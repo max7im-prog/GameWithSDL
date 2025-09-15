@@ -182,22 +182,20 @@ bool Game::init() {
   c0->remove();
 
   
-  std::shared_ptr<DemoCreature> d0; 
   {
     auto config = DemoCreatureConfig::defaultConfig();
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
     config.position = {35, 8};
-    d0 = creatureFactory->create<DemoCreature>(config);
+    c0 = creatureFactory->create<DemoCreature>(config);
   }
-  d0->rotate3D(B2_PI); 
-  // d0->remove();
+  // c0->remove();
 
   // Controller for the creature
   {
     auto ent = registry.create();
     auto &controller = registry.emplace_or_replace<Controller>(ent);
-    controller.creature = d0->getEntity();
+    controller.creature = c0->getEntity();
   }
 
   return true;

@@ -151,26 +151,40 @@ DemoCreature::DemoCreature(
 
   // Create connections
   auto jointConfig = RevoluteConnectionConfig::defaultConfig();
+
+  // Hips
   {
-    auto cfg = jointConfig;
-    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB =
-        leftLeg->getSegments()[0]->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(-torsoWidth * 0.3, 0);
-    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    leftHipJoint = connectionFactory->create<RevoluteConnection>(cfg);
-    registerChild(leftHipJoint);
+    auto cfg = GirdleConnectionConfig::defaultConfig();
+    cfg.filter = CreatureConfig::defaultFilter();
+    cfg.filter.groupIndex = groupId;
+    cfg.configs.prismTemplate.jointDef.hertz = 10;
+    cfg.centerAttach.shape = torso->getPolygon();
+    cfg.centerAttach.localPoint = {0,0};
+
+    cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.centerTemplate.radius = 0.4;
+
+    cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.rightTemplate.radius = 0.4;
+
+    cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
+    cfg.configs.leftTemplate.radius = 0.4;
+
+    cfg.leftAttach.shape = leftLeg->getSegments()[0];
+    cfg.leftAttach.localPoint = leftLeg->getSegments()[0]->getLocalCenter1();
+
+    cfg.rightAttach.shape = rightLeg->getSegments()[0];
+    cfg.rightAttach.localPoint = rightLeg->getSegments()[0]->getLocalCenter1();
+    cfg.girdleWidth = torsoWidth * 0.6f;
+
+    cfg.configs.rotationControlTemplate.kp = 1.0f;
+    cfg.configs.rotationControlTemplate.kd = 0.0f;
+    cfg.configs.rotationControlTemplate.ki = 0.0f;
+    hipConnection = connectionFactory->create<GirdleConnection>(cfg);
+    registerChild(hipConnection);
   }
-  {
-    auto cfg = jointConfig;
-    cfg.templateJointCfg.jointDef.bodyIdA = torso->getPolygon()->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB =
-        rightLeg->getSegments()[0]->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = b2Vec2(torsoWidth * 0.3, 0);
-    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    rightHipJoint = connectionFactory->create<RevoluteConnection>(cfg);
-    registerChild(rightHipJoint);
-  }
+
+  // Shoulders
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
     cfg.filter = CreatureConfig::defaultFilter();
@@ -201,7 +215,6 @@ DemoCreature::DemoCreature(
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(shoulderConnection);
   }
-
   // Configure controllers
   {
     float inertia = torso->getPolygon()->getRotationalInertia();
@@ -469,14 +482,14 @@ void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   constexpr float planeDist = 5;
 
   b2Vec2 creaturePos = getWorldPos();
-  
-  float translationX =b2Sub(worldPoint,creaturePos).x ;
 
-  float desiredAngle = b2Atan2(translationX,planeDist);
+  float translationX = b2Sub(worldPoint, creaturePos).x;
+
+  float desiredAngle = b2Atan2(translationX, planeDist);
   shoulderConnection->rotate3D(desiredAngle);
-  
+  hipConnection->rotate3D(desiredAngle);
 }
 
-b2Vec2 DemoCreature::getWorldPos(){
-  return torso->getPolygon()-> getWorldPos();
+b2Vec2 DemoCreature::getWorldPos() {
+  return torso->getPolygon()->getWorldPos();
 }

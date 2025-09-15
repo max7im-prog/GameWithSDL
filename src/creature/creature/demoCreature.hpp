@@ -30,8 +30,6 @@ public:
 
   b2Vec2 getWorldPos() override;
 
-  void rotate3D(b2Rot rot);
-  void rotate3D(float angle);
 
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
@@ -45,11 +43,13 @@ protected:
   std::shared_ptr<LimbBody> rightLeg = nullptr;
   std::shared_ptr<PolygonBody> torso = nullptr;
 
-  std::shared_ptr<RevoluteConnection> leftHipJoint = nullptr;
-  std::shared_ptr<RevoluteConnection> rightHipJoint = nullptr;
   std::shared_ptr<GirdleConnection> shoulderConnection = nullptr;
+  std::shared_ptr<GirdleConnection> hipConnection = nullptr;
 
 private:
+
+  void rotate3D(b2Rot rot);
+  void rotate3D(float angle);
   void keepTorsoUpright(float dt);
   PIDScalarController torsoAngleController;
 
