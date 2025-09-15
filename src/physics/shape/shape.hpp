@@ -23,6 +23,7 @@ public:
   b2Vec2 getLinearVelocity();
   b2Vec2 getLocalPoint(b2Vec2 worldPoint);
   b2Vec2 getWorldPoint(b2Vec2 localPoint);
+  b2Vec2 getWorldPos();
 
   void applyTorque(float torque);
 

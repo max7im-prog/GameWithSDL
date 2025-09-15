@@ -63,7 +63,7 @@ DemoCreature::DemoCreature(
     auto cfg = limbConfig;
     cfg.segments.clear();
     cfg.basePos =
-        b2Add(config.position, b2Vec2(-torsoWidth *0.7, torsoHeight / 2));
+        b2Add(config.position, b2Vec2(-torsoWidth * 0.7, torsoHeight / 2));
     {
 
       auto lastPos = cfg.basePos;
@@ -108,7 +108,7 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.basePos =
-        b2Add(config.position, b2Vec2(torsoWidth *0.7, torsoHeight / 2));
+        b2Add(config.position, b2Vec2(torsoWidth * 0.7, torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -177,11 +177,11 @@ DemoCreature::DemoCreature(
     cfg.filter.groupIndex = groupId;
     cfg.configs.prismTemplate.jointDef.hertz = 10;
     cfg.centerAttach.shape = torso->getPolygon();
-    cfg.centerAttach.localPoint = {0, torsoHeight/2};
+    cfg.centerAttach.localPoint = {0, torsoHeight / 2};
 
     cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
     cfg.configs.centerTemplate.radius = 0.8;
-    
+
     cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
     cfg.configs.rightTemplate.radius = 0.4;
 
@@ -193,11 +193,11 @@ DemoCreature::DemoCreature(
 
     cfg.rightAttach.shape = rightArm->getSegments()[0];
     cfg.rightAttach.localPoint = rightArm->getSegments()[0]->getLocalCenter1();
-    cfg.girdleWidth = torsoWidth*1.4f;
+    cfg.girdleWidth = torsoWidth * 1.4f;
 
-    cfg.configs.rotationControlTemplate.kp = 0.0f;
+    cfg.configs.rotationControlTemplate.kp = 1.0f;
     cfg.configs.rotationControlTemplate.kd = 0.0f;
-    cfg.configs.rotationControlTemplate.ki = 0.01f;
+    cfg.configs.rotationControlTemplate.ki = 0.0f;
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(shoulderConnection);
   }
@@ -459,11 +459,24 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
   }
 }
 
+void DemoCreature::rotate3D(float angle) { rotate3D(b2MakeRot(angle)); }
 
-void DemoCreature::rotate3D(float angle){
-  rotate3D(b2MakeRot(angle));
+void DemoCreature::rotate3D(b2Rot rot) {
+  shoulderConnection->rotateAroundAxis(rot);
 }
 
-void DemoCreature::rotate3D(b2Rot rot){
-  shoulderConnection->rotateAroundAxis(rot);
+void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
+  constexpr float planeDist = 5;
+
+  b2Vec2 creaturePos = getWorldPos();
+  
+  float translationX =b2Sub(worldPoint,creaturePos).x ;
+
+  float desiredAngle = b2Atan2(translationX,planeDist);
+  shoulderConnection->rotate3D(desiredAngle);
+  
+}
+
+b2Vec2 DemoCreature::getWorldPos(){
+  return torso->getPolygon()-> getWorldPos();
 }

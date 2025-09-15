@@ -59,7 +59,7 @@ void ControllerUpdateSystem::update(entt::registry &registry,
         break;
       }
     }
-    
+
     newController.aimContext.update = true;
     for (auto button : pressedButtons) {
       switch (button) {
@@ -71,6 +71,12 @@ void ControllerUpdateSystem::update(entt::registry &registry,
       default:
         break;
       }
+    }
+
+    {
+      newController.lookContext.update = true;
+      newController.lookContext.worldPoint = mouseLocation;
+      newController.lookContext.look = true;
     }
 
     movementDir = b2Normalize(movementDir);

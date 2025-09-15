@@ -23,9 +23,12 @@ public:
 
   void move(b2Vec2 dir, float intensity) override;
   void aim(b2Vec2 worldPoint, bool aim) override;
+  void lookAt(b2Vec2 worldPoint, bool aim) override;
   void jump() override;
   virtual void update(float dt) override;
   virtual ~DemoCreature() = default;
+
+  b2Vec2 getWorldPos() override;
 
   void rotate3D(b2Rot rot);
   void rotate3D(float angle);

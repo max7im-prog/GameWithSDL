@@ -14,11 +14,7 @@ enum CreatureAbilities {
   CAN_JUMP = 1 << 0,
 };
 
-enum CreatureState {
-  ON_GROUND,
-  IN_AIR,
-  FLYING
-};
+enum CreatureState { ON_GROUND, IN_AIR, FLYING };
 
 class Creature : public RegistryComposite {
 public:
@@ -36,6 +32,8 @@ public:
   virtual void update(float dt) override;
 
   std::uint32_t getAbilities();
+
+  virtual b2Vec2 getWorldPos() = 0;
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
