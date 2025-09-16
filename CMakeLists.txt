@@ -63,7 +63,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/connection)
 
 set(EXTERNAL_LIBS
   box2d
-  SDL3-shared
+  SDL3::SDL3
   EnTT::EnTT
 )
 
