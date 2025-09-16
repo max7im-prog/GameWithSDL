@@ -1,5 +1,4 @@
 #pragma once
-#include "SDL3/SDL.h"
 #include "eventUtils.hpp"
 #include <SDL3/SDL.h>
 

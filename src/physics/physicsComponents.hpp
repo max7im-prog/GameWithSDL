@@ -2,7 +2,6 @@
 #include "joint.hpp"
 #include "shape.hpp"
 #include "world.hpp"
-#include <SDL3/SDL.h>
 #include <box2d/box2d.h>
 #include <variant>
 
