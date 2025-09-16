@@ -1,5 +1,5 @@
 #include "renderUtils.hpp"
-#include "SDL3/SDL_render.h"
+#include "SDL3/SDL.h"
 #include "box2d/box2d.h"
 #include "box2d/id.h"
 #include "box2d/math_functions.h"

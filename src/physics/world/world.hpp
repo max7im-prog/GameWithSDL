@@ -2,7 +2,7 @@
 #include <box2d/box2d.h>
 #include "registryContainer.hpp"
 
-#include <SDL3/SDL_stdinc.h>
+#include <SDL3/SDL.h>
 
 struct WorldConfig {
   Uint32 substepCount = 4;

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "SDL3/SDL_keycode.h"
-#include <SDL3/SDL_events.h>
-#include <SDL3/SDL_stdinc.h>
+#include "SDL3/SDL.h"
 #include <entt/entt.hpp>
 
 // System to poll SDL events (mostly player's input)

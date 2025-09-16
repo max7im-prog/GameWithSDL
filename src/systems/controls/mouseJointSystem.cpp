@@ -1,5 +1,5 @@
 #include "mouseJointSystem.hpp"
-#include "SDL3/SDL_mouse.h"
+#include "SDL3/SDL.h"
 #include "box2d/box2d.h"
 #include "box2d/types.h"
 #include "emptyShape.hpp"

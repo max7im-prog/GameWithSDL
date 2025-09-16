@@ -1,6 +1,6 @@
 #include "controllerUpdateSystem.hpp"
 
-#include "SDL3/SDL_keycode.h"
+#include "SDL3/SDL.h"
 #include "box2d/math_functions.h"
 #include "controlComponents.hpp"
 #include "eventComponents.hpp"
