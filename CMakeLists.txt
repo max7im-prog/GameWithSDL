@@ -20,6 +20,7 @@ FetchContent_Declare(
   box2d
   GIT_REPOSITORY https://github.com/max7im-prog/game-box2d.git
   GIT_TAG v3.1.1
+  GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(box2d)
 
@@ -27,6 +28,7 @@ FetchContent_Declare(
   SDL
   GIT_REPOSITORY https://github.com/max7im-prog/game-SDL.git
   GIT_TAG release-3.2.16
+  GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(SDL)
 
@@ -34,6 +36,7 @@ FetchContent_Declare(
   entt
   GIT_REPOSITORY https://github.com/max7im-prog/game-entt.git
   GIT_TAG v3.15.0
+  GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(entt)
 
