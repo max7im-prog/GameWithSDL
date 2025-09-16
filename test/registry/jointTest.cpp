@@ -1,4 +1,3 @@
-#include "box2d/types.h"
 #include "circle.hpp"
 #include "distanceJoint.hpp"
 #include "jointFactory.hpp"

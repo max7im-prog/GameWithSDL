@@ -1,13 +1,8 @@
 
-#include "connection.hpp"
-#include "box2d/types.h"
 #include "circle.hpp"
 #include "connectionFactory.hpp"
-#include "distanceJoint.hpp"
 #include "jointFactory.hpp"
-#include "mouseJoint.hpp"
 #include "registryTestUtils.hpp"
-#include "revoluteJoint.hpp"
 
 // 3 entities for world and 2 shapes
 constexpr size_t INIT_SHAPE_COUNT = 3;
