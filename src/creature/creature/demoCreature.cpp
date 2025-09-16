@@ -344,7 +344,7 @@ void DemoCreature::dampHorizontalMovement(float dt) {
 void DemoCreature::jump() { jumpContext.jump = true; }
 
 void DemoCreature::updateJump(float dt) {
-  constexpr uint jumpPeriodms = 500;
+  constexpr uint32_t jumpPeriodms = 500;
 
   auto now = std::chrono::system_clock::now();
   auto duration = now - jumpContext.lastJumpCall;
