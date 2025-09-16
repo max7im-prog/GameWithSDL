@@ -2,10 +2,9 @@
 #include <box2d/box2d.h>
 #include "registryContainer.hpp"
 
-#include <SDL3/SDL.h>
 
 struct WorldConfig {
-  Uint32 substepCount = 4;
+  uint32_t substepCount = 4;
 };
 
 class World : public RegistryContainer {
@@ -17,7 +16,7 @@ public:
 protected:
   World(entt::registry &registry);
   b2WorldId worldId;
-  Uint32 substepCount = 1;
+  uint32_t substepCount = 1;
 
 private:
   friend class WorldFactory;
