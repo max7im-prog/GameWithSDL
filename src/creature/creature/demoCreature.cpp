@@ -218,9 +218,9 @@ DemoCreature::DemoCreature(
   // Configure controllers
   {
     float inertia = torso->getPolygon()->getRotationalInertia();
-    PIDScalarControllerConfig cfg = {.kp = inertia * 80.0f,
+    PIDScalarControllerConfig cfg = {.kp = inertia * 160.0f,
                                      .ki = 0.0f,
-                                     .kd = inertia * 8.0f,
+                                     .kd = inertia * 49.0f,
                                      .maxForce = inertia * 150};
     torsoAngleController = PIDScalarController(cfg);
   }
