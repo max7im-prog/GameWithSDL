@@ -53,6 +53,7 @@ bool Game::init() {
   worldFactory = std::shared_ptr<WorldFactory>(new WorldFactory(registry));
   {
     auto config = BasicWorld::Config::defaultConfig();
+    config.substepCount = 16;
     world = worldFactory->create<BasicWorld>(config);
   }
 
