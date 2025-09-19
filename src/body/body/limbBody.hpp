@@ -4,11 +4,12 @@
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
 #include "jointFactory.hpp"
+#include "kinematicUtils.hpp"
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 
 struct LimbSegmentConfig {
-  b2Vec2 endPos = {0,0};
+  b2Vec2 endPos = {0, 0};
   float radius = 0.25;
 };
 
@@ -27,6 +28,9 @@ struct LimbBodyConfig : public BodyConfig {
 
   std::vector<LimbSegmentConfig> segments;
   b2Vec2 basePos;
+
+  std::vector<AngleConstraint> angleConstraints = {};
+  b2Rot rootRot;
 };
 
 class LimbBody : public Body {
@@ -67,6 +71,8 @@ protected:
     b2Vec2 trackingPoint = b2Vec2(0, 0);
     bool isTracking = false;
   } trackingContext;
+
+  IKTask rootIKTask;
 
   friend class BodyFactory;
 };

@@ -40,7 +40,6 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     segments.push_back(capsule);
     lastPos = capsule->getCenter2();
   }
-
   // Connect capsules
   auto jointConfig = config.templateJointConfig;
   for (size_t i = 1; i < segments.size(); i++) {
@@ -58,6 +57,16 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     registerChild(joint);
     joints.push_back(joint);
   }
+
+  // Configure Inverse Kinematics template
+  rootIKTask.rootRot = config.rootRot;
+  if (config.angleConstraints.size() != 0) {
+    rootIKTask.angleConstraints = config.angleConstraints;
+  } else {
+    rootIKTask.angleConstraints =
+        std::vector<AngleConstraint>(segmentLengths.size());
+  }
+  rootIKTask.lengths = segmentLengths;
 
   // Create PID controllers
   constexpr int CONTROLLERS_PER_SEGMENT = 2;

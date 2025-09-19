@@ -3,6 +3,11 @@
 #include <box2d/box2d.h>
 #include <vector>
 
+struct AngleConstraint {
+  float minRot = -B2_PI;
+  float maxRot = B2_PI;
+};
+
 class KinematicUtils {
 public:
   // Solves an inverse kinematic problem with a FABRIK method
@@ -34,11 +39,6 @@ public:
   enum class IKTaskParams : uint32_t {
     CONSTRAIN_ANGLE = 1,
   };
-  struct AngleConstraint {
-    float minRot = -B2_PI;
-    float maxRot = B2_PI;
-  };
-
   std::vector<float> lengths = {};
   std::vector<b2Vec2> previousJoints = {};
   std::vector<AngleConstraint> angleConstraints = {};
@@ -61,11 +61,11 @@ private:
 
 inline b2Rot rotToPoint(b2Vec2 from, b2Vec2 to) {
   b2Vec2 vecToPoint = b2Normalize(b2Sub(to, from));
-  return {.c = vecToPoint.x,.s = vecToPoint.y};
+  return {.c = vecToPoint.x, .s = vecToPoint.y};
 }
 
-inline b2Rot clampRot(b2Rot rot,float minAngle, float maxAngle){
+inline b2Rot clampRot(b2Rot rot, float minAngle, float maxAngle) {
   float angle = b2Rot_GetAngle(rot);
-  angle = b2ClampFloat(angle,minAngle,maxAngle);
+  angle = b2ClampFloat(angle, minAngle, maxAngle);
   return b2MakeRot(angle);
 }
