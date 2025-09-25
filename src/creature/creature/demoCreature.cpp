@@ -475,7 +475,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
 void DemoCreature::rotate3D(float angle) { rotate3D(b2MakeRot(angle)); }
 
 void DemoCreature::rotate3D(b2Rot rot) {
-  shoulderConnection->rotateAroundAxis(rot);
+  shoulderConnection->rotate3D(rot);
 }
 
 void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
