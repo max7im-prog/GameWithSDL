@@ -4,17 +4,18 @@
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
 #include "kinematicUtils.hpp"
+#include "revoluteConnection.hpp"
 #include "revoluteJoint.hpp"
 
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
-                   const LimbBodyConfig &config,
+                   const LimbBodyConfig &c,
                    const std::shared_ptr<ShapeFactory> shapeFactory,
                    const std::shared_ptr<JointFactory> jointFactory)
-    : Body(registry, world), segmentsConfig(config.segments) {
+    : Body(registry, world), config(c) {
 
   b2Vec2 lastPos = config.basePos;
   b2Vec2 incrementDir = {0, -1};
-  b2Rot adjustmentRot = b2MakeRot(B2_PI / 2);
+  const b2Rot adjustmentRot = b2MakeRot(B2_PI / 2);
 
   // Create capsules
   segmentLengths = {};
@@ -40,6 +41,17 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     segments.push_back(capsule);
     lastPos = capsule->getCenter2();
   }
+
+  // Configure Inverse Kinematics template
+  rootIKTask.rootRot = config.rootRot;
+  if (config.initialAngleConstraints.size() != 0) {
+    rootIKTask.angleConstraints = config.initialAngleConstraints;
+  } else {
+    rootIKTask.angleConstraints =
+        std::vector<AngleConstraint>(segmentLengths.size());
+  }
+  rootIKTask.lengths = segmentLengths;
+
   // Connect capsules
   auto jointConfig = config.templateJointConfig;
   for (size_t i = 1; i < segments.size(); i++) {
@@ -53,20 +65,14 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     jointConfig.jointDef.localAnchorB =
         b2Body_GetLocalPoint(bodyB, segments[i]->getCenter1());
 
+    jointConfig.jointDef.enableLimit = config.enableAngleConstraints;
+    jointConfig.jointDef.lowerAngle = config.initialAngleConstraints[i].minRot;
+    jointConfig.jointDef.upperAngle = config.initialAngleConstraints[i].maxRot;
+
     auto joint = jointFactory->create<RevoluteJoint>(jointConfig);
     registerChild(joint);
     joints.push_back(joint);
   }
-
-  // Configure Inverse Kinematics template
-  rootIKTask.rootRot = config.rootRot;
-  if (config.angleConstraints.size() != 0) {
-    rootIKTask.angleConstraints = config.angleConstraints;
-  } else {
-    rootIKTask.angleConstraints =
-        std::vector<AngleConstraint>(segmentLengths.size());
-  }
-  rootIKTask.lengths = segmentLengths;
 
   // Create PID controllers
   constexpr int CONTROLLERS_PER_SEGMENT = 2;
@@ -94,6 +100,9 @@ LimbBodyConfig LimbBodyConfig::defaultConfig() {
   ret.templateJointConfig = RevoluteJointConfig::defaultConfig();
   ret.basePos = {0, 0};
   ret.segments = {};
+
+  ret.initialAngleConstraints = {};
+  ret.enableAngleConstraints = false;
 
   return ret;
 }
@@ -145,9 +154,15 @@ void LimbBody::update(float dt) {
   }
 
   auto oldPos = this->getJointsPos();
+  rootIKTask.previousJoints = oldPos;
+  rootIKTask.fixturePoint = getBasePos();
+  rootIKTask.targetPoint = trackingContext.trackingPoint;
 
-  auto newPos = KinematicUtils::solveFABRIK(
-      getBasePos(), trackingContext.trackingPoint, oldPos, getSegmentLengths());
+  auto newPos = rootIKTask.solveFABRIK(
+      static_cast<uint32_t>(IKTask::IKTaskParams::CONSTRAIN_ANGLE));
+
+  // auto newPos = KinematicUtils::solveFABRIK(
+  // getBasePos(), trackingContext.trackingPoint, oldPos, getSegmentLengths());
 
   b2Vec2 correctingForce = {0, 0};
   b2Vec2 firstError = {0, 0};
@@ -170,4 +185,39 @@ void LimbBody::update(float dt) {
 
 const std::vector<std::shared_ptr<Capsule>> &LimbBody::getSegments() const {
   return segments;
+}
+
+void LimbBody::setAngleConstraints(
+    const std::vector<AngleConstraint> &constraints) {
+  // Update inverse kinematics
+  rootIKTask.angleConstraints = constraints;
+
+  // Update joints
+  // TODO: complete
+}
+
+std::shared_ptr<RevoluteConnection>
+LimbBody::connect(std::shared_ptr<ConnectionFactory> factory, b2Vec2 localPos,
+                  b2BodyId attachedBodyId, std::shared_ptr<Body> parentBody) {
+  // TODO: implement
+  std::shared_ptr<RevoluteConnection> ret = nullptr;
+
+
+  {
+    auto cfg = RevoluteConnectionConfig::defaultConfig();
+    cfg.templateJointCfg.jointDef.bodyIdA = attachedBodyId;
+    cfg.templateJointCfg.jointDef.bodyIdB = segments[0]->getBodyId();
+
+    cfg.templateJointCfg.jointDef.referenceAngle =
+        b2Rot_GetAngle(config.rootRot);
+    cfg.templateJointCfg.jointDef.upperAngle =
+        config.initialAngleConstraints[0].maxRot;
+    cfg.templateJointCfg.jointDef.lowerAngle =
+        config.initialAngleConstraints[0].minRot;
+
+    ret = factory->create<RevoluteConnection>(cfg);
+  }
+
+
+  return ret; 
 }

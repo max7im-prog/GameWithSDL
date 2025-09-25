@@ -3,6 +3,7 @@
 #include "body.hpp"
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
+#include "connectionFactory.hpp"
 #include "jointFactory.hpp"
 #include "kinematicUtils.hpp"
 #include "revoluteJoint.hpp"
@@ -29,7 +30,8 @@ struct LimbBodyConfig : public BodyConfig {
   std::vector<LimbSegmentConfig> segments;
   b2Vec2 basePos;
 
-  std::vector<AngleConstraint> angleConstraints = {};
+  std::vector<AngleConstraint> initialAngleConstraints = {};
+  bool enableAngleConstraints = false;
   b2Rot rootRot;
 };
 
@@ -39,9 +41,12 @@ public:
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
   float getLength();
+  void setAngleConstraints(const std::vector<AngleConstraint> & constraints);
   const std::vector<float> &getSegmentLengths();
   const std::vector<std::shared_ptr<Capsule>> &getSegments() const;
   std::vector<b2Vec2> getJointsPos();
+
+  std::shared_ptr<RevoluteConnection> connect(std::shared_ptr<ConnectionFactory> factory, b2Vec2 localPos, b2BodyId attachedBodyId, std::shared_ptr<Body> parentBody);
 
   void setTracking(b2Vec2 worldPoint, bool isTracking);
   bool getTracking();
@@ -66,13 +71,17 @@ protected:
   std::vector<SegmentController> controllers;
   std::vector<float> segmentLengths;
   float length;
-  const std::vector<LimbSegmentConfig> segmentsConfig;
+
   struct TrackingContext {
     b2Vec2 trackingPoint = b2Vec2(0, 0);
     bool isTracking = false;
   } trackingContext;
 
   IKTask rootIKTask;
+
+  const Config config;
+
+  std::weak_ptr<RevoluteConnection> connection;
 
   friend class BodyFactory;
 };

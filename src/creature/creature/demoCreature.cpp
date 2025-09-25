@@ -55,9 +55,9 @@ DemoCreature::DemoCreature(
                                   .KIMultiplier = 0.3f,
                                   .KDMultiplier = 10.0f,
                                   .maxForceMultiplier = 15.0f};
-  limbConfig.templateJointConfig.jointDef.upperAngle = B2_PI / 4;
-  limbConfig.templateJointConfig.jointDef.lowerAngle = -B2_PI / 4;
-  limbConfig.templateJointConfig.jointDef.enableLimit = true;
+  // limbConfig.templateJointConfig.jointDef.upperAngle = B2_PI / 4;
+  // limbConfig.templateJointConfig.jointDef.lowerAngle = -B2_PI / 4;
+  // limbConfig.templateJointConfig.jointDef.enableLimit = true;
 
   {
     auto cfg = limbConfig;
