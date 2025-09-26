@@ -6,7 +6,6 @@
 #include "girdleConnection.hpp"
 #include "limbBody.hpp"
 #include "polygonBody.hpp"
-#include "revoluteJoint.hpp"
 #include <chrono>
 
 enum Direction { LEFT, RIGHT, STANDING };

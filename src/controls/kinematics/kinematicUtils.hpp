@@ -4,8 +4,8 @@
 #include <vector>
 
 struct AngleConstraint {
-  float minRot = -B2_PI;
-  float maxRot = B2_PI;
+  float minRot = -B2_PI*0.98;
+  float maxRot = B2_PI*0.98;
 };
 
 class KinematicUtils {

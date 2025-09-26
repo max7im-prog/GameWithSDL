@@ -1,6 +1,5 @@
 #include "demoCreature.hpp"
 #include "PIDScalarController.hpp"
-#include "box2d/base.h"
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
@@ -9,7 +8,6 @@
 #include "limbBody.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
-#include "revoluteJoint.hpp"
 #include "world.hpp"
 #include <chrono>
 #include <sys/types.h>
@@ -36,6 +34,13 @@ DemoCreature::DemoCreature(
   float torsoHeight = config.sizeYMeters;
   auto groupId = ShapeFactory::getNextNegativeId();
 
+  b2Vec2 leftShoulderPos =
+      b2Add(config.position, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
+  b2Vec2 rightShoulderPos =
+      b2Add(config.position, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
+  b2Vec2 leftHipPos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
+  b2Vec2 rightHipPos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
+
   // Create bodies
   auto torsoConfig = PolygonBodyConfig::defaultConfig();
   torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
@@ -46,6 +51,12 @@ DemoCreature::DemoCreature(
                                    {(torsoWidth / 4), (torsoHeight)},
                                    {(torsoWidth / 4), (0)}};
 
+  auto shoulderConfig = CircleBodyConfig::defaultConfig();
+  shoulderConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
+  shoulderConfig.shapeCfg.radius = segmentRadius * 4;
+  shoulderConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
+  shoulderConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
+
   auto limbConfig = LimbBodyConfig::defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
   limbConfig.templateCapsuleConfig.shapeDef.filter =
@@ -55,10 +66,10 @@ DemoCreature::DemoCreature(
                                   .KIMultiplier = 0.3f,
                                   .KDMultiplier = 10.0f,
                                   .maxForceMultiplier = 15.0f};
-  // limbConfig.templateJointConfig.jointDef.upperAngle = B2_PI / 4;
-  // limbConfig.templateJointConfig.jointDef.lowerAngle = -B2_PI / 4;
-  // limbConfig.templateJointConfig.jointDef.enableLimit = true;
 
+  limbConfig.rootRot = b2MakeRot(0);
+
+  // Limbs
   {
     auto cfg = limbConfig;
     cfg.segments.clear();
@@ -80,6 +91,7 @@ DemoCreature::DemoCreature(
         lastPos = newPos;
       }
     }
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftArm);
   }
@@ -102,13 +114,14 @@ DemoCreature::DemoCreature(
         lastPos = newPos;
       }
     }
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftLeg = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftLeg);
   }
   {
     auto cfg = limbConfig;
     cfg.basePos =
-        b2Add(config.position, b2Vec2(torsoWidth * 0.5 , torsoHeight / 2));
+        b2Add(config.position, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -120,6 +133,7 @@ DemoCreature::DemoCreature(
         lastPos = newPos;
       }
     }
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     rightArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(rightArm);
   }
@@ -137,11 +151,14 @@ DemoCreature::DemoCreature(
         lastPos = newPos;
       }
     }
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     cfg.limbControlConfig.KPMultiplier = 100;
     cfg.limbControlConfig.KDMultiplier = 100;
     rightLeg = bodyFactory->create<LimbBody>(cfg);
     registerChild(rightLeg);
   }
+
+  // Torso
   {
     auto cfg = torsoConfig;
     cfg.shapeCfg.bodyDef.position = {config.position};
@@ -149,72 +166,88 @@ DemoCreature::DemoCreature(
     registerChild(torso);
   }
 
+  // Shoulders and hips
+  {
+    auto cfg = shoulderConfig;
+    cfg.shapeCfg.bodyDef.position = leftShoulderPos;
+    leftShoulder = bodyFactory->create<CircleBody>(cfg);
+    registerChild(leftShoulder);
+  }
+  {
+    auto cfg = shoulderConfig;
+    cfg.shapeCfg.bodyDef.position = rightShoulderPos;
+    rightShoulder = bodyFactory->create<CircleBody>(cfg);
+    registerChild(rightShoulder);
+  }
+  {
+    auto cfg = shoulderConfig;
+    cfg.shapeCfg.bodyDef.position = leftHipPos;
+    leftHip = bodyFactory->create<CircleBody>(cfg);
+    registerChild(leftHip);
+  }
+  {
+    auto cfg = shoulderConfig;
+    cfg.shapeCfg.bodyDef.position = rightHipPos;
+    rightHip = bodyFactory->create<CircleBody>(cfg);
+    registerChild(rightHip);
+  }
+
   // Create connections
-  auto jointConfig = RevoluteConnectionConfig::defaultConfig();
 
   // Hips
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
-    cfg.filter = CreatureConfig::defaultFilter();
-    cfg.filter.groupIndex = groupId;
-    cfg.configs.prismTemplate.jointDef.hertz = 10;
+    cfg.girdleWidth = torsoWidth * 0.4;
     cfg.centerAttach.shape = torso->getPolygon();
-    cfg.centerAttach.localPoint = {0,0};
+    cfg.centerAttach.localPoint = {0, 0};
 
-    cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.centerTemplate.radius = segmentRadius*5;
+    cfg.leftAttach.shape = leftHip->getCircle();
+    cfg.leftAttach.localPoint = {0, 0};
 
-    cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.rightTemplate.radius = segmentRadius*3;
+    cfg.rightAttach.shape = rightHip->getCircle();
+    cfg.rightAttach.localPoint = {0, 0};
 
-    cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftTemplate.radius = segmentRadius*3;
+    cfg.rotationControlTemplate.kp = 1.0f;
+    cfg.rotationControlTemplate.kd = 0.0f;
+    cfg.rotationControlTemplate.ki = 0.0f;
 
-    cfg.leftAttach.shape = leftLeg->getSegments()[0];
-    cfg.leftAttach.localPoint = leftLeg->getSegments()[0]->getLocalCenter1();
+    cfg.rotationAxis = {0, 1};
+    cfg.prismTemplate.jointDef.hertz = 10;
 
-    cfg.rightAttach.shape = rightLeg->getSegments()[0];
-    cfg.rightAttach.localPoint = rightLeg->getSegments()[0]->getLocalCenter1();
-    cfg.girdleWidth = torsoWidth * 0.6f;
-
-    cfg.configs.rotationControlTemplate.kp = 1.0f;
-    cfg.configs.rotationControlTemplate.kd = 0.0f;
-    cfg.configs.rotationControlTemplate.ki = 0.0f;
     hipConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(hipConnection);
   }
 
+  leftLeg->connect(connectionFactory, leftHip->getCircle(), {0, 0});
+  rightLeg->connect(connectionFactory, rightHip->getCircle(), {0, 0});
+
   // Shoulders
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
-    cfg.filter = CreatureConfig::defaultFilter();
-    cfg.filter.groupIndex = groupId;
-    cfg.configs.prismTemplate.jointDef.hertz = 10;
+    cfg.girdleWidth = torsoWidth * 0.8f;
     cfg.centerAttach.shape = torso->getPolygon();
-    cfg.centerAttach.localPoint = {0, torsoHeight / 2};
+    cfg.centerAttach.localPoint = {0, torsoHeight / 2.0f};
 
-    cfg.configs.centerTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.centerTemplate.radius = segmentRadius*8;
+    cfg.leftAttach.shape = leftShoulder->getCircle();
+    cfg.leftAttach.localPoint = {0, 0};
 
-    cfg.configs.rightTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.rightTemplate.radius = segmentRadius*4;
+    cfg.rightAttach.shape = rightShoulder->getCircle();
+    cfg.rightAttach.localPoint = {0, 0};
 
-    cfg.configs.leftTemplate.bodyDef.type = b2_dynamicBody;
-    cfg.configs.leftTemplate.radius = segmentRadius*6;
+    cfg.rotationControlTemplate.kp = 1.0f;
+    cfg.rotationControlTemplate.kd = 0.0f;
+    cfg.rotationControlTemplate.ki = 0.0f;
 
-    cfg.leftAttach.shape = leftArm->getSegments()[0];
-    cfg.leftAttach.localPoint = leftArm->getSegments()[0]->getLocalCenter1();
+    cfg.rotationAxis = {0, 1};
+    cfg.prismTemplate.jointDef.hertz = 10;
 
-    cfg.rightAttach.shape = rightArm->getSegments()[0];
-    cfg.rightAttach.localPoint = rightArm->getSegments()[0]->getLocalCenter1();
-    cfg.girdleWidth = torsoWidth * 1.0f;
-
-    cfg.configs.rotationControlTemplate.kp = 1.0f;
-    cfg.configs.rotationControlTemplate.kd = 0.0f;
-    cfg.configs.rotationControlTemplate.ki = 0.0f;
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerChild(shoulderConnection);
   }
+
+  leftArm->connect(connectionFactory, leftShoulder->getCircle(), {0, 0});
+  rightArm->connect(connectionFactory, rightShoulder->getCircle(), {0, 0});
+
   // Configure controllers
   {
     float inertia = torso->getPolygon()->getRotationalInertia();
@@ -254,7 +287,7 @@ DemoCreature::DemoCreature(
   }
 
   // Assign values
-  legHeight = segmentLen * numSegments*0.9;
+  legHeight = segmentLen * numSegments * 0.9;
   creatureState = CreatureState::ON_GROUND;
   creatureAbilities = CreatureAbilities::CAN_JUMP;
   moveContext.maxSpeedMultiplier = 3;
@@ -473,9 +506,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
 
 void DemoCreature::rotate3D(float angle) { rotate3D(b2MakeRot(angle)); }
 
-void DemoCreature::rotate3D(b2Rot rot) {
-  shoulderConnection->rotate3D(rot);
-}
+void DemoCreature::rotate3D(b2Rot rot) { shoulderConnection->rotate3D(rot); }
 
 void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   constexpr float planeDist = 15;
