@@ -13,6 +13,7 @@ class RevoluteJoint : public Joint {
 public:
   using Config = RevoluteJointConfig;
   ~RevoluteJoint() = default;
+  void setAngleLimits(float lower, float upper);
 
 protected:
   RevoluteJoint() = delete;

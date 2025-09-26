@@ -43,7 +43,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   }
 
   // Configure Inverse Kinematics template
-  rootIKTask.rootRot = config.rootRot;
+  rootRot = config.rootRot;
   if (config.initialAngleConstraints.size() != 0) {
     rootIKTask.angleConstraints = config.initialAngleConstraints;
   } else {
@@ -157,12 +157,10 @@ void LimbBody::update(float dt) {
   rootIKTask.previousJoints = oldPos;
   rootIKTask.fixturePoint = getBasePos();
   rootIKTask.targetPoint = trackingContext.trackingPoint;
+  rootIKTask.rootRot = getAdjustedRootRot();
 
   auto newPos = rootIKTask.solveFABRIK(
       static_cast<uint32_t>(IKTask::IKTaskParams::CONSTRAIN_ANGLE));
-
-  // auto newPos = KinematicUtils::solveFABRIK(
-  // getBasePos(), trackingContext.trackingPoint, oldPos, getSegmentLengths());
 
   b2Vec2 correctingForce = {0, 0};
   b2Vec2 firstError = {0, 0};
@@ -189,35 +187,72 @@ const std::vector<std::shared_ptr<Capsule>> &LimbBody::getSegments() const {
 
 void LimbBody::setAngleConstraints(
     const std::vector<AngleConstraint> &constraints) {
+  if (constraints.size() != segments.size()) {
+    throw(
+        std::runtime_error("Angle constraint of different size than segments"));
+  }
+
   // Update inverse kinematics
   rootIKTask.angleConstraints = constraints;
 
   // Update joints
-  // TODO: complete
+  if (connection) {
+    auto joint = connection->getRevoluteJoint();
+    joint->setAngleLimits(rootIKTask.angleConstraints[0].minRot,
+                          rootIKTask.angleConstraints[0].maxRot);
+  }
+
+  for (size_t i = 0; i < joints.size(); i++) {
+    auto joint = joints[i];
+
+    joint->setAngleLimits(rootIKTask.angleConstraints[i + 1].minRot,
+                          rootIKTask.angleConstraints[i + 1].maxRot);
+  }
 }
 
-std::shared_ptr<RevoluteConnection>
-LimbBody::connect(std::shared_ptr<ConnectionFactory> factory, b2Vec2 localPos,
-                  b2BodyId attachedBodyId, std::shared_ptr<Body> parentBody) {
-  // TODO: implement
-  std::shared_ptr<RevoluteConnection> ret = nullptr;
-
+void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
+                       std::shared_ptr<Shape> shape, b2Vec2 localPoint) {
+  if (!shape) {
+    throw(std::runtime_error("Nullptr instead of shape"));
+  }
+  if (connection) {
+    connection->remove();
+    unregisterChild(connection);
+    connection = nullptr;
+  }
 
   {
     auto cfg = RevoluteConnectionConfig::defaultConfig();
-    cfg.templateJointCfg.jointDef.bodyIdA = attachedBodyId;
+    cfg.templateJointCfg = config.templateJointConfig;
+    cfg.templateJointCfg.jointDef.bodyIdA = shape->getBodyId();
     cfg.templateJointCfg.jointDef.bodyIdB = segments[0]->getBodyId();
-
-    cfg.templateJointCfg.jointDef.referenceAngle =
-        b2Rot_GetAngle(config.rootRot);
-    cfg.templateJointCfg.jointDef.upperAngle =
-        config.initialAngleConstraints[0].maxRot;
+    cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
+    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
+    cfg.templateJointCfg.jointDef.enableLimit = true;
     cfg.templateJointCfg.jointDef.lowerAngle =
-        config.initialAngleConstraints[0].minRot;
+        rootIKTask.angleConstraints[0].minRot;
+    cfg.templateJointCfg.jointDef.upperAngle =
+        rootIKTask.angleConstraints[0].maxRot;
+    cfg.templateJointCfg.jointDef.referenceAngle =
+        b2Rot_GetAngle(b2MulRot(rootRot, shape->getRotation()));
 
-    ret = factory->create<RevoluteConnection>(cfg);
+    connection = factory->create<RevoluteConnection>(cfg);
+    registerChild(connection);
+  }
+}
+
+b2Rot LimbBody::getAdjustedRootRot() {
+  b2Rot ret;
+
+  if (connection) {
+    ret = b2MulRot(rootRot, b2Body_GetRotation(b2Joint_GetBodyA(
+                                connection->getRevoluteJoint()->getJointId())));
+  } else {
+    b2Vec2 v = b2Normalize(
+        b2Sub(segments[0]->getCenter1(), segments[0]->getCenter2()));
+    b2Rot r = {.c = v.y, .s = v.x};
+    ret = r;
   }
 
-
-  return ret; 
+  return ret;
 }

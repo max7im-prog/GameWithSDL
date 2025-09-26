@@ -383,7 +383,6 @@ void DemoCreature::updateJump(float dt) {
 }
 
 void DemoCreature::updateMove(float dt) {
-  // TODO: implement
   if (moveContext.move) {
     moveContext.move = false;
     if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {

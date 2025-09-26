@@ -38,9 +38,13 @@ protected:
                const std::shared_ptr<ConnectionFactory> connectionFactory);
 
   std::shared_ptr<LimbBody> leftArm = nullptr;
+  std::shared_ptr<CircleBody> leftShoulder = nullptr;
   std::shared_ptr<LimbBody> rightArm = nullptr;
+  std::shared_ptr<CircleBody> rightShoulder = nullptr;
   std::shared_ptr<LimbBody> leftLeg = nullptr;
+  std::shared_ptr<CircleBody> leftHip = nullptr;
   std::shared_ptr<LimbBody> rightLeg = nullptr;
+  std::shared_ptr<CircleBody> rightHip = nullptr;
   std::shared_ptr<PolygonBody> torso = nullptr;
 
   std::shared_ptr<GirdleConnection> shoulderConnection = nullptr;

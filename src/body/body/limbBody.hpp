@@ -41,16 +41,23 @@ public:
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
   float getLength();
-  void setAngleConstraints(const std::vector<AngleConstraint> & constraints);
+
+  /**
+   * @brief Get the root rotation adjusted for the rotation of a connected body
+   */
+  b2Rot getAdjustedRootRot();
+  
+  void setAngleConstraints(const std::vector<AngleConstraint> &constraints);
   const std::vector<float> &getSegmentLengths();
   const std::vector<std::shared_ptr<Capsule>> &getSegments() const;
   std::vector<b2Vec2> getJointsPos();
 
-  std::shared_ptr<RevoluteConnection> connect(std::shared_ptr<ConnectionFactory> factory, b2Vec2 localPos, b2BodyId attachedBodyId, std::shared_ptr<Body> parentBody);
-
   void setTracking(b2Vec2 worldPoint, bool isTracking);
   bool getTracking();
   b2Vec2 getTrackingPoint();
+
+  void connect(std::shared_ptr<ConnectionFactory> factory,
+               std::shared_ptr<Shape> shape, b2Vec2 localPoint);
 
   void update(float dt) override;
 
@@ -80,8 +87,8 @@ protected:
   IKTask rootIKTask;
 
   const Config config;
-
-  std::weak_ptr<RevoluteConnection> connection;
+  std::shared_ptr<RevoluteConnection> connection;
+  b2Rot rootRot;
 
   friend class BodyFactory;
 };

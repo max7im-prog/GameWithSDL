@@ -13,3 +13,7 @@ RevoluteJoint::RevoluteJoint(entt::registry &registry, const World &world,
     : Joint(registry) {
   jointId = b2CreateRevoluteJoint(world.getWorldId(), &(config.jointDef));
 }
+
+void RevoluteJoint::setAngleLimits(float lower, float upper) {
+  b2RevoluteJoint_SetLimits(jointId, lower, upper);
+}

@@ -1,4 +1,3 @@
-// TODO: rewrite
 #include "connectionFactory.hpp"
 #include "registryObjectFactory.hpp"
 ConnectionFactory::ConnectionFactory(

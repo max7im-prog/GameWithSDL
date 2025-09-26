@@ -39,7 +39,6 @@ void DebugUtils::debugPrintRegistry(entt::registry &registry)
     //         std::cout << "  - Mouse\n";
     //     }
 
-    //     // TODO: create output for all other components
 
         
 
