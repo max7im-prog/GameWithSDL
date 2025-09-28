@@ -31,7 +31,6 @@ struct LimbBodyConfig : public BodyConfig {
   b2Vec2 basePos;
 
   std::vector<AngleConstraint> initialAngleConstraints = {};
-  bool enableAngleConstraints = false;
   b2Rot rootRot;
 };
 

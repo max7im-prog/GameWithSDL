@@ -14,8 +14,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     : Body(registry, world), config(c) {
 
   b2Vec2 lastPos = config.basePos;
-  b2Vec2 incrementDir = {0, -1};
-  const b2Rot adjustmentRot = b2MakeRot(B2_PI / 2);
+  const b2Vec2 incrementDir = {1, 0};
 
   // Create capsules
   segmentLengths = {};
@@ -29,10 +28,9 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     float angle = b2Atan2(norm.y, norm.x);
 
     b2Rot rot = b2MakeRot(angle);
-    b2Rot relativeRot = b2MulRot(rot, adjustmentRot);
     segmentLengths.push_back(len);
     length += len;
-    capsuleConfig.bodyDef.rotation = relativeRot;
+    capsuleConfig.bodyDef.rotation = rot;
     capsuleConfig.center1 = {0, 0};
     capsuleConfig.center2 = b2MulSV(len, incrementDir);
     capsuleConfig.radius = seg.radius;
@@ -65,9 +63,10 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     jointConfig.jointDef.localAnchorB =
         b2Body_GetLocalPoint(bodyB, segments[i]->getCenter1());
 
-    jointConfig.jointDef.enableLimit = config.enableAngleConstraints;
+    jointConfig.jointDef.enableLimit = config.initialAngleConstraints[i].enable;
     jointConfig.jointDef.lowerAngle = config.initialAngleConstraints[i].minRot;
     jointConfig.jointDef.upperAngle = config.initialAngleConstraints[i].maxRot;
+    jointConfig.jointDef.referenceAngle = 0.0f;
 
     auto joint = jointFactory->create<RevoluteJoint>(jointConfig);
     registerChild(joint);
@@ -102,7 +101,6 @@ LimbBodyConfig LimbBodyConfig::defaultConfig() {
   ret.segments = {};
 
   ret.initialAngleConstraints = {};
-  ret.enableAngleConstraints = false;
 
   return ret;
 }
@@ -159,8 +157,7 @@ void LimbBody::update(float dt) {
   rootIKTask.targetPoint = trackingContext.trackingPoint;
   rootIKTask.rootRot = getAdjustedRootRot();
 
-  auto newPos = rootIKTask.solveFABRIK(
-      static_cast<uint32_t>(IKTask::IKTaskParams::CONSTRAIN_ANGLE));
+  auto newPos = rootIKTask.solveFABRIK();
 
   b2Vec2 correctingForce = {0, 0};
   b2Vec2 firstError = {0, 0};
@@ -228,7 +225,8 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
     cfg.templateJointCfg.jointDef.bodyIdB = segments[0]->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
-    cfg.templateJointCfg.jointDef.enableLimit = true;
+    cfg.templateJointCfg.jointDef.enableLimit =
+        rootIKTask.angleConstraints[0].enable;
     cfg.templateJointCfg.jointDef.lowerAngle =
         rootIKTask.angleConstraints[0].minRot;
     cfg.templateJointCfg.jointDef.upperAngle =

@@ -67,7 +67,9 @@ DemoCreature::DemoCreature(
                                   .KDMultiplier = 10.0f,
                                   .maxForceMultiplier = 15.0f};
 
-  limbConfig.rootRot = b2MakeRot(0);
+  limbConfig.rootRot = b2MakeRot(-B2_PI/2);
+
+  
 
   // Limbs
   {
@@ -78,12 +80,12 @@ DemoCreature::DemoCreature(
     {
 
       auto lastPos = cfg.basePos;
-      b2Rot baseRot = b2MakeRot(-B2_PI / 4);
-      b2Rot incrRot = b2MakeRot(-B2_PI / 3);
+      b2Rot baseRot = b2MakeRot(-B2_PI *3/ 4);
+      b2Rot incrRot = b2MakeRot(0);
       b2Rot q = baseRot;
 
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
+        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
         q = b2MulRot(q, incrRot);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
@@ -91,6 +93,7 @@ DemoCreature::DemoCreature(
         lastPos = newPos;
       }
     }
+    // cfg.initialAngleConstraints = {{.minRot = -B2_PI/2,.maxRot = B2_PI/2,.enable = true},{.minRot = -B2_PI/2,.maxRot = B2_PI/2,.enable = true}};
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftArm);
@@ -101,12 +104,12 @@ DemoCreature::DemoCreature(
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
     {
       auto lastPos = cfg.basePos;
-      b2Rot baseRot = b2MakeRot(-B2_PI / 4);
-      b2Rot incrRot = b2MakeRot(-B2_PI / 4);
+      b2Rot baseRot = b2MakeRot(-B2_PI *3/ 4);
+      b2Rot incrRot = b2MakeRot(0);
       b2Rot q = baseRot;
 
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
+        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
         q = b2MulRot(q, incrRot);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
@@ -125,8 +128,8 @@ DemoCreature::DemoCreature(
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        b2Rot q = b2MakeRot(B2_PI / 4);
+        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
+        b2Rot q = b2MakeRot(-B2_PI / 4);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
@@ -143,8 +146,8 @@ DemoCreature::DemoCreature(
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(0, -1));
-        b2Rot q = b2MakeRot(B2_PI / 4);
+        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
+        b2Rot q = b2MakeRot(-B2_PI / 4);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});

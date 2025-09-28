@@ -6,6 +6,7 @@
 struct AngleConstraint {
   float minRot = -B2_PI*0.98;
   float maxRot = B2_PI*0.98;
+  bool enable = false;
 };
 
 class KinematicUtils {
@@ -36,9 +37,6 @@ private:
 
 class IKTask {
 public:
-  enum class IKTaskParams : uint32_t {
-    CONSTRAIN_ANGLE = 1,
-  };
   std::vector<float> lengths = {};
   std::vector<b2Vec2> previousJoints = {};
   std::vector<AngleConstraint> angleConstraints = {};
@@ -47,16 +45,16 @@ public:
   b2Rot rootRot = b2MakeRot(0);
   size_t maxIterations = 10;
   float margin = 0.01;
-  std::vector<b2Vec2> solveFABRIK(uint32_t params);
+  std::vector<b2Vec2> solveFABRIK();
 
 private:
   std::vector<b2Vec2> joints = {};
   float totalLength = 0;
   size_t numLengths = 0;
   size_t numJoints = 0;
-  void forwardPass(uint32_t params);
-  void backwardPass(uint32_t params);
-  void solveFar(uint32_t params);
+  void forwardPass();
+  void backwardPass();
+  void solveFar();
 };
 
 inline b2Rot rotToPoint(b2Vec2 from, b2Vec2 to) {

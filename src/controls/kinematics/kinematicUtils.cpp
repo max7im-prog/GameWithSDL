@@ -95,13 +95,12 @@ std::vector<float> KinematicUtils::getAngles(const std::vector<b2Vec2> &pos) {
   return ret;
 }
 
-std::vector<b2Vec2> IKTask::solveFABRIK(uint32_t params) {
+std::vector<b2Vec2> IKTask::solveFABRIK() {
   if (previousJoints.size() != lengths.size() + 1) {
     throw std::runtime_error("Size of lengths vector should be 1 less than "
                              "size of previous joints vector");
   }
-  if ((params & static_cast<uint32_t>(IKTaskParams::CONSTRAIN_ANGLE)) &&
-      (lengths.size() != angleConstraints.size())) {
+  if ((lengths.size() != angleConstraints.size())) {
     throw std::runtime_error("AngleConstraint vector is of different size than "
                              "the PreviousJoints vector");
   }
@@ -120,14 +119,14 @@ std::vector<b2Vec2> IKTask::solveFABRIK(uint32_t params) {
     for (size_t i = 0;
          i < maxIterations && b2Distance(joints.back(), targetPoint) > margin;
          i++) {
-      backwardPass(params);
-      forwardPass(params);
+      backwardPass();
+      forwardPass();
     }
   }
   return joints;
 }
 
-void IKTask::backwardPass(uint32_t params) {
+void IKTask::backwardPass() {
   joints[numJoints - 1] = targetPoint;
   for (size_t i = numJoints - 2; i > 0; i--) {
     b2Vec2 initPoint = joints[i + 1];
@@ -158,7 +157,7 @@ void IKTask::backwardPass(uint32_t params) {
   }
 }
 
-void IKTask::forwardPass(uint32_t params) {
+void IKTask::forwardPass() {
   joints[0] = fixturePoint;
   for (size_t i = 1; i < numJoints - 1; i++) {
     b2Vec2 initPoint = joints[i - 1];
@@ -188,4 +187,4 @@ void IKTask::forwardPass(uint32_t params) {
   }
 }
 
-void IKTask::solveFar(uint32_t params) {}
+void IKTask::solveFar() {}
