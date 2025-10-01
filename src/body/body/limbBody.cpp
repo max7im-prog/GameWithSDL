@@ -4,8 +4,10 @@
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
 #include "kinematicUtils.hpp"
+#include "miscUtils.hpp"
 #include "revoluteConnection.hpp"
 #include "revoluteJoint.hpp"
+#include <stdexcept>
 
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const LimbBodyConfig &c,
@@ -37,7 +39,11 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
     registerChild(capsule);
     segments.push_back(capsule);
-    lastPos = capsule->getCenter2();
+
+    auto c = capsule.lock();
+    if (!c)
+      throw std::runtime_error("Capsule expired");
+    lastPos = c->getCenter2();
   }
 
   // Configure Inverse Kinematics template
@@ -52,16 +58,19 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
 
   // Connect capsules
   auto jointConfig = config.templateJointConfig;
+  auto segmentsLock = miscUtils::lockAll(segments);
+  if (!segmentsLock)
+    throw std::runtime_error("One or more segments expired");
   for (size_t i = 1; i < segments.size(); i++) {
-    auto bodyA = segments[i - 1]->getBodyId();
-    auto bodyB = segments[i]->getBodyId();
+    auto bodyA = (*segmentsLock)[i - 1]->getBodyId();
+    auto bodyB = (*segmentsLock)[i]->getBodyId();
 
     jointConfig.jointDef.bodyIdA = bodyA;
     jointConfig.jointDef.bodyIdB = bodyB;
     jointConfig.jointDef.localAnchorA =
-        b2Body_GetLocalPoint(bodyA, segments[i - 1]->getCenter2());
+        b2Body_GetLocalPoint(bodyA, (*segmentsLock)[i - 1]->getCenter2());
     jointConfig.jointDef.localAnchorB =
-        b2Body_GetLocalPoint(bodyB, segments[i]->getCenter1());
+        b2Body_GetLocalPoint(bodyB, (*segmentsLock)[i]->getCenter1());
 
     jointConfig.jointDef.enableLimit = config.initialAngleConstraints[i].enable;
     jointConfig.jointDef.lowerAngle = config.initialAngleConstraints[i].minRot;
@@ -76,7 +85,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   // Create PID controllers
   constexpr int CONTROLLERS_PER_SEGMENT = 2;
   float gravity = b2Length(b2World_GetGravity(world->getWorldId()));
-  for (auto capsule : segments) {
+  for (auto capsule : *segmentsLock) {
     float mass = capsule->getMass();
     float force = mass * gravity / CONTROLLERS_PER_SEGMENT;
     {
@@ -109,14 +118,21 @@ b2Vec2 LimbBody::getBasePos() {
   if (segments.size() == 0) {
     return {0, 0};
   }
-  return segments.begin()->get()->getCenter1();
+
+  auto c = segments.begin()->lock();
+  if (!c)
+    throw std::runtime_error("Capsule expired");
+  return c->getCenter1();
 }
 
 b2Vec2 LimbBody::getEndPos() {
   if (segments.size() == 0) {
     return {0, 0};
   }
-  return segments.back()->getCenter2();
+  auto c = segments.back().lock();
+  if (!c)
+    throw std::runtime_error("Capsule expired");
+  return c->getCenter2();
 }
 
 const std::vector<float> &LimbBody::getSegmentLengths() {
@@ -139,10 +155,13 @@ std::vector<b2Vec2> LimbBody::getJointsPos() {
     return {};
   }
   std::vector<b2Vec2> ret = {};
-  for (auto capsule : segments) {
+  auto segmentsLock = miscUtils::lockAll(segments);
+  if (!segmentsLock)
+    throw std::runtime_error("One or more segments expired");
+  for (auto capsule : *segmentsLock) {
     ret.push_back(capsule->getCenter1());
   }
-  ret.push_back(segments.back()->getCenter2());
+  ret.push_back((*segmentsLock).back()->getCenter2());
   return ret;
 }
 
@@ -159,6 +178,10 @@ void LimbBody::update(float dt) {
 
   auto newPos = rootIKTask.solveFABRIK();
 
+  auto segmentsLock = miscUtils::lockAll(segments);
+  if (!segmentsLock)
+    throw std::runtime_error("One or more segments expired");
+
   b2Vec2 correctingForce = {0, 0};
   b2Vec2 firstError = {0, 0};
   b2Vec2 secondError = b2Sub(newPos[0], oldPos[0]);
@@ -167,18 +190,18 @@ void LimbBody::update(float dt) {
     secondError = b2Sub(newPos[i + 1], oldPos[i + 1]);
     b2Vec2 firstForce = controllers[i].baseController.update(firstError, dt);
     b2Vec2 secondForce = controllers[i].endController.update(secondError, dt);
-    b2BodyId bodyId = segments[i]->getBodyId();
+    b2BodyId bodyId = (*segmentsLock)[i]->getBodyId();
     b2Body_ApplyForce(bodyId, firstForce, oldPos[i], true);
     b2Body_ApplyForce(bodyId, secondForce, oldPos[i + 1], true);
     correctingForce = b2Sub(correctingForce, b2Add(firstForce, secondForce));
   }
 
   // Apply correcting force to stop limb from moving body it is connected to
-  b2Body_ApplyForce(segments[0]->getBodyId(), correctingForce, getBasePos(),
-                    true);
+  b2Body_ApplyForce((*segmentsLock)[0]->getBodyId(), correctingForce,
+                    getBasePos(), true);
 }
 
-const std::vector<std::shared_ptr<Capsule>> &LimbBody::getSegments() const {
+const std::vector<std::weak_ptr<Capsule>> &LimbBody::getSegments() const {
   return segments;
 }
 
@@ -193,14 +216,22 @@ void LimbBody::setAngleConstraints(
   rootIKTask.angleConstraints = constraints;
 
   // Update joints
-  if (connection) {
-    auto joint = connection->getRevoluteJoint();
+
+  auto connectionLock = connection.lock();
+  if (connectionLock) {
+    auto joint = connectionLock->getRevoluteJoint();
+    if (!joint)
+      throw std::runtime_error("Joint expired");
     joint->setAngleLimits(rootIKTask.angleConstraints[0].minRot,
-                          rootIKTask.angleConstraints[0].maxRot);
+                                        rootIKTask.angleConstraints[0].maxRot);
   }
 
+  auto jointsLock = miscUtils::lockAll(joints);
+  if (!jointsLock)
+    throw std::runtime_error("One or more joints expired");
+
   for (size_t i = 0; i < joints.size(); i++) {
-    auto joint = joints[i];
+    auto joint = (*jointsLock)[i];
 
     joint->setAngleLimits(rootIKTask.angleConstraints[i + 1].minRot,
                           rootIKTask.angleConstraints[i + 1].maxRot);
@@ -212,17 +243,25 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
   if (!shape) {
     throw(std::runtime_error("Nullptr instead of shape"));
   }
-  if (connection) {
-    connection->remove();
+
+  auto connectionLock = connection.lock();
+
+  if (connectionLock) {
+    connectionLock->remove();
     unregisterChild(connection);
-    connection = nullptr;
+    connection = std::weak_ptr<RevoluteConnection>();
   }
 
   {
     auto cfg = RevoluteConnectionConfig::defaultConfig();
     cfg.templateJointCfg = config.templateJointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = shape->getBodyId();
-    cfg.templateJointCfg.jointDef.bodyIdB = segments[0]->getBodyId();
+
+    auto firstSegmentLock = segments[0].lock();
+    if (!firstSegmentLock)
+      throw std::runtime_error("First segment expired");
+
+    cfg.templateJointCfg.jointDef.bodyIdB = firstSegmentLock->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
     cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
     cfg.templateJointCfg.jointDef.enableLimit =
@@ -242,12 +281,18 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
 b2Rot LimbBody::getAdjustedRootRot() {
   b2Rot ret;
 
-  if (connection) {
+  auto connectionLock = connection.lock();
+
+  if (connectionLock) {
     ret = b2MulRot(rootRot, b2Body_GetRotation(b2Joint_GetBodyA(
-                                connection->getRevoluteJoint()->getJointId())));
+                                connectionLock->getRevoluteJoint()->getJointId())));
   } else {
+
+    auto firstSegmentLock = segments[0].lock();
+    if (!firstSegmentLock)
+      throw std::runtime_error("First segment expired");
     b2Vec2 v = b2Normalize(
-        b2Sub(segments[0]->getCenter1(), segments[0]->getCenter2()));
+        b2Sub(firstSegmentLock->getCenter1(), firstSegmentLock->getCenter2()));
     b2Rot r = {.c = v.y, .s = v.x};
     ret = r;
   }

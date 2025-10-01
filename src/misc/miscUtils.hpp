@@ -2,6 +2,7 @@
 #include <memory>
 #include <optional>
 #include <tuple>
+#include <vector>
 namespace miscUtils {
 // Base case: no weak_ptrs
 inline std::optional<std::tuple<>> lockAll() {
@@ -22,4 +23,20 @@ lockAll(const std::weak_ptr<T> &first, const std::weak_ptr<Rest> &...rest) {
   }
   return std::tuple_cat(std::make_tuple(sp), *tail);
 }
+
+template <typename T>
+std::optional<std::vector<std::shared_ptr<T>>>
+lockAll(const std::vector<std::weak_ptr<T>> &weakPtrs) {
+  std::vector<std::shared_ptr<T>> result;
+  result.reserve(weakPtrs.size());
+  for (const auto &wp : weakPtrs) {
+    auto sp = wp.lock();
+    if (!sp) {
+      return std::nullopt; // one expired → fail
+    }
+    result.push_back(std::move(sp));
+  }
+  return result;
+}
+
 } // namespace miscUtils

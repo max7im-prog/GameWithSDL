@@ -11,8 +11,11 @@ WeldConnection::WeldConnection(entt::registry &registry,
   registerChild(weldJoint);
 }
 
-const std::weak_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
-  return weldJoint;
+const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
+  auto ret = weldJoint.lock();
+  if (!ret)
+    throw std::runtime_error("Joint expired");
+  return ret;
 }
 
 WeldConnectionConfig WeldConnectionConfig::defaultConfig() {

@@ -11,9 +11,12 @@ DistanceConnection::DistanceConnection(
   registerChild(distanceJoint);
 }
 
-const std::weak_ptr<DistanceJoint>
+const std::shared_ptr<DistanceJoint>
 DistanceConnection::getDistanceJoint() const {
-  return distanceJoint;
+  auto ret = distanceJoint.lock();
+  if (!ret)
+    throw std::runtime_error("Joint expired");
+  return ret;
 }
 
 DistanceConnectionConfig DistanceConnectionConfig::defaultConfig() {

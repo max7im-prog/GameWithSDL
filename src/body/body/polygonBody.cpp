@@ -1,6 +1,5 @@
 #include "polygonBody.hpp"
 #include "body.hpp"
-#include "box2d/math_functions.h"
 #include "polygon.hpp"
 
 PolygonBody::PolygonBody(entt::registry &registry,
@@ -19,4 +18,4 @@ PolygonBodyConfig PolygonBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::shared_ptr<Polygon> PolygonBody::getPolygon() { return polygon; }
+const std::weak_ptr<Polygon> PolygonBody::getPolygon() { return polygon; }

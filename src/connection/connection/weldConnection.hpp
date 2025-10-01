@@ -10,7 +10,7 @@ struct WeldConnectionConfig : ConnectionConfig {
 class WeldConnection : public Connection {
 public:
   using Config = WeldConnectionConfig;
-  const std::weak_ptr<WeldJoint> getWeldJoint() const;
+  const std::shared_ptr<WeldJoint> getWeldJoint() const;
 
 protected:
   WeldConnection(entt::registry &registry, const std::shared_ptr<World> world,

@@ -2,12 +2,28 @@
 #include "body.hpp"
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
+#include <stdexcept>
 
-b2Vec2 CapsuleBody::getCenter1() { return capsule->getCenter1(); }
+b2Vec2 CapsuleBody::getCenter1() {
+  auto c = capsule.lock();
+  if (!c)
+    throw std::runtime_error("Capsule expired");
+  return c->getCenter1();
+}
 
-b2Vec2 CapsuleBody::getCenter2() { return capsule->getCenter2(); }
+b2Vec2 CapsuleBody::getCenter2() {
+  auto c = capsule.lock();
+  if (!c)
+    throw std::runtime_error("Capsule expired");
+  return c->getCenter2();
+}
 
-float CapsuleBody::getRadius() { return capsule->getRadius(); }
+float CapsuleBody::getRadius() {
+  auto c = capsule.lock();
+  if (!c)
+    throw std::runtime_error("Capsule expired");
+  return c->getRadius();
+}
 
 CapsuleBody::CapsuleBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
@@ -25,4 +41,4 @@ CapsuleBodyConfig CapsuleBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::shared_ptr<Capsule> CapsuleBody::getCapsule() { return capsule; }
+const std::weak_ptr<Capsule> CapsuleBody::getCapsule() { return capsule; }

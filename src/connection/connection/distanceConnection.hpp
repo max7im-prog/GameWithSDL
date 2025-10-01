@@ -10,7 +10,7 @@ struct DistanceConnectionConfig : public ConnectionConfig {
 class DistanceConnection : public Connection {
 public:
   using Config = DistanceConnectionConfig;
-  const std::weak_ptr<DistanceJoint> getDistanceJoint() const;
+  const std::shared_ptr<DistanceJoint> getDistanceJoint() const;
 
 protected:
   DistanceConnection(entt::registry &registry,

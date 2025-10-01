@@ -11,9 +11,12 @@ RevoluteConnection::RevoluteConnection(
   registerChild(revoluteJoint);
 }
 
-const std::weak_ptr<RevoluteJoint>
+const std::shared_ptr<RevoluteJoint>
 RevoluteConnection::getRevoluteJoint() const {
-  return revoluteJoint;
+  auto ret = revoluteJoint.lock();
+  if (!ret)
+    throw std::runtime_error("Joint expired");
+  return ret;
 }
 
 RevoluteConnectionConfig RevoluteConnectionConfig::defaultConfig() {

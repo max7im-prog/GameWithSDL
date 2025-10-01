@@ -14,7 +14,7 @@ public:
   using Config = CircleBodyConfig;
   b2Vec2 getCenter();
   float getRadius();
-  const std::shared_ptr<Circle> getCircle();
+  const std::weak_ptr<Circle> getCircle();
 
 protected:
   CircleBody() = delete;
@@ -22,7 +22,7 @@ protected:
              const CircleBodyConfig &config,
              const std::shared_ptr<ShapeFactory> shapeFactory,
              const std::shared_ptr<JointFactory> jointFactory);
-  std::shared_ptr<Circle> circle;
+  std::weak_ptr<Circle> circle;
 
   friend class BodyFactory;
 };

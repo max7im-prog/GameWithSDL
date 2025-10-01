@@ -48,7 +48,7 @@ public:
   
   void setAngleConstraints(const std::vector<AngleConstraint> &constraints);
   const std::vector<float> &getSegmentLengths();
-  const std::vector<std::shared_ptr<Capsule>> &getSegments() const;
+  const std::vector<std::weak_ptr<Capsule>> &getSegments() const;
   std::vector<b2Vec2> getJointsPos();
 
   void setTracking(b2Vec2 worldPoint, bool isTracking);
@@ -72,8 +72,8 @@ protected:
     PIDVectorController endController;
   };
 
-  std::vector<std::shared_ptr<Capsule>> segments;
-  std::vector<std::shared_ptr<RevoluteJoint>> joints;
+  std::vector<std::weak_ptr<Capsule>> segments;
+  std::vector<std::weak_ptr<RevoluteJoint>> joints;
   std::vector<SegmentController> controllers;
   std::vector<float> segmentLengths;
   float length;
@@ -86,7 +86,7 @@ protected:
   IKTask rootIKTask;
 
   const Config config;
-  std::shared_ptr<RevoluteConnection> connection;
+  std::weak_ptr<RevoluteConnection> connection;
   b2Rot rootRot;
 
   friend class BodyFactory;

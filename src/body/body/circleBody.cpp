@@ -3,9 +3,23 @@
 #include "box2d/math_functions.h"
 #include "circle.hpp"
 
-b2Vec2 CircleBody::getCenter() { return circle->getCenter(); }
+b2Vec2 CircleBody::getCenter() {
 
-float CircleBody::getRadius() { return circle->getRadius(); }
+  auto c = circle.lock();
+  if (!c)
+    throw std::runtime_error("Circle expired");
+
+  return c->getCenter();
+}
+
+float CircleBody::getRadius() {
+
+  auto c = circle.lock();
+  if (!c)
+    throw std::runtime_error("Circle expired");
+
+  return c->getRadius();
+}
 
 CircleBody::CircleBody(entt::registry &registry,
                        const std::shared_ptr<World> world,
@@ -23,4 +37,4 @@ CircleBodyConfig CircleBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::shared_ptr<Circle> CircleBody::getCircle() { return circle; }
+const std::weak_ptr<Circle> CircleBody::getCircle() { return circle; }

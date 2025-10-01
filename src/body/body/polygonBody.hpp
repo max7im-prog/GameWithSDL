@@ -12,7 +12,7 @@ struct PolygonBodyConfig : public BodyConfig {
 class PolygonBody : public Body {
 public:
   using Config = PolygonBodyConfig;
-  const std::shared_ptr<Polygon> getPolygon();
+  const std::weak_ptr<Polygon> getPolygon();
 
 protected:
   PolygonBody() = delete;
@@ -21,7 +21,7 @@ protected:
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory);
 
-  std::shared_ptr<Polygon> polygon;
+  std::weak_ptr<Polygon> polygon;
 
   friend class BodyFactory;
 };

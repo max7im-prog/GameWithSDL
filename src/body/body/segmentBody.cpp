@@ -18,4 +18,4 @@ SegmentBodyConfig SegmentBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::shared_ptr<Segment> SegmentBody::getSegment() { return segment; }
+const std::weak_ptr<Segment> SegmentBody::getSegment() { return segment; }
