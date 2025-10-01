@@ -18,4 +18,11 @@ PolygonBodyConfig PolygonBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::weak_ptr<Polygon> PolygonBody::getPolygon() { return polygon; }
+const std::shared_ptr<Polygon> PolygonBody::getPolygon() {
+
+  auto ret = polygon.lock();
+  if (!ret)
+    throw std::runtime_error("Shape expired");
+
+  return ret;
+}

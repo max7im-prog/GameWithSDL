@@ -18,4 +18,10 @@ SegmentBodyConfig SegmentBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::weak_ptr<Segment> SegmentBody::getSegment() { return segment; }
+const std::shared_ptr<Segment> SegmentBody::getSegment() {
+
+  auto ret = segment.lock();
+  if (!ret)
+    throw std::runtime_error("Shape expired");
+  return ret;
+}

@@ -12,7 +12,7 @@ struct PolygonBodyConfig : public BodyConfig {
 class PolygonBody : public Body {
 public:
   using Config = PolygonBodyConfig;
-  const std::weak_ptr<Polygon> getPolygon();
+  const std::shared_ptr<Polygon> getPolygon();
 
 protected:
   PolygonBody() = delete;

@@ -14,7 +14,7 @@ public:
   using Config = CircleBodyConfig;
   b2Vec2 getCenter();
   float getRadius();
-  const std::weak_ptr<Circle> getCircle();
+  const std::shared_ptr<Circle> getCircle();
 
 protected:
   CircleBody() = delete;

@@ -29,30 +29,26 @@ public:
 
   b2Vec2 getWorldPos() override;
 
-
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
                const DemoCreatureConfig &config,
                const std::shared_ptr<BodyFactory> bodyFactory,
                const std::shared_ptr<ConnectionFactory> connectionFactory);
 
-  std::shared_ptr<LimbBody> leftArm = nullptr;
-  std::shared_ptr<CircleBody> leftShoulder = nullptr;
-  std::shared_ptr<LimbBody> rightArm = nullptr;
-  std::shared_ptr<CircleBody> rightShoulder = nullptr;
-  std::shared_ptr<LimbBody> leftLeg = nullptr;
-  std::shared_ptr<CircleBody> leftHip = nullptr;
-  std::shared_ptr<LimbBody> rightLeg = nullptr;
-  std::shared_ptr<CircleBody> rightHip = nullptr;
-  std::shared_ptr<PolygonBody> torso = nullptr;
+  std::weak_ptr<LimbBody> leftArm;
+  std::weak_ptr<CircleBody> leftShoulder;
+  std::weak_ptr<LimbBody> rightArm;
+  std::weak_ptr<CircleBody> rightShoulder;
+  std::weak_ptr<LimbBody> leftLeg;
+  std::weak_ptr<CircleBody> leftHip;
+  std::weak_ptr<LimbBody> rightLeg;
+  std::weak_ptr<CircleBody> rightHip;
+  std::weak_ptr<PolygonBody> torso;
 
-  std::shared_ptr<GirdleConnection> shoulderConnection = nullptr;
-  std::shared_ptr<GirdleConnection> hipConnection = nullptr;
+  std::weak_ptr<GirdleConnection> shoulderConnection;
+  std::weak_ptr<GirdleConnection> hipConnection;
 
 private:
-
-  void rotate3D(b2Rot rot);
-  void rotate3D(float angle);
   void keepTorsoUpright(float dt);
   PIDScalarController torsoAngleController;
 

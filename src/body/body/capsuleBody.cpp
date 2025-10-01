@@ -41,4 +41,10 @@ CapsuleBodyConfig CapsuleBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::weak_ptr<Capsule> CapsuleBody::getCapsule() { return capsule; }
+const std::shared_ptr<Capsule> CapsuleBody::getCapsule() {
+
+  auto ret = capsule.lock();
+  if (!ret)
+    throw std::runtime_error("Shape expired");
+  return ret;
+}

@@ -6,6 +6,7 @@
 #include "creature.hpp"
 #include "girdleConnection.hpp"
 #include "limbBody.hpp"
+#include "miscUtils.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
 #include "world.hpp"
@@ -67,9 +68,7 @@ DemoCreature::DemoCreature(
                                   .KDMultiplier = 10.0f,
                                   .maxForceMultiplier = 15.0f};
 
-  limbConfig.rootRot = b2MakeRot(-B2_PI/2);
-
-  
+  limbConfig.rootRot = b2MakeRot(-B2_PI / 2);
 
   // Limbs
   {
@@ -80,12 +79,12 @@ DemoCreature::DemoCreature(
     {
 
       auto lastPos = cfg.basePos;
-      b2Rot baseRot = b2MakeRot(-B2_PI *3/ 4);
+      b2Rot baseRot = b2MakeRot(-B2_PI * 3 / 4);
       b2Rot incrRot = b2MakeRot(0);
       b2Rot q = baseRot;
 
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
+        auto incr = b2MulSV(segmentLen, b2Vec2(1, 0));
         q = b2MulRot(q, incrRot);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
@@ -93,7 +92,9 @@ DemoCreature::DemoCreature(
         lastPos = newPos;
       }
     }
-    // cfg.initialAngleConstraints = {{.minRot = -B2_PI/2,.maxRot = B2_PI/2,.enable = true},{.minRot = -B2_PI/2,.maxRot = B2_PI/2,.enable = true}};
+    // cfg.initialAngleConstraints = {{.minRot = -B2_PI/2,.maxRot =
+    // B2_PI/2,.enable = true},{.minRot = -B2_PI/2,.maxRot = B2_PI/2,.enable =
+    // true}};
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftArm = bodyFactory->create<LimbBody>(cfg);
     registerChild(leftArm);
@@ -104,12 +105,12 @@ DemoCreature::DemoCreature(
     cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
     {
       auto lastPos = cfg.basePos;
-      b2Rot baseRot = b2MakeRot(-B2_PI *3/ 4);
+      b2Rot baseRot = b2MakeRot(-B2_PI * 3 / 4);
       b2Rot incrRot = b2MakeRot(0);
       b2Rot q = baseRot;
 
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
+        auto incr = b2MulSV(segmentLen, b2Vec2(1, 0));
         q = b2MulRot(q, incrRot);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
@@ -128,7 +129,7 @@ DemoCreature::DemoCreature(
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
+        auto incr = b2MulSV(segmentLen, b2Vec2(1, 0));
         b2Rot q = b2MakeRot(-B2_PI / 4);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
@@ -146,7 +147,7 @@ DemoCreature::DemoCreature(
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
-        auto incr = b2MulSV(segmentLen, b2Vec2(1,0));
+        auto incr = b2MulSV(segmentLen, b2Vec2(1, 0));
         b2Rot q = b2MakeRot(-B2_PI / 4);
         incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
@@ -197,17 +198,26 @@ DemoCreature::DemoCreature(
 
   // Create connections
 
+  auto bodyPartLocks =
+      miscUtils::lockAll(leftArm, leftShoulder, rightArm, rightShoulder,
+                         leftLeg, leftHip, rightLeg, rightHip, torso);
+
+  if (!bodyPartLocks)
+    throw std::runtime_error("one or more part expired");
+  auto &[leftArmLock, leftShoulderLock, rightArmLock, rightShoulderLock,
+         leftLegLock, leftHipLock, rightLegLock, rightHipLock, torsoLock] =
+      *bodyPartLocks;
   // Hips
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
     cfg.girdleWidth = torsoWidth * 0.4;
-    cfg.centerAttach.shape = torso->getPolygon();
+    cfg.centerAttach.shape = torsoLock->getPolygon();
     cfg.centerAttach.localPoint = {0, 0};
 
-    cfg.leftAttach.shape = leftHip->getCircle();
+    cfg.leftAttach.shape = leftHipLock->getCircle();
     cfg.leftAttach.localPoint = {0, 0};
 
-    cfg.rightAttach.shape = rightHip->getCircle();
+    cfg.rightAttach.shape = rightHipLock->getCircle();
     cfg.rightAttach.localPoint = {0, 0};
 
     cfg.rotationControlTemplate.kp = 1.0f;
@@ -221,20 +231,20 @@ DemoCreature::DemoCreature(
     registerChild(hipConnection);
   }
 
-  leftLeg->connect(connectionFactory, leftHip->getCircle(), {0, 0});
-  rightLeg->connect(connectionFactory, rightHip->getCircle(), {0, 0});
+  leftLegLock->connect(connectionFactory, leftHipLock->getCircle(), {0, 0});
+  rightLegLock->connect(connectionFactory, rightHipLock->getCircle(), {0, 0});
 
   // Shoulders
   {
     auto cfg = GirdleConnectionConfig::defaultConfig();
     cfg.girdleWidth = torsoWidth * 0.8f;
-    cfg.centerAttach.shape = torso->getPolygon();
+    cfg.centerAttach.shape = torsoLock->getPolygon();
     cfg.centerAttach.localPoint = {0, torsoHeight / 2.0f};
 
-    cfg.leftAttach.shape = leftShoulder->getCircle();
+    cfg.leftAttach.shape = leftShoulderLock->getCircle();
     cfg.leftAttach.localPoint = {0, 0};
 
-    cfg.rightAttach.shape = rightShoulder->getCircle();
+    cfg.rightAttach.shape = rightShoulderLock->getCircle();
     cfg.rightAttach.localPoint = {0, 0};
 
     cfg.rotationControlTemplate.kp = 1.0f;
@@ -248,12 +258,14 @@ DemoCreature::DemoCreature(
     registerChild(shoulderConnection);
   }
 
-  leftArm->connect(connectionFactory, leftShoulder->getCircle(), {0, 0});
-  rightArm->connect(connectionFactory, rightShoulder->getCircle(), {0, 0});
+  leftArmLock->connect(connectionFactory, leftShoulderLock->getCircle(),
+                       {0, 0});
+  rightArmLock->connect(connectionFactory, rightShoulderLock->getCircle(),
+                        {0, 0});
 
   // Configure controllers
   {
-    float inertia = torso->getPolygon()->getRotationalInertia();
+    float inertia = torsoLock->getPolygon()->getRotationalInertia();
     PIDScalarControllerConfig cfg = {.kp = inertia * 160.0f,
                                      .ki = 0.0f,
                                      .kd = inertia * 49.0f,
@@ -261,7 +273,7 @@ DemoCreature::DemoCreature(
     torsoAngleController = PIDScalarController(cfg);
   }
   {
-    float force = torso->getPolygon()->getMass() *
+    float force = torsoLock->getPolygon()->getMass() *
                   b2Length(b2World_GetGravity(world->getWorldId()));
     PIDScalarControllerConfig cfg = {.kp = force * 2.0f,
                                      .ki = force * 0.5f,
@@ -271,7 +283,7 @@ DemoCreature::DemoCreature(
     rightLegHeightController = PIDScalarController(cfg);
   }
   {
-    float force = torso->getPolygon()->getMass() *
+    float force = torsoLock->getPolygon()->getMass() *
                   b2Length(b2World_GetGravity(world->getWorldId()));
     PIDScalarControllerConfig cfg = {.kp = force * 5.0f,
                                      .ki = 0.0f,
@@ -280,7 +292,7 @@ DemoCreature::DemoCreature(
     horizontalDampingController = PIDScalarController(cfg);
   }
   {
-    float force = torso->getPolygon()->getMass() *
+    float force = torsoLock->getPolygon()->getMass() *
                   b2Length(b2World_GetGravity(world->getWorldId()));
     PIDScalarControllerConfig cfg = {.kp = force * 5.0f,
                                      .ki = 0.0f,
@@ -306,8 +318,12 @@ DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {
-  leftArm->setTracking(worldPoint, aim);
-  rightArm->setTracking(worldPoint, aim);
+  auto locks = miscUtils::lockAll(leftArm, rightArm);
+  if (!locks)
+    throw std::runtime_error("One or more elements expired");
+  auto &[leftArmLock, rightArmLock] = *locks;
+  leftArmLock->setTracking(worldPoint, aim);
+  rightArmLock->setTracking(worldPoint, aim);
 }
 
 void DemoCreature::update(float dt) {
@@ -321,9 +337,13 @@ void DemoCreature::update(float dt) {
 }
 
 void DemoCreature::keepTorsoUpright(float dt) {
-  float error = -b2Rot_GetAngle(torso->getPolygon()->getRotation());
+
+  auto torsoLock = torso.lock();
+  if (!torsoLock)
+    throw std::runtime_error("Torso is expired");
+  float error = -b2Rot_GetAngle(torsoLock->getPolygon()->getRotation());
   float torque = torsoAngleController.update(error, dt);
-  torso->getPolygon()->applyTorque(torque);
+  torsoLock->getPolygon()->applyTorque(torque);
 }
 
 void DemoCreature::keepTorsoAboveTheGround(float dt) {
@@ -331,9 +351,14 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
   b2QueryFilter filter = b2DefaultQueryFilter();
   filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
 
+  auto locks = miscUtils::lockAll(leftLeg, rightLeg, torso);
+  if (!locks)
+    throw std::runtime_error("One or more elements expired");
+  auto &[leftLegLock, rightLegLock, torsoLock] = *locks;
+
   // Left leg
   {
-    b2Vec2 castOrigin = leftLeg->getBasePos();
+    b2Vec2 castOrigin = leftLegLock->getBasePos();
     auto res = b2World_CastRayClosest(world->getWorldId(), castOrigin,
                                       {0, -legHeight * 3}, filter);
     if (res.hit) {
@@ -341,7 +366,7 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
       if (realHeight < legHeight * 1.2) {
         float error = legHeight - realHeight;
         float force = leftLegHeightController.update(error, dt);
-        b2Body_ApplyForce(torso->getPolygon()->getBodyId(), {0, force},
+        b2Body_ApplyForce(torsoLock->getPolygon()->getBodyId(), {0, force},
                           castOrigin, true);
       }
     } else {
@@ -351,7 +376,7 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
 
   // Right leg
   {
-    b2Vec2 castOrigin = rightLeg->getBasePos();
+    b2Vec2 castOrigin = rightLegLock->getBasePos();
     auto res = b2World_CastRayClosest(world->getWorldId(), castOrigin,
                                       {0, -legHeight * 3}, filter);
     if (res.hit) {
@@ -359,7 +384,7 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
       if (realHeight < legHeight * 1.2) {
         float error = legHeight - realHeight;
         float force = rightLegHeightController.update(error, dt);
-        b2Body_ApplyForce(torso->getPolygon()->getBodyId(), {0, force},
+        b2Body_ApplyForce(torsoLock->getPolygon()->getBodyId(), {0, force},
                           castOrigin, true);
       }
     } else {
@@ -370,7 +395,11 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
 
 void DemoCreature::dampHorizontalMovement(float dt) {
   if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
-    auto bodyId = torso->getPolygon()->getBodyId();
+
+    auto torsoLock = torso.lock();
+    if (!torsoLock)
+      throw std::runtime_error("Torso expired");
+    auto bodyId = torsoLock->getPolygon()->getBodyId();
     auto error = 0 - b2Body_GetLinearVelocity(bodyId).x;
     auto force = horizontalDampingController.update(error, dt);
     b2Body_ApplyForceToCenter(bodyId, b2MulSV(force, {1, 0}), true);
@@ -382,14 +411,19 @@ void DemoCreature::jump() { jumpContext.jump = true; }
 void DemoCreature::updateJump(float dt) {
   constexpr uint32_t jumpPeriodms = 500;
 
+  auto locks = miscUtils::lockAll(leftLeg, rightLeg, torso);
+  if (!locks)
+    throw std::runtime_error("One or more elements expired");
+  auto &[leftLegLock, rightLegLock, torsoLock] = *locks;
+
   auto now = std::chrono::system_clock::now();
   auto duration = now - jumpContext.lastJumpCall;
   auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
   if (ms.count() > jumpPeriodms) {
     // Raycast down to figure out if we should update jumpState
     {
-      b2Vec2 castOrigin =
-          b2MulSV(0.5f, b2Add(leftLeg->getBasePos(), rightLeg->getBasePos()));
+      b2Vec2 castOrigin = b2MulSV(
+          0.5f, b2Add(leftLegLock->getBasePos(), rightLegLock->getBasePos()));
       b2Vec2 castTranslation = b2MulSV(legHeight * 1.2f, {0, -1});
       b2QueryFilter filter = b2DefaultQueryFilter();
       filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
@@ -409,9 +443,9 @@ void DemoCreature::updateJump(float dt) {
         jumpContext.jumpState = JumpContext::JumpState::IN_AIR;
         jumpContext.lastJumpCall = std::chrono::system_clock::now();
         float gravForce = b2Length(b2World_GetGravity(world->getWorldId())) *
-                          torso->getPolygon()->getMass();
+                          torsoLock->getPolygon()->getMass();
         b2Vec2 impulse = b2MulSV(gravForce * 3.0, {0, 1});
-        b2Body_ApplyLinearImpulseToCenter(torso->getPolygon()->getBodyId(),
+        b2Body_ApplyLinearImpulseToCenter(torsoLock->getPolygon()->getBodyId(),
                                           impulse, true);
       }
     }
@@ -422,16 +456,22 @@ void DemoCreature::updateMove(float dt) {
   if (moveContext.move) {
     moveContext.move = false;
     if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
+      auto locks = miscUtils::lockAll(torso);
+      if (!locks)
+        throw std::runtime_error("One or more elements expired");
+      auto &[torsoLock] = *locks;
       auto normDir = b2Normalize(moveContext.dir);
       float desiredHorizontalSpeed =
           moveContext.defaultSpeedMpS *
           std::max(moveContext.maxSpeedMultiplier, moveContext.intensity) *
           normDir.x;
-      auto error = desiredHorizontalSpeed -
-                   b2Body_GetLinearVelocity(torso->getPolygon()->getBodyId()).x;
+      auto error =
+          desiredHorizontalSpeed -
+          b2Body_GetLinearVelocity(torsoLock->getPolygon()->getBodyId()).x;
       float forceVal = horizontalSpeedController.update(error, dt);
       b2Vec2 force = b2MulSV(forceVal, {1, 0});
-      b2Body_ApplyForceToCenter(torso->getPolygon()->getBodyId(), force, true);
+      b2Body_ApplyForceToCenter(torsoLock->getPolygon()->getBodyId(), force,
+                                true);
     }
   }
 }
@@ -439,10 +479,15 @@ void DemoCreature::updateMove(float dt) {
 void DemoCreature::updateFeet(float dt) {
   Direction direction = STANDING;
   constexpr float epsilon = 0.01;
+
+  auto locks = miscUtils::lockAll(torso,leftLeg,rightLeg);
+  if (!locks)
+    throw std::runtime_error("One or more elements expired");
+  auto &[torsoLock,leftLegLock,rightLegLock] = *locks;
   if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
 
     // Find direction of movement
-    b2Vec2 dir = b2Normalize(torso->getPolygon()->getLinearVelocity());
+    b2Vec2 dir = b2Normalize(torsoLock->getPolygon()->getLinearVelocity());
     if (dir.x > epsilon) {
       direction = RIGHT;
     } else if (dir.x < -epsilon) {
@@ -452,8 +497,8 @@ void DemoCreature::updateFeet(float dt) {
     }
   }
 
-  updateLeg(dt, leftFootContext, leftLeg, direction);
-  updateLeg(dt, rightFootContext, rightLeg, direction);
+  updateLeg(dt, leftFootContext, leftLegLock, direction);
+  updateLeg(dt, rightFootContext, rightLegLock, direction);
 }
 
 void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
@@ -507,22 +552,25 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
   }
 }
 
-void DemoCreature::rotate3D(float angle) { rotate3D(b2MakeRot(angle)); }
-
-void DemoCreature::rotate3D(b2Rot rot) { shoulderConnection->rotate3D(rot); }
 
 void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   constexpr float planeDist = 15;
+  auto locks = miscUtils::lockAll(shoulderConnection,hipConnection);
+  if(!locks) throw std::runtime_error("One or more elements expired");
+  auto& [shoulderConnectionLock,hipConnectionLock] = *locks;
 
   b2Vec2 creaturePos = getWorldPos();
 
   float translationX = b2Sub(worldPoint, creaturePos).x;
 
   float desiredAngle = b2Atan2(translationX, planeDist);
-  shoulderConnection->rotate3D(desiredAngle);
-  hipConnection->rotate3D(desiredAngle);
+  shoulderConnectionLock->rotate3D(desiredAngle);
+  hipConnectionLock->rotate3D(desiredAngle);
 }
 
 b2Vec2 DemoCreature::getWorldPos() {
-  return torso->getPolygon()->getWorldPos();
+  
+  auto torsoLock = torso.lock();
+  if(!torsoLock) throw std::runtime_error("Torso expired");
+  return torsoLock->getPolygon()->getWorldPos();
 }

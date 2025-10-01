@@ -15,7 +15,7 @@ public:
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
   float getRadius();
-  const std::weak_ptr<Capsule> getCapsule();
+  const std::shared_ptr<Capsule> getCapsule();
 
 protected:
   CapsuleBody() = delete;

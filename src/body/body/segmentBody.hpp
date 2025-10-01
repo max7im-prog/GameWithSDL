@@ -12,7 +12,7 @@ struct SegmentBodyConfig : public BodyConfig {
 class SegmentBody : public Body {
 public:
   using Config = SegmentBodyConfig;
-  const std::weak_ptr<Segment> getSegment();
+  const std::shared_ptr<Segment> getSegment();
 
 protected:
   SegmentBody() = delete;

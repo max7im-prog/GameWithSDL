@@ -37,4 +37,10 @@ CircleBodyConfig CircleBodyConfig::defaultConfig() {
   return ret;
 }
 
-const std::weak_ptr<Circle> CircleBody::getCircle() { return circle; }
+const std::shared_ptr<Circle> CircleBody::getCircle() { 
+  
+  auto ret = circle.lock();
+  if (!ret)
+    throw std::runtime_error("Shape expired");
+  
+  return ret; }
