@@ -21,7 +21,7 @@ protected:
                  const std::shared_ptr<BodyFactory> bodyFactory,
                  const std::shared_ptr<ConnectionFactory> connectionFactory);
 
-  std::shared_ptr<CapsuleBody> capsuleBody;
+  std::weak_ptr<CapsuleBody> capsuleBody;
 
 private:
   friend class TerrainFactory;

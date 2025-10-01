@@ -20,7 +20,7 @@ protected:
                  const std::shared_ptr<BodyFactory> bodyFactory,
                  const std::shared_ptr<ConnectionFactory> connectionFactory);
 
-  std::shared_ptr<PolygonBody> polygonBody;
+  std::weak_ptr<PolygonBody> polygonBody;
 
 private:
   friend class TerrainFactory;
