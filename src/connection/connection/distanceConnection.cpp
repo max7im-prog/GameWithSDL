@@ -11,7 +11,7 @@ DistanceConnection::DistanceConnection(
   registerChild(distanceJoint);
 }
 
-const std::shared_ptr<DistanceJoint>
+const std::weak_ptr<DistanceJoint>
 DistanceConnection::getDistanceJoint() const {
   return distanceJoint;
 }

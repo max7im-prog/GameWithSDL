@@ -11,7 +11,7 @@ WeldConnection::WeldConnection(entt::registry &registry,
   registerChild(weldJoint);
 }
 
-const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
+const std::weak_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
   return weldJoint;
 }
 

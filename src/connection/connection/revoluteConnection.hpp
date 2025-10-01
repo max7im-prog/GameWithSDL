@@ -11,7 +11,7 @@ struct RevoluteConnectionConfig : ConnectionConfig {
 class RevoluteConnection : public Connection {
 public:
   using Config = RevoluteConnectionConfig;
-  const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;
+  const std::weak_ptr<RevoluteJoint> getRevoluteJoint() const;
 
 protected:
   RevoluteConnection(entt::registry &registry,
@@ -19,7 +19,7 @@ protected:
                      const RevoluteConnectionConfig &config,
                      const std::shared_ptr<ShapeFactory> shapeFactory,
                      const std::shared_ptr<JointFactory> jointFactory);
-  std::shared_ptr<RevoluteJoint> revoluteJoint;
+  std::weak_ptr<RevoluteJoint> revoluteJoint;
 
   friend class ConnectionFactory;
 };

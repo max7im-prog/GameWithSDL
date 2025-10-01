@@ -1,6 +1,8 @@
 #include "girdleConnection.hpp"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
+#include "prismaticJoint.hpp"
+#include "miscUtils.hpp"
 #include <stdexcept>
 GirdleConnection::GirdleConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
@@ -67,19 +69,26 @@ void GirdleConnection::update(float dt) {
 }
 
 void GirdleConnection::updateRotation(float dt) {
-  constexpr float ROTATIONAL_SENSITIVITY = 0.01;
-  if (std::abs(b2Rot_GetAngle(target3DRotation) -
-               b2Rot_GetAngle(current3DRotation)) > ROTATIONAL_SENSITIVITY) {
+  if (auto locks = miscUtils::lockAll(leftPrism,rightPrism)) {
+    auto& [leftPrismLock, rightPrismLock] = *locks;
 
-    // Calculate the error
-    b2Rot error = b2InvMulRot(current3DRotation, target3DRotation);
-    b2Rot rotIncr = rotationController.update(error, dt);
-    current3DRotation = b2MulRot(current3DRotation, rotIncr);
 
-    // Change target offsets of the prismatic joints in a girdle
-    float newOffset = girdleWidth / 2 * current3DRotation.c;
-    rightPrism->setTargetTranslation(newOffset);
-    leftPrism->setTargetTranslation(-newOffset);
+    constexpr float ROTATIONAL_SENSITIVITY = 0.01;
+    if (std::abs(b2Rot_GetAngle(target3DRotation) -
+                 b2Rot_GetAngle(current3DRotation)) > ROTATIONAL_SENSITIVITY) {
+
+      // Calculate the error
+      b2Rot error = b2InvMulRot(current3DRotation, target3DRotation);
+      b2Rot rotIncr = rotationController.update(error, dt);
+      current3DRotation = b2MulRot(current3DRotation, rotIncr);
+
+      // Change target offsets of the prismatic joints in a girdle
+      float newOffset = girdleWidth / 2 * current3DRotation.c;
+      rightPrismLock->setTargetTranslation(newOffset);
+      leftPrismLock->setTargetTranslation(-newOffset);
+    }
+
+
   }
 }
 

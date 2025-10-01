@@ -37,8 +37,8 @@ protected:
                    const std::shared_ptr<ShapeFactory> shapeFactory,
                    const std::shared_ptr<JointFactory> jointFactory);
 
-  std::shared_ptr<PrismaticJoint> leftPrism;
-  std::shared_ptr<PrismaticJoint> rightPrism;
+  std::weak_ptr<PrismaticJoint> leftPrism;
+  std::weak_ptr<PrismaticJoint> rightPrism;
 
   float girdleWidth;
   b2Rot current3DRotation;

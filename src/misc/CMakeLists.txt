@@ -7,5 +7,5 @@ set(INCLUDE_DIRS
 )
 
 add_library(game_misc_lib INTERFACE)
-target_include_directories(game_misc_lib INTERFACE)
+target_include_directories(game_misc_lib INTERFACE ${INCLUDE_DIRS})
 

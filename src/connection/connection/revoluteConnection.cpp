@@ -11,7 +11,7 @@ RevoluteConnection::RevoluteConnection(
   registerChild(revoluteJoint);
 }
 
-const std::shared_ptr<RevoluteJoint>
+const std::weak_ptr<RevoluteJoint>
 RevoluteConnection::getRevoluteJoint() const {
   return revoluteJoint;
 }
