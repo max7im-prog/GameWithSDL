@@ -6,6 +6,7 @@
 #include "revoluteJoint.hpp"
 
 // 3 entities for world and 2 shapes
+// TODO: remove lock() from testing
 constexpr size_t INIT_SHAPE_COUNT = 3;
 
 template <typename TObject> class JointEntityTest : public WorldRegistryTest {
@@ -20,8 +21,8 @@ protected:
   void SetUp() override {
     initFactories();
     auto cfg = Circle::Config::defaultConfig();
-    shape1 = shapeFactory->create<Circle>(cfg);
-    shape2 = shapeFactory->create<Circle>(cfg);
+    shape1 = shapeFactory->create<Circle>(cfg).lock();
+    shape2 = shapeFactory->create<Circle>(cfg).lock();
   }
   void TearDown() override {
     shape1.reset();
@@ -50,7 +51,7 @@ TYPED_TEST(JointEntityTest, InitDeinit) {
   auto cfg = Object::Config::defaultConfig();
   cfg.jointDef.bodyIdA = this->shape1->getBodyId();
   cfg.jointDef.bodyIdB = this->shape2->getBodyId();
-  auto obj = this->jointFactory->template create<Object>(cfg);
+  auto obj = this->jointFactory->template create<Object>(cfg).lock();
   ASSERT_TRUE(obj);
   EXPECT_EQ(this->registry.template view<Component>().size(), 1);
   obj->remove();

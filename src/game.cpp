@@ -54,7 +54,8 @@ bool Game::init() {
   {
     auto config = BasicWorld::Config::defaultConfig();
     config.substepCount = 16;
-    world = worldFactory->create<BasicWorld>(config);
+    world = worldFactory->create<BasicWorld>(config).lock();
+    if(!world) throw std::runtime_error("Failed to create world") ;
   }
 
   // Initialize factories
@@ -177,7 +178,8 @@ bool Game::init() {
     config.sizeXMeters = 2;
     config.sizeYMeters = 2;
     config.position = {5, 10};
-    c0 = creatureFactory->create<DemoCreature>(config);
+    c0 = creatureFactory->create<DemoCreature>(config).lock();
+    if(!world) throw std::runtime_error("Failed to create creature") ;
   }
   c0->aim({30, 30}, true);
   // c0->remove();
@@ -188,7 +190,8 @@ bool Game::init() {
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
     config.position = {35, 8};
-    c0 = creatureFactory->create<DemoCreature>(config);
+    c0 = creatureFactory->create<DemoCreature>(config).lock();
+    if(!world) throw std::runtime_error("Failed to create creature") ;
   }
   // c0->remove();
 

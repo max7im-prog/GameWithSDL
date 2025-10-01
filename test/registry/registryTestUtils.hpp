@@ -48,7 +48,7 @@ protected:
     worldFactory = std::make_shared<WorldFactory>(registry);
     {
       auto config = BasicWorld::Config::defaultConfig();
-      world = worldFactory->create<BasicWorld>(config);
+      world = worldFactory->create<BasicWorld>(config).lock();
     }
 
     shapeFactory = std::make_shared<ShapeFactory>(registry, world);

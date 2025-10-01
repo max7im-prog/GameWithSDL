@@ -66,6 +66,7 @@ using StandaloneEntityTypes = ::testing::Types<
 
 TYPED_TEST_SUITE(StandaloneEntityTest, StandaloneEntityTypes);
 
+// TODO: remove lock() from testing
 TYPED_TEST(StandaloneEntityTest, InitDeinit) {
   using Factory = typename TestFixture::Factory;
   using Object = typename TestFixture::Object;
@@ -75,7 +76,7 @@ TYPED_TEST(StandaloneEntityTest, InitDeinit) {
   ASSERT_EQ(WorldRegistryTest::registrySize(this->registry), 1);
 
   auto cfg = Object::Config::defaultConfig();
-  auto obj = this->template getFactory<Factory>()->template create<Object>(cfg);
+  auto obj = this->template getFactory<Factory>()->template create<Object>(cfg).lock();
 
   ASSERT_TRUE(obj);
 
