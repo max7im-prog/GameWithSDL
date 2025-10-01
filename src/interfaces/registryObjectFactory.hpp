@@ -38,11 +38,14 @@ public:
    */
   template <typename T>
     requires FactoryConstructable<T, Derived>
-  std::shared_ptr<T> create(const T::Config &config) {
+  std::weak_ptr<T> create(const T::Config &config) {
     std::shared_ptr<T> ret = nullptr;
     try {
       ret = derived().template tryCreate<T>(config);
     } catch (std::exception &e) {
+      return nullptr;
+    }
+    if (!ret) {
       return nullptr;
     }
     derived().template registerObject<T>(ret);

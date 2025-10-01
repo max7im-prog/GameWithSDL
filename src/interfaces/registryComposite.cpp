@@ -11,25 +11,42 @@ RegistryComposite::~RegistryComposite() { removeChildren(); }
 RegistryComposite::RegistryComposite(entt::registry &registry)
     : RegistryObject(registry) {}
 
-void RegistryComposite::registerChild(std::shared_ptr<RegistryComposite> child) {
+void RegistryComposite::registerChild(std::weak_ptr<RegistryComposite> child) {
   if (children == nullptr) {
-    children = std::make_unique<std::vector<std::shared_ptr<RegistryComposite>>>();
+    children =
+        std::make_unique<std::vector<std::weak_ptr<RegistryComposite>>>();
   }
   children->push_back(child);
 }
 
-void RegistryComposite::unregisterChild(std::shared_ptr<RegistryComposite> child) {
+void RegistryComposite::unregisterChild(
+    std::weak_ptr<RegistryComposite> child) {
   if (children == nullptr) {
     return;
   }
-  children->erase(std::remove(children->begin(), children->end(), child),
-                  children->end());
+
+  auto childLocked = child.lock();
+  std::erase_if(*children,
+                [&childLocked](std::weak_ptr<RegistryComposite> cur) -> bool {
+                  std::shared_ptr<RegistryComposite> curLocked;
+                  curLocked = cur.lock();
+                  if (!curLocked) {
+                    return true;
+                  }
+                  if (!childLocked) {
+                    return false;
+                  }
+                  return childLocked == curLocked;
+                });
 }
 
 void RegistryComposite::update(float dt) {
   if (children) {
     for (auto &ch : *children) {
-      ch->update(dt);
+      auto chLocked = ch.lock();
+      if (chLocked) {
+        chLocked->update(dt);
+      }
     }
   }
 }
@@ -37,7 +54,10 @@ void RegistryComposite::update(float dt) {
 void RegistryComposite::removeChildren() {
   if (children != nullptr) {
     for (auto &ch : *children) {
-      ch->remove();
+      auto chLocked = ch.lock();
+      if (chLocked) {
+        chLocked->remove();
+      }
     }
   }
   children = nullptr;

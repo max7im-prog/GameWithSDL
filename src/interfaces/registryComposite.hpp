@@ -33,7 +33,7 @@ public:
    * children upon removal and destruction.
    *
    */
-  void registerChild(std::shared_ptr<RegistryComposite> child);
+  void registerChild(std::weak_ptr<RegistryComposite> child);
 
   /**
    * @brief Unregisters an object from the child of an object.
@@ -42,7 +42,7 @@ public:
    * children upon removal and destruction of a parent.
    *
    */
-  void unregisterChild(std::shared_ptr<RegistryComposite> child);
+  void unregisterChild(std::weak_ptr<RegistryComposite> child);
 
   virtual void update(float dt);
 
@@ -55,5 +55,5 @@ private:
    * for objects with no children.
    *
    */
-  std::unique_ptr<std::vector<std::shared_ptr<RegistryComposite>>> children;
+  std::unique_ptr<std::vector<std::weak_ptr<RegistryComposite>>> children;
 };
