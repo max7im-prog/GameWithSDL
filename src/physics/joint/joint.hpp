@@ -6,10 +6,11 @@
 #include "entt/entity/entity.hpp"
 #include "entt/entt.hpp"
 #include "registryComposite.hpp"
+#include "visitor.hpp"
 
 struct JointConfig {};
 
-class Joint : public RegistryComposite {
+class Joint : public RegistryComposite , public SceneNode{
 public:
   b2JointId getJointId();
   b2JointType getType();
@@ -17,6 +18,7 @@ public:
 
   void update([[maybe_unused]] float dt) override {};
 
+  virtual void accept(Visitor &v) override;
 protected:
   Joint() = delete;
   Joint(entt::registry &registry);

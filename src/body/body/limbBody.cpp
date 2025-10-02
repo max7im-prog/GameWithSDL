@@ -58,7 +58,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
 
   // Connect capsules
   auto jointConfig = config.templateJointConfig;
-  auto segmentsLock = miscUtils::lockAll(segments);
+  auto segmentsLock = MiscUtils::lockAll(segments);
   if (!segmentsLock)
     throw std::runtime_error("One or more segments expired");
   for (size_t i = 1; i < segments.size(); i++) {
@@ -155,7 +155,7 @@ std::vector<b2Vec2> LimbBody::getJointsPos() {
     return {};
   }
   std::vector<b2Vec2> ret = {};
-  auto segmentsLock = miscUtils::lockAll(segments);
+  auto segmentsLock = MiscUtils::lockAll(segments);
   if (!segmentsLock)
     throw std::runtime_error("One or more segments expired");
   for (auto capsule : *segmentsLock) {
@@ -178,7 +178,7 @@ void LimbBody::update(float dt) {
 
   auto newPos = rootIKTask.solveFABRIK();
 
-  auto segmentsLock = miscUtils::lockAll(segments);
+  auto segmentsLock = MiscUtils::lockAll(segments);
   if (!segmentsLock)
     throw std::runtime_error("One or more segments expired");
 
@@ -226,7 +226,7 @@ void LimbBody::setAngleConstraints(
                                         rootIKTask.angleConstraints[0].maxRot);
   }
 
-  auto jointsLock = miscUtils::lockAll(joints);
+  auto jointsLock = MiscUtils::lockAll(joints);
   if (!jointsLock)
     throw std::runtime_error("One or more joints expired");
 

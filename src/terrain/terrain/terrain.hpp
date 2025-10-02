@@ -1,5 +1,6 @@
 #pragma once
 #include "registryComposite.hpp"
+#include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
 
@@ -8,11 +9,12 @@ struct TerrainConfig {
   static b2Filter defaultFilter();
 };
 
-class Terrain : public RegistryComposite {
+class Terrain : public RegistryComposite , public SceneNode{
 public:
   virtual void update(float dt) override;
   virtual ~Terrain() = 0;
 
+  virtual void accept(Visitor &v) override;
 protected:
   Terrain(entt::registry &registry, const std::shared_ptr<World> world);
 

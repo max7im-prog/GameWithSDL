@@ -3,7 +3,7 @@
 #include <optional>
 #include <tuple>
 #include <vector>
-namespace miscUtils {
+namespace MiscUtils {
 // Base case: no weak_ptrs
 inline std::optional<std::tuple<>> lockAll() {
   return std::make_optional(std::tuple<>());

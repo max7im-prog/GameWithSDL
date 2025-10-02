@@ -1,6 +1,7 @@
 #pragma once
 #include "box2d/id.h"
 #include "registryComposite.hpp"
+#include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
 #include <box2d/types.h>
@@ -12,7 +13,7 @@ struct ShapeConfig {
   b2ShapeDef shapeDef;
 };
 
-class Shape : public RegistryComposite {
+class Shape : public RegistryComposite, public SceneNode {
 public:
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
@@ -29,6 +30,8 @@ public:
 
   virtual ~Shape();
   void update([[maybe_unused]] float dt) override {};
+
+  virtual void accept(Visitor &v) override;
 
 protected:
   Shape() = delete;

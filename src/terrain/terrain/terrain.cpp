@@ -14,3 +14,5 @@ b2Filter TerrainConfig::defaultFilter() {
   ret.categoryBits = ObjectCategory::TERRAIN;
   return ret;
 };
+
+void Terrain::accept(Visitor &v) { v.visit(this); }

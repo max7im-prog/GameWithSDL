@@ -6,11 +6,12 @@
 
 struct BodyConfig {};
 
-class Body : public RegistryComposite {
+class Body : public RegistryComposite ,public SceneNode{
 public:
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Body();
 
+  virtual void accept(Visitor &v) override;
 protected:
   Body(entt::registry &registry, const std::shared_ptr<World> world);
   const std::shared_ptr<World> world;

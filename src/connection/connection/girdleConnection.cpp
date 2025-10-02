@@ -69,7 +69,7 @@ void GirdleConnection::update(float dt) {
 }
 
 void GirdleConnection::updateRotation(float dt) {
-  if (auto locks = miscUtils::lockAll(leftPrism,rightPrism)) {
+  if (auto locks = MiscUtils::lockAll(leftPrism,rightPrism)) {
     auto& [leftPrismLock, rightPrismLock] = *locks;
 
 

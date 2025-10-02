@@ -6,3 +6,5 @@ Connection::Connection(entt::registry &registry,
     : RegistryComposite(registry), world(world) {}
 
 Connection::~Connection() {}
+
+void Connection::accept(Visitor &v) { v.visit(this); }

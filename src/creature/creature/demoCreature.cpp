@@ -199,7 +199,7 @@ DemoCreature::DemoCreature(
   // Create connections
 
   auto bodyPartLocks =
-      miscUtils::lockAll(leftArm, leftShoulder, rightArm, rightShoulder,
+      MiscUtils::lockAll(leftArm, leftShoulder, rightArm, rightShoulder,
                          leftLeg, leftHip, rightLeg, rightHip, torso);
 
   if (!bodyPartLocks)
@@ -318,7 +318,7 @@ DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {
-  auto locks = miscUtils::lockAll(leftArm, rightArm);
+  auto locks = MiscUtils::lockAll(leftArm, rightArm);
   if (!locks)
     throw std::runtime_error("One or more elements expired");
   auto &[leftArmLock, rightArmLock] = *locks;
@@ -351,7 +351,7 @@ void DemoCreature::keepTorsoAboveTheGround(float dt) {
   b2QueryFilter filter = b2DefaultQueryFilter();
   filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
 
-  auto locks = miscUtils::lockAll(leftLeg, rightLeg, torso);
+  auto locks = MiscUtils::lockAll(leftLeg, rightLeg, torso);
   if (!locks)
     throw std::runtime_error("One or more elements expired");
   auto &[leftLegLock, rightLegLock, torsoLock] = *locks;
@@ -411,7 +411,7 @@ void DemoCreature::jump() { jumpContext.jump = true; }
 void DemoCreature::updateJump(float dt) {
   constexpr uint32_t jumpPeriodms = 500;
 
-  auto locks = miscUtils::lockAll(leftLeg, rightLeg, torso);
+  auto locks = MiscUtils::lockAll(leftLeg, rightLeg, torso);
   if (!locks)
     throw std::runtime_error("One or more elements expired");
   auto &[leftLegLock, rightLegLock, torsoLock] = *locks;
@@ -456,7 +456,7 @@ void DemoCreature::updateMove(float dt) {
   if (moveContext.move) {
     moveContext.move = false;
     if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
-      auto locks = miscUtils::lockAll(torso);
+      auto locks = MiscUtils::lockAll(torso);
       if (!locks)
         throw std::runtime_error("One or more elements expired");
       auto &[torsoLock] = *locks;
@@ -480,7 +480,7 @@ void DemoCreature::updateFeet(float dt) {
   Direction direction = STANDING;
   constexpr float epsilon = 0.01;
 
-  auto locks = miscUtils::lockAll(torso,leftLeg,rightLeg);
+  auto locks = MiscUtils::lockAll(torso,leftLeg,rightLeg);
   if (!locks)
     throw std::runtime_error("One or more elements expired");
   auto &[torsoLock,leftLegLock,rightLegLock] = *locks;
@@ -555,7 +555,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
 
 void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   constexpr float planeDist = 15;
-  auto locks = miscUtils::lockAll(shoulderConnection,hipConnection);
+  auto locks = MiscUtils::lockAll(shoulderConnection,hipConnection);
   if(!locks) throw std::runtime_error("One or more elements expired");
   auto& [shoulderConnectionLock,hipConnectionLock] = *locks;
 
