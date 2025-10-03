@@ -8,4 +8,4 @@ set(INCLUDE_DIRS
 
 add_library(game_render_lib STATIC ${SOURCES})
 target_include_directories(game_render_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_render_lib PUBLIC SDL3::SDL3 box2d)
+target_link_libraries(game_render_lib PUBLIC SDL3::SDL3 box2d game_interfaces_lib)
