@@ -7,7 +7,7 @@ struct SegmentConfig : public ShapeConfig {
   b2Vec2 localPoint1, localPoint2;
 };
 
-class Segment : public Shape {
+class Segment : public Shape, public Visitable<Segment> {
 public:
   using Config = SegmentConfig;
   virtual ~Segment() = default;

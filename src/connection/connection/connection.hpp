@@ -8,11 +8,10 @@
 
 struct ConnectionConfig {};
 
-class Connection : public RegistryComposite , public SceneNode{
+class Connection : public RegistryComposite {
 public:
   virtual ~Connection();
 
-  virtual void accept(Visitor &v) override;
 protected:
   Connection(entt::registry &registry, const std::shared_ptr<World> world);
   const std::shared_ptr<World> world;

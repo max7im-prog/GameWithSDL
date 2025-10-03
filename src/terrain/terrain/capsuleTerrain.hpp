@@ -11,7 +11,7 @@ struct CapsuleTerrainConfig : public TerrainConfig {
   float radius;
   static CapsuleTerrainConfig defaultConfig();
 };
-class CapsuleTerrain : public Terrain {
+class CapsuleTerrain : public Terrain , public Visitable<CapsuleTerrain>{
 public:
   using Config = CapsuleTerrainConfig;
 

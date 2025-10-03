@@ -21,11 +21,20 @@ protected:
 private:
 };
 
-class SceneNode {
+class IVisitable {
 public:
-  virtual ~SceneNode() = default;
+  virtual ~IVisitable() = default;
   virtual void accept(Visitor &v) = 0;
+};
 
-protected:
-private:
+/**
+ * @brief An interface for objects that can be visited by Visitor
+ *
+ * @tparam Derived Interface implements an accept function for an object. This
+ * argument shows how the visitor should interpret an object in an accept()
+ * function. Solves the CRTP problem.
+ */
+template <typename Derived> class Visitable : public IVisitable {
+public:
+  void accept(Visitor &v) override { v.visit(static_cast<Derived *>(this)); }
 };

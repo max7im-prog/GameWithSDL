@@ -34,7 +34,7 @@ struct LimbBodyConfig : public BodyConfig {
   b2Rot rootRot;
 };
 
-class LimbBody : public Body {
+class LimbBody : public Body , public Visitable<LimbBody>{
 public:
   using Config = LimbBodyConfig;
   b2Vec2 getBasePos();

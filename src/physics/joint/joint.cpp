@@ -15,5 +15,3 @@ Joint::~Joint() {
 
 Joint::Joint(entt::registry &registry) : RegistryComposite(registry){}
 
-
-void Joint::accept(Visitor &v) { v.visit(this); }

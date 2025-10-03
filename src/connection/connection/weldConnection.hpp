@@ -7,7 +7,7 @@ struct WeldConnectionConfig : ConnectionConfig {
   WeldJointConfig templateJointCfg;
   static WeldConnectionConfig defaultConfig();
 };
-class WeldConnection : public Connection {
+class WeldConnection : public Connection, public Visitable<WeldConnection> {
 public:
   using Config = WeldConnectionConfig;
   const std::shared_ptr<WeldJoint> getWeldJoint() const;

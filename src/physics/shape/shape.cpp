@@ -42,5 +42,3 @@ b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) {
 }
 
 b2Vec2 Shape::getWorldPos() { return b2Body_GetWorldPoint(bodyId, {0, 0}); }
-
-void Shape::accept(Visitor &v) { v.visit(this); }

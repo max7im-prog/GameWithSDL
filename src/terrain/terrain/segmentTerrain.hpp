@@ -9,7 +9,7 @@ struct SegmentTerrainConfig : public TerrainConfig {
   b2Vec2 point1, point2;
   static SegmentTerrainConfig defaultConfig();
 };
-class SegmentTerrain : public Terrain {
+class SegmentTerrain : public Terrain ,public Visitable<SegmentTerrain>{
 public:
   using Config = SegmentTerrainConfig;
 

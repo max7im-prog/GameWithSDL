@@ -6,7 +6,7 @@ struct CircleConfig : public ShapeConfig {
   float radius;
 };
 
-class Circle : public Shape {
+class Circle : public Shape, public Visitable<Circle> {
 public:
   using Config = CircleConfig;
   virtual ~Circle() = default;

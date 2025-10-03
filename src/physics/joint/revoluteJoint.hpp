@@ -9,7 +9,7 @@ struct RevoluteJointConfig : public JointConfig {
   b2RevoluteJointDef jointDef;
 };
 
-class RevoluteJoint : public Joint {
+class RevoluteJoint : public Joint , public Visitable<RevoluteJoint>{
 public:
   using Config = RevoluteJointConfig;
   ~RevoluteJoint() = default;

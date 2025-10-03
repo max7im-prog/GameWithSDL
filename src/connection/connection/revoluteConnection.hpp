@@ -8,7 +8,7 @@ struct RevoluteConnectionConfig : ConnectionConfig {
   RevoluteJointConfig templateJointCfg;
   static RevoluteConnectionConfig defaultConfig();
 };
-class RevoluteConnection : public Connection {
+class RevoluteConnection : public Connection , public Visitable<RevoluteConnection>{
 public:
   using Config = RevoluteConnectionConfig;
   const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;

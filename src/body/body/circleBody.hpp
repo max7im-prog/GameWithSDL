@@ -9,7 +9,7 @@ struct CircleBodyConfig : public BodyConfig {
   CircleConfig shapeCfg;
 };
 
-class CircleBody : public Body {
+class CircleBody : public Body , public Visitable<CircleBody>{
 public:
   using Config = CircleBodyConfig;
   b2Vec2 getCenter();

@@ -8,7 +8,7 @@ struct CircleTerrainConfig : public TerrainConfig {
   float radius;
   static CircleTerrainConfig defaultConfig();
 };
-class CircleTerrain : public Terrain {
+class CircleTerrain : public Terrain , public Visitable<CircleTerrain>{
 public:
   using Config = CircleTerrainConfig;
 

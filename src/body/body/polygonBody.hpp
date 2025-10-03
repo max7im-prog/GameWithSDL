@@ -9,7 +9,7 @@ struct PolygonBodyConfig : public BodyConfig {
   PolygonConfig shapeCfg;
 };
 
-class PolygonBody : public Body {
+class PolygonBody : public Body , public Visitable<PolygonBody>{
 public:
   using Config = PolygonBodyConfig;
   const std::shared_ptr<Polygon> getPolygon();

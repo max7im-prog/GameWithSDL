@@ -10,7 +10,7 @@
 
 struct JointConfig {};
 
-class Joint : public RegistryComposite , public SceneNode{
+class Joint : public RegistryComposite {
 public:
   b2JointId getJointId();
   b2JointType getType();
@@ -18,7 +18,6 @@ public:
 
   void update([[maybe_unused]] float dt) override {};
 
-  virtual void accept(Visitor &v) override;
 protected:
   Joint() = delete;
   Joint(entt::registry &registry);

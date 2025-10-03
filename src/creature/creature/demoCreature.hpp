@@ -16,7 +16,7 @@ struct DemoCreatureConfig : public CreatureConfig {
   float sizeYMeters = 1;
 };
 
-class DemoCreature : public Creature {
+class DemoCreature : public Creature , public Visitable<DemoCreature>{
 public:
   using Config = DemoCreatureConfig;
 

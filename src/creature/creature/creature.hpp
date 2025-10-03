@@ -16,7 +16,7 @@ enum CreatureAbilities {
 
 enum CreatureState { ON_GROUND, IN_AIR, FLYING };
 
-class Creature : public RegistryComposite, public SceneNode {
+class Creature : public RegistryComposite{
 public:
   virtual ~Creature() = 0;
 
@@ -35,7 +35,6 @@ public:
 
   virtual b2Vec2 getWorldPos() = 0;
 
-  virtual void accept(Visitor &v) override;
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);

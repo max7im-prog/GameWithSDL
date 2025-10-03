@@ -10,7 +10,7 @@ struct PolygonTerrainConfig : public TerrainConfig {
   std::vector<b2Vec2> vertices;
   static PolygonTerrainConfig defaultConfig();
 };
-class PolygonTerrain : public Terrain {
+class PolygonTerrain : public Terrain , public Visitable<PolygonTerrain>{
 public:
   using Config = PolygonTerrainConfig;
 

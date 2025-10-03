@@ -13,7 +13,7 @@ struct ShapeConfig {
   b2ShapeDef shapeDef;
 };
 
-class Shape : public RegistryComposite, public SceneNode {
+class Shape : public RegistryComposite{
 public:
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
@@ -31,7 +31,6 @@ public:
   virtual ~Shape();
   void update([[maybe_unused]] float dt) override {};
 
-  virtual void accept(Visitor &v) override;
 
 protected:
   Shape() = delete;

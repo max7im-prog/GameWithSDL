@@ -8,7 +8,7 @@ struct CapsuleConfig : public ShapeConfig {
   b2Vec2 center2;
 };
 
-class Capsule : public Shape {
+class Capsule : public Shape , public Visitable<Capsule>{
 public:
   using Config = CapsuleConfig;
   virtual ~Capsule() = default;

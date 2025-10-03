@@ -9,7 +9,7 @@ struct WeldJointConfig : public JointConfig {
   b2WeldJointDef jointDef;
 };
 
-class WeldJoint : public Joint {
+class WeldJoint : public Joint , public Visitable<WeldJoint>{
 public:
   using Config = WeldJointConfig;
   ~WeldJoint() = default;

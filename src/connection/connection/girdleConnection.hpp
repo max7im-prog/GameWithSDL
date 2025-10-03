@@ -24,7 +24,7 @@ struct GirdleConnectionConfig : public ConnectionConfig {
   b2Rot initial3DRotation;
 };
 
-class GirdleConnection : public Connection {
+class GirdleConnection : public Connection , public Visitable<GirdleConnection>{
 public:
   using Config = GirdleConnectionConfig;
   virtual void update(float dt) override;

@@ -7,7 +7,7 @@ struct DistanceConnectionConfig : public ConnectionConfig {
   DistanceJointConfig templateJointCfg;
   static DistanceConnectionConfig defaultConfig();
 };
-class DistanceConnection : public Connection {
+class DistanceConnection : public Connection , public Visitable<DistanceConnection>{
 public:
   using Config = DistanceConnectionConfig;
   const std::shared_ptr<DistanceJoint> getDistanceJoint() const;

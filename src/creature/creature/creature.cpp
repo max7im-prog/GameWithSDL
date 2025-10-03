@@ -18,5 +18,3 @@ b2Filter CreatureConfig::defaultFilter() {
   ret.categoryBits = ObjectCategory::CREATURE;
   return ret;
 };
-
-void Creature::accept(Visitor &v) { v.visit(this); }
