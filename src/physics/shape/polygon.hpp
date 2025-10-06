@@ -12,6 +12,8 @@ public:
   using Config = PolygonConfig;
   virtual ~Polygon() = default;
 
+  std::vector<b2Vec2> getVertices() const;
+
 protected:
   Polygon() = delete;
   Polygon(entt::registry &registry, const World &world,

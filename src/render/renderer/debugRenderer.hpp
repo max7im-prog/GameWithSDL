@@ -22,6 +22,17 @@ public:
   void visit(RevoluteJoint *);
   void visit(WeldJoint *);
 
+  enum RenderColor {
+    CIRCLE_COLOR,
+    POLYGON_COLOR,
+    SEGMENT_COLOR,
+    CAPSULE_COLOR,
+    JOINT_COLOR
+  };
+
 protected:
+  SDL_Color getSDLColor(const RenderColor &c);
+  static const std::map<RenderColor, SDL_Color> colorMapping;
+
 private:
 };

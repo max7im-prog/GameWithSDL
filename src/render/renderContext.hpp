@@ -21,22 +21,22 @@ public:
 
   ~RenderContext();
 
-  SDL_Renderer *getSDLRenderer();
-  SDL_Window *getSDLWindow();
+  SDL_Renderer *getSDLRenderer() const;
+  SDL_Window *getSDLWindow() const;
 
-  int getWidthPixels();
-  int getHeightPixels();
+  int getWidthPixels() const;
+  int getHeightPixels() const;
 
-  float getWidthMeters();
-  float getHeightMeters();
+  float getWidthMeters() const;
+  float getHeightMeters() const;
 
-  float getPixelToMeterRatio();
+  float getPixelToMeterRatio() const;
   void setPixelToMeterRatio(float ratio);
 
   /**
    * @brief Get the position of a top left corner of the screen in box2d world
    */
-  b2Vec2 getBasePos();
+  b2Vec2 getBasePos() const;
 
   /**
    * @brief Set the position of a top left corner of the screen in box2d world

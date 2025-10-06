@@ -29,36 +29,36 @@ RenderContext::createNewRenderContext(const RenderContextConfig &cfg) {
   return ret;
 }
 
-SDL_Renderer *RenderContext::getSDLRenderer() { return renderer; }
+SDL_Renderer *RenderContext::getSDLRenderer() const{ return renderer; }
 
-SDL_Window *RenderContext::getSDLWindow() { return window; }
+SDL_Window *RenderContext::getSDLWindow() const{ return window; }
 
-int RenderContext::getWidthPixels() {
+int RenderContext::getWidthPixels() const{
   int w, h;
   SDL_GetWindowSizeInPixels(window, &w, &h);
   return w;
 }
 
-int RenderContext::getHeightPixels() {
+int RenderContext::getHeightPixels() const{
   int w, h;
   SDL_GetWindowSizeInPixels(window, &w, &h);
   return h;
 }
 
-float RenderContext::getWidthMeters() {
+float RenderContext::getWidthMeters() const{
   return (float(getWidthPixels())) / pixelToMeterRatio;
 }
 
-float RenderContext::getHeightMeters() {
+float RenderContext::getHeightMeters() const{
   return (float(getHeightPixels())) / pixelToMeterRatio;
 }
 
-float RenderContext::getPixelToMeterRatio() { return pixelToMeterRatio; }
+float RenderContext::getPixelToMeterRatio() const{ return pixelToMeterRatio; }
 
 void RenderContext::setPixelToMeterRatio(float ratio) {
   pixelToMeterRatio = ratio;
 }
 
-b2Vec2 RenderContext::getBasePos() { return basePos; }
+b2Vec2 RenderContext::getBasePos() const{ return basePos; }
 
 void RenderContext::setBasePos(b2Vec2 p) { basePos = p; }
