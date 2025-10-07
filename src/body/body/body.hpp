@@ -6,7 +6,7 @@
 
 struct BodyConfig {};
 
-class Body : public RegistryComposite {
+class Body : public RegistryComposite, public virtual IVisitable {
 public:
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Body();

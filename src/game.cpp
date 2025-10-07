@@ -27,25 +27,18 @@ bool Game::isRunning() { return this->running; }
 void Game::setRunning(bool val) { this->running = val; }
 
 bool Game::init() {
-  auto window = SDL_CreateWindow("Game", this->WIDTH, this->HEIGHT, 0);
-  if (!window) {
-    std::cerr << "Failed to create SDL window: " << SDL_GetError() << std::endl;
-    return false;
-  }
-  auto renderer = SDL_CreateRenderer(window, nullptr);
-  if (!renderer) {
-    std::cerr << "Failed to create SDL renderer: " << SDL_GetError()
-              << std::endl;
-    return false;
-  }
 
-  this->renderContext.window = window;
-  this->renderContext.renderer = renderer;
-  this->renderContext.x = 0;
-  this->renderContext.y = 0;
-  this->renderContext.w = this->WIDTH;
-  this->renderContext.h = this->HEIGHT;
-  this->renderContext.pixelToMeterRatio = 12.5f;
+  // Initialize render context and renderers
+  {
+    auto cfg = RenderContextConfig::defaultConfig();
+    cfg.basePos = {0, 70};
+    cfg.widthPixels = 1200;
+    cfg.heightPixels = 900;
+    cfg.pixelToMeterRatio = 10;
+    cfg.WindowTitle = "Game";
+    renderContext = RenderContext::createNewRenderContext(cfg);
+  }
+  debugRenderSystem = std::make_unique<DebugRenderSystem>(*renderContext);
 
   this->running = true;
 
@@ -55,7 +48,8 @@ bool Game::init() {
     auto config = BasicWorld::Config::defaultConfig();
     config.substepCount = 16;
     world = worldFactory->create<BasicWorld>(config).lock();
-    if(!world) throw std::runtime_error("Failed to create world") ;
+    if (!world)
+      throw std::runtime_error("Failed to create world");
   }
 
   // Initialize factories
@@ -179,19 +173,20 @@ bool Game::init() {
     config.sizeYMeters = 2;
     config.position = {5, 10};
     c0 = creatureFactory->create<DemoCreature>(config).lock();
-    if(!world) throw std::runtime_error("Failed to create creature") ;
+    if (!world)
+      throw std::runtime_error("Failed to create creature");
   }
   c0->aim({30, 30}, true);
   // c0->remove();
 
-  
   {
     auto config = DemoCreatureConfig::defaultConfig();
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
     config.position = {35, 8};
     c0 = creatureFactory->create<DemoCreature>(config).lock();
-    if(!world) throw std::runtime_error("Failed to create creature") ;
+    if (!world)
+      throw std::runtime_error("Failed to create creature");
   }
   // c0->remove();
 
@@ -207,8 +202,6 @@ bool Game::init() {
 
 void Game::clean() {
   this->registry.clear();
-  SDL_DestroyRenderer(this->renderContext.renderer);
-  SDL_DestroyWindow(this->renderContext.window);
 }
 
 void Game::handleEvents() {
@@ -217,22 +210,23 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
-  this->controllerUpdateSystem.update(this->registry, renderContext);
+  this->controllerUpdateSystem.update(this->registry, *renderContext);
   this->creatureControlSystem.update(this->registry);
 
   creatureUpdateSystem.update(this->registry, this->FPS);
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,
-                          renderContext);
+                          *renderContext);
 
   this->worldUpdateSystem.update(this->registry, this->FPS);
 }
 
 void Game::render() {
-  this->renderBackgroundSystem.update(this->registry, this->renderContext);
-  this->renderPhysicsBodiesSystem.update(this->registry, this->renderContext);
-  this->renderPhysicsJointsSystem.update(this->registry, this->renderContext);
+  this->renderBackgroundSystem.update(this->registry, *renderContext);
+  // this->renderPhysicsBodiesSystem.update(this->registry, this->renderContext);
+  // this->renderPhysicsJointsSystem.update(this->registry, this->renderContext);
+  this->debugRenderSystem->update(this->registry);
 
-  SDL_RenderPresent(this->renderContext.renderer);
+  SDL_RenderPresent(this->renderContext->getSDLRenderer());
 }
 
 void Game::deltaTime() {

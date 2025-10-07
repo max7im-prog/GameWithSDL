@@ -23,42 +23,52 @@ RenderContext::~RenderContext() {
   SDL_DestroyWindow(window);
 }
 
-RenderContext
+std::shared_ptr<RenderContext>
 RenderContext::createNewRenderContext(const RenderContextConfig &cfg) {
-  RenderContext ret(cfg);
+  auto ret = std::shared_ptr<RenderContext>(new RenderContext(cfg));
   return ret;
 }
 
-SDL_Renderer *RenderContext::getSDLRenderer() const{ return renderer; }
+SDL_Renderer *RenderContext::getSDLRenderer() const { return renderer; }
 
-SDL_Window *RenderContext::getSDLWindow() const{ return window; }
+SDL_Window *RenderContext::getSDLWindow() const { return window; }
 
-int RenderContext::getWidthPixels() const{
+int RenderContext::getWidthPixels() const {
   int w, h;
   SDL_GetWindowSizeInPixels(window, &w, &h);
   return w;
 }
 
-int RenderContext::getHeightPixels() const{
+int RenderContext::getHeightPixels() const {
   int w, h;
   SDL_GetWindowSizeInPixels(window, &w, &h);
   return h;
 }
 
-float RenderContext::getWidthMeters() const{
+float RenderContext::getWidthMeters() const {
   return (float(getWidthPixels())) / pixelToMeterRatio;
 }
 
-float RenderContext::getHeightMeters() const{
+float RenderContext::getHeightMeters() const {
   return (float(getHeightPixels())) / pixelToMeterRatio;
 }
 
-float RenderContext::getPixelToMeterRatio() const{ return pixelToMeterRatio; }
+float RenderContext::getPixelToMeterRatio() const { return pixelToMeterRatio; }
 
 void RenderContext::setPixelToMeterRatio(float ratio) {
   pixelToMeterRatio = ratio;
 }
 
-b2Vec2 RenderContext::getBasePos() const{ return basePos; }
+b2Vec2 RenderContext::getBasePos() const { return basePos; }
 
 void RenderContext::setBasePos(b2Vec2 p) { basePos = p; }
+
+RenderContextConfig RenderContextConfig::defaultConfig() {
+  RenderContextConfig ret;
+  ret.basePos = {100, 100};
+  ret.widthPixels = 800;
+  ret.heightPixels = 600;
+  ret.pixelToMeterRatio = 10;
+  ret.WindowTitle = "Game";
+  return ret;
+}

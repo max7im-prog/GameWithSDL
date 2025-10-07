@@ -9,7 +9,7 @@ struct TerrainConfig {
   static b2Filter defaultFilter();
 };
 
-class Terrain : public RegistryComposite {
+class Terrain : public RegistryComposite, public virtual IVisitable {
 public:
   virtual void update(float dt) override;
   virtual ~Terrain() = 0;

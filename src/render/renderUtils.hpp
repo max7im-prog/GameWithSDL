@@ -23,12 +23,6 @@ screenPos b2VecToScreenPos(b2Vec2 meters, const RenderContext &context);
 // , returns (x, y)
 b2Vec2 screenPosTob2Vec(screenPos pixels, const RenderContext &context);
 
-// Renders a shape, returns true on success, false otherwise
-bool renderShape(b2ShapeId shapeId, const RenderContext &context);
-
-// Renders a joint, returns true on success, false otherwise
-bool renderJoint(b2JointId jointId, const RenderContext &context);
-
 void renderCircle(screenPos pixelCenter, int pixelRadius, SDL_Color color,
                   const RenderContext &context);
 void renderSegment(screenPos pixelPoint1, screenPos pixelPoint2,

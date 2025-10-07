@@ -37,7 +37,7 @@ b2Vec2 Shape::getLocalPoint(b2Vec2 worldPoint) {
   return b2Body_GetLocalPoint(bodyId, worldPoint);
 }
 
-b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) {
+b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) const{
   return b2Body_GetWorldPoint(bodyId, localPoint);
 }
 

@@ -1,14 +1,12 @@
 #pragma once
 
-
-
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 
 struct ConnectionConfig {};
 
-class Connection : public RegistryComposite {
+class Connection : public RegistryComposite, public virtual IVisitable {
 public:
   virtual ~Connection();
 

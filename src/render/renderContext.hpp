@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <box2d/box2d.h>
+#include <memory>
 #include <string>
 
 struct RenderContextConfig {
@@ -16,7 +17,7 @@ struct RenderContextConfig {
 
 class RenderContext {
 public:
-  [[nodiscard]] static RenderContext
+  [[nodiscard]] static std::shared_ptr<RenderContext>
   createNewRenderContext(const RenderContextConfig &cfg);
 
   ~RenderContext();
@@ -43,6 +44,10 @@ public:
    */
   void setBasePos(b2Vec2 p);
 
+  RenderContext() = default;
+
+  RenderContext(RenderContext &&) = default;
+  RenderContext &operator=(RenderContext &&) = default;
 private:
   RenderContext(const RenderContextConfig &cfg);
 
@@ -59,9 +64,6 @@ private:
   SDL_Renderer *renderer;
   SDL_Window *window;
 
-  RenderContext() = delete;
   RenderContext(const RenderContext &) = delete;
   RenderContext &operator=(const RenderContext &) = delete;
-  RenderContext(RenderContext &&) = default;
-  RenderContext &operator=(RenderContext &&) = default;
 };

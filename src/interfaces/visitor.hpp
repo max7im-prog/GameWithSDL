@@ -1,21 +1,31 @@
 #pragma once
 
-class Shape;
 class Joint;
 class Body;
 class Connection;
 class Creature;
 class Terrain;
 
+class Shape;
+class Circle;
+class Segment;
+class Capsule;
+class Polygon;
+
 class Visitor {
 public:
   virtual ~Visitor() = default;
-  virtual void visit([[maybe_unused]] Shape *shape) {}
-  virtual void visit([[maybe_unused]] Joint *joint) {}
-  virtual void visit([[maybe_unused]] Body *body) {}
-  virtual void visit([[maybe_unused]] Connection *connection) {}
-  virtual void visit([[maybe_unused]] Creature *creature) {}
-  virtual void visit([[maybe_unused]] Terrain *terrain) {}
+  virtual void visit([[maybe_unused]] Shape *) {}
+  virtual void visit([[maybe_unused]] Circle *) {}
+  virtual void visit([[maybe_unused]] Segment *) {}
+  virtual void visit([[maybe_unused]] Capsule *) {}
+  virtual void visit([[maybe_unused]] Polygon *) {}
+  
+  virtual void visit([[maybe_unused]] Joint *) {}
+  virtual void visit([[maybe_unused]] Body *) {}
+  virtual void visit([[maybe_unused]] Connection *) {}
+  virtual void visit([[maybe_unused]] Creature *) {}
+  virtual void visit([[maybe_unused]] Terrain *) {}
 
 protected:
 private:
@@ -34,7 +44,7 @@ public:
  * argument shows how the visitor should interpret an object in an accept()
  * function. Solves the CRTP problem.
  */
-template <typename Derived> class Visitable : public IVisitable {
+template <typename Derived> class Visitable : public virtual IVisitable {
 public:
   void accept(Visitor &v) override { v.visit(static_cast<Derived *>(this)); }
 };

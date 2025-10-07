@@ -10,7 +10,7 @@
 
 struct JointConfig {};
 
-class Joint : public RegistryComposite {
+class Joint : public RegistryComposite, public virtual IVisitable {
 public:
   b2JointId getJointId();
   b2JointType getType();

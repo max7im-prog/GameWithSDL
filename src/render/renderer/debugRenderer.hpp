@@ -12,7 +12,7 @@
 
 class DebugRenderer : public Renderer {
 public:
-  DebugRenderer(entt::registry &r, RenderContext &c);
+  DebugRenderer( RenderContext &c);
   void visit(Circle *c);
   void visit(Polygon *p);
   void visit(Segment *s);

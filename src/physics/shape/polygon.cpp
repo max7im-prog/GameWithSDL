@@ -29,7 +29,7 @@ std::vector<b2Vec2> Polygon::getVertices() const {
   auto p = b2Shape_GetPolygon(shapeId);
   ret.reserve(p.count);
   for (size_t i = 0; i < p.count; i++) {
-    ret.push_back(p.vertices[i]);
+    ret.push_back(getWorldPoint(p.vertices[i]));
   }
   return ret;
 }

@@ -13,7 +13,7 @@ struct ShapeConfig {
   b2ShapeDef shapeDef;
 };
 
-class Shape : public RegistryComposite{
+class Shape : public RegistryComposite, public virtual IVisitable {
 public:
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
@@ -23,14 +23,13 @@ public:
   b2Rot getRotation();
   b2Vec2 getLinearVelocity();
   b2Vec2 getLocalPoint(b2Vec2 worldPoint);
-  b2Vec2 getWorldPoint(b2Vec2 localPoint);
+  b2Vec2 getWorldPoint(b2Vec2 localPoint) const;
   b2Vec2 getWorldPos();
 
   void applyTorque(float torque);
 
   virtual ~Shape();
   void update([[maybe_unused]] float dt) override {};
-
 
 protected:
   Shape() = delete;
