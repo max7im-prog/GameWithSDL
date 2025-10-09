@@ -7,7 +7,7 @@ const std::map<DebugRenderer::RenderColor, SDL_Color>
         {DebugRenderer::RenderColor::CAPSULE_COLOR, {255, 0, 0, 255}},
         {DebugRenderer::RenderColor::CIRCLE_COLOR, {0, 255, 0, 255}},
         {DebugRenderer::RenderColor::SEGMENT_COLOR, {0, 0, 255, 255}},
-        {DebugRenderer::RenderColor::POLYGON_COLOR, {255, 255, 0, 255}},
+        {DebugRenderer::RenderColor::POLYGON_COLOR, {255, 0, 255, 255}},
         {DebugRenderer::RenderColor::SEGMENT_COLOR, {255, 0, 255, 255}}};
 
 DebugRenderer::DebugRenderer(RenderContext &c) : Renderer(c) {}

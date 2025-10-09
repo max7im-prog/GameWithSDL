@@ -1,0 +1,40 @@
+#include "cameraSystem.hpp"
+#include "eventComponents.hpp"
+#include <iostream>
+
+void CameraSystem::update(entt::registry &registry,
+                          RenderContext &renderContext) {
+  auto v = registry.view<ButtonPressEvent>();
+  bool mmbPressed = false;
+  screenPos positionPressed = {0, 0};
+  for (auto &ent : v) {
+    auto &event = registry.get<ButtonPressEvent>(ent);
+    if (event.event.button.button == SDL_BUTTON_MIDDLE) {
+      mmbPressed = true;
+      positionPressed.x = event.event.button.x;
+      positionPressed.y = event.event.button.y;
+      break;
+    }
+  }
+
+  if (mmbPressed && pressed) {
+   screenPos currentPos;
+   SDL_GetMouseState(&(currentPos.x),&(currentPos.y));
+   auto deltaX = currentPos.x - initialPressedPos.x;
+   auto deltaY = currentPos.y - initialPressedPos.y;
+   auto ratio = renderContext.getPixelToMeterRatio();
+   b2Vec2 deltaVec = {0,0};
+   deltaVec.x = -deltaX/ratio;
+   deltaVec.y = deltaY/ratio;
+   renderContext.setBasePos(b2Add(initialBasePos,deltaVec));
+
+  } else if (mmbPressed && !pressed) {
+    pressed = true;
+    initialPressedPos = positionPressed;
+    initialBasePos = renderContext.getBasePos();
+  } else if (!mmbPressed && pressed) {
+    pressed = false;
+  } else if (!mmbPressed && !pressed) {
+    // Do nothing
+  }
+}

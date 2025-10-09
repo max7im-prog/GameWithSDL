@@ -6,9 +6,6 @@
 #include "eventComponents.hpp"
 #include "renderUtils.hpp"
 
-ControllerUpdateSystem::ControllerUpdateSystem() {}
-
-ControllerUpdateSystem::~ControllerUpdateSystem() {}
 
 void ControllerUpdateSystem::update(entt::registry &registry,
                                     const RenderContext &renderContext) {

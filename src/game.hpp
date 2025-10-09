@@ -25,6 +25,7 @@
 #include "mouseJointSystem.hpp"
 #include "worldFactory.hpp"
 #include "worldUpdateSystem.hpp"
+#include "cameraSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game {
@@ -76,6 +77,7 @@ private:
   CreatureControlSystem creatureControlSystem;
   MouseJointSystem mouseJointSystem;
   CreatureUpdateSystem creatureUpdateSystem;
+  CameraSystem cameraSystem;
 
   // Render systems
   RenderBackgroundSystem renderBackgroundSystem;

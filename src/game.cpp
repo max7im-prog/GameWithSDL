@@ -200,9 +200,7 @@ bool Game::init() {
   return true;
 }
 
-void Game::clean() {
-  this->registry.clear();
-}
+void Game::clean() { this->registry.clear(); }
 
 void Game::handleEvents() {
   this->pollEventSystem.update(this->registry);
@@ -217,13 +215,17 @@ void Game::update() {
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,
                           *renderContext);
 
+  cameraSystem.update(this->registry, *renderContext);
+
   this->worldUpdateSystem.update(this->registry, this->FPS);
 }
 
 void Game::render() {
   this->renderBackgroundSystem.update(this->registry, *renderContext);
-  // this->renderPhysicsBodiesSystem.update(this->registry, this->renderContext);
-  // this->renderPhysicsJointsSystem.update(this->registry, this->renderContext);
+  // this->renderPhysicsBodiesSystem.update(this->registry,
+  // this->renderContext);
+  // this->renderPhysicsJointsSystem.update(this->registry,
+  // this->renderContext);
   this->debugRenderSystem->update(this->registry);
 
   SDL_RenderPresent(this->renderContext->getSDLRenderer());
