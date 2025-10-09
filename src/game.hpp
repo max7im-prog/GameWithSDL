@@ -1,5 +1,6 @@
 #pragma once
 #include "bodyFactory.hpp"
+#include "cleanupSystem.hpp"
 #include "creatureControlSystem.hpp"
 #include "creatureFactory.hpp"
 #include "creatureUpdateSystem.hpp"
@@ -40,8 +41,8 @@ public:
   // Initializes Game, including SDL
   bool init();
 
-  // Cleans the resources used by game, i guess
-  void clean();
+  // Cleans all the objects that expire at the end of the frame
+  void cleanupFrame();
 
   // Calls all event systems
   void handleEvents();
@@ -54,6 +55,9 @@ public:
 
   // Waits for time to pass to adjust the framerate
   void deltaTime();
+
+  // Cleans the resources used by game, i guess
+  void clean();
 
 private:
   // Window parameters
@@ -78,6 +82,7 @@ private:
   MouseJointSystem mouseJointSystem;
   CreatureUpdateSystem creatureUpdateSystem;
   CameraSystem cameraSystem;
+  CleanupSystem cleanupSystem;
 
   // Render systems
   RenderBackgroundSystem renderBackgroundSystem;

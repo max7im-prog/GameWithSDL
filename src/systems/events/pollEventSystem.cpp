@@ -2,9 +2,6 @@
 
 #include <SDL3/SDL.h>
 
-#include "SDL3/SDL.h"
-#include "SDL3/SDL.h"
-#include "SDL3/SDL.h"
 #include "eventComponents.hpp"
 #include "eventUtils.hpp"
 

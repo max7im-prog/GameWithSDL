@@ -220,6 +220,8 @@ void Game::update() {
   this->worldUpdateSystem.update(this->registry, this->FPS);
 }
 
+void Game::cleanupFrame() { cleanupSystem.update(this->registry); }
+
 void Game::render() {
   this->renderBackgroundSystem.update(this->registry, *renderContext);
   // this->renderPhysicsBodiesSystem.update(this->registry,
