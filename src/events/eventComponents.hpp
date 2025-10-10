@@ -1,6 +1,12 @@
 #pragma once
-#include "eventUtils.hpp"
 #include <SDL3/SDL.h>
+
+enum InputState {
+  JUST_PRESSED,
+  HELD_PRESSED,
+  JUST_RELEASED,
+  SINGLE_FRAME_EVENT,
+};
 
 struct PlayerInput {
   InputState state;

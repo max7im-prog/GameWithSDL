@@ -12,6 +12,9 @@ public:
   void update(entt::registry &registry);
 
 private:
+  using EventHandler =
+      std::function<void(entt::registry &, const SDL_Event &e)>;
+
   // For key presses
   std::map<SDL_Keycode, entt::entity> keyMap = {};
   std::unordered_set<SDL_Keycode> justPressedKeys = {};
@@ -25,4 +28,9 @@ private:
   std::unordered_set<Uint8> justReleasedButtons = {};
 
   std::vector<entt::entity> singleFrameEvents = {};
+
+  static const std::unordered_map<Uint32, EventHandler> eventHandlers;
+
+  void pollEvents(entt::registry& registry);
+  void advanceHeld(entt::registry& registry);
 };
