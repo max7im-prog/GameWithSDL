@@ -137,7 +137,14 @@ const std::unordered_map<Uint32, PollEventSystem::EventHandler>
              // Do nothing
            }
          }},
-        {SDL_EVENT_MOUSE_WHEEL, [](entt::registry &r, const SDL_Event &e) {}},
+
+        {SDL_EVENT_MOUSE_WHEEL,
+         [](entt::registry &r, const SDL_Event &e) {
+           auto ent = r.create();
+           auto &mw = r.emplace_or_replace<MouseWheelEvent>(ent);
+           mw.event = e;
+           r.emplace_or_replace<MarkedForCleanupTag>(ent);
+         }},
 
 };
 
