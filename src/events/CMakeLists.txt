@@ -6,6 +6,6 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-add_library(game_events_lib INTERFACE)
-target_include_directories(game_events_lib INTERFACE ${INCLUDE_DIRS})
-target_link_libraries(game_events_lib INTERFACE SDL3::SDL3)
+add_library(game_events_lib STATIC ${SOURCES})
+target_include_directories(game_events_lib PUBLIC ${INCLUDE_DIRS})
+target_link_libraries(game_events_lib PUBLIC SDL3::SDL3 EnTT::EnTT)
