@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Shape;
 class Circle;
 class Segment;
@@ -44,14 +43,14 @@ public:
   virtual void visit([[maybe_unused]] Segment *) {}
   virtual void visit([[maybe_unused]] Capsule *) {}
   virtual void visit([[maybe_unused]] Polygon *) {}
-  
+
   virtual void visit([[maybe_unused]] Joint *) {}
   virtual void visit([[maybe_unused]] DistanceJoint *) {}
   virtual void visit([[maybe_unused]] MouseJoint *) {}
   virtual void visit([[maybe_unused]] PrismaticJoint *) {}
   virtual void visit([[maybe_unused]] RevoluteJoint *) {}
   virtual void visit([[maybe_unused]] WeldJoint *) {}
-  
+
   virtual void visit([[maybe_unused]] Body *) {}
   virtual void visit([[maybe_unused]] CircleBody *) {}
   virtual void visit([[maybe_unused]] SegmentBody *) {}
@@ -93,5 +92,7 @@ public:
  */
 template <typename Derived> class Visitable : public virtual IVisitable {
 public:
-  virtual void accept(Visitor &v) override { v.visit(static_cast<Derived *>(this)); }
+  virtual void accept(Visitor &v) override {
+    v.visit(static_cast<Derived *>(this));
+  }
 };
