@@ -5,7 +5,8 @@
 #include "shapeFactory.hpp"
 
 struct PolygonBodyConfig : public BodyConfig {
-  static PolygonBodyConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   PolygonConfig shapeCfg;
 };
 

@@ -5,7 +5,8 @@
 #include "shapeFactory.hpp"
 
 struct CircleBodyConfig : public BodyConfig {
-  static CircleBodyConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   CircleConfig shapeCfg;
 };
 

@@ -1,10 +1,11 @@
 #pragma once
 #include "box2d/box2d.h"
 #include "joint.hpp"
+#include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "shape.hpp"
 
-struct BodyConfig {};
+struct BodyConfig :public ObjectConfig{};
 
 class Body : public RegistryComposite, public virtual IVisitable {
 public:

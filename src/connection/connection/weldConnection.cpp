@@ -18,8 +18,8 @@ const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
   return ret;
 }
 
-WeldConnectionConfig WeldConnectionConfig::defaultConfig() {
-  WeldConnectionConfig ret;
-  ret.templateJointCfg = WeldJointConfig::defaultConfig();
-  return ret;
+void WeldConnectionConfig::defaultConfig() { templateJointCfg.defaultConfig(); }
+
+void SegmentConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }

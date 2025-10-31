@@ -9,7 +9,8 @@
 #include <memory>
 
 struct GirdleConnectionConfig : public ConnectionConfig {
-  static GirdleConnectionConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 
   PrismaticJointConfig prismTemplate;
   PIDRotControllerConfig rotationControlTemplate;

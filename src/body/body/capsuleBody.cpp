@@ -35,10 +35,12 @@ CapsuleBody::CapsuleBody(entt::registry &registry,
   registerChild(capsule);
 }
 
-CapsuleBodyConfig CapsuleBodyConfig::defaultConfig() {
-  CapsuleBodyConfig ret;
-  ret.shapeCfg = CapsuleConfig::defaultConfig();
-  return ret;
+void CapsuleBodyConfig::defaultConfig() {
+  shapeCfg .defaultConfig();
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 const std::shared_ptr<Capsule> CapsuleBody::getCapsule() {

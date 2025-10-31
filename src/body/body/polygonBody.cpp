@@ -12,10 +12,12 @@ PolygonBody::PolygonBody(entt::registry &registry,
   registerChild(polygon);
 }
 
-PolygonBodyConfig PolygonBodyConfig::defaultConfig() {
-  PolygonBodyConfig ret;
-  ret.shapeCfg = PolygonConfig::defaultConfig();
-  return ret;
+void PolygonBodyConfig::defaultConfig() {
+  shapeCfg.defaultConfig();
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 const std::shared_ptr<Polygon> PolygonBody::getPolygon() {

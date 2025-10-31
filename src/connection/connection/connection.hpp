@@ -1,10 +1,11 @@
 #pragma once
 
+#include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 
-struct ConnectionConfig {};
+struct ConnectionConfig :public ObjectConfig{};
 
 class Connection : public RegistryComposite, public virtual IVisitable {
 public:

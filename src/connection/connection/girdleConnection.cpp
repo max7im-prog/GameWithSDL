@@ -1,8 +1,8 @@
 #include "girdleConnection.hpp"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
-#include "prismaticJoint.hpp"
 #include "miscUtils.hpp"
+#include "prismaticJoint.hpp"
 #include <stdexcept>
 GirdleConnection::GirdleConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
@@ -54,13 +54,15 @@ GirdleConnection::GirdleConnection(
   rotationController = PIDRotController(config.rotationControlTemplate);
 }
 
-GirdleConnectionConfig GirdleConnectionConfig::defaultConfig() {
-  GirdleConnectionConfig ret;
-  ret.prismTemplate = PrismaticJointConfig::defaultConfig();
-  ret.girdleWidth = 1;
-  ret.rotationAxis = {0, 1};
-  ret.initial3DRotation = b2MakeRot(0);
-  return ret;
+void GirdleConnectionConfig::defaultConfig() {
+  prismTemplate.defaultConfig();
+  girdleWidth = 1;
+  rotationAxis = {0, 1};
+  initial3DRotation = b2MakeRot(0);
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }
 
 void GirdleConnection::update(float dt) {
@@ -69,9 +71,8 @@ void GirdleConnection::update(float dt) {
 }
 
 void GirdleConnection::updateRotation(float dt) {
-  if (auto locks = MiscUtils::lockAll(leftPrism,rightPrism)) {
-    auto& [leftPrismLock, rightPrismLock] = *locks;
-
+  if (auto locks = MiscUtils::lockAll(leftPrism, rightPrism)) {
+    auto &[leftPrismLock, rightPrismLock] = *locks;
 
     constexpr float ROTATIONAL_SENSITIVITY = 0.01;
     if (std::abs(b2Rot_GetAngle(target3DRotation) -
@@ -87,8 +88,6 @@ void GirdleConnection::updateRotation(float dt) {
       rightPrismLock->setTargetTranslation(newOffset);
       leftPrismLock->setTargetTranslation(-newOffset);
     }
-
-
   }
 }
 

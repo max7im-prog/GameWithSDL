@@ -102,16 +102,17 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   }
 }
 
-LimbBodyConfig LimbBodyConfig::defaultConfig() {
-  LimbBodyConfig ret;
-  ret.templateCapsuleConfig = CapsuleConfig::defaultConfig();
-  ret.templateJointConfig = RevoluteJointConfig::defaultConfig();
-  ret.basePos = {0, 0};
-  ret.segments = {};
+void LimbBodyConfig::defaultConfig() {
+  templateCapsuleConfig.defaultConfig();
+  templateJointConfig.defaultConfig();
+  basePos = {0, 0};
+  segments = {};
 
-  ret.initialAngleConstraints = {};
+  initialAngleConstraints = {};
+}
 
-  return ret;
+void SegmentConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }
 
 b2Vec2 LimbBody::getBasePos() {
@@ -223,7 +224,7 @@ void LimbBody::setAngleConstraints(
     if (!joint)
       throw std::runtime_error("Joint expired");
     joint->setAngleLimits(rootIKTask.angleConstraints[0].minRot,
-                                        rootIKTask.angleConstraints[0].maxRot);
+                          rootIKTask.angleConstraints[0].maxRot);
   }
 
   auto jointsLock = MiscUtils::lockAll(joints);
@@ -284,8 +285,9 @@ b2Rot LimbBody::getAdjustedRootRot() {
   auto connectionLock = connection.lock();
 
   if (connectionLock) {
-    ret = b2MulRot(rootRot, b2Body_GetRotation(b2Joint_GetBodyA(
-                                connectionLock->getRevoluteJoint()->getJointId())));
+    ret = b2MulRot(rootRot,
+                   b2Body_GetRotation(b2Joint_GetBodyA(
+                       connectionLock->getRevoluteJoint()->getJointId())));
   } else {
 
     auto firstSegmentLock = segments[0].lock();

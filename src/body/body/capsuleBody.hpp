@@ -5,7 +5,8 @@
 #include "shapeFactory.hpp"
 
 struct CapsuleBodyConfig : public BodyConfig {
-  static CapsuleBodyConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   CapsuleConfig shapeCfg;
 };
 

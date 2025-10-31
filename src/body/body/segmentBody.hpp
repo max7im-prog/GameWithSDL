@@ -5,7 +5,8 @@
 #include "shapeFactory.hpp"
 
 struct SegmentBodyConfig : public BodyConfig {
-  static SegmentBodyConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   SegmentConfig shapeCfg;
 };
 

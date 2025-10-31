@@ -12,10 +12,12 @@ SegmentBody::SegmentBody(entt::registry &registry,
   registerChild(segment);
 }
 
-SegmentBodyConfig SegmentBodyConfig::defaultConfig() {
-  SegmentBodyConfig ret;
-  ret.shapeCfg = SegmentConfig::defaultConfig();
-  return ret;
+void SegmentBodyConfig::defaultConfig() {
+  shapeCfg.defaultConfig();
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 const std::shared_ptr<Segment> SegmentBody::getSegment() {

@@ -5,7 +5,8 @@
 
 struct DistanceConnectionConfig : public ConnectionConfig {
   DistanceJointConfig templateJointCfg;
-  static DistanceConnectionConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 };
 class DistanceConnection : public Connection , public Visitable<DistanceConnection>{
 public:

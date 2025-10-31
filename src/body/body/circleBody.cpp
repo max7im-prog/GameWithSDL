@@ -31,10 +31,12 @@ CircleBody::CircleBody(entt::registry &registry,
   registerChild(circle);
 }
 
-CircleBodyConfig CircleBodyConfig::defaultConfig() {
-  CircleBodyConfig ret;
-  ret.shapeCfg = CircleConfig::defaultConfig();
-  return ret;
+void CircleBodyConfig::defaultConfig() {
+  shapeCfg.defaultConfig();
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 const std::shared_ptr<Circle> CircleBody::getCircle() { 

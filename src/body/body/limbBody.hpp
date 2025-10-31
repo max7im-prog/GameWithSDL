@@ -22,7 +22,8 @@ struct LimbControlConfig {
 };
 
 struct LimbBodyConfig : public BodyConfig {
-  static LimbBodyConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   CapsuleConfig templateCapsuleConfig;
   RevoluteJointConfig templateJointConfig;
   LimbControlConfig limbControlConfig;

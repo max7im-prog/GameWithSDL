@@ -19,8 +19,10 @@ RevoluteConnection::getRevoluteJoint() const {
   return ret;
 }
 
-RevoluteConnectionConfig RevoluteConnectionConfig::defaultConfig() {
-  RevoluteConnectionConfig ret;
-  ret.templateJointCfg = RevoluteJointConfig::defaultConfig();
-  return ret;
+void RevoluteConnectionConfig::defaultConfig() {
+  templateJointCfg .defaultConfig();
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }

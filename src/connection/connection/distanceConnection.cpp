@@ -19,8 +19,10 @@ DistanceConnection::getDistanceJoint() const {
   return ret;
 }
 
-DistanceConnectionConfig DistanceConnectionConfig::defaultConfig() {
-  DistanceConnectionConfig ret;
-  ret.templateJointCfg = DistanceJointConfig::defaultConfig();
-  return ret;
+void DistanceConnectionConfig::defaultConfig() {
+  templateJointCfg.defaultConfig();
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }
