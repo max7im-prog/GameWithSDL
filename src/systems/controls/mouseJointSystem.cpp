@@ -37,7 +37,8 @@ void MouseJointSystem::update(
             jointExists = true;
             // Empty shape
             {
-              auto config = EmptyShapeConfig::defaultConfig();
+              EmptyShapeConfig config;
+              config.defaultConfig();
               config.bodyDef.position = mouseLocation;
               config.bodyDef.type = b2_staticBody;
               mouseShape = shapeFactory->create<EmptyShape>(config).lock();
@@ -45,7 +46,8 @@ void MouseJointSystem::update(
             }
             // Mouse joint
             {
-              auto config = MouseJointConfig::defaultConfig();
+              MouseJointConfig config;
+              config.defaultConfig();
               config.jointDef.bodyIdA = mouseShape->getBodyId();
               config.jointDef.bodyIdB = b2Shape_GetBody(shapesAtMouse[0]);
               config.jointDef.target = mouseLocation;

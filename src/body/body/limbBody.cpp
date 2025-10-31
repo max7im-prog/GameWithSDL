@@ -254,7 +254,8 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
   }
 
   {
-    auto cfg = RevoluteConnectionConfig::defaultConfig();
+    RevoluteConnectionConfig cfg;
+    cfg.defaultConfig();
     cfg.templateJointCfg = config.templateJointConfig;
     cfg.templateJointCfg.jointDef.bodyIdA = shape->getBodyId();
 

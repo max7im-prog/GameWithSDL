@@ -8,12 +8,14 @@
 #include "basicWorld.hpp"
 #include "bodyFactory.hpp"
 #include "box2d/math_functions.h"
+#include "capsuleTerrain.hpp"
 #include "connectionFactory.hpp"
 #include "controlComponents.hpp"
 #include "creature.hpp"
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
 #include "polygonTerrain.hpp"
+#include "segmentTerrain.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
@@ -75,21 +77,24 @@ bool Game::init() {
 
   // Some terrain
   {
-    auto config = PolygonTerrainConfig::defaultConfig();
+    PolygonTerrainConfig config;
+    config.defaultConfig();
     config.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
     config.position = {2, 3};
 
     terrainFactory->create<PolygonTerrain>(config);
   }
   {
-    auto config = PolygonTerrainConfig::defaultConfig();
+    PolygonTerrainConfig config;
+    config.defaultConfig();
     config.vertices = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     config.position = {30, 30};
 
     terrainFactory->create<PolygonTerrain>(config);
   }
   {
-    auto config = SegmentTerrainConfig::defaultConfig();
+    SegmentTerrainConfig config;
+    config.defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {20, 20};
     config.position = {62, 3};
@@ -97,7 +102,8 @@ bool Game::init() {
     terrainFactory->create<SegmentTerrain>(config);
   }
   {
-    auto config = SegmentTerrainConfig::defaultConfig();
+    SegmentTerrainConfig config;
+    config.defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {20, 0};
     config.position = {82, 23};
@@ -105,7 +111,8 @@ bool Game::init() {
     terrainFactory->create<SegmentTerrain>(config);
   }
   {
-    auto config = SegmentTerrainConfig::defaultConfig();
+    SegmentTerrainConfig config;
+    config.defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {0, 20};
     config.position = {102, 23};
@@ -113,27 +120,31 @@ bool Game::init() {
     terrainFactory->create<SegmentTerrain>(config);
   }
   {
-    auto config = SegmentTerrainConfig::defaultConfig();
+    SegmentTerrainConfig config;
+    config.defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {0, 60};
     config.position = {2, 4};
     terrainFactory->create<SegmentTerrain>(config);
   }
   {
-    auto config = SegmentTerrainConfig::defaultConfig();
+    SegmentTerrainConfig config;
+    config.defaultConfig();
     config.point1 = {0, 0};
     config.point2 = {100, -21};
     config.position = {2, 64};
     terrainFactory->create<SegmentTerrain>(config);
   }
   {
-    auto config = PolygonTerrainConfig::defaultConfig();
+    PolygonTerrainConfig config;
+    config.defaultConfig();
     config.vertices = {{0, 0}, {0, 1}, {30, 1}, {30, 0}};
     config.position = {10, 25};
     terrainFactory->create<PolygonTerrain>(config);
   }
   {
-    auto config = CapsuleTerrainConfig::defaultConfig();
+    CapsuleTerrainConfig config;
+    config.defaultConfig();
     config.point1 = {-10, 0};
     config.point2 = {10, 0};
     config.radius = 1;
@@ -141,25 +152,29 @@ bool Game::init() {
     terrainFactory->create<CapsuleTerrain>(config);
   }
   {
-    auto config = CircleTerrainConfig::defaultConfig();
+    CircleTerrainConfig config;
+    config.defaultConfig();
     config.radius = 1;
     config.position = {82, 23};
     terrainFactory->create<CircleTerrain>(config);
   }
   {
-    auto config = CircleTerrainConfig::defaultConfig();
+    CircleTerrainConfig config;
+    config.defaultConfig();
     config.radius = 1;
     config.position = {85, 23};
     terrainFactory->create<CircleTerrain>(config);
   }
   {
-    auto config = CircleTerrainConfig::defaultConfig();
+    CircleTerrainConfig config;
+    config.defaultConfig();
     config.radius = 1;
     config.position = {89, 23};
     terrainFactory->create<CircleTerrain>(config);
   }
   {
-    auto config = CircleTerrainConfig::defaultConfig();
+    CircleTerrainConfig config;
+    config.defaultConfig();
     config.radius = 1;
     config.position = {90, 23};
     terrainFactory->create<CircleTerrain>(config);
@@ -168,7 +183,8 @@ bool Game::init() {
   // Some creatures
   std::shared_ptr<Creature> c0;
   {
-    auto config = DemoCreatureConfig::defaultConfig();
+    DemoCreatureConfig config;
+    config.defaultConfig();
     config.sizeXMeters = 2;
     config.sizeYMeters = 2;
     config.position = {5, 10};
@@ -180,7 +196,8 @@ bool Game::init() {
   // c0->remove();
 
   {
-    auto config = DemoCreatureConfig::defaultConfig();
+    DemoCreatureConfig config;
+    config.defaultConfig();
     config.sizeXMeters = 3;
     config.sizeYMeters = 4;
     config.position = {35, 8};

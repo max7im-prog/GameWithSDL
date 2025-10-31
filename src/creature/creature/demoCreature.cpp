@@ -3,6 +3,7 @@
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
+#include "circleBody.hpp"
 #include "creature.hpp"
 #include "girdleConnection.hpp"
 #include "limbBody.hpp"
@@ -43,7 +44,8 @@ DemoCreature::DemoCreature(
   b2Vec2 rightHipPos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
 
   // Create bodies
-  auto torsoConfig = PolygonBodyConfig::defaultConfig();
+  PolygonBodyConfig torsoConfig;
+  torsoConfig.defaultConfig();
   torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   torsoConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
@@ -52,13 +54,15 @@ DemoCreature::DemoCreature(
                                    {(torsoWidth / 4), (torsoHeight)},
                                    {(torsoWidth / 4), (0)}};
 
-  auto shoulderConfig = CircleBodyConfig::defaultConfig();
+  CircleBodyConfig shoulderConfig;
+  shoulderConfig.defaultConfig();
   shoulderConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   shoulderConfig.shapeCfg.radius = segmentRadius * 4;
   shoulderConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   shoulderConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
 
-  auto limbConfig = LimbBodyConfig::defaultConfig();
+  LimbBodyConfig limbConfig;
+  limbConfig.defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
   limbConfig.templateCapsuleConfig.shapeDef.filter =
       CreatureConfig::defaultFilter();
@@ -209,7 +213,8 @@ DemoCreature::DemoCreature(
       *bodyPartLocks;
   // Hips
   {
-    auto cfg = GirdleConnectionConfig::defaultConfig();
+    GirdleConnectionConfig cfg;
+    cfg.defaultConfig();
     cfg.girdleWidth = torsoWidth * 0.4;
     cfg.centerAttach.shape = torsoLock->getPolygon();
     cfg.centerAttach.localPoint = {0, 0};
@@ -236,7 +241,8 @@ DemoCreature::DemoCreature(
 
   // Shoulders
   {
-    auto cfg = GirdleConnectionConfig::defaultConfig();
+    GirdleConnectionConfig cfg;
+    cfg.defaultConfig();
     cfg.girdleWidth = torsoWidth * 0.8f;
     cfg.centerAttach.shape = torsoLock->getPolygon();
     cfg.centerAttach.localPoint = {0, torsoHeight / 2.0f};
@@ -315,7 +321,7 @@ void DemoCreatureConfig::defaultConfig() {
   position = {0, 0};
 }
 
-void DemoCreatureConfig::fromJSON(const nlohmann::json& json){
+void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
   // TODO: implement
 }
 
@@ -482,10 +488,10 @@ void DemoCreature::updateFeet(float dt) {
   Direction direction = STANDING;
   constexpr float epsilon = 0.01;
 
-  auto locks = MiscUtils::lockAll(torso,leftLeg,rightLeg);
+  auto locks = MiscUtils::lockAll(torso, leftLeg, rightLeg);
   if (!locks)
     throw std::runtime_error("One or more elements expired");
-  auto &[torsoLock,leftLegLock,rightLegLock] = *locks;
+  auto &[torsoLock, leftLegLock, rightLegLock] = *locks;
   if (jumpContext.jumpState == JumpContext::JumpState::ON_GROUND) {
 
     // Find direction of movement
@@ -554,12 +560,12 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
   }
 }
 
-
 void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   constexpr float planeDist = 15;
-  auto locks = MiscUtils::lockAll(shoulderConnection,hipConnection);
-  if(!locks) throw std::runtime_error("One or more elements expired");
-  auto& [shoulderConnectionLock,hipConnectionLock] = *locks;
+  auto locks = MiscUtils::lockAll(shoulderConnection, hipConnection);
+  if (!locks)
+    throw std::runtime_error("One or more elements expired");
+  auto &[shoulderConnectionLock, hipConnectionLock] = *locks;
 
   b2Vec2 creaturePos = getWorldPos();
 
@@ -571,8 +577,9 @@ void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
 }
 
 b2Vec2 DemoCreature::getWorldPos() {
-  
+
   auto torsoLock = torso.lock();
-  if(!torsoLock) throw std::runtime_error("Torso expired");
+  if (!torsoLock)
+    throw std::runtime_error("Torso expired");
   return torsoLock->getPolygon()->getWorldPos();
 }
