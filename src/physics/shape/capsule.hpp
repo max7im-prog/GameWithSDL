@@ -2,7 +2,8 @@
 #include "shape.hpp"
 
 struct CapsuleConfig : public ShapeConfig {
-  static CapsuleConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   float radius;
   b2Vec2 center1;
   b2Vec2 center2;

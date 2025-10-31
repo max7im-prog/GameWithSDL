@@ -2,10 +2,11 @@
 #include "box2d/box2d.h"
 #include "box2d/types.h"
 
-RevoluteJointConfig RevoluteJointConfig::defaultConfig() {
-  RevoluteJointConfig ret;
-  ret.jointDef = b2DefaultRevoluteJointDef();
-  return ret;
+void RevoluteJointConfig::defaultConfig() {
+  jointDef = b2DefaultRevoluteJointDef();
+}
+void RevoluteJointConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 RevoluteJoint::RevoluteJoint(entt::registry &registry, const World &world,

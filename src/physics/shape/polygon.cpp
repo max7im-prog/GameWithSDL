@@ -14,13 +14,14 @@ Polygon::Polygon(entt::registry &registry, const World &world,
   shapeId = b2CreatePolygonShape(bodyId, &(config.shapeDef), &polygon);
 }
 
-PolygonConfig PolygonConfig::defaultConfig() {
-  PolygonConfig ret;
-  ret.shapeDef = b2DefaultShapeDef();
-  ret.bodyDef = b2DefaultBodyDef();
-  ret.radius = 0;
-  ret.vertices = {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
-  return ret;
+void PolygonConfig::defaultConfig() {
+  shapeDef = b2DefaultShapeDef();
+  bodyDef = b2DefaultBodyDef();
+  radius = 0;
+  vertices = {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
+}
+void PolygonConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 std::vector<b2Vec2> Polygon::getVertices() const {

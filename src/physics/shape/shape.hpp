@@ -1,5 +1,6 @@
 #pragma once
 #include "box2d/id.h"
+#include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
@@ -8,7 +9,7 @@
 #include <entt/entt.hpp>
 #include <optional>
 
-struct ShapeConfig {
+struct ShapeConfig : public ObjectConfig{
   b2BodyDef bodyDef;
   b2ShapeDef shapeDef;
 };

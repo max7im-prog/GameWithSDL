@@ -2,7 +2,8 @@
 #include "shape.hpp"
 
 struct CircleConfig : public ShapeConfig {
-  static CircleConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   float radius;
 };
 

@@ -2,10 +2,11 @@
 #include "box2d/box2d.h"
 #include "box2d/types.h"
 
-MouseJointConfig MouseJointConfig::defaultConfig() {
-  MouseJointConfig ret;
-  ret.jointDef = b2DefaultMouseJointDef();
-  return ret;
+void MouseJointConfig::defaultConfig() {
+  jointDef = b2DefaultMouseJointDef();
+}
+void MouseJointConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 MouseJoint::MouseJoint(entt::registry &registry, const World &world,

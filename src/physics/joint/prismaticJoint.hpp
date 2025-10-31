@@ -6,7 +6,8 @@
 #include "world.hpp"
 
 struct PrismaticJointConfig : public JointConfig {
-  static PrismaticJointConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   b2PrismaticJointDef jointDef;
 };
 

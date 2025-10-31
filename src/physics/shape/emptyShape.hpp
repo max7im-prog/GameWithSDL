@@ -2,7 +2,8 @@
 #include "shape.hpp"
 
 struct EmptyShapeConfig : public ShapeConfig {
-  static EmptyShapeConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 
 private:
   // Not used in EmptyShape

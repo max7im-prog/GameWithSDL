@@ -10,10 +10,12 @@ EmptyShape::EmptyShape(entt::registry &registry, const World &world,
   shapeId = b2_nullShapeId;
 }
 
-EmptyShapeConfig EmptyShapeConfig::defaultConfig() {
-  EmptyShapeConfig ret;
-  ret.shapeDef = b2DefaultShapeDef();
-  ret.bodyDef = b2DefaultBodyDef();
-  ret.bodyDef.type = b2_staticBody;
-  return ret;
+void EmptyShapeConfig::defaultConfig() {
+  shapeDef = b2DefaultShapeDef();
+  bodyDef = b2DefaultBodyDef();
+  bodyDef.type = b2_staticBody;
+}
+
+void EmptyShapeConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }

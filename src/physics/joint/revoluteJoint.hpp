@@ -5,7 +5,8 @@
 #include "world.hpp"
 
 struct RevoluteJointConfig : public JointConfig {
-  static RevoluteJointConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   b2RevoluteJointDef jointDef;
 };
 

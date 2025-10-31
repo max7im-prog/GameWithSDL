@@ -2,10 +2,8 @@
 #include "box2d/box2d.h"
 #include "box2d/types.h"
 
-DistanceJointConfig DistanceJointConfig::defaultConfig() {
-  DistanceJointConfig ret;
-  ret.jointDef = b2DefaultDistanceJointDef();
-  return ret;
+void DistanceJointConfig::defaultConfig() {
+  jointDef = b2DefaultDistanceJointDef();
 }
 
 DistanceJoint::DistanceJoint(entt::registry &registry,const World &world,

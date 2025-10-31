@@ -5,7 +5,8 @@
 #include "world.hpp"
 
 struct MouseJointConfig : public JointConfig {
-  static MouseJointConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   b2MouseJointDef jointDef;
 };
 

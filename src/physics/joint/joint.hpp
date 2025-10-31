@@ -5,10 +5,11 @@
 #include "box2d/types.h"
 #include "entt/entity/entity.hpp"
 #include "entt/entt.hpp"
+#include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 
-struct JointConfig {};
+struct JointConfig : public ObjectConfig{};
 
 class Joint : public RegistryComposite, public virtual IVisitable {
 public:

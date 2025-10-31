@@ -14,14 +14,16 @@ Capsule::Capsule(entt::registry &registry, const World &world,
   shapeId = b2CreateCapsuleShape(bodyId, &(config.shapeDef), &capsule);
 }
 
-CapsuleConfig CapsuleConfig::defaultConfig() {
-  CapsuleConfig ret;
-  ret.shapeDef = b2DefaultShapeDef();
-  ret.bodyDef = b2DefaultBodyDef();
-  ret.radius = 1;
-  ret.center1 = {0, 0};
-  ret.center2 = {0, -1};
-  return ret;
+void CapsuleConfig::defaultConfig() {
+  shapeDef = b2DefaultShapeDef();
+  bodyDef = b2DefaultBodyDef();
+  radius = 1;
+  center1 = {0, 0};
+  center2 = {0, -1};
+}
+
+void CapsuleConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }
 
 b2Vec2 Capsule::getCenter1() {

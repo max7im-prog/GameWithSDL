@@ -5,7 +5,8 @@
 #include "world.hpp"
 
 struct DistanceJointConfig : public JointConfig {
-  static DistanceJointConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
   b2DistanceJointDef jointDef;
 };
 

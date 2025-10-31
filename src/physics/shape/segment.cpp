@@ -14,13 +14,15 @@ Segment::Segment(entt::registry &registry, const World &world,
   shapeId = b2CreateSegmentShape(bodyId, &(config.shapeDef), &segment);
 }
 
-SegmentConfig SegmentConfig::defaultConfig() {
-  SegmentConfig ret;
-  ret.shapeDef = b2DefaultShapeDef();
-  ret.bodyDef = b2DefaultBodyDef();
-  ret.localPoint1 = {0,0};
-  ret.localPoint2 = {1,0};
-  return ret;
+void SegmentConfig::defaultConfig() {
+  shapeDef = b2DefaultShapeDef();
+  bodyDef = b2DefaultBodyDef();
+  localPoint1 = {0,0};
+  localPoint2 = {1,0};
+}
+
+void SegmentConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 b2Vec2 Segment::getPoint1() {
