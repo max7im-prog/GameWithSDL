@@ -39,4 +39,4 @@ lockAll(const std::vector<std::weak_ptr<T>> &weakPtrs) {
   return result;
 }
 
-} // namespace miscUtils
+} // namespace MiscUtils

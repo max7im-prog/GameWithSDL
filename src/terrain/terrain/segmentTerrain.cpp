@@ -1,5 +1,6 @@
 #include "segmentTerrain.hpp"
 #include "box2d/types.h"
+#include "jsonUtils.hpp"
 #include "terrain.hpp"
 
 SegmentTerrain::SegmentTerrain(
@@ -30,5 +31,19 @@ SegmentTerrainConfig SegmentTerrainConfig::defaultConfig() {
   ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   ret.position = {0, 0};
+  return ret;
+}
+
+SegmentTerrainConfig
+SegmentTerrainConfig::fromJSON(const std::string &filename) {
+  SegmentTerrainConfig ret;
+  auto temp = JsonUtils::parseJSON(filename);
+  if (!temp) {
+    throw std::runtime_error("Failed to parse json file: " + filename);
+  }
+  auto json = *temp;
+  ret = SegmentTerrainConfig::defaultConfig();
+  
+
   return ret;
 }
