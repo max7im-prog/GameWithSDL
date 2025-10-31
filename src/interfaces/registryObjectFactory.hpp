@@ -33,7 +33,7 @@ public:
    * For it to work, derived classes have to implement tryCreate() and attach()
    * member functions.
    *
-   * @tparam T Class that is beig created
+   * @tparam T Class that is being created
    * @param config A configuration defined in T as T::Config
    */
   template <typename T>
