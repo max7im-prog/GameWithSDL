@@ -20,7 +20,8 @@ protected:
   static void TearDownTestSuite() {}
   void SetUp() override {
     initFactories();
-    auto cfg = Circle::Config::defaultConfig();
+    Circle::Config cfg;
+    cfg.defaultConfig();
     shape1 = shapeFactory->create<Circle>(cfg).lock();
     shape2 = shapeFactory->create<Circle>(cfg).lock();
   }
@@ -46,9 +47,11 @@ TYPED_TEST(JointEntityTest, InitDeinit) {
   using Factory = typename TestFixture::Factory;
   using Object = typename TestFixture::Object;
   using Component = typename TestFixture::Component;
+  using Conf = typename Object::Config;
 
   ASSERT_EQ(WorldRegistryTest::registrySize(this->registry), INIT_SHAPE_COUNT);
-  auto cfg = Object::Config::defaultConfig();
+  Conf cfg;
+  cfg.defaultConfig();
   cfg.jointDef.bodyIdA = this->shape1->getBodyId();
   cfg.jointDef.bodyIdB = this->shape2->getBodyId();
   auto obj = this->jointFactory->template create<Object>(cfg).lock();

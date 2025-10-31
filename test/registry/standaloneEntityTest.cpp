@@ -71,11 +71,13 @@ TYPED_TEST(StandaloneEntityTest, InitDeinit) {
   using Factory = typename TestFixture::Factory;
   using Object = typename TestFixture::Object;
   using Component = typename TestFixture::Component;
+  using Conf = typename Object::Config;
 
   // 1 entity for world
   ASSERT_EQ(WorldRegistryTest::registrySize(this->registry), 1);
+  Conf cfg;
+  cfg.defaultConfig();
 
-  auto cfg = Object::Config::defaultConfig();
   auto obj = this->template getFactory<Factory>()->template create<Object>(cfg).lock();
 
   ASSERT_TRUE(obj);
