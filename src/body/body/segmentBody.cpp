@@ -16,7 +16,7 @@ void SegmentBodyConfig::defaultConfig() {
   shapeCfg.defaultConfig();
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json& json){
+void SegmentBodyConfig::fromJSON(const nlohmann::json& json){
   // TODO: implement
 }
 

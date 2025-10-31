@@ -21,12 +21,14 @@ CircleTerrain::CircleTerrain(
   }
 }
 
-CircleTerrainConfig CircleTerrainConfig::defaultConfig() {
-  CircleTerrainConfig ret;
-  ret.templateBodyCfg = CircleBodyConfig::defaultConfig();
-  ret.position = {0, 0};
-  ret.radius = 1;
-  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-  return ret;
+void CircleTerrainConfig::defaultConfig() {
+  templateBodyCfg .defaultConfig();
+  position = {0, 0};
+  radius = 1;
+  templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+}
+
+void CircleTerrainConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }

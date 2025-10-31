@@ -39,7 +39,7 @@ void CapsuleBodyConfig::defaultConfig() {
   shapeCfg .defaultConfig();
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json& json){
+void CapsuleBodyConfig::fromJSON(const nlohmann::json& json){
   // TODO: implement
 }
 

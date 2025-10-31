@@ -1,11 +1,12 @@
 #pragma once
 #include "body.hpp"
 #include "box2d/types.h"
+#include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 
-struct CreatureConfig {
+struct CreatureConfig : ObjectConfig{
   b2Vec2 position;
   static b2Filter defaultFilter();
 };

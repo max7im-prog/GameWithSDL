@@ -35,7 +35,7 @@ void CircleBodyConfig::defaultConfig() {
   shapeCfg.defaultConfig();
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json& json){
+void CircleBodyConfig::fromJSON(const nlohmann::json& json){
   // TODO: implement
 }
 

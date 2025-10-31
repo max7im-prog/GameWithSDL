@@ -1,10 +1,11 @@
 #pragma once
+#include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
 
-struct TerrainConfig {
+struct TerrainConfig :ObjectConfig{
   b2Vec2 position;
   static b2Filter defaultFilter();
 };

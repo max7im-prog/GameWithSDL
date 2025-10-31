@@ -22,12 +22,14 @@ PolygonTerrain::PolygonTerrain(
   }
 }
 
-PolygonTerrainConfig PolygonTerrainConfig::defaultConfig() {
-  PolygonTerrainConfig ret;
-  ret.vertices = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
-  ret.templateBodyCfg = PolygonBodyConfig::defaultConfig();
-  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-  ret.position = {0, 0};
-  return ret;
+void PolygonTerrainConfig::defaultConfig() {
+  vertices = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
+  templateBodyCfg.defaultConfig();
+  templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  position = {0, 0};
+}
+
+void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }

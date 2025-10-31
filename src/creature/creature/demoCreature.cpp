@@ -309,12 +309,14 @@ DemoCreature::DemoCreature(
   moveContext.defaultSpeedMpS = 5;
 }
 
-DemoCreatureConfig DemoCreatureConfig::defaultConfig() {
-  DemoCreatureConfig ret;
-  ret.sizeXMeters = 1;
-  ret.sizeYMeters = 1;
-  ret.position = {0, 0};
-  return ret;
+void DemoCreatureConfig::defaultConfig() {
+  sizeXMeters = 1;
+  sizeYMeters = 1;
+  position = {0, 0};
+}
+
+void DemoCreatureConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {

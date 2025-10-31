@@ -7,8 +7,8 @@
 struct SegmentTerrainConfig : public TerrainConfig {
   SegmentBodyConfig templateBodyCfg;
   b2Vec2 point1, point2;
-  static SegmentTerrainConfig defaultConfig();
-  static SegmentTerrainConfig fromJSON(const std::string &filename);
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 };
 class SegmentTerrain : public Terrain, public Visitable<SegmentTerrain> {
 public:

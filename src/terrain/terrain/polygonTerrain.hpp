@@ -8,7 +8,8 @@
 struct PolygonTerrainConfig : public TerrainConfig {
   PolygonBodyConfig templateBodyCfg;
   std::vector<b2Vec2> vertices;
-  static PolygonTerrainConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 };
 class PolygonTerrain : public Terrain , public Visitable<PolygonTerrain>{
 public:

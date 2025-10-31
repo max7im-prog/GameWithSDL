@@ -16,7 +16,7 @@ void PolygonBodyConfig::defaultConfig() {
   shapeCfg.defaultConfig();
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json& json){
+void PolygonBodyConfig::fromJSON(const nlohmann::json& json){
   // TODO: implement
 }
 

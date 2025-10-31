@@ -61,7 +61,7 @@ void GirdleConnectionConfig::defaultConfig() {
   initial3DRotation = b2MakeRot(0);
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json &json) {
+void GirdleConnectionConfig::fromJSON(const nlohmann::json &json) {
   // TODO: implement
 }
 

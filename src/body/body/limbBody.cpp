@@ -111,7 +111,7 @@ void LimbBodyConfig::defaultConfig() {
   initialAngleConstraints = {};
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json &json) {
+void LimbBodyConfig::fromJSON(const nlohmann::json &json) {
   // TODO: implement
 }
 

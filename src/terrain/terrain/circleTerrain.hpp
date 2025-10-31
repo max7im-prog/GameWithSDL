@@ -6,7 +6,8 @@
 struct CircleTerrainConfig : public TerrainConfig {
   CircleBodyConfig templateBodyCfg;
   float radius;
-  static CircleTerrainConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 };
 class CircleTerrain : public Terrain , public Visitable<CircleTerrain>{
 public:

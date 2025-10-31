@@ -23,6 +23,6 @@ void DistanceConnectionConfig::defaultConfig() {
   templateJointCfg.defaultConfig();
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json &json) {
+void DistanceConnectionConfig::fromJSON(const nlohmann::json &json) {
   // TODO: implement
 }

@@ -23,14 +23,16 @@ CapsuleTerrain::CapsuleTerrain(
   }
 }
 
-CapsuleTerrainConfig CapsuleTerrainConfig::defaultConfig() {
-  CapsuleTerrainConfig ret;
-  ret.templateBodyCfg = CapsuleBodyConfig::defaultConfig();
-  ret.point1 = {0, 0};
-  ret.point2= {1, 0};
-  ret.position = {0, 0};
-  ret.radius = 0.25;
-  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-  return ret;
+void CapsuleTerrainConfig::defaultConfig() {
+  templateBodyCfg.defaultConfig();
+  point1 = {0, 0};
+  point2 = {1, 0};
+  position = {0, 0};
+  radius = 0.25;
+  templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+}
+
+void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
 }

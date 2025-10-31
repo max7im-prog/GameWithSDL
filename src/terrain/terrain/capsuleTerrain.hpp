@@ -9,7 +9,8 @@ struct CapsuleTerrainConfig : public TerrainConfig {
   CapsuleBodyConfig templateBodyCfg;
   b2Vec2 point1, point2;
   float radius;
-  static CapsuleTerrainConfig defaultConfig();
+  void defaultConfig() override;
+  void fromJSON(const nlohmann::json &json) override;
 };
 class CapsuleTerrain : public Terrain , public Visitable<CapsuleTerrain>{
 public:

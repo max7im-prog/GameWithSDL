@@ -23,27 +23,15 @@ SegmentTerrain::SegmentTerrain(
   }
 }
 
-SegmentTerrainConfig SegmentTerrainConfig::defaultConfig() {
-  SegmentTerrainConfig ret;
-  ret.templateBodyCfg = SegmentBodyConfig::defaultConfig();
-  ret.point1 = {0, 0};
-  ret.point2 = {1, 0};
-  ret.templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  ret.templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-  ret.position = {0, 0};
-  return ret;
+void SegmentTerrainConfig::defaultConfig() {
+  templateBodyCfg .defaultConfig();
+  point1 = {0, 0};
+  point2 = {1, 0};
+  templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
+  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  position = {0, 0};
 }
 
-SegmentTerrainConfig
-SegmentTerrainConfig::fromJSON(const std::string &filename) {
-  SegmentTerrainConfig ret;
-  auto temp = JsonUtils::parseJSON(filename);
-  if (!temp) {
-    throw std::runtime_error("Failed to parse json file: " + filename);
-  }
-  auto json = *temp;
-  ret = SegmentTerrainConfig::defaultConfig();
-  
-
-  return ret;
+void SegmentTerrainConfig::fromJSON(const nlohmann::json& json){
+  // TODO: implement
 }

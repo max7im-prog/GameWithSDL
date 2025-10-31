@@ -23,6 +23,6 @@ void RevoluteConnectionConfig::defaultConfig() {
   templateJointCfg .defaultConfig();
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json& json){
+void RevoluteConnectionConfig::fromJSON(const nlohmann::json& json){
   // TODO: implement
 }
