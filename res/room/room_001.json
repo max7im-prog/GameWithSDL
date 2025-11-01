@@ -1,0 +1,33 @@
+{
+  "id": "room_001",
+  "x": 0,
+  "y": 0,
+  "width": 100,
+  "height": 100,
+  "entities": [
+    {
+      "id": "creature_001",
+      "type": "creature",
+      "x": 50,
+      "y": 50,
+      "scaleX": 1,
+      "scaleY": 1,
+      "flipX": false,
+      "flipY": false,
+      "rotation": 0,
+      "configFile": "res/creature/testCreature.json"
+    },
+    {
+      "id": "terrain_001",
+      "type": "terrain",
+      "x": 20,
+      "y": 70,
+      "scaleX": 60,
+      "scaleY": 4,
+      "flipX": false,
+      "flipY": false,
+      "rotation": 0,
+      "confingFile": "res/terrain/unitSquare.json"
+    }
+  ]
+}

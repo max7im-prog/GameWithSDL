@@ -1,0 +1,36 @@
+{
+  "type": "PolygonTerrain",
+  "vertices": [
+    {
+      "x": -0.5,
+      "y": -0.5
+    },
+    {
+      "x": -0.5,
+      "y": 0.5
+    },
+    {
+      "x": 0.5,
+      "y": 0.5
+    },
+    {
+      "x": 0.5,
+      "y": -0.5
+    }
+  ],
+  "bodyParams": {
+    "shape": {
+      "material": {
+        "friction": 0.5,
+        "restitution": 0.5,
+        "rollingResistance": 0
+      }
+    },
+    "body": {
+      "type": "static",
+      "linearDamping": 0,
+      "angularDamping": 0,
+      "fixedRotation": false
+    }
+  }
+}
