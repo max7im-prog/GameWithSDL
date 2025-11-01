@@ -319,6 +319,7 @@ void DemoCreatureConfig::defaultConfig() {
   sizeXMeters = 1;
   sizeYMeters = 1;
   position = {0, 0};
+  rotation = b2MakeRot(0);
 }
 
 void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {

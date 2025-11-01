@@ -81,6 +81,7 @@ bool Game::init() {
     config.defaultConfig();
     config.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
     config.position = {2, 3};
+    config.rotation = b2MakeRot(0);
 
     terrainFactory->create<PolygonTerrain>(config);
   }

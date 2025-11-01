@@ -16,6 +16,7 @@ CapsuleTerrain::CapsuleTerrain(
     bodyCfg.shapeCfg.center2 = config.point2;
     bodyCfg.shapeCfg.radius = config.radius;
     bodyCfg.shapeCfg.bodyDef.position = config.position;
+    bodyCfg.shapeCfg.bodyDef.rotation = config.rotation;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     capsuleBody = bodyFactory->create<CapsuleBody>(bodyCfg);
@@ -28,6 +29,7 @@ void CapsuleTerrainConfig::defaultConfig() {
   point1 = {0, 0};
   point2 = {1, 0};
   position = {0, 0};
+  rotation = b2MakeRot(0);
   radius = 0.25;
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();

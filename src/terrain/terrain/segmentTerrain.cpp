@@ -1,4 +1,5 @@
 #include "segmentTerrain.hpp"
+#include "box2d/math_functions.h"
 #include "box2d/types.h"
 #include "jsonUtils.hpp"
 #include "terrain.hpp"
@@ -16,6 +17,7 @@ SegmentTerrain::SegmentTerrain(
     bodyCfg.shapeCfg.localPoint1 = config.point1;
     bodyCfg.shapeCfg.localPoint2 = config.point2;
     bodyCfg.shapeCfg.bodyDef.position = config.position;
+    bodyCfg.shapeCfg.bodyDef.rotation = config.rotation;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     segmentBody = bodyFactory->create<SegmentBody>(bodyCfg);
@@ -30,6 +32,7 @@ void SegmentTerrainConfig::defaultConfig() {
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
   position = {0, 0};
+  rotation = b2MakeRot(0);
 }
 
 void SegmentTerrainConfig::fromJSON(const nlohmann::json& json){
