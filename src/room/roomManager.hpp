@@ -15,7 +15,8 @@ public:
    *
    * @return A room ID of a room in a file
    */
-  RoomId preloadRoom(std::string_view roomFile);
+  std::optional<RoomId> preloadRoom(std::string_view roomFile);
+
   /**
    * @brief Loads all the entities in a room into world except for ones that are
    * already loaded.
@@ -23,6 +24,7 @@ public:
    * @param roomId
    */
   void loadRoom(const RoomId &roomId);
+
   /**
    * @brief Marks a room as not loaded. Does not delete entities in a room from
    * the registry.
@@ -30,14 +32,15 @@ public:
    * @param roomId
    */
   void unloadRoom(const RoomId &roomId);
-  const std::map<RoomId, RoomProxy> &getRooms();
+  const std::map<RoomId, std::shared_ptr<RoomProxy>> &getRooms();
   const std::map<EntityId, std::weak_ptr<RegistryComposite>> &getEntities();
-  RoomProxy &getRoom(const RoomId &roomId);
+  std::shared_ptr<RoomProxy> &getRoom(const RoomId &roomId);
   std::shared_ptr<RegistryComposite> getEntity(EntityId);
+  void unloadEntity(const EntityId &);
 
 protected:
 private:
-  std::map<RoomId, RoomProxy> _rooms;
+  std::map<RoomId, std::shared_ptr<RoomProxy>> _rooms;
   std::map<EntityId, std::weak_ptr<RegistryComposite>> _entities;
   std::shared_ptr<World> _world;
 };
