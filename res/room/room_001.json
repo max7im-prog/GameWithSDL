@@ -21,7 +21,7 @@
       "id": "terrain_001",
       "type": "terrain",
       "x": 20,
-      "y": 70,
+      "y": 30,
       "scaleX": 60,
       "scaleY": 4,
       "flipX": false,

@@ -1,5 +1,5 @@
 #pragma once
 #include <string>
 
-using RoomID = std::string;
-using NodeID = std::string;
+using RoomId = std::string;
+using EntityId = std::string;

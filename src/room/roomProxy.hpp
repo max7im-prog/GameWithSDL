@@ -1,23 +1,29 @@
 #pragma once
+#include "box2d/math_functions.h"
 #include "entt/entity/fwd.hpp"
+#include "nlohmann/json.hpp"
+#include "nlohmann/json_fwd.hpp"
 #include "roomIdentifiers.hpp"
 #include <map>
 
 class RoomProxy {
 public:
-  const RoomID &getRoomID();
-  const std::string &getRoomFile();
-  RoomProxy(const std::string &roomFile);
+  RoomProxy() = default;
   ~RoomProxy() = default;
-  void loadRoom();
-  void unloadRoom();
+  const nlohmann::json &getJSON();
+  const b2AABB &getAABB();
+  void preload(std::string_view roomFile);
+  void unloadFromMemory();
+  bool isLoaded();
+  bool isValidFile();
+  const std::string &getRoomFile();
 
 protected:
 private:
-  const RoomID _id;
-  const std::string _roomFile;
-  bool loaded = false;
-  std::map<NodeID, entt::entity> entities;
-
-  static std::string parseRoomID(const std::string& roomFile);
+  void loadIntoMemory();
+  nlohmann::json _json;
+  bool _loadedIntoMemory;
+  std::string _roomFile;
+  b2AABB _aabb;
+  RoomId _roomId;
 };
