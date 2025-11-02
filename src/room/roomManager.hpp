@@ -25,18 +25,11 @@ public:
    */
   void loadRoom(const RoomId &roomId);
 
-  /**
-   * @brief Marks a room as not loaded. Does not delete entities in a room from
-   * the registry.
-   *
-   * @param roomId
-   */
-  void unloadRoom(const RoomId &roomId);
   const std::map<RoomId, std::shared_ptr<RoomProxy>> &getRooms();
   const std::map<EntityId, std::weak_ptr<RegistryComposite>> &getEntities();
-  std::shared_ptr<RoomProxy> &getRoom(const RoomId &roomId);
-  std::shared_ptr<RegistryComposite> getEntity(EntityId);
-  void unloadEntity(const EntityId &);
+  std::shared_ptr<RoomProxy> getRoom(const RoomId &roomId);
+  std::weak_ptr<RegistryComposite> getEntity(const EntityId &entityId);
+  void unloadEntity(const EntityId &entityId);
 
 protected:
 private:

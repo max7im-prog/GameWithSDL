@@ -42,7 +42,7 @@ protected:
 private:
   void loadJSONIntoMemory();
   nlohmann::json _json;
-  bool _loadedIntoMemory;
+  bool _JSONloadedIntoMemory;
   std::string _roomFile;
   b2AABB _aabb;
   RoomId _roomId;
