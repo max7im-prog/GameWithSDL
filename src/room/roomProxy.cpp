@@ -44,7 +44,7 @@ std::optional<RoomId> RoomProxy::preload(std::string_view roomFile) {
   return _roomId;
 }
 
-const nlohmann::json &RoomProxy::getJSON() {
+const nlohmann::json &RoomProxy::getJSON() const {
   if (!isJSONLoadedIntoMemory()) {
     loadJSONIntoMemory();
   }
@@ -56,7 +56,7 @@ void RoomProxy::unloadJSONFromMemory() {
   _JSONloadedIntoMemory = false;
 }
 
-void RoomProxy::loadJSONIntoMemory() {
+void RoomProxy::loadJSONIntoMemory() const {
   auto temp = JsonUtils::parseJSON(_roomFile);
   if (!temp) {
     throw std::runtime_error("Failed to parse JSON: " + _roomFile);
@@ -65,8 +65,10 @@ void RoomProxy::loadJSONIntoMemory() {
   _JSONloadedIntoMemory = true;
 }
 
-const b2AABB &RoomProxy::getAABB() { return _aabb; }
+const b2AABB &RoomProxy::getAABB() const { return _aabb; }
 
-const std::string &RoomProxy::getRoomFile() { return _roomFile; }
+const std::string &RoomProxy::getRoomFile() const { return _roomFile; }
 
-const RoomId &RoomProxy::getRoomId() { return _roomId; }
+const RoomId &RoomProxy::getRoomId() const { return _roomId; }
+
+bool RoomProxy::isJSONLoadedIntoMemory() const { return _JSONloadedIntoMemory; }

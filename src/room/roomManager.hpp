@@ -31,8 +31,8 @@ public:
    */
   std::optional<RoomId> loadRoom(const RoomId &roomId);
 
-  const std::map<RoomId, std::shared_ptr<RoomProxy>> &getRooms();
-  const std::map<EntityId, std::weak_ptr<RegistryComposite>> &getEntities();
+  const std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> &getRooms();
+  const std::unordered_map<EntityId, std::weak_ptr<RegistryComposite>> &getEntities();
   std::shared_ptr<RoomProxy> getRoom(const RoomId &roomId);
   std::weak_ptr<RegistryComposite> getEntity(const EntityId &entityId);
   void unloadEntity(const EntityId &entityId);
@@ -50,8 +50,8 @@ private:
                         std::function<void(const EntityDispatchContext &)>>
       entityDispatchTable;
 
-  std::map<RoomId, std::shared_ptr<RoomProxy>> _rooms;
-  std::map<EntityId, std::weak_ptr<RegistryComposite>> _entities;
+  std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> _rooms;
+  std::unordered_map<EntityId, std::weak_ptr<RegistryComposite>> _entities;
   const std::shared_ptr<World> _world;
   const std::shared_ptr<CreatureFactory> _creatureFactory;
   const std::shared_ptr<TerrainFactory> _terrainFactory;

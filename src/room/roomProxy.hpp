@@ -16,11 +16,11 @@ class RoomProxy {
 public:
   RoomProxy();
   ~RoomProxy() = default;
-  const nlohmann::json &getJSON();
-  const b2AABB &getAABB();
-  const std::string &getRoomFile();
-  const RoomId &getRoomId();
-  bool isJSONLoadedIntoMemory();
+  const nlohmann::json &getJSON() const;
+  const b2AABB &getAABB() const;
+  const std::string &getRoomFile() const;
+  const RoomId &getRoomId() const;
+  bool isJSONLoadedIntoMemory() const;
 
   /**
    * @brief Reads the bounding box parameters and a room id from json and stores
@@ -40,9 +40,9 @@ public:
 
 protected:
 private:
-  void loadJSONIntoMemory();
-  nlohmann::json _json;
-  bool _JSONloadedIntoMemory;
+  void loadJSONIntoMemory() const;
+  mutable nlohmann::json _json;
+  mutable bool _JSONloadedIntoMemory;
   std::string _roomFile;
   b2AABB _aabb;
   RoomId _roomId;

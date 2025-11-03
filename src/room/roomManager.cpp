@@ -1,4 +1,5 @@
 #include "roomManager.hpp"
+#include "demoCreature.hpp"
 #include "jsonUtils.hpp"
 #include "polygonTerrain.hpp"
 #include "roomIdentifiers.hpp"
@@ -20,6 +21,30 @@ EntityId createEntityId(const nlohmann::json &roomJson,
   ret += entityConfigJson.at("id");
   return ret;
 }
+
+struct EntityMetadata {
+  float _x;
+  float _y;
+  b2Rot _rot;
+  float _scaleX;
+  float _scaleY;
+  bool _flipX;
+  bool _flipY;
+};
+
+EntityMetadata formEntityMetadata(const nlohmann::json &metadataJson,
+                                  const nlohmann::json &roomJson) {
+  EntityMetadata ret{};
+  ret._x = roomJson.at("x").get<float>() + metadataJson.at("x").get<float>();
+  ret._y = roomJson.at("y").get<float>() + metadataJson.at("y").get<float>();
+  ret._rot = b2MakeRot((B2_PI * 2) * metadataJson.at("rotation").get<float>() /
+                       360.0f);
+  ret._scaleX = metadataJson.at("scaleX").get<float>();
+  ret._scaleY = metadataJson.at("scaleY").get<float>();
+  ret._flipX = metadataJson.at("flipX").get<bool>();
+  ret._flipY = metadataJson.at("flipY").get<bool>();
+  return ret;
+}
 } // namespace
 
 const std::map<std::string,
@@ -32,20 +57,37 @@ const std::map<std::string,
            if (context._mgr._entities.contains(entityId)) {
              return;
            }
+           auto metadata = formEntityMetadata(context._metadataJson,
+                                              context._room->getJSON());
            PolygonTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           float x = context._room->getJSON().at("x").get<float>() +
-                     context._metadataJson.at("x").get<float>();
-           float y = context._room->getJSON().at("y").get<float>() +
-                     context._metadataJson.at("y").get<float>();
-
-           b2Rot rot = b2MakeRot(
-               (B2_PI * 2) * context._metadataJson.at("rotation").get<float>() /
-               360.0f);
+           cfg.position = {metadata._x, metadata._y};
+           cfg.rotation = metadata._rot;
 
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<PolygonTerrain>(cfg);
+           context._mgr._entities.insert({entityId, ent});
+         }}
+
+        ,
+        {"DemoCreature",
+         [](const RoomManager::EntityDispatchContext &context) {
+           std::string entityId =
+               createEntityId(context._room->getJSON(), context._configJson);
+           if (context._mgr._entities.contains(entityId)) {
+             return;
+           }
+           auto metadata = formEntityMetadata(context._metadataJson,
+                                              context._room->getJSON());
+           DemoCreature::Config cfg;
+           cfg.defaultConfig();
+           cfg.fromJSON(context._configJson);
+           cfg.position = {metadata._x, metadata._y};
+           cfg.rotation = metadata._rot;
+
+           auto factory = context._mgr._creatureFactory;
+           auto ent = factory->create<DemoCreature>(cfg);
            context._mgr._entities.insert({entityId, ent});
          }}
 
@@ -61,11 +103,12 @@ std::optional<RoomId> RoomManager::preloadRoom(std::string_view roomFile) {
   return roomId;
 }
 
-const std::map<RoomId, std::shared_ptr<RoomProxy>> &RoomManager::getRooms() {
+const std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> &
+RoomManager::getRooms() {
   return _rooms;
 }
 
-const std::map<EntityId, std::weak_ptr<RegistryComposite>> &
+const std::unordered_map<EntityId, std::weak_ptr<RegistryComposite>> &
 RoomManager::getEntities() {
   return _entities;
 }
@@ -114,4 +157,5 @@ std::optional<RoomId> RoomManager::loadRoom(const RoomId &roomId) {
       // TODO: log error
     }
   }
+  return roomId;
 }
