@@ -14,11 +14,11 @@ RoomManager::RoomManager(std::shared_ptr<World> world,
 
 namespace {
 EntityId createEntityId(const nlohmann::json &roomJson,
-                        const nlohmann::json &entityConfigJson) {
+                        const nlohmann::json &entityMetadataJson) {
   EntityId ret = "";
   ret += roomJson.at("id");
   ret += "/";
-  ret += entityConfigJson.at("id");
+  ret += entityMetadataJson.at("id");
   return ret;
 }
 
@@ -53,7 +53,7 @@ const std::map<std::string,
         {"PolygonTerrain",
          [](const RoomManager::EntityDispatchContext &context) {
            std::string entityId =
-               createEntityId(context._room->getJSON(), context._configJson);
+               createEntityId(context._room->getJSON(), context._metadataJson);
            if (context._mgr._entities.contains(entityId)) {
              return;
            }
@@ -71,7 +71,7 @@ const std::map<std::string,
          }},
         {"DemoCreature", [](const RoomManager::EntityDispatchContext &context) {
            std::string entityId =
-               createEntityId(context._room->getJSON(), context._configJson);
+               createEntityId(context._room->getJSON(), context._metadataJson);
            if (context._mgr._entities.contains(entityId)) {
              return;
            }

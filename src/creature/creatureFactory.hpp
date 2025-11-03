@@ -1,3 +1,5 @@
+#pragma once
+
 #include "bodyFactory.hpp"
 #include "connectionFactory.hpp"
 #include "creatureComponents.hpp"

@@ -15,6 +15,7 @@
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
 #include "polygonTerrain.hpp"
+#include "roomManager.hpp"
 #include "segmentTerrain.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
@@ -73,146 +74,12 @@ bool Game::init() {
   terrainFactory = std::shared_ptr<TerrainFactory>(
       new TerrainFactory(registry, world, bodyFactory, connectionFactory));
 
-  // TODO: remove temp testing code
-
-  // Some terrain
-  {
-    PolygonTerrainConfig config;
-    config.defaultConfig();
-    config.vertices = {{0, 0}, {0, 1}, {60, 1}, {60, 0}};
-    config.position = {2, 3};
-    config.rotation = b2MakeRot(0);
-
-    terrainFactory->create<PolygonTerrain>(config);
-  }
-  {
-    PolygonTerrainConfig config;
-    config.defaultConfig();
-    config.vertices = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-    config.position = {30, 30};
-
-    terrainFactory->create<PolygonTerrain>(config);
-  }
-  {
-    SegmentTerrainConfig config;
-    config.defaultConfig();
-    config.point1 = {0, 0};
-    config.point2 = {20, 20};
-    config.position = {62, 3};
-
-    terrainFactory->create<SegmentTerrain>(config);
-  }
-  {
-    SegmentTerrainConfig config;
-    config.defaultConfig();
-    config.point1 = {0, 0};
-    config.point2 = {20, 0};
-    config.position = {82, 23};
-
-    terrainFactory->create<SegmentTerrain>(config);
-  }
-  {
-    SegmentTerrainConfig config;
-    config.defaultConfig();
-    config.point1 = {0, 0};
-    config.point2 = {0, 20};
-    config.position = {102, 23};
-
-    terrainFactory->create<SegmentTerrain>(config);
-  }
-  {
-    SegmentTerrainConfig config;
-    config.defaultConfig();
-    config.point1 = {0, 0};
-    config.point2 = {0, 60};
-    config.position = {2, 4};
-    terrainFactory->create<SegmentTerrain>(config);
-  }
-  {
-    SegmentTerrainConfig config;
-    config.defaultConfig();
-    config.point1 = {0, 0};
-    config.point2 = {100, -21};
-    config.position = {2, 64};
-    terrainFactory->create<SegmentTerrain>(config);
-  }
-  {
-    PolygonTerrainConfig config;
-    config.defaultConfig();
-    config.vertices = {{0, 0}, {0, 1}, {30, 1}, {30, 0}};
-    config.position = {10, 25};
-    terrainFactory->create<PolygonTerrain>(config);
-  }
-  {
-    CapsuleTerrainConfig config;
-    config.defaultConfig();
-    config.point1 = {-10, 0};
-    config.point2 = {10, 0};
-    config.radius = 1;
-    config.position = {55, 25};
-    terrainFactory->create<CapsuleTerrain>(config);
-  }
-  {
-    CircleTerrainConfig config;
-    config.defaultConfig();
-    config.radius = 1;
-    config.position = {82, 23};
-    terrainFactory->create<CircleTerrain>(config);
-  }
-  {
-    CircleTerrainConfig config;
-    config.defaultConfig();
-    config.radius = 1;
-    config.position = {85, 23};
-    terrainFactory->create<CircleTerrain>(config);
-  }
-  {
-    CircleTerrainConfig config;
-    config.defaultConfig();
-    config.radius = 1;
-    config.position = {89, 23};
-    terrainFactory->create<CircleTerrain>(config);
-  }
-  {
-    CircleTerrainConfig config;
-    config.defaultConfig();
-    config.radius = 1;
-    config.position = {90, 23};
-    terrainFactory->create<CircleTerrain>(config);
-  }
-
-  // Some creatures
-  std::shared_ptr<Creature> c0;
-  {
-    DemoCreatureConfig config;
-    config.defaultConfig();
-    config.sizeXMeters = 2;
-    config.sizeYMeters = 2;
-    config.position = {5, 10};
-    c0 = creatureFactory->create<DemoCreature>(config).lock();
-    if (!world)
-      throw std::runtime_error("Failed to create creature");
-  }
-  c0->aim({30, 30}, true);
-  // c0->remove();
+  roomManager =
+      std::make_shared<RoomManager>(world, creatureFactory, terrainFactory);
 
   {
-    DemoCreatureConfig config;
-    config.defaultConfig();
-    config.sizeXMeters = 3;
-    config.sizeYMeters = 4;
-    config.position = {35, 8};
-    c0 = creatureFactory->create<DemoCreature>(config).lock();
-    if (!world)
-      throw std::runtime_error("Failed to create creature");
-  }
-  // c0->remove();
-
-  // Controller for the creature
-  {
-    auto ent = registry.create();
-    auto &controller = registry.emplace_or_replace<Controller>(ent);
-    controller.creature = c0->getEntity();
+    auto temp = roomManager->preloadRoom("/home/max7im/Projects/GameWithSDL/res/room/room_001.json");
+    roomManager->loadRoom(*temp);
   }
 
   return true;

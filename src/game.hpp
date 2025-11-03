@@ -5,6 +5,7 @@
 #include "creatureFactory.hpp"
 #include "creatureUpdateSystem.hpp"
 #include "jointFactory.hpp"
+#include "roomManager.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
@@ -22,11 +23,11 @@
 #include "quitSystem.hpp"
 
 // Update
+#include "cameraSystem.hpp"
 #include "controllerUpdateSystem.hpp"
 #include "mouseJointSystem.hpp"
 #include "worldFactory.hpp"
 #include "worldUpdateSystem.hpp"
-#include "cameraSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game {
@@ -74,6 +75,9 @@ private:
   // Event systems
   PollEventSystem pollEventSystem;
   QuitSystem quitSystem;
+
+  // Room manager
+  std::shared_ptr<RoomManager> roomManager;
 
   // Update systems
   WorldUpdateSystem worldUpdateSystem;
