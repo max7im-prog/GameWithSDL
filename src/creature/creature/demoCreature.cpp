@@ -323,7 +323,11 @@ void DemoCreatureConfig::defaultConfig() {
 }
 
 void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
+  defaultConfig();
+  position = {0,0};
+  rotation = b2MakeRot(0);
+  sizeXMeters = json.at("sizeX");
+  sizeYMeters = json.at("sizeY");
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {

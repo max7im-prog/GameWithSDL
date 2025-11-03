@@ -68,11 +68,8 @@ const std::map<std::string,
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<PolygonTerrain>(cfg);
            context._mgr._entities.insert({entityId, ent});
-         }}
-
-        ,
-        {"DemoCreature",
-         [](const RoomManager::EntityDispatchContext &context) {
+         }},
+        {"DemoCreature", [](const RoomManager::EntityDispatchContext &context) {
            std::string entityId =
                createEntityId(context._room->getJSON(), context._configJson);
            if (context._mgr._entities.contains(entityId)) {
@@ -89,9 +86,7 @@ const std::map<std::string,
            auto factory = context._mgr._creatureFactory;
            auto ent = factory->create<DemoCreature>(cfg);
            context._mgr._entities.insert({entityId, ent});
-         }}
-
-};
+         }}};
 
 std::optional<RoomId> RoomManager::preloadRoom(std::string_view roomFile) {
   std::shared_ptr<RoomProxy> room = std::make_shared<RoomProxy>();

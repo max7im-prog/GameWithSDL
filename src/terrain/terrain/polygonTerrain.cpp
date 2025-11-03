@@ -33,5 +33,15 @@ void PolygonTerrainConfig::defaultConfig() {
 }
 
 void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
+  defaultConfig();
+  position = {0, 0};
+  rotation = b2MakeRot(0);
+  auto vtcs = json.at("vertices");
+  vertices = {};
+  for(auto& v: vtcs ){
+    float x = v.at("x").get<float>();
+    float y = v.at("y").get<float>();
+    vertices.push_back({x,y});
+  }
+  // TODO: Complete
 }
