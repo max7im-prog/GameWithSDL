@@ -61,6 +61,7 @@ public:
   void clean();
 
 private:
+  entt::registry registry;
   // Window parameters
   int WIDTH = 800;
   int HEIGHT = 600;
@@ -94,7 +95,6 @@ private:
   // RenderPhysicsJointsSystem renderPhysicsJointsSystem;
   std::shared_ptr<DebugRenderSystem> debugRenderSystem;
 
-  entt::registry registry;
   entt::dispatcher eventDispatcher;
   std::shared_ptr<RenderContext> renderContext;
 
