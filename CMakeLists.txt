@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.20.0)
+cmake_minimum_required(VERSION 4.0.0)
 project(
   GameWithSDL
   VERSION 0.1.0
@@ -14,6 +14,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
+
+# External libraries
+
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_Declare(
@@ -23,7 +26,6 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(box2d)
-
 FetchContent_Declare(
   SDL
   GIT_REPOSITORY https://github.com/max7im-prog/game-SDL.git
@@ -31,7 +33,6 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(SDL)
-
 FetchContent_Declare(
   entt
   GIT_REPOSITORY https://github.com/max7im-prog/game-entt.git
@@ -39,7 +40,6 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(entt)
-
 FetchContent_Declare(
   nlohmann-json
   GIT_REPOSITORY https://github.com/nlohmann/json.git
@@ -47,7 +47,6 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(nlohmann-json)
-
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
@@ -56,6 +55,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
+# Add subdirectories
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls)
@@ -70,13 +70,13 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/terrain)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/connection)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/room)
 
+# Game libraries
 set(EXTERNAL_LIBS
   box2d
   SDL3::SDL3
   EnTT::EnTT
   nlohmann_json::nlohmann_json
 )
-
 set(GAME_LIBS
   game_body_lib
   game_controls_lib
@@ -92,33 +92,41 @@ set(GAME_LIBS
   game_connection_lib
   game_room_lib
 )
-
 add_library(game_run_lib STATIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src/game.hpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/game.cpp
 )
-
 target_include_directories(game_run_lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
-
 target_link_libraries(game_run_lib PUBLIC ${GAME_LIBS} ${EXTERNAL_LIBS})
 
+# Create executable
 add_executable(
   Game
   ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
 )
 target_link_libraries(Game PRIVATE game_run_lib)
 
+# Compiler options
 target_compile_options(Game PRIVATE
   $<$<CONFIG:Debug>:-Wall -Wextra -g -ggdb3 -fsanitize=address -fsanitize=undefined -fsanitize=leak>
   $<$<CONFIG:Release>:-Wall -Wextra -O3 -g -ggdb3>
 )
-
 target_link_options(Game PRIVATE
   $<$<CONFIG:Debug>:-fsanitize=address -fsanitize=undefined -fsanitize=leak>
 )
 
+# Copy resources into build
+add_custom_target(copy_resources)
+add_custom_command(TARGET copy_resources POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+  "${CMAKE_CURRENT_SOURCE_DIR}/res"
+  "$<TARGET_FILE_DIR:Game>/res"
+)
+add_dependencies(Game copy_resources)
+
+# Testing
 include(CTest)
 include(GoogleTest)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)

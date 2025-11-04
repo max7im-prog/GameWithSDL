@@ -15,7 +15,7 @@
       "flipX": false,
       "flipY": false,
       "rotation": 0,
-      "configFile": "/home/max7im/Projects/GameWithSDL/res/creature/testCreature.json"
+      "configFile": "res/creature/testCreature.json"
     },
     {
       "id": "terrain_001",
@@ -27,7 +27,7 @@
       "flipX": false,
       "flipY": false,
       "rotation": 0,
-      "configFile": "/home/max7im/Projects/GameWithSDL/res/terrain/unitSquare.json"
+      "configFile": "res/terrain/unitSquare.json"
     }
   ]
 }

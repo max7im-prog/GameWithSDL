@@ -20,6 +20,7 @@
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
+
 Game::Game(int w, int h, int fps)
     : WIDTH(w), HEIGHT(h), FPS(fps), running(false) {}
 
