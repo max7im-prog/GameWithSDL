@@ -5,6 +5,7 @@
 #include "polygonTerrain.hpp"
 #include "roomIdentifiers.hpp"
 #include "roomProxy.hpp"
+#include "segmentTerrain.hpp"
 #include <optional>
 #include <string>
 
@@ -91,6 +92,69 @@ const std::map<std::string,
 
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<PolygonTerrain>(cfg);
+           context._mgr._entities.insert({*entityId, ent});
+         }},
+        {"CapsuleTerrain",
+         [](const RoomManager::EntityDispatchContext &context) {
+           auto entityId =
+               createEntityId(context._room->getJSON(), context._metadataJson);
+           if (!entityId) {
+             // TODO: log error
+             return;
+           }
+           if (context._mgr._entities.contains(*entityId)) {
+             return;
+           }
+           CapsuleTerrain::Config cfg;
+           cfg.defaultConfig();
+           cfg.fromJSON(context._configJson);
+           cfg._transform = formEntityTransform(context._metadataJson,
+                                                context._room->getJSON());
+
+           auto factory = context._mgr._terrainFactory;
+           auto ent = factory->create<CapsuleTerrain>(cfg);
+           context._mgr._entities.insert({*entityId, ent});
+         }},
+        {"SegmentTerrain",
+         [](const RoomManager::EntityDispatchContext &context) {
+           auto entityId =
+               createEntityId(context._room->getJSON(), context._metadataJson);
+           if (!entityId) {
+             // TODO: log error
+             return;
+           }
+           if (context._mgr._entities.contains(*entityId)) {
+             return;
+           }
+           SegmentTerrain::Config cfg;
+           cfg.defaultConfig();
+           cfg.fromJSON(context._configJson);
+           cfg._transform = formEntityTransform(context._metadataJson,
+                                                context._room->getJSON());
+
+           auto factory = context._mgr._terrainFactory;
+           auto ent = factory->create<SegmentTerrain>(cfg);
+           context._mgr._entities.insert({*entityId, ent});
+         }},
+        {"CircleTerrain",
+         [](const RoomManager::EntityDispatchContext &context) {
+           auto entityId =
+               createEntityId(context._room->getJSON(), context._metadataJson);
+           if (!entityId) {
+             // TODO: log error
+             return;
+           }
+           if (context._mgr._entities.contains(*entityId)) {
+             return;
+           }
+           CircleTerrain::Config cfg;
+           cfg.defaultConfig();
+           cfg.fromJSON(context._configJson);
+           cfg._transform = formEntityTransform(context._metadataJson,
+                                                context._room->getJSON());
+
+           auto factory = context._mgr._terrainFactory;
+           auto ent = factory->create<CircleTerrain>(cfg);
            context._mgr._entities.insert({*entityId, ent});
          }},
         {"DemoCreature", [](const RoomManager::EntityDispatchContext &context) {

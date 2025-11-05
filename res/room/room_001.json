@@ -9,7 +9,7 @@
       "id": "creature_001",
       "type": "creature",
       "x": 50,
-      "y": 50,
+      "y": 20,
       "scaleX": 1,
       "scaleY": 1,
       "flipX": false,
@@ -18,16 +18,77 @@
       "configFile": "res/creature/testCreature.json"
     },
     {
-      "id": "terrain_001",
+      "id": "floor_001",
       "type": "terrain",
       "x": 50,
-      "y": 30,
+      "y": 10,
       "scaleX": 60,
       "scaleY": 2,
       "flipX": false,
       "flipY": false,
       "rotation": 0,
       "configFile": "res/terrain/unitSquare.json"
+    },
+    {
+      "id": "roof_001",
+      "type": "terrain",
+      "x": 35,
+      "y": 49,
+      "scaleX": 60,
+      "scaleY": 2,
+      "flipX": false,
+      "flipY": false,
+      "rotation": 30,
+      "configFile": "res/terrain/unitSegment.json"
+    },
+    {
+      "id": "roof_002",
+      "type": "terrain",
+      "x": 65,
+      "y": 49,
+      "scaleX": 60,
+      "scaleY": 2,
+      "flipX": false,
+      "flipY": false,
+      "rotation": -30,
+      "configFile": "res/terrain/unitSegment.json"
+    },
+    {
+      "id": "disco_ball_001",
+      "type": "terrain",
+      "x": 50,
+      "y": 50,
+      "scaleX": 2,
+      "scaleY": 2,
+      "flipX": false,
+      "flipY": false,
+      "rotation": 0,
+      "configFile": "res/terrain/unitCircle.json"
+    },
+    {
+      "id": "wall_left_001",
+      "type": "terrain",
+      "x": 20,
+      "y": 25,
+      "scaleX": 30,
+      "scaleY": 2,
+      "flipX": false,
+      "flipY": false,
+      "rotation": 90,
+      "configFile": "res/terrain/unitCapsule.json"
+    },
+    {
+      "id": "wall_right_001",
+      "type": "terrain",
+      "x": 80,
+      "y": 25,
+      "scaleX": 30,
+      "scaleY": 2,
+      "flipX": false,
+      "flipY": false,
+      "rotation": 90,
+      "configFile": "res/terrain/unitCapsule.json"
     }
+
   ]
 }

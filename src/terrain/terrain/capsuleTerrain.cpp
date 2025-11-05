@@ -28,7 +28,7 @@ CapsuleTerrain::CapsuleTerrain(
     auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.center1 = transformedVertices[0];
     bodyCfg.shapeCfg.center2 = transformedVertices[1];
-    bodyCfg.shapeCfg.radius = config.radius * std::max(config._transform._scaleX, config._transform._scaleY);
+    bodyCfg.shapeCfg.radius = config.radius * std::min(config._transform._scaleX, config._transform._scaleY);
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
