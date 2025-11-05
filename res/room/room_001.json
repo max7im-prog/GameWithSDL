@@ -20,10 +20,10 @@
     {
       "id": "terrain_001",
       "type": "terrain",
-      "x": 20,
+      "x": 50,
       "y": 30,
       "scaleX": 60,
-      "scaleY": 4,
+      "scaleY": 2,
       "flipX": false,
       "flipY": false,
       "rotation": 0,
