@@ -1,6 +1,7 @@
 #include "circleTerrain.hpp"
 #include "box2d/types.h"
 #include "terrain.hpp"
+#include "jsonUtils.hpp"
 
 CircleTerrain::CircleTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
@@ -10,11 +11,15 @@ CircleTerrain::CircleTerrain(
     : Terrain(registry, world) {
 
   // A single circle
-  auto terrainPos = b2Add(config._transform._originPos, config._transform._relativePos);
-  auto terrainRot = b2MulRot(config._transform._rootRot, config._transform._relativeRot);
+  auto terrainPos =
+      b2Add(config._transform._originPos, config._transform._relativePos);
+  auto terrainRot =
+      b2MulRot(config._transform._rootRot, config._transform._relativeRot);
   {
     auto bodyCfg = config.templateBodyCfg;
-    bodyCfg.shapeCfg.radius = config.radius;
+    bodyCfg.shapeCfg.radius =
+        config.radius *
+        std::max(config._transform._scaleX, config._transform._scaleY);
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
@@ -25,12 +30,14 @@ CircleTerrain::CircleTerrain(
 }
 
 void CircleTerrainConfig::defaultConfig() {
-  templateBodyCfg .defaultConfig();
+  templateBodyCfg.defaultConfig();
   radius = 1;
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
 }
 
-void CircleTerrainConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
+void CircleTerrainConfig::fromJSON(const nlohmann::json &json) {
+  defaultConfig();
+  radius = JsonUtils::getOrDefault<float>(json, "radius", 1.0f);
+  // TODO: Complete implementation
 }
