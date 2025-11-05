@@ -10,11 +10,13 @@ CircleTerrain::CircleTerrain(
     : Terrain(registry, world) {
 
   // A single circle
+  auto terrainPos = b2Add(config._transform._originPos, config._transform._relativePos);
+  auto terrainRot = b2MulRot(config._transform._rootRot, config._transform._relativeRot);
   {
     auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.radius = config.radius;
-    bodyCfg.shapeCfg.bodyDef.position = config.position;
-    bodyCfg.shapeCfg.bodyDef.rotation = config.rotation;
+    bodyCfg.shapeCfg.bodyDef.position = terrainPos;
+    bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     circleBody = bodyFactory->create<CircleBody>(bodyCfg);
@@ -24,8 +26,6 @@ CircleTerrain::CircleTerrain(
 
 void CircleTerrainConfig::defaultConfig() {
   templateBodyCfg .defaultConfig();
-  position = {0, 0};
-  rotation = b2MakeRot(0);
   radius = 1;
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();

@@ -11,11 +11,13 @@ PolygonTerrain::PolygonTerrain(
     : Terrain(registry, world) {
 
   // A single polygon
+  auto terrainPos = b2Add(config._transform._originPos, config._transform._relativePos);
+  auto terrainRot = b2MulRot(config._transform._rootRot, config._transform._relativeRot);
   {
     auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.vertices = config.vertices;
-    bodyCfg.shapeCfg.bodyDef.position = config.position;
-    bodyCfg.shapeCfg.bodyDef.rotation = config.rotation;
+    bodyCfg.shapeCfg.bodyDef.position = terrainPos;
+    bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     polygonBody = bodyFactory->create<PolygonBody>(bodyCfg);
@@ -28,14 +30,10 @@ void PolygonTerrainConfig::defaultConfig() {
   templateBodyCfg.defaultConfig();
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
-  position = {0, 0};
-  rotation = b2MakeRot(0);
 }
 
 void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
   defaultConfig();
-  position = {0, 0};
-  rotation = b2MakeRot(0);
   auto vtcs = json.at("vertices");
   vertices = {};
   for(auto& v: vtcs ){

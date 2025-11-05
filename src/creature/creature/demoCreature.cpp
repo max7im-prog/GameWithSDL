@@ -35,13 +35,14 @@ DemoCreature::DemoCreature(
   float torsoWidth = config.sizeXMeters;
   float torsoHeight = config.sizeYMeters;
   auto groupId = ShapeFactory::getNextNegativeId();
+  b2Vec2 creaturePos = b2Add(config._transform._originPos,config._transform._relativePos);
 
   b2Vec2 leftShoulderPos =
-      b2Add(config.position, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
+      b2Add(creaturePos, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
   b2Vec2 rightShoulderPos =
-      b2Add(config.position, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
-  b2Vec2 leftHipPos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
-  b2Vec2 rightHipPos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
+      b2Add(creaturePos, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
+  b2Vec2 leftHipPos = b2Add(creaturePos, b2Vec2(-torsoWidth * 0.3, 0));
+  b2Vec2 rightHipPos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.3, 0));
 
   // Create bodies
   PolygonBodyConfig torsoConfig;
@@ -79,7 +80,7 @@ DemoCreature::DemoCreature(
     auto cfg = limbConfig;
     cfg.segments.clear();
     cfg.basePos =
-        b2Add(config.position, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
+        b2Add(creaturePos, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
     {
 
       auto lastPos = cfg.basePos;
@@ -106,7 +107,7 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.segments.clear();
-    cfg.basePos = b2Add(config.position, b2Vec2(-torsoWidth * 0.3, 0));
+    cfg.basePos = b2Add(creaturePos, b2Vec2(-torsoWidth * 0.3, 0));
     {
       auto lastPos = cfg.basePos;
       b2Rot baseRot = b2MakeRot(-B2_PI * 3 / 4);
@@ -129,7 +130,7 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.basePos =
-        b2Add(config.position, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
+        b2Add(creaturePos, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -147,7 +148,7 @@ DemoCreature::DemoCreature(
   }
   {
     auto cfg = limbConfig;
-    cfg.basePos = b2Add(config.position, b2Vec2(torsoWidth * 0.3, 0));
+    cfg.basePos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.3, 0));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -169,7 +170,7 @@ DemoCreature::DemoCreature(
   // Torso
   {
     auto cfg = torsoConfig;
-    cfg.shapeCfg.bodyDef.position = {config.position};
+    cfg.shapeCfg.bodyDef.position = {creaturePos};
     torso = bodyFactory->create<PolygonBody>(cfg);
     registerChild(torso);
   }
@@ -318,14 +319,10 @@ DemoCreature::DemoCreature(
 void DemoCreatureConfig::defaultConfig() {
   sizeXMeters = 1;
   sizeYMeters = 1;
-  position = {0, 0};
-  rotation = b2MakeRot(0);
 }
 
 void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
   defaultConfig();
-  position = {0,0};
-  rotation = b2MakeRot(0);
   sizeXMeters = json.at("sizeX");
   sizeYMeters = json.at("sizeY");
 }

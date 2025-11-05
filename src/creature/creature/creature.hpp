@@ -7,8 +7,6 @@
 #include <entt/entt.hpp>
 
 struct CreatureConfig : TopLevelObjectConfig{
-  b2Vec2 position;
-  b2Rot rotation;
   static b2Filter defaultFilter();
 };
 
