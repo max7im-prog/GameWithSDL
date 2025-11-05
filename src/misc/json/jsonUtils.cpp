@@ -1,4 +1,5 @@
 #include "jsonUtils.hpp"
+#include "nlohmann/json_fwd.hpp"
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <optional>
@@ -21,3 +22,4 @@ JsonUtils::parseJSON(const std::string &filename) {
     return std::nullopt;
   }
 }
+

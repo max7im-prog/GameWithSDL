@@ -5,6 +5,7 @@
 #include "roomIdentifiers.hpp"
 #include "roomProxy.hpp"
 #include <optional>
+#include <string>
 
 RoomManager::RoomManager(std::shared_ptr<World> world,
                          std::shared_ptr<CreatureFactory> creatureFactory,
@@ -129,28 +130,56 @@ void RoomManager::unloadEntity(const EntityId &entityId) {
 
 std::optional<RoomId> RoomManager::loadRoom(const RoomId &roomId) {
   auto it = _rooms.find(roomId);
-  if (it == _rooms.end()) {
+  if (it == _rooms.end())
+    return std::nullopt;
+
+  auto room = it->second;
+  const auto &roomJson = room->getJSON();
+
+  auto entitiesIt = roomJson.find("entities");
+  if (entitiesIt == roomJson.end() || !entitiesIt->is_array()) {
+    // TODO: log error: "Room missing valid 'entities' array"
     return std::nullopt;
   }
-  auto room = it->second;
-  auto roomJson = room->getJSON();
-  for (auto &entityMetadataJson : roomJson["entities"]) {
-    auto configFile = entityMetadataJson.at("configFile").get<std::string>();
-    auto temp = JsonUtils::parseJSON(configFile);
-    if (!temp) {
+
+  // Load each entity through a dispatch table
+  for (auto &entityMetadataJson : *entitiesIt) {
+    const auto configFile =
+        JsonUtils::getOptional<std::string>(entityMetadataJson, "configFile");
+    if (!configFile) {
       // TODO: log error
       continue;
     }
-    auto entityConfigJson = *temp;
-    auto entityType = entityConfigJson.at("type").get<std::string>();
 
-    if (RoomManager::entityDispatchTable.contains(entityType)) {
-      RoomManager::EntityDispatchContext context = {
-          *this, room, entityMetadataJson, entityConfigJson};
-      RoomManager::entityDispatchTable.at(std::string(entityType))(context);
-    } else {
+    const auto entityConfigJson = JsonUtils::parseJSON(*configFile);
+    if (!entityConfigJson) {
       // TODO: log error
+      continue;
+    }
+
+    const auto entityType =
+        JsonUtils::getOptional<std::string>(*entityConfigJson, "type");
+    if (!entityType) {
+      // TODO: log error
+      continue;
+    }
+
+    if (auto dispatchIt = RoomManager::entityDispatchTable.find(*entityType);
+        dispatchIt != RoomManager::entityDispatchTable.end()) {
+      RoomManager::EntityDispatchContext context{
+          *this, room, entityMetadataJson, *entityConfigJson};
+      try {
+        dispatchIt->second(context);
+      } catch (const nlohmann::json::exception &e) {
+        // TODO: log json error
+      } catch (const std::exception &e) {
+        // TODO: log factory/runtime error
+      }
+
+    } else {
+      // TODO: log: unknown entity type
     }
   }
+
   return roomId;
 }
