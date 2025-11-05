@@ -16,9 +16,6 @@ void SegmentBodyConfig::defaultConfig() {
   shapeCfg.defaultConfig();
 }
 
-void SegmentBodyConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 const std::shared_ptr<Segment> SegmentBody::getSegment() {
 

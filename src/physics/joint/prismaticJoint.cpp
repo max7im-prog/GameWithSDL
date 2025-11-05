@@ -7,9 +7,6 @@ void PrismaticJointConfig::defaultConfig() {
   jointDef = b2DefaultPrismaticJointDef();
 }
 
-void PrismaticJointConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
-}
 
 PrismaticJoint::PrismaticJoint(entt::registry &registry, const World &world,
                                const PrismaticJointConfig &config)

@@ -5,7 +5,7 @@
 #include "world.hpp"
 #include <box2d/box2d.h>
 
-struct TerrainConfig :ObjectConfig{
+struct TerrainConfig :TopLevelObjectConfig{
   b2Vec2 position;
   b2Rot rotation;
   static b2Filter defaultFilter();

@@ -3,7 +3,6 @@
 
 struct CapsuleConfig : public ShapeConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   float radius;
   b2Vec2 center1;
   b2Vec2 center2;

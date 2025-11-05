@@ -111,9 +111,6 @@ void LimbBodyConfig::defaultConfig() {
   initialAngleConstraints = {};
 }
 
-void LimbBodyConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
-}
 
 b2Vec2 LimbBody::getBasePos() {
   if (segments.size() == 0) {

@@ -6,7 +6,6 @@
 
 struct CapsuleBodyConfig : public BodyConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   CapsuleConfig shapeCfg;
 };
 

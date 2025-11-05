@@ -5,9 +5,6 @@
 void DistanceJointConfig::defaultConfig() {
   jointDef = b2DefaultDistanceJointDef();
 }
-void DistanceJointConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 DistanceJoint::DistanceJoint(entt::registry &registry,const World &world,
                              const DistanceJointConfig &config):Joint(registry) {

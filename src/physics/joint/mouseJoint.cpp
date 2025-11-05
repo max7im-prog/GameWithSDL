@@ -5,9 +5,6 @@
 void MouseJointConfig::defaultConfig() {
   jointDef = b2DefaultMouseJointDef();
 }
-void MouseJointConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 MouseJoint::MouseJoint(entt::registry &registry, const World &world,
                              const MouseJointConfig &config)

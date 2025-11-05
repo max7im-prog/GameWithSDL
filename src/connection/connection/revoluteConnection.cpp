@@ -23,6 +23,3 @@ void RevoluteConnectionConfig::defaultConfig() {
   templateJointCfg .defaultConfig();
 }
 
-void RevoluteConnectionConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}

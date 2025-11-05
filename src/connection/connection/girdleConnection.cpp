@@ -61,9 +61,6 @@ void GirdleConnectionConfig::defaultConfig() {
   initial3DRotation = b2MakeRot(0);
 }
 
-void GirdleConnectionConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
-}
 
 void GirdleConnection::update(float dt) {
   updateRotation(dt);

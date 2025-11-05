@@ -35,9 +35,6 @@ void CircleBodyConfig::defaultConfig() {
   shapeCfg.defaultConfig();
 }
 
-void CircleBodyConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 const std::shared_ptr<Circle> CircleBody::getCircle() { 
   

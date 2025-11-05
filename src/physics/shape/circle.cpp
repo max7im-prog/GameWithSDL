@@ -19,9 +19,6 @@ void CircleConfig::defaultConfig() {
   radius = 1;
 }
 
-void CircleConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 b2Vec2 Circle::getCenter() {
   b2Circle circle = b2Shape_GetCircle(shapeId);

@@ -3,7 +3,6 @@
 
 struct CircleConfig : public ShapeConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   float radius;
 };
 

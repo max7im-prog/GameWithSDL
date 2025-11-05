@@ -3,7 +3,6 @@
 
 struct EmptyShapeConfig : public ShapeConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
 
 private:
   // Not used in EmptyShape

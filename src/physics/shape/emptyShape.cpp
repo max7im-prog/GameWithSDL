@@ -15,7 +15,3 @@ void EmptyShapeConfig::defaultConfig() {
   bodyDef = b2DefaultBodyDef();
   bodyDef.type = b2_staticBody;
 }
-
-void EmptyShapeConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}

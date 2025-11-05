@@ -3,7 +3,6 @@
 
 struct PolygonConfig : public ShapeConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   std::vector<b2Vec2> vertices;
   float radius;
 };

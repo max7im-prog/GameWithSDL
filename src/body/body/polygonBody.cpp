@@ -16,9 +16,6 @@ void PolygonBodyConfig::defaultConfig() {
   shapeCfg.defaultConfig();
 }
 
-void PolygonBodyConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 const std::shared_ptr<Polygon> PolygonBody::getPolygon() {
 

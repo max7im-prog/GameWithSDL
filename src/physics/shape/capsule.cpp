@@ -22,9 +22,6 @@ void CapsuleConfig::defaultConfig() {
   center2 = {0, -1};
 }
 
-void CapsuleConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
-}
 
 b2Vec2 Capsule::getCenter1() {
   b2Capsule capsule = b2Shape_GetCapsule(shapeId);

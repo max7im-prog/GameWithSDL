@@ -6,7 +6,6 @@
 
 struct CircleBodyConfig : public BodyConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   CircleConfig shapeCfg;
 };
 

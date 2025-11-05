@@ -6,7 +6,6 @@
 struct WeldConnectionConfig : ConnectionConfig {
   WeldJointConfig templateJointCfg;
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
 };
 class WeldConnection : public Connection, public Visitable<WeldConnection> {
 public:

@@ -20,9 +20,6 @@ void PolygonConfig::defaultConfig() {
   radius = 0;
   vertices = {{0, 0}, {0, 1}, {1, 1}, {1, 0}};
 }
-void PolygonConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 std::vector<b2Vec2> Polygon::getVertices() const {
 

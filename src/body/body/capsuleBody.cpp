@@ -39,9 +39,6 @@ void CapsuleBodyConfig::defaultConfig() {
   shapeCfg .defaultConfig();
 }
 
-void CapsuleBodyConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 const std::shared_ptr<Capsule> CapsuleBody::getCapsule() {
 

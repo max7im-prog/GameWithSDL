@@ -6,7 +6,6 @@
 
 struct MouseJointConfig : public JointConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   b2MouseJointDef jointDef;
 };
 

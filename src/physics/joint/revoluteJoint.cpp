@@ -5,9 +5,6 @@
 void RevoluteJointConfig::defaultConfig() {
   jointDef = b2DefaultRevoluteJointDef();
 }
-void RevoluteJointConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 RevoluteJoint::RevoluteJoint(entt::registry &registry, const World &world,
                              const RevoluteJointConfig &config)

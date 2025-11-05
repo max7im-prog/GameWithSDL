@@ -7,7 +7,6 @@
 struct RevoluteConnectionConfig : ConnectionConfig {
   RevoluteJointConfig templateJointCfg;
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
 };
 class RevoluteConnection : public Connection , public Visitable<RevoluteConnection>{
 public:

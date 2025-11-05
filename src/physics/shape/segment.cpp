@@ -21,9 +21,6 @@ void SegmentConfig::defaultConfig() {
   localPoint2 = {1,0};
 }
 
-void SegmentConfig::fromJSON(const nlohmann::json& json){
-  // TODO: implement
-}
 
 b2Vec2 Segment::getPoint1() {
   b2Segment segment = b2Shape_GetSegment(shapeId);

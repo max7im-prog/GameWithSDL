@@ -6,7 +6,6 @@
 
 struct RevoluteJointConfig : public JointConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   b2RevoluteJointDef jointDef;
 };
 

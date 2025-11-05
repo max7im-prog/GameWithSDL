@@ -4,7 +4,6 @@
 
 struct SegmentConfig : public ShapeConfig {
   void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
   b2Vec2 localPoint1, localPoint2;
 };
 

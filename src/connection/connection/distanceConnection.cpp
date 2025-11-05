@@ -23,6 +23,3 @@ void DistanceConnectionConfig::defaultConfig() {
   templateJointCfg.defaultConfig();
 }
 
-void DistanceConnectionConfig::fromJSON(const nlohmann::json &json) {
-  // TODO: implement
-}
