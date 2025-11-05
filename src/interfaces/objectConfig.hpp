@@ -1,4 +1,5 @@
 #pragma once
+#include "box2d/math_functions.h"
 #include <nlohmann/json.hpp>
 
 /**
@@ -46,4 +47,15 @@ public:
    * data.
    */
   virtual void fromJSON(const nlohmann::json &json) = 0;
+
+  struct Transform {
+    b2Vec2 _originPos{0,0};
+    b2Vec2 _relativePos{0,0};
+    b2Rot _rootRot{b2MakeRot(0)};
+    b2Rot _relativeRot{b2MakeRot(0)};
+    float _scaleX{1.0f};
+    float _scaleY{1.0f};
+    bool _flipX{false};
+    bool _flipY{false};
+  } _transform;
 };
