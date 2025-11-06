@@ -172,10 +172,6 @@ std::shared_ptr<RoomProxy> RoomManager::getRoom(const RoomId &roomId) {
   return _rooms[roomId];
 }
 
-std::weak_ptr<RegistryComposite>
-RoomManager::getEntity(const EntityId &entityId) {
-  return _entities[entityId];
-}
 
 void RoomManager::unloadEntity(const EntityId &entityId) {
   auto it = _entities.find(entityId);

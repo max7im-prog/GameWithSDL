@@ -20,7 +20,6 @@
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
-
 Game::Game(int w, int h, int fps)
     : WIDTH(w), HEIGHT(h), FPS(fps), running(false) {}
 
@@ -78,9 +77,24 @@ bool Game::init() {
   roomManager =
       std::make_shared<RoomManager>(world, creatureFactory, terrainFactory);
 
+  // Load something into world
   {
-    auto temp = roomManager->preloadRoom("/home/max7im/Projects/GameWithSDL/res/room/room_001.json");
+    auto temp = roomManager->preloadRoom(
+        "/home/max7im/Projects/GameWithSDL/res/room/room_001.json");
     roomManager->loadRoom(*temp);
+  }
+
+  // Controller for a creature
+  {
+    if (auto creature =
+            roomManager->getEntity<DemoCreature>("room_001/creature_001")
+                .lock()) {
+      {
+        auto ent = registry.create();
+        auto &controller = registry.emplace_or_replace<Controller>(ent);
+        controller.creature = creature->getEntity();
+      }
+    }
   }
 
   return true;

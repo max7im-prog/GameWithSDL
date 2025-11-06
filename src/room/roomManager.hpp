@@ -32,9 +32,25 @@ public:
   std::optional<RoomId> loadRoom(const RoomId &roomId);
 
   const std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> &getRooms();
-  const std::unordered_map<EntityId, std::weak_ptr<RegistryComposite>> &getEntities();
+  const std::unordered_map<EntityId, std::weak_ptr<RegistryComposite>> &
+  getEntities();
   std::shared_ptr<RoomProxy> getRoom(const RoomId &roomId);
-  std::weak_ptr<RegistryComposite> getEntity(const EntityId &entityId);
+
+  template <typename T>
+  std::weak_ptr<T> getEntity(const EntityId &entityId) {
+    auto it = _entities.find(entityId);
+    if (it == _entities.end())
+      return std::weak_ptr<T>();
+
+    auto sp = it->second.lock();
+    if (!sp)
+      return std::weak_ptr<T>();
+
+    // Downcast shared_ptr to derived type
+    auto derivedSp = std::dynamic_pointer_cast<T>(sp);
+    return std::weak_ptr<T>(derivedSp);
+  }
+
   void unloadEntity(const EntityId &entityId);
 
 protected:
