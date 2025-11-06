@@ -23,19 +23,24 @@ b2AABB getAABBfromJSON(const nlohmann::json &json) {
 } // namespace
 
 RoomProxy::RoomProxy()
-    : _roomFile(), _roomId(), _JSONloadedIntoMemory(false), _aabb(), _json() {}
+    : _roomFile(), _roomId(), _JSONloadedIntoMemory(false), _aabb(), _json(),_origin() {}
 
-std::optional<RoomId> RoomProxy::preload(std::string_view roomFile) {
+std::optional<RoomId> RoomProxy::preload(std::string_view roomFile,
+                                         b2Vec2 origin, const RoomId &roomId) {
   auto temp = JsonUtils::parseJSON(std::string(roomFile));
   if (!temp) {
     return std::nullopt;
   }
   auto json = *temp;
+  json["x"] = origin.x;
+  json["y"] = origin.y;
+  json["id"] = roomId;
   if (!canPreload(json)) {
     return std::nullopt;
   }
 
   _aabb = getAABBfromJSON(json);
+  _origin = origin;
   _roomFile = std::string(roomFile);
   _roomId = json.at("id").get<RoomId>();
   _JSONloadedIntoMemory = false;
@@ -62,6 +67,9 @@ void RoomProxy::loadJSONIntoMemory() const {
     throw std::runtime_error("Failed to parse JSON: " + _roomFile);
   }
   _json = *temp;
+  _json["x"] = _origin.x;
+  _json["y"] = _origin.y;
+  _json["id"] = _roomId;
   _JSONloadedIntoMemory = true;
 }
 

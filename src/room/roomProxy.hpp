@@ -29,7 +29,7 @@ public:
    * @param roomFile
    * @return std::optional<RoomId> Returns nullopt on failure
    */
-  std::optional<RoomId> preload(std::string_view roomFile);
+  std::optional<RoomId> preload(std::string_view roomFile, b2Vec2 origin,const RoomId& roomId);
 
   /**
    * @brief removes the json from memory. Not sure if it is useful or not, but
@@ -46,4 +46,5 @@ private:
   std::string _roomFile;
   b2AABB _aabb;
   RoomId _roomId;
+  b2Vec2 _origin;
 };

@@ -57,8 +57,8 @@ const std::map<std::string,
            PolygonTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
-                                                context._room->getJSON());
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(
+               context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<PolygonTerrain>(cfg);
@@ -78,8 +78,8 @@ const std::map<std::string,
            CapsuleTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
-                                                context._room->getJSON());
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(
+               context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<CapsuleTerrain>(cfg);
@@ -99,8 +99,8 @@ const std::map<std::string,
            SegmentTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
-                                                context._room->getJSON());
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(
+               context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<SegmentTerrain>(cfg);
@@ -120,8 +120,8 @@ const std::map<std::string,
            CircleTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
-                                                context._room->getJSON());
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(
+               context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
            auto ent = factory->create<CircleTerrain>(cfg);
@@ -140,22 +140,24 @@ const std::map<std::string,
            DemoCreature::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
-                                                context._room->getJSON());
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(
+               context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._creatureFactory;
            auto ent = factory->create<DemoCreature>(cfg);
            context._mgr._entities.insert({*entityId, ent});
          }}};
 
-std::optional<RoomId> RoomManager::preloadRoom(std::string_view roomFile) {
+std::optional<RoomId> RoomManager::preloadRoom(std::string_view roomFile,
+                                               b2Vec2 origin,
+                                               const RoomId &roomId) {
   std::shared_ptr<RoomProxy> room = std::make_shared<RoomProxy>();
-  auto roomId = room->preload(roomFile);
-  if (!roomId) {
+  auto id = room->preload(roomFile, origin, roomId);
+  if (!id) {
     return std::nullopt;
   }
-  _rooms[*roomId] = room;
-  return roomId;
+  _rooms[*id] = room;
+  return id;
 }
 
 const std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> &
@@ -171,7 +173,6 @@ RoomManager::getEntities() {
 std::shared_ptr<RoomProxy> RoomManager::getRoom(const RoomId &roomId) {
   return _rooms[roomId];
 }
-
 
 void RoomManager::unloadEntity(const EntityId &entityId) {
   auto it = _entities.find(entityId);
@@ -238,4 +239,41 @@ std::optional<RoomId> RoomManager::loadRoom(const RoomId &roomId) {
   }
 
   return roomId;
+}
+
+std::vector<RoomId>
+RoomManager::preloadRoomLayout(std::string_view roomLayoutFile) {
+  std::vector<RoomId> ret;
+  auto temp = JsonUtils::parseJSON(std::string(roomLayoutFile));
+  if (!temp) {
+    // TODO: log error
+    return {};
+  }
+
+  auto json = *temp;
+  if (!json.contains("rooms")) {
+    // TODO: log error
+    return {};
+  }
+
+  for (auto &room : json["rooms"]) {
+    if (!room.contains("id") || !room.contains("x") || !room.contains("y") ||
+        !room.contains("configFile")) {
+      // TODO: log error
+      continue;
+    }
+    b2Vec2 origin = {JsonUtils::getOrDefault<float>(room, "x", 0.0f),
+                     JsonUtils::getOrDefault<float>(room, "y", 0.0f)};
+    RoomId roomId = *JsonUtils::getOptional<std::string>(room, "id");
+    std::string roomConfigFile =
+        *JsonUtils::getOptional<std::string>(room, "configFile");
+
+    auto id = preloadRoom(roomConfigFile, origin, roomId);
+    if (id) {
+      ret.push_back(*id);
+    } else {
+      // TODO: log error
+    }
+  }
+  return ret;
 }

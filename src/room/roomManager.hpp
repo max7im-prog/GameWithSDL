@@ -20,7 +20,10 @@ public:
    *
    * @return A room ID of a room in a file
    */
-  std::optional<RoomId> preloadRoom(std::string_view roomFile);
+  std::optional<RoomId> preloadRoom(std::string_view roomFile, b2Vec2 origin,
+                                    const RoomId &roomId);
+
+  std::vector<RoomId> preloadRoomLayout(std::string_view roomLayoutFile);
 
   /**
    * @brief Loads all the entities in a room into world except for ones that are
@@ -36,8 +39,7 @@ public:
   getEntities();
   std::shared_ptr<RoomProxy> getRoom(const RoomId &roomId);
 
-  template <typename T>
-  std::weak_ptr<T> getEntity(const EntityId &entityId) {
+  template <typename T> std::weak_ptr<T> getEntity(const EntityId &entityId) {
     auto it = _entities.find(entityId);
     if (it == _entities.end())
       return std::weak_ptr<T>();

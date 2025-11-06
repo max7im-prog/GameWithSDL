@@ -79,9 +79,14 @@ bool Game::init() {
 
   // Load something into world
   {
-    auto temp = roomManager->preloadRoom(
-        "/home/max7im/Projects/GameWithSDL/res/room/room_001.json");
-    roomManager->loadRoom(*temp);
+    // auto temp = roomManager->preloadRoom(
+    //     "/home/max7im/Projects/GameWithSDL/res/room/testRoom.json",{0,0},"room_001");
+    // roomManager->loadRoom(*temp);
+    auto rooms =
+        roomManager->preloadRoomLayout("res/worldLayout/worldLayout,json");
+    for (auto &room : rooms) {
+      roomManager->loadRoom(room);
+    }
   }
 
   // Controller for a creature
