@@ -49,8 +49,8 @@ public:
   virtual void fromJSON(const nlohmann::json &json) = 0;
 
   struct Transform {
-    b2Vec2 _originPos{0,0};
-    b2Vec2 _relativePos{0,0};
+    b2Vec2 _originPos{0, 0};
+    b2Vec2 _relativePos{0, 0};
     b2Rot _rootRot{b2MakeRot(0)};
     b2Rot _relativeRot{b2MakeRot(0)};
     float _scaleX{1.0f};
@@ -58,4 +58,30 @@ public:
     bool _flipX{false};
     bool _flipY{false};
   } _transform;
+
+  /**
+   * @brief Composes an objects's transform (size scaling, rotation, position,
+   * etc.)
+   *
+   * @param objectJson A json object representing an object's relative transform
+   * inside a room. The following field are parsed:
+   *  {
+   *  "x": 35, // Position is relative to the room's origin
+   *  "y": 49, // Position is relative to the room's origin
+   *  "scaleX": 60,
+   *  "scaleY": 2,
+   *  "flipX": false,
+   *  "flipY": false,
+   *  "rotation": 30, // Degrees
+   *  }
+   * @param roomJson A json object represinting a room. The following field are
+   * parsed:
+   *  {
+   *  "x": 0, // Room origin
+   *  "y": 0, // Room origin
+   *  }
+   * @return Transform
+   */
+  static Transform parseObjectTransform(const nlohmann::json &objectJson,
+                                 const nlohmann::json &roomJson);
 };

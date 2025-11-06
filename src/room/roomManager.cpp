@@ -37,36 +37,6 @@ createEntityId(const nlohmann::json &roomJson,
   return ret;
 }
 
-TopLevelObjectConfig::Transform
-formEntityTransform(const nlohmann::json &metadataJson,
-                    const nlohmann::json &roomJson) {
-  TopLevelObjectConfig::Transform ret{};
-
-  // Position
-  float roomX = JsonUtils::getOrDefault<float>(roomJson, "x", 0.0f);
-  float roomY = JsonUtils::getOrDefault<float>(roomJson, "y", 0.0f);
-  float offsetX = JsonUtils::getOrDefault<float>(metadataJson, "x", 0.0f);
-  float offsetY = JsonUtils::getOrDefault<float>(metadataJson, "y", 0.0f);
-  ret._originPos = {roomX, roomY};
-  ret._relativePos = {offsetX, offsetY};
-
-  // Rotation
-  float rotationAngle =
-      JsonUtils::getOrDefault<float>(metadataJson, "rotation", 0);
-  float rootAngle = 0;
-  ret._relativeRot = b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f);
-  ret._rootRot = b2MakeRot((B2_PI * 2) * rootAngle / 360.0f);
-
-  // Scale
-  ret._scaleX = JsonUtils::getOrDefault<float>(metadataJson, "scaleX", 1.0f);
-  ret._scaleY = JsonUtils::getOrDefault<float>(metadataJson, "scaleY", 1.0f);
-
-  // Flip
-  ret._flipX = JsonUtils::getOrDefault<bool>(metadataJson, "flipX", false);
-  ret._flipY = JsonUtils::getOrDefault<bool>(metadataJson, "flipY", false);
-
-  return ret;
-}
 } // namespace
 
 const std::map<std::string,
@@ -87,7 +57,7 @@ const std::map<std::string,
            PolygonTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = formEntityTransform(context._metadataJson,
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
                                                 context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -108,7 +78,7 @@ const std::map<std::string,
            CapsuleTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = formEntityTransform(context._metadataJson,
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
                                                 context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -129,7 +99,7 @@ const std::map<std::string,
            SegmentTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = formEntityTransform(context._metadataJson,
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
                                                 context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -150,7 +120,7 @@ const std::map<std::string,
            CircleTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = formEntityTransform(context._metadataJson,
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
                                                 context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -170,7 +140,7 @@ const std::map<std::string,
            DemoCreature::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = formEntityTransform(context._metadataJson,
+           cfg._transform = TopLevelObjectConfig::parseObjectTransform(context._metadataJson,
                                                 context._room->getJSON());
 
            auto factory = context._mgr._creatureFactory;
