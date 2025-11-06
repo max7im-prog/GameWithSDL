@@ -5,8 +5,40 @@
 #include "world.hpp"
 #include <box2d/box2d.h>
 
-struct TerrainConfig :TopLevelObjectConfig{
+struct TerrainConfig : TopLevelObjectConfig {
   static b2Filter defaultFilter();
+
+  struct BodyParams {
+    b2BodyDef _bodyDef;
+    b2ShapeDef _shapeDef;
+  };
+
+  /**
+   * @brief Parses parameters of a body that is a base for a terrain.
+   *
+   * @param json A json object representing body params. The expected structure
+   * is as follows:
+   *
+   * "bodyParams":
+   *  {
+   *  "shape":{
+   *       "material":{
+   *         "friction": 0.5,
+   *         "restitution": 0.5,
+   *         "rollingResistance": 0
+   *     },
+   *       "density": 1
+   *   },
+   *   "body": {
+   *     "type": "static",
+   *     "linearDamping": 0,
+   *     "angularDamping": 0,
+   *     "fixedRotation": false
+   *   }
+   *  }
+   * @return BodyParams
+   */
+  static BodyParams parseBodyParams(const nlohmann::json &json);
 };
 
 class Terrain : public RegistryComposite, public virtual IVisitable {

@@ -22,7 +22,6 @@ CircleTerrain::CircleTerrain(
         std::max(config._transform._scaleX, config._transform._scaleY);
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
-    bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     circleBody = bodyFactory->create<CircleBody>(bodyCfg);
     registerChild(circleBody);
@@ -39,5 +38,10 @@ void CircleTerrainConfig::defaultConfig() {
 void CircleTerrainConfig::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   radius = JsonUtils::getOrDefault<float>(json, "radius", 1.0f);
-  // TODO: Complete implementation
+
+  if(json.contains("bodyParams")){
+    auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
+    templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
+    templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
+  }
 }

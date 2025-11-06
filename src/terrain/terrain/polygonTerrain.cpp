@@ -30,7 +30,6 @@ PolygonTerrain::PolygonTerrain(
     bodyCfg.shapeCfg.vertices = transformedVertices;
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
-    bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     polygonBody = bodyFactory->create<PolygonBody>(bodyCfg);
     registerChild(polygonBody);
@@ -71,5 +70,10 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
     }
     vertices.push_back({x, y});
   }
-  // TODO: Complete
+
+  if(json.contains("bodyParams")){
+    auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
+    templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
+    templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
+  }
 }

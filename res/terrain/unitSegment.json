@@ -14,7 +14,8 @@
         "friction": 0.5,
         "restitution": 0.5,
         "rollingResistance": 0
-      }
+      },
+      "density": 1
     },
     "body": {
       "type": "static",

@@ -31,7 +31,6 @@ SegmentTerrain::SegmentTerrain(
     bodyCfg.shapeCfg.localPoint2 = transformedVertices[1];
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
-    bodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     segmentBody = bodyFactory->create<SegmentBody>(bodyCfg);
     registerChild(segmentBody);
@@ -49,19 +48,15 @@ void SegmentTerrainConfig::defaultConfig() {
 void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   if (json.contains("point1")) {
-    point1.x = JsonUtils::getOrDefault<float>(json["point1"], "x", 0.0f);
-    point1.y = JsonUtils::getOrDefault<float>(json["point1"], "y", 0.0f);
+    point1 = JsonUtils::parseB2Vec2(json["point1"]);
   } else {
     // TODO: log error
-    point1 = {0, 0};
   }
 
   if (json.contains("point2")) {
-    point2.x = JsonUtils::getOrDefault<float>(json["point2"], "x", 0.0f);
-    point2.y = JsonUtils::getOrDefault<float>(json["point2"], "y", 0.0f);
+    point2 = JsonUtils::parseB2Vec2(json["point2"]);
   } else {
     // TODO: log error
-    point2 = {0, 0};
   }
 
   if (b2Distance(point1, point2) == 0) {
@@ -69,5 +64,10 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
     point1 = {0, 0};
     point1 = {1, 0};
   }
-  // TODO: Complete implementation
+
+  if(json.contains("bodyParams")){
+    auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
+    templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
+    templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
+  }
 }
