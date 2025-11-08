@@ -15,6 +15,7 @@
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
 #include "polygonTerrain.hpp"
+#include "roomComponents.hpp"
 #include "roomManager.hpp"
 #include "segmentTerrain.hpp"
 #include "shapeFactory.hpp"
@@ -79,14 +80,10 @@ bool Game::init() {
 
   // Load something into world
   {
-    // auto temp = roomManager->preloadRoom(
-    //     "/home/max7im/Projects/GameWithSDL/res/room/testRoom.json",{0,0},"room_001");
-    // roomManager->loadRoom(*temp);
     auto rooms =
-        roomManager->preloadRoomLayout("res/worldLayout/worldLayout,json");
-    for (auto &room : rooms) {
-      roomManager->loadRoom(room);
-    }
+        roomManager->preloadRoomLayout("res/worldLayout/worldLayout.json");
+
+    roomManager->loadRoom("room_001");
   }
 
   // Controller for a creature
@@ -97,7 +94,17 @@ bool Game::init() {
       {
         auto ent = registry.create();
         auto &controller = registry.emplace_or_replace<Controller>(ent);
+
         controller.creature = creature->getEntity();
+      }
+      {
+        float interval = 200;
+        auto ent = creature->getEntity();
+        auto &loadContext =
+            registry.emplace_or_replace<CreatureLoadsRoomsTag>(ent);
+        loadContext.loadBorder = {interval, interval};
+        loadContext.unloadBorder = {interval * 2, interval * 2};
+        loadContext.destroyBorder = {interval * 3, interval * 3};
       }
     }
   }
@@ -115,6 +122,7 @@ void Game::handleEvents() {
 void Game::update() {
   this->controllerUpdateSystem.update(this->registry, *renderContext);
   this->creatureControlSystem.update(this->registry);
+  this->roomLoadSystem.update(this->registry, this->roomManager);
 
   creatureUpdateSystem.update(this->registry, this->FPS);
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,

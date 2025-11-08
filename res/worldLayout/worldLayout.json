@@ -48,6 +48,54 @@
       "x": 455,
       "y": 0,
       "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_009",
+      "x": 520,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_010",
+      "x": 585,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_011",
+      "x": 650,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_012",
+      "x": 715,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_013",
+      "x": 780,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_014",
+      "x": 845,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_015",
+      "x": 910,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
+    },
+    {
+      "id": "room_016",
+      "x": 975,
+      "y": 0,
+      "configFile": "res/room/testRoom.json"
     }
   ]
 }

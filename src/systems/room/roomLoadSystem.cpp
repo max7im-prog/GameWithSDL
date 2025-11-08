@@ -3,7 +3,6 @@
 #include "creatureComponents.hpp"
 #include "roomComponents.hpp"
 #include "roomIdentifiers.hpp"
-#include "terrainComponents.hpp"
 void RoomLoadSystem::update(entt::registry &registry,
                             std::shared_ptr<RoomManager> roomManager) {
   for (auto &creatureEnt :
@@ -71,15 +70,7 @@ void RoomLoadSystem::update(entt::registry &registry,
 
 void RoomLoadSystem::loadRoomIfUnloaded(const RoomId &roomId,
                                         std::shared_ptr<RoomManager> mgr) {
-
-  auto it = loadedRooms.find(roomId);
-  bool isLoaded{false};
-  if (it != loadedRooms.end()) {
-    loadedRooms[roomId] = false;
-    isLoaded = false;
-  } else {
-    isLoaded = loadedRooms.at(roomId);
-  }
+  bool isLoaded = loadedRooms.contains(roomId) && loadedRooms[roomId];
   if (!isLoaded) {
     mgr->loadRoom(roomId);
     loadedRooms[roomId] = true;
@@ -88,14 +79,7 @@ void RoomLoadSystem::loadRoomIfUnloaded(const RoomId &roomId,
 
 void RoomLoadSystem::unloadRoomIfLoaded(const RoomId &roomId,
                                         std::shared_ptr<RoomManager> mgr) {
-  auto it = loadedRooms.find(roomId);
-  bool isLoaded{false};
-  if (it != loadedRooms.end()) {
-    loadedRooms[roomId] = false;
-    isLoaded = false;
-  } else {
-    isLoaded = loadedRooms.at(roomId);
-  }
+  bool isLoaded = loadedRooms.contains(roomId) && loadedRooms[roomId];
   if (isLoaded) {
     loadedRooms[roomId] = false;
   }

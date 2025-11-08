@@ -7,6 +7,8 @@ class RoomLoadSystem {
 public:
   RoomLoadSystem() = default;
   ~RoomLoadSystem() = default;
+
+  // FIXME: implement proper loading for multiple creatures
   void update(entt::registry &registry,
               std::shared_ptr<RoomManager> roomManager);
 
