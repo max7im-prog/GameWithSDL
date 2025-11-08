@@ -14,6 +14,7 @@ struct PolygonTerrainConfig : public TerrainConfig {
 class PolygonTerrain : public Terrain , public Visitable<PolygonTerrain>{
 public:
   using Config = PolygonTerrainConfig;
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   PolygonTerrain(entt::registry &registry, const std::shared_ptr<World> world,

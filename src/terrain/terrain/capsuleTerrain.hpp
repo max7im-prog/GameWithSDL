@@ -15,6 +15,7 @@ struct CapsuleTerrainConfig : public TerrainConfig {
 class CapsuleTerrain : public Terrain , public Visitable<CapsuleTerrain>{
 public:
   using Config = CapsuleTerrainConfig;
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   CapsuleTerrain(entt::registry &registry, const std::shared_ptr<World> world,

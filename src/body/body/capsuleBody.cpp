@@ -47,3 +47,5 @@ const std::shared_ptr<Capsule> CapsuleBody::getCapsule() {
     throw std::runtime_error("Shape expired");
   return ret;
 }
+
+b2Vec2 CapsuleBody::getWorldPos() { return capsule.lock()->getWorldPos(); }

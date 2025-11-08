@@ -12,6 +12,7 @@ struct CircleTerrainConfig : public TerrainConfig {
 class CircleTerrain : public Terrain , public Visitable<CircleTerrain>{
 public:
   using Config = CircleTerrainConfig;
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   CircleTerrain(entt::registry &registry, const std::shared_ptr<World> world,

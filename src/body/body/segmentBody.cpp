@@ -24,3 +24,7 @@ const std::shared_ptr<Segment> SegmentBody::getSegment() {
     throw std::runtime_error("Shape expired");
   return ret;
 }
+
+b2Vec2 SegmentBody::getWorldPos(){
+  return segment.lock()->getWorldPos();
+}

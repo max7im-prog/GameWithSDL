@@ -299,3 +299,6 @@ b2Rot LimbBody::getAdjustedRootRot() {
 
   return ret;
 }
+b2Vec2 LimbBody::getWorldPos(){
+  return getBasePos();
+}

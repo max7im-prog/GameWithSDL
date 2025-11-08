@@ -31,15 +31,15 @@ CircleBody::CircleBody(entt::registry &registry,
   registerChild(circle);
 }
 
-void CircleBodyConfig::defaultConfig() {
-  shapeCfg.defaultConfig();
-}
+void CircleBodyConfig::defaultConfig() { shapeCfg.defaultConfig(); }
 
+const std::shared_ptr<Circle> CircleBody::getCircle() {
 
-const std::shared_ptr<Circle> CircleBody::getCircle() { 
-  
   auto ret = circle.lock();
   if (!ret)
     throw std::runtime_error("Shape expired");
-  
-  return ret; }
+
+  return ret;
+}
+
+b2Vec2 CircleBody::getWorldPos() { return circle.lock()->getWorldPos(); }

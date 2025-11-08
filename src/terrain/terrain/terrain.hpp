@@ -1,6 +1,7 @@
 #pragma once
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"
+#include "sceneNode.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
@@ -41,7 +42,7 @@ struct TerrainConfig : TopLevelObjectConfig {
   static BodyParams parseBodyParams(const nlohmann::json &json);
 };
 
-class Terrain : public RegistryComposite, public virtual IVisitable {
+class Terrain : public SceneNode{
 public:
   virtual void update(float dt) override;
   virtual ~Terrain() = 0;

@@ -15,6 +15,7 @@ public:
   b2Vec2 getCenter();
   float getRadius();
   const std::shared_ptr<Circle> getCircle();
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   CircleBody() = delete;

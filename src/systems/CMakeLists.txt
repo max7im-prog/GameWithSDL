@@ -17,8 +17,10 @@ target_include_directories(game_systems_lib PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(game_systems_lib PUBLIC
     game_body_lib
     game_creature_lib
+    game_terrain_lib
     game_render_lib
     game_events_lib
     game_physics_lib
     game_misc_lib
+    game_room_lib
 )

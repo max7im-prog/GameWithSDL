@@ -25,3 +25,7 @@ const std::shared_ptr<Polygon> PolygonBody::getPolygon() {
 
   return ret;
 }
+
+b2Vec2 PolygonBody::getWorldPos(){
+  return polygon.lock()->getWorldPos();
+}

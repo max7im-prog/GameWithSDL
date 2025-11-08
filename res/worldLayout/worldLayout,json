@@ -33,7 +33,7 @@
     },
     {
       "id": "room_006",
-      "x": 326,
+      "x": 325,
       "y": 0,
       "configFile": "res/room/testRoom.json"
     },

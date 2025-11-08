@@ -10,7 +10,7 @@ void Terrain::update(float dt) { RegistryComposite::update(dt); }
 Terrain::~Terrain() {}
 
 Terrain::Terrain(entt::registry &registry, const std::shared_ptr<World> world)
-    : RegistryComposite(registry), world(world) {}
+    : SceneNode(registry), world(world) {}
 
 b2Filter TerrainConfig::defaultFilter() {
   b2Filter ret = b2DefaultFilter();

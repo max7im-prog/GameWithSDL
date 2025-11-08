@@ -13,6 +13,7 @@ class PolygonBody : public Body , public Visitable<PolygonBody>{
 public:
   using Config = PolygonBodyConfig;
   const std::shared_ptr<Polygon> getPolygon();
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   PolygonBody() = delete;

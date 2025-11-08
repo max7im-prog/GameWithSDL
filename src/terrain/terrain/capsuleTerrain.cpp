@@ -74,3 +74,5 @@ void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 }
+
+b2Vec2 CapsuleTerrain::getWorldPos() { return capsuleBody.lock()->getWorldPos(); }

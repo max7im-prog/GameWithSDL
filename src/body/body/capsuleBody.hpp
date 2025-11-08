@@ -16,6 +16,7 @@ public:
   b2Vec2 getCenter2();
   float getRadius();
   const std::shared_ptr<Capsule> getCapsule();
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   CapsuleBody() = delete;

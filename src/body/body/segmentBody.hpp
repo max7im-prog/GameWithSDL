@@ -13,6 +13,7 @@ class SegmentBody : public Body , public Visitable<SegmentBody>{
 public:
   using Config = SegmentBodyConfig;
   const std::shared_ptr<Segment> getSegment();
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   SegmentBody() = delete;

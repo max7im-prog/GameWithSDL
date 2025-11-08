@@ -3,6 +3,7 @@
 #include "box2d/types.h"
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"
+#include "sceneNode.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
 
@@ -16,7 +17,7 @@ enum CreatureAbilities {
 
 enum CreatureState { ON_GROUND, IN_AIR, FLYING };
 
-class Creature : public RegistryComposite, public virtual IVisitable {
+class Creature : public SceneNode{
 public:
   virtual ~Creature() = 0;
 
@@ -33,7 +34,6 @@ public:
 
   std::uint32_t getAbilities();
 
-  virtual b2Vec2 getWorldPos() = 0;
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);

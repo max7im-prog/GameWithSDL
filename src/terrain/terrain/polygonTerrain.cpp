@@ -77,3 +77,4 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 }
+b2Vec2 PolygonTerrain::getWorldPos() { return polygonBody.lock()->getWorldPos(); }

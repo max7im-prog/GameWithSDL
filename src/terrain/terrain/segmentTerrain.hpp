@@ -13,6 +13,7 @@ struct SegmentTerrainConfig : public TerrainConfig {
 class SegmentTerrain : public Terrain, public Visitable<SegmentTerrain> {
 public:
   using Config = SegmentTerrainConfig;
+  virtual b2Vec2 getWorldPos() override;
 
 protected:
   SegmentTerrain(entt::registry &registry, const std::shared_ptr<World> world,

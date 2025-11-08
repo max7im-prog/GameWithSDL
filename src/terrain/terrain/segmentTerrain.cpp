@@ -17,7 +17,7 @@ SegmentTerrain::SegmentTerrain(
   auto terrainRot =
       b2MulRot(config._transform._rootRot, config._transform._relativeRot);
 
-  std::vector<b2Vec2> transformedVertices = {config.point1,config.point2};
+  std::vector<b2Vec2> transformedVertices = {config.point1, config.point2};
   std::for_each(transformedVertices.begin(), transformedVertices.end(),
                 [&config](b2Vec2 &v) {
                   v.x = config._transform._scaleX * v.x *
@@ -65,9 +65,11 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
     point1 = {1, 0};
   }
 
-  if(json.contains("bodyParams")){
+  if (json.contains("bodyParams")) {
     auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 }
+
+b2Vec2 SegmentTerrain::getWorldPos() { return segmentBody.lock()->getWorldPos(); }

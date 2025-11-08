@@ -40,6 +40,7 @@ public:
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
   float getLength();
+  virtual b2Vec2 getWorldPos() override;
 
   /**
    * @brief Get the root rotation adjusted for the rotation of a connected body
