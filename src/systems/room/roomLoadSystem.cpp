@@ -1,25 +1,102 @@
 #include "roomLoadSystem.hpp"
+#include "box2d/math_functions.h"
 #include "creatureComponents.hpp"
 #include "roomComponents.hpp"
-#include <exception>
+#include "roomIdentifiers.hpp"
+#include "terrainComponents.hpp"
 void RoomLoadSystem::update(entt::registry &registry,
                             std::shared_ptr<RoomManager> roomManager) {
-  for (auto &creatureEnt : registry.view<CreatureLoadsRoomsTag>()) {
-    b2Vec2 creaturePos{0, 0};
-    try {
-      auto &creature = registry.get<PhysicsCreature>(creatureEnt).creature;
-      creaturePos = creature->getWorldPos();
-    } catch (std::exception &e) {
-      // TODO: log error
-      continue;
-    }
-    for (auto &terrainEnt : registry.view<PhysicsTerrain>()) {
-      try {
-        auto &terrain = registry.get<PhysicsTerrain>(terrainEnt).terrain;
-        // b2Vec2 terrainPos = terrain->getWorldPos();
-      } catch (...) {
-        // TODO: log error
+  for (auto &creatureEnt :
+       registry.view<PhysicsCreature, CreatureLoadsRoomsTag>()) {
+    auto loadingCreature = registry.get<PhysicsCreature>(creatureEnt).creature;
+    b2Vec2 loadCenter = loadingCreature->getWorldPos();
+    const auto &RoomLoadingConfig =
+        registry.get<CreatureLoadsRoomsTag>(creatureEnt);
+
+    // Compute bounding boxes of load / unload / destroy borders
+    b2AABB loadAABB = {{loadCenter.x - RoomLoadingConfig.loadBorder.sizeX / 2,
+                        loadCenter.y - RoomLoadingConfig.loadBorder.sizeY / 2},
+                       {loadCenter.x + RoomLoadingConfig.loadBorder.sizeX / 2,
+                        loadCenter.y + RoomLoadingConfig.loadBorder.sizeY / 2}};
+    b2AABB unloadAABB = {
+        {loadCenter.x - RoomLoadingConfig.unloadBorder.sizeX / 2,
+         loadCenter.y - RoomLoadingConfig.unloadBorder.sizeY / 2},
+        {loadCenter.x + RoomLoadingConfig.unloadBorder.sizeX / 2,
+         loadCenter.y + RoomLoadingConfig.unloadBorder.sizeY / 2}};
+    b2AABB destroyAABB = {
+        {loadCenter.x - RoomLoadingConfig.destroyBorder.sizeX / 2,
+         loadCenter.y - RoomLoadingConfig.destroyBorder.sizeY / 2},
+        {loadCenter.x + RoomLoadingConfig.destroyBorder.sizeX / 2,
+         loadCenter.y + RoomLoadingConfig.destroyBorder.sizeY / 2}};
+
+    // Apply loading border
+    {
+      for (const auto &[id, room] : roomManager->getRooms()) {
+        b2AABB roomAABB = room->getAABB();
+        if (b2AABB_Overlaps(loadAABB, roomAABB)) {
+          loadRoomIfUnloaded(id, roomManager);
+        }
       }
     }
+
+    // Apply unloading border
+    {
+      for (const auto &[id, room] : roomManager->getRooms()) {
+        b2AABB roomAABB = room->getAABB();
+        if (!b2AABB_Overlaps(unloadAABB, roomAABB)) {
+          unloadRoomIfLoaded(id, roomManager);
+        }
+      }
+    }
+
+    // Apply destruction border
+    {
+      std::vector<EntityId> entitiesToUnload;
+      for (auto &[id, ent] : roomManager->getEntities()) {
+        if (auto lockedEnt = ent.lock()) {
+          b2Vec2 pos = lockedEnt->getWorldPos();
+          auto lockedEntAABB = b2MakeAABB(&pos, 1, 0.1);
+
+          if (!b2AABB_Contains(destroyAABB, lockedEntAABB)) {
+            entitiesToUnload.push_back(id);
+          }
+        }
+      }
+      for (auto &id : entitiesToUnload) {
+        roomManager->unloadEntity(id);
+      }
+    }
+  }
+}
+
+void RoomLoadSystem::loadRoomIfUnloaded(const RoomId &roomId,
+                                        std::shared_ptr<RoomManager> mgr) {
+
+  auto it = loadedRooms.find(roomId);
+  bool isLoaded{false};
+  if (it != loadedRooms.end()) {
+    loadedRooms[roomId] = false;
+    isLoaded = false;
+  } else {
+    isLoaded = loadedRooms.at(roomId);
+  }
+  if (!isLoaded) {
+    mgr->loadRoom(roomId);
+    loadedRooms[roomId] = true;
+  }
+}
+
+void RoomLoadSystem::unloadRoomIfLoaded(const RoomId &roomId,
+                                        std::shared_ptr<RoomManager> mgr) {
+  auto it = loadedRooms.find(roomId);
+  bool isLoaded{false};
+  if (it != loadedRooms.end()) {
+    loadedRooms[roomId] = false;
+    isLoaded = false;
+  } else {
+    isLoaded = loadedRooms.at(roomId);
+  }
+  if (isLoaded) {
+    loadedRooms[roomId] = false;
   }
 }

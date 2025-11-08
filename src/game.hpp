@@ -15,7 +15,6 @@
 #include "debugRenderSystem.hpp"
 #include "renderBackgroundSystem.hpp"
 #include "renderContext.hpp"
-#include "renderPhysicsBodiesSystem.hpp"
 #include "renderPhysicsJointsSystem.hpp"
 
 // Events

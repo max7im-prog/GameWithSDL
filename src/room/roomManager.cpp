@@ -161,16 +161,16 @@ std::optional<RoomId> RoomManager::preloadRoom(std::string_view roomFile,
 }
 
 const std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> &
-RoomManager::getRooms() {
+RoomManager::getRooms() const{
   return _rooms;
 }
 
-const std::unordered_map<EntityId, std::weak_ptr<RegistryComposite>> &
-RoomManager::getEntities() {
+const std::unordered_map<EntityId, std::weak_ptr<SceneNode>> &
+RoomManager::getEntities() const{
   return _entities;
 }
 
-std::shared_ptr<RoomProxy> RoomManager::getRoom(const RoomId &roomId) {
+std::shared_ptr<RoomProxy> RoomManager::getRoom(const RoomId &roomId){
   return _rooms[roomId];
 }
 
