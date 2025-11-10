@@ -84,9 +84,10 @@ bool Game::init() {
         roomManager->preloadRoomLayout("res/worldLayout/worldLayout.json");
 
     roomManager->loadRoom("room_001");
+    roomManager->loadRoom("room_016");
   }
 
-  // Controller for a creature
+  // Controller and loader for a creature
   {
     if (auto creature =
             roomManager->getEntity<DemoCreature>("room_001/creature_001")
@@ -108,6 +109,22 @@ bool Game::init() {
       }
     }
   }
+  // Loader for another creature
+  // {
+  //   if (auto creature =
+  //           roomManager->getEntity<DemoCreature>("room_016/creature_001")
+  //               .lock()) {
+  //     {
+  //       float interval = 200;
+  //       auto ent = creature->getEntity();
+  //       auto &loadContext =
+  //           registry.emplace_or_replace<CreatureLoadsRoomsTag>(ent);
+  //       loadContext.loadBorder = {interval, interval};
+  //       loadContext.unloadBorder = {interval * 2, interval * 2};
+  //       loadContext.destroyBorder = {interval * 3, interval * 3};
+  //     }
+  //   }
+  // }
 
   return true;
 }

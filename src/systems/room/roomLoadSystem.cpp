@@ -5,6 +5,9 @@
 #include "roomIdentifiers.hpp"
 void RoomLoadSystem::update(entt::registry &registry,
                             std::shared_ptr<RoomManager> roomManager) {
+
+  std::vector<b2AABB> destructionBorders;
+
   for (auto &creatureEnt :
        registry.view<PhysicsCreature, CreatureLoadsRoomsTag>()) {
     auto loadingCreature = registry.get<PhysicsCreature>(creatureEnt).creature;
@@ -28,6 +31,8 @@ void RoomLoadSystem::update(entt::registry &registry,
         {loadCenter.x + RoomLoadingConfig.destroyBorder.sizeX / 2,
          loadCenter.y + RoomLoadingConfig.destroyBorder.sizeY / 2}};
 
+    destructionBorders.push_back(destroyAABB);
+
     // Apply loading border
     {
       for (const auto &[id, room] : roomManager->getRooms()) {
@@ -47,23 +52,33 @@ void RoomLoadSystem::update(entt::registry &registry,
         }
       }
     }
+  }
 
-    // Apply destruction border
-    {
-      std::vector<EntityId> entitiesToUnload;
-      for (auto &[id, ent] : roomManager->getEntities()) {
-        if (auto lockedEnt = ent.lock()) {
-          b2Vec2 pos = lockedEnt->getWorldPos();
-          auto lockedEntAABB = b2MakeAABB(&pos, 1, 0.1);
+  // Apply destruction borders globally (entity should be outside every border
+  // to be destroyed)
+  {
+    std::vector<EntityId> entitiesToUnload;
+    for (auto &[id, ent] : roomManager->getEntities()) {
 
-          if (!b2AABB_Contains(destroyAABB, lockedEntAABB)) {
-            entitiesToUnload.push_back(id);
+      if (auto lockedEnt = ent.lock()) {
+
+        b2Vec2 pos = lockedEnt->getWorldPos();
+        auto lockedEntAABB = b2MakeAABB(&pos, 1, 0.1);
+        bool insideAny = false;
+
+        for (auto &border : destructionBorders) {
+          if (b2AABB_Contains(border, lockedEntAABB)) {
+            insideAny = true;
+            break;
           }
         }
+        if (!insideAny) {
+          entitiesToUnload.push_back(id);
+        }
       }
-      for (auto &id : entitiesToUnload) {
-        roomManager->unloadEntity(id);
-      }
+    }
+    for (auto &id : entitiesToUnload) {
+      roomManager->unloadEntity(id);
     }
   }
 }
