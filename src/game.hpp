@@ -32,7 +32,7 @@
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game {
 public:
-  Game(int w, int h, int fps);
+  Game(int w, int h);
   ~Game();
 
   // Used to determine if the game loop is active
@@ -42,23 +42,23 @@ public:
   // Initializes Game, including SDL
   bool init();
 
-  // Cleans all the objects that expire at the end of the frame
-  void cleanupFrame();
+  // Cleans all the objects that expire at the end of the tick
+  void cleanupTick();
 
   // Calls all event systems
   void handleEvents();
 
   // Calls all game systems
-  void update();
+  void update(Uint64 TPS);
 
   // Calls all rendering systems
   void render();
 
   // Waits for time to pass to adjust the framerate
-  void deltaTime();
+  // void deltaTime();
 
   // Cleans the resources used by game, i guess
-  void clean();
+  void cleanup();
 
 private:
   entt::registry registry;
@@ -66,9 +66,6 @@ private:
   int WIDTH = 800;
   int HEIGHT = 600;
 
-  // fps parameters
-  int FPS = 60;
-  Uint64 frameStart = 0;
 
   // Used to determine if game loop is active
   bool running = false;

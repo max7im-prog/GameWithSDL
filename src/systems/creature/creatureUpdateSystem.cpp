@@ -10,13 +10,13 @@ CreatureUpdateSystem::~CreatureUpdateSystem()
 {
 }
 
-void CreatureUpdateSystem::update(entt::registry& registry,int FPS)
+void CreatureUpdateSystem::update(entt::registry& registry,int TPS)
 {
     auto v = registry.view<PhysicsCreature>();
     for(auto ent:v){
         auto& comp = v.get<PhysicsCreature>(ent);
         if(comp.creature){
-            comp.creature->update(1.0f/((float)FPS));
+            comp.creature->update(1.0f/((float)TPS));
         }
     }
 }

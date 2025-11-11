@@ -6,5 +6,5 @@ public:
     CreatureUpdateSystem();
     ~CreatureUpdateSystem();
 
-    void update(entt::registry& registry,int FPS);
+    void update(entt::registry& registry,int TPS);
 };

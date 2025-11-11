@@ -21,8 +21,8 @@
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
-Game::Game(int w, int h, int fps)
-    : WIDTH(w), HEIGHT(h), FPS(fps), running(false) {}
+Game::Game(int w, int h)
+    : WIDTH(w), HEIGHT(h), running(false) {}
 
 Game::~Game() {}
 
@@ -84,7 +84,7 @@ bool Game::init() {
         roomManager->preloadRoomLayout("res/worldLayout/worldLayout.json");
 
     roomManager->loadRoom("room_001");
-    roomManager->loadRoom("room_016");
+    // roomManager->loadRoom("room_016");
   }
 
   // Controller and loader for a creature
@@ -129,28 +129,28 @@ bool Game::init() {
   return true;
 }
 
-void Game::clean() { this->registry.clear(); }
+void Game::cleanup() { this->registry.clear(); }
 
 void Game::handleEvents() {
   this->pollEventSystem.update(this->registry);
   this->quitSystem.update(this->registry, running);
 }
 
-void Game::update() {
+void Game::update(Uint64 TPS) {
   this->controllerUpdateSystem.update(this->registry, *renderContext);
   this->creatureControlSystem.update(this->registry);
   this->roomLoadSystem.update(this->registry, this->roomManager);
 
-  creatureUpdateSystem.update(this->registry, this->FPS);
+  creatureUpdateSystem.update(this->registry, TPS);
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,
                           *renderContext);
 
   cameraSystem.update(this->registry, *renderContext);
 
-  this->worldUpdateSystem.update(this->registry, this->FPS);
+  this->worldUpdateSystem.update(this->registry, TPS);
 }
 
-void Game::cleanupFrame() { cleanupSystem.update(this->registry); }
+void Game::cleanupTick() { cleanupSystem.update(this->registry); }
 
 void Game::render() {
   this->renderBackgroundSystem.update(this->registry, *renderContext);
@@ -163,13 +163,13 @@ void Game::render() {
   SDL_RenderPresent(this->renderContext->getSDLRenderer());
 }
 
-void Game::deltaTime() {
-  Uint64 cur = SDL_GetTicks();
-  Uint64 frameDuration = 1000u / static_cast<Uint64>(this->FPS);
+// void Game::deltaTime() {
+//   // Uint64 cur = SDL_GetTicks();
+//   // Uint64 frameDuration = 1000u / static_cast<Uint64>(this->FPS);
 
-  if (cur - frameStart < frameDuration) {
-    SDL_Delay(frameDuration - (cur - frameStart));
-  }
+//   // if (cur - frameStart < frameDuration) {
+//   //   SDL_Delay(frameDuration - (cur - frameStart));
+//   // }
 
-  frameStart = SDL_GetTicks();
-}
+//   // frameStart = SDL_GetTicks();
+// }
