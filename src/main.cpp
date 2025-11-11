@@ -42,7 +42,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     }
 
     // Render according to FPS
-    Uint64 sinceLastRender = newTime - lastRenderTime;
+    Uint64 sinceLastRender{newTime - lastRenderTime};
     if (sinceLastRender >= targetFrameTime) {
       game.render();
       lastRenderTime = SDL_GetPerformanceCounter();
