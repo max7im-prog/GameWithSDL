@@ -3,13 +3,13 @@
 #include <SDL3/SDL.h>
 
 /**
- * @brief A base class for all the update systema
+ * @brief A base class for all the game systems
  *
  */
-class System {
+class GameSystem {
 public:
-  explicit System(std::string_view name);
-  virtual ~System() = 0;
+  explicit GameSystem(std::string_view name);
+  virtual ~GameSystem() = 0;
   void setUpdateInterval(double updateInterval);
   double getUpdateInterval() const;
   void setEnabled(bool enabled);
@@ -18,14 +18,14 @@ public:
 
 protected:
   /**
-   * @brief Used to determine whetheer the system snould run or not. This
+   * @brief Used to determine whether the system snould run or not. This
    * depends on whether the required update interval has passed or not.
    *
    * Internally advances a counter by the amount of time calculated through TPS.
    *
-   * @param TPS Ticks Per Second a game runs on.
+   * @param secondsPassed - seconds passed from the last call
    */
-  bool shouldRun(Uint64 TPS);
+  bool shouldRun(double secondsPassed);
 
 private:
   const std::string _name;

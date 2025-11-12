@@ -21,8 +21,7 @@
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
-Game::Game(int w, int h)
-    : WIDTH(w), HEIGHT(h), running(false) {}
+Game::Game(int w, int h) : WIDTH(w), HEIGHT(h), running(false) {}
 
 Game::~Game() {}
 
@@ -154,22 +153,7 @@ void Game::cleanupTick() { cleanupSystem.update(this->registry); }
 
 void Game::render() {
   this->renderBackgroundSystem.update(this->registry, *renderContext);
-  // this->renderPhysicsBodiesSystem.update(this->registry,
-  // this->renderContext);
-  // this->renderPhysicsJointsSystem.update(this->registry,
-  // this->renderContext);
   this->debugRenderSystem->update(this->registry);
 
   SDL_RenderPresent(this->renderContext->getSDLRenderer());
 }
-
-// void Game::deltaTime() {
-//   // Uint64 cur = SDL_GetTicks();
-//   // Uint64 frameDuration = 1000u / static_cast<Uint64>(this->FPS);
-
-//   // if (cur - frameStart < frameDuration) {
-//   //   SDL_Delay(frameDuration - (cur - frameStart));
-//   // }
-
-//   // frameStart = SDL_GetTicks();
-// }

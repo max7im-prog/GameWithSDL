@@ -25,9 +25,9 @@
 #include "cameraSystem.hpp"
 #include "controllerUpdateSystem.hpp"
 #include "mouseJointSystem.hpp"
+#include "roomLoadSystem.hpp"
 #include "worldFactory.hpp"
 #include "worldUpdateSystem.hpp"
-#include "roomLoadSystem.hpp"
 
 // Class to combine main logic of a game - registry, systems, rendering.
 class Game {
@@ -54,9 +54,6 @@ public:
   // Calls all rendering systems
   void render();
 
-  // Waits for time to pass to adjust the framerate
-  // void deltaTime();
-
   // Cleans the resources used by game, i guess
   void cleanup();
 
@@ -65,7 +62,6 @@ private:
   // Window parameters
   int WIDTH = 800;
   int HEIGHT = 600;
-
 
   // Used to determine if game loop is active
   bool running = false;
@@ -89,8 +85,6 @@ private:
 
   // Render systems
   RenderBackgroundSystem renderBackgroundSystem;
-  // RenderPhysicsBodiesSystem renderPhysicsBodiesSystem;
-  // RenderPhysicsJointsSystem renderPhysicsJointsSystem;
   std::shared_ptr<DebugRenderSystem> debugRenderSystem;
 
   entt::dispatcher eventDispatcher;
