@@ -7,7 +7,12 @@
 RoomLoadSystem::RoomLoadSystem() : GameSystem("RoomLoadSystem") {}
 
 void RoomLoadSystem::update(entt::registry &registry,
-                            std::shared_ptr<RoomManager> roomManager) {
+                            std::shared_ptr<RoomManager> roomManager,
+                            double secondsPassed) {
+
+  if (!shouldRun(secondsPassed)) {
+    return;
+  }
 
   std::vector<b2AABB> destructionBorders;
 

@@ -4,7 +4,7 @@
 #include <entt/entt.hpp>
 
 // System that calls step() in every physics world in a registry
-class WorldUpdateSystem :public GameSystem{
+class WorldUpdateSystem : public GameSystem {
 public:
   WorldUpdateSystem();
   ~WorldUpdateSystem();

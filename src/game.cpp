@@ -85,6 +85,7 @@ bool Game::init() {
     roomManager->loadRoom("room_001");
     // roomManager->loadRoom("room_016");
   }
+  roomLoadSystem.setUpdateInterval(0.25);
 
   // Controller and loader for a creature
   {
@@ -138,7 +139,7 @@ void Game::handleEvents() {
 void Game::update(Uint64 TPS) {
   this->controllerUpdateSystem.update(this->registry, *renderContext);
   this->creatureControlSystem.update(this->registry);
-  this->roomLoadSystem.update(this->registry, this->roomManager);
+  this->roomLoadSystem.update(this->registry, this->roomManager, 1.0/static_cast<double>(TPS));
 
   creatureUpdateSystem.update(this->registry, TPS);
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,

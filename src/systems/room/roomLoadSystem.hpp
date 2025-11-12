@@ -9,9 +9,8 @@ public:
   RoomLoadSystem() ;
   ~RoomLoadSystem() = default;
 
-  // FIXME: implement proper loading for multiple creatures
   void update(entt::registry &registry,
-              std::shared_ptr<RoomManager> roomManager);
+              std::shared_ptr<RoomManager> roomManager, double secondsPassed);
 
 private:
   std::unordered_map<RoomId, bool> loadedRooms;
