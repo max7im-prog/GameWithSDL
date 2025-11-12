@@ -1,10 +1,11 @@
 #pragma once
+#include "gameSystem.hpp"
 #include <entt/entt.hpp>
 
 // System to update creatures with controller attached to them.
-class CreatureControlSystem{
+class CreatureControlSystem:public GameSystem{
 public:
-    CreatureControlSystem() = default;
+    CreatureControlSystem();
     ~CreatureControlSystem() = default;
     void update(entt::registry& registry);
 };

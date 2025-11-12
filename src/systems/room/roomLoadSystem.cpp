@@ -3,6 +3,9 @@
 #include "creatureComponents.hpp"
 #include "roomComponents.hpp"
 #include "roomIdentifiers.hpp"
+
+RoomLoadSystem::RoomLoadSystem() : GameSystem("RoomLoadSystem") {}
+
 void RoomLoadSystem::update(entt::registry &registry,
                             std::shared_ptr<RoomManager> roomManager) {
 

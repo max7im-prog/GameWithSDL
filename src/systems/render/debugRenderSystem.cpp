@@ -1,8 +1,9 @@
 #include "debugRenderSystem.hpp"
+#include "gameSystem.hpp"
 #include "physicsComponents.hpp"
 
 DebugRenderSystem::DebugRenderSystem(RenderContext &renderContext)
-    : renderer(renderContext) {}
+    : GameSystem("DebugRenderSystem"),renderer(renderContext) {}
 
 void DebugRenderSystem::update(entt::registry &registry) {
   {

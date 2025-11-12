@@ -1,6 +1,7 @@
 #include "quitSystem.hpp"
 #include "eventComponents.hpp"
-QuitSystem::QuitSystem()
+#include "gameSystem.hpp"
+QuitSystem::QuitSystem():GameSystem("QuitSystem")
 {
 }
 

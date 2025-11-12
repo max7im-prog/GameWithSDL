@@ -3,7 +3,7 @@
 #include "physicsComponents.hpp"
 #include "renderUtils.hpp"
 
-RenderPhysicsJointsSystem::RenderPhysicsJointsSystem() {}
+RenderPhysicsJointsSystem::RenderPhysicsJointsSystem() :GameSystem("RenderPhysicsJointSystem"){}
 
 RenderPhysicsJointsSystem::~RenderPhysicsJointsSystem() {}
 

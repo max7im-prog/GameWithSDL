@@ -1,5 +1,6 @@
 #pragma once
 #include "emptyShape.hpp"
+#include "gameSystem.hpp"
 #include "jointFactory.hpp"
 #include "mouseJoint.hpp"
 #include "renderContext.hpp"
@@ -8,9 +9,9 @@
 #include <entt/entt.hpp>
 #include <memory>
 
-class MouseJointSystem {
+class MouseJointSystem :public GameSystem{
 public:
-  MouseJointSystem() = default;
+  MouseJointSystem() ;
   ~MouseJointSystem() = default;
   void update(entt::registry &registry, const std::shared_ptr<World> world,
               const std::shared_ptr<ShapeFactory> shapeFactory,

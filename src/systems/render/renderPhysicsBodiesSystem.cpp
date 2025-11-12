@@ -1,9 +1,10 @@
 #include "renderPhysicsBodiesSystem.hpp"
 
+#include "gameSystem.hpp"
 #include "physicsComponents.hpp"
 #include "renderUtils.hpp"
 
-RenderPhysicsBodiesSystem::RenderPhysicsBodiesSystem() {}
+RenderPhysicsBodiesSystem::RenderPhysicsBodiesSystem() :GameSystem("RenderPhysicsBodiesSystem"){}
 
 RenderPhysicsBodiesSystem::~RenderPhysicsBodiesSystem() {}
 

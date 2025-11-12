@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gameSystem.hpp"
 #ifndef QUITSYSTEM_HPP
 #define QUITSYSTEM_HPP
 
@@ -9,7 +10,7 @@
 class Game;
 
 // System to handle exiting the game
-class QuitSystem{
+class QuitSystem:public GameSystem{
 public:
     QuitSystem();
     ~QuitSystem();

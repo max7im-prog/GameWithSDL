@@ -1,8 +1,9 @@
 #include "creatureUpdateSystem.hpp"
 #include "creatureComponents.hpp"
+#include "gameSystem.hpp"
 
 
-CreatureUpdateSystem::CreatureUpdateSystem()
+CreatureUpdateSystem::CreatureUpdateSystem():GameSystem("CreatureUpdateSystem")
 {
 }
 

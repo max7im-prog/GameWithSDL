@@ -1,6 +1,7 @@
 #pragma once
+#include "gameSystem.hpp"
 #include <entt/entt.hpp>
-class CleanupSystem{
+class CleanupSystem:public GameSystem{
 public:
     CleanupSystem();
     ~CleanupSystem();

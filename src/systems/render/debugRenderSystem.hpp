@@ -1,9 +1,10 @@
 
 #include "debugRenderer.hpp"
+#include "gameSystem.hpp"
 #include "renderContext.hpp"
 #include <entt/entt.hpp>
 
-class DebugRenderSystem {
+class DebugRenderSystem :public GameSystem{
 public:
   DebugRenderSystem( RenderContext &renderContext);
   ~DebugRenderSystem() = default;

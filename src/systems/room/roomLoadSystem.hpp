@@ -1,11 +1,12 @@
 #pragma once
+#include "gameSystem.hpp"
 #include "roomIdentifiers.hpp"
 #include "roomManager.hpp"
 
 #include <memory>
-class RoomLoadSystem {
+class RoomLoadSystem :public GameSystem{
 public:
-  RoomLoadSystem() = default;
+  RoomLoadSystem() ;
   ~RoomLoadSystem() = default;
 
   // FIXME: implement proper loading for multiple creatures

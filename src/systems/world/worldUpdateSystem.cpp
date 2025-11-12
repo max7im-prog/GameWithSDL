@@ -1,6 +1,6 @@
 #include "worldUpdateSystem.hpp"
 #include "physicsComponents.hpp"
-WorldUpdateSystem::WorldUpdateSystem()
+WorldUpdateSystem::WorldUpdateSystem(): GameSystem("WorldUpdateSystem")
 {
 }
 

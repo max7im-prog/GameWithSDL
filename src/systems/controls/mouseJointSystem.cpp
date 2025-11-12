@@ -5,11 +5,13 @@
 #include "emptyShape.hpp"
 #include "eventComponents.hpp"
 #include "eventUtils.hpp"
+#include "gameSystem.hpp"
 #include "jointFactory.hpp"
 #include "mouseJoint.hpp"
 #include "physicsUtils.hpp"
 #include "renderUtils.hpp"
 #include "shapeFactory.hpp"
+MouseJointSystem::MouseJointSystem() : GameSystem("MouseJointSystem") {}
 
 void MouseJointSystem::update(entt::registry &registry,
                               const std::shared_ptr<World> world,

@@ -1,7 +1,8 @@
 #include <entt/entt.hpp>
+#include "gameSystem.hpp"
 #include "renderContext.hpp"
 
-class RenderPhysicsJointsSystem{
+class RenderPhysicsJointsSystem:public GameSystem{
 public:
     RenderPhysicsJointsSystem();
     ~RenderPhysicsJointsSystem();

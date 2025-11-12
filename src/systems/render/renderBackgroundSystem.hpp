@@ -1,11 +1,11 @@
-#include <entt/entt.hpp>
+#include "gameSystem.hpp"
 #include "renderContext.hpp"
+#include <entt/entt.hpp>
 
-class RenderBackgroundSystem
-{
+class RenderBackgroundSystem : public GameSystem {
 public:
-    RenderBackgroundSystem();
-    ~RenderBackgroundSystem();
+  RenderBackgroundSystem();
+  ~RenderBackgroundSystem();
 
-    void update(entt::registry &registry, const RenderContext &renderContext);
+  void update(entt::registry &registry, const RenderContext &renderContext);
 };

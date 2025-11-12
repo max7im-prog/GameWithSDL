@@ -3,6 +3,8 @@
 #include "renderUtils.hpp"
 #include <iostream>
 
+CameraSystem::CameraSystem() : GameSystem("CameraSystem") {}
+
 void CameraSystem::update(entt::registry &registry,
                           RenderContext &renderContext) {
   updatePosition(registry, renderContext);

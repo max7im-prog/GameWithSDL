@@ -1,11 +1,12 @@
 #pragma once
+#include "gameSystem.hpp"
 #include "renderContext.hpp"
 #include "renderUtils.hpp"
 #include <entt/entt.hpp>
 
-class CameraSystem {
+class CameraSystem : public GameSystem{
 public:
-  CameraSystem() = default;
+  CameraSystem();
   ~CameraSystem() = default;
   void update(entt::registry &registry, RenderContext &renderContext);
 

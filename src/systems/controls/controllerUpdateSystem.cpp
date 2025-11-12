@@ -6,6 +6,8 @@
 #include "eventComponents.hpp"
 #include "renderUtils.hpp"
 
+ControllerUpdateSystem::ControllerUpdateSystem()
+    : GameSystem("ControllerUpdateSystem") {}
 
 void ControllerUpdateSystem::update(entt::registry &registry,
                                     const RenderContext &renderContext) {

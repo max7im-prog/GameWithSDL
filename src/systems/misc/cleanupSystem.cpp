@@ -1,7 +1,8 @@
 #include "cleanupSystem.hpp"
 #include "eventComponents.hpp"
+#include "gameSystem.hpp"
 
-CleanupSystem::CleanupSystem() {}
+CleanupSystem::CleanupSystem() :GameSystem("CleanupSystem"){}
 
 CleanupSystem::~CleanupSystem() {}
 

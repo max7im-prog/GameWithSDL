@@ -1,12 +1,13 @@
 #pragma once
 
 #include "SDL3/SDL.h"
+#include "gameSystem.hpp"
 #include <entt/entt.hpp>
 
 // System to poll SDL events (mostly player's input)
-class PollEventSystem {
+class PollEventSystem :public GameSystem{
 public:
-  PollEventSystem() = default;
+  PollEventSystem();
   ~PollEventSystem() = default;
 
   void update(entt::registry &registry);

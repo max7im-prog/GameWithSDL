@@ -1,7 +1,8 @@
 #pragma once
+#include "gameSystem.hpp"
 #include <entt/entt.hpp>
 
-class CreatureUpdateSystem{
+class CreatureUpdateSystem:public GameSystem{
 public:
     CreatureUpdateSystem();
     ~CreatureUpdateSystem();

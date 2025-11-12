@@ -5,6 +5,9 @@
 #include "SDL3/SDL_events.h"
 #include "eventComponents.hpp"
 #include "eventUtils.hpp"
+#include "gameSystem.hpp"
+
+  PollEventSystem::PollEventSystem():GameSystem("PollEventSystem"){}
 
 const std::unordered_map<Uint32, PollEventSystem::EventHandler>
     PollEventSystem::eventHandlers = {

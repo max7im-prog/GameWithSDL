@@ -1,10 +1,11 @@
 #pragma once
 #include <entt/entt.hpp>
 
+#include "gameSystem.hpp"
 #include "renderContext.hpp"
 
 
-class RenderPhysicsBodiesSystem{
+class RenderPhysicsBodiesSystem:public GameSystem{
 public:
     RenderPhysicsBodiesSystem();
     ~RenderPhysicsBodiesSystem();

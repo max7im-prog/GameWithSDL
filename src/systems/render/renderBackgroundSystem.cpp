@@ -6,7 +6,7 @@
 
 #include "renderUtils.hpp"
 
-RenderBackgroundSystem::RenderBackgroundSystem()
+RenderBackgroundSystem::RenderBackgroundSystem():GameSystem("RenderBackgroundSystem")
 {
 }
 

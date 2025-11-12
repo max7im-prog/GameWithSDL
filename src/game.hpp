@@ -87,7 +87,6 @@ private:
   RenderBackgroundSystem renderBackgroundSystem;
   std::shared_ptr<DebugRenderSystem> debugRenderSystem;
 
-  entt::dispatcher eventDispatcher;
   std::shared_ptr<RenderContext> renderContext;
 
   // Entity factories

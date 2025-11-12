@@ -1,6 +1,8 @@
 #include "creatureControlSystem.hpp"
 #include "controlComponents.hpp"
 #include "creatureComponents.hpp"
+#include "gameSystem.hpp"
+    CreatureControlSystem::CreatureControlSystem():GameSystem("CreatureControlSystem"){}
 
 void CreatureControlSystem::update(entt::registry &registry) {
   auto view = registry.view<Controller>();
