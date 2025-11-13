@@ -43,16 +43,16 @@ public:
   bool init();
 
   // Cleans all the objects that expire at the end of the tick
-  void cleanupTick();
+  void cleanupTick(Uint64 TPS);
 
   // Calls all event systems
-  void handleEvents();
+  void handleEvents(Uint64 TPS);
 
   // Calls all game systems
   void update(Uint64 TPS);
 
   // Calls all rendering systems
-  void render();
+  void render(Uint64 TPS);
 
   // Cleans the resources used by game, i guess
   void cleanup();

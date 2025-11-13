@@ -9,5 +9,5 @@ public:
   WorldUpdateSystem();
   ~WorldUpdateSystem();
 
-  void update(entt::registry &registry, int TPS);
+  void update(entt::registry &registry, double secondsPassed);
 };

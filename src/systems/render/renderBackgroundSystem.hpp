@@ -7,5 +7,5 @@ public:
   RenderBackgroundSystem();
   ~RenderBackgroundSystem();
 
-  void update(entt::registry &registry, const RenderContext &renderContext);
+  void update(entt::registry &registry, const RenderContext &renderContext, double secondsPassed);
 };

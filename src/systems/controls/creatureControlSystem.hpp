@@ -7,5 +7,5 @@ class CreatureControlSystem:public GameSystem{
 public:
     CreatureControlSystem();
     ~CreatureControlSystem() = default;
-    void update(entt::registry& registry);
+    void update(entt::registry& registry, double secondsPassed);
 };

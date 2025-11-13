@@ -35,16 +35,16 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
 
     // Update according to TPS
     while (accumulator >= targetTickTime) {
-      game.handleEvents();
+      game.handleEvents(targetTPS);
       game.update(targetTPS);
-      game.cleanupTick();
+      game.cleanupTick(targetTPS);
       accumulator -= targetTickTime;
     }
 
     // Render according to FPS
     Uint64 sinceLastRender{newTime - lastRenderTime};
     if (sinceLastRender >= targetFrameTime) {
-      game.render();
+      game.render(targetTPS);
       lastRenderTime = SDL_GetPerformanceCounter();
     } else {
       // Time remaining until next render in seconds

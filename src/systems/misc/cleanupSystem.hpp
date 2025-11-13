@@ -6,5 +6,5 @@ public:
     CleanupSystem();
     ~CleanupSystem();
 
-    void update(entt::registry& registry);
+    void update(entt::registry& registry, double secondsPassed);
 };

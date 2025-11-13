@@ -8,7 +8,7 @@ class DebugRenderSystem :public GameSystem{
 public:
   DebugRenderSystem( RenderContext &renderContext);
   ~DebugRenderSystem() = default;
-  void update(entt::registry &registry);
+  void update(entt::registry &registry, double secondsPassed);
 
 private:
   DebugRenderSystem() = delete;

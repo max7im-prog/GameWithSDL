@@ -126,35 +126,43 @@ bool Game::init() {
   //   }
   // }
 
+
+
   return true;
 }
 
 void Game::cleanup() { this->registry.clear(); }
 
-void Game::handleEvents() {
-  this->pollEventSystem.update(this->registry);
-  this->quitSystem.update(this->registry, running);
+void Game::handleEvents(Uint64 TPS) {
+  double dt = 1.0 / static_cast<double>(TPS);
+  this->pollEventSystem.update(this->registry,dt);
+  this->quitSystem.update(this->registry, running,dt);
 }
 
 void Game::update(Uint64 TPS) {
-  this->controllerUpdateSystem.update(this->registry, *renderContext);
-  this->creatureControlSystem.update(this->registry);
-  this->roomLoadSystem.update(this->registry, this->roomManager, 1.0/static_cast<double>(TPS));
+  double dt = 1.0 / static_cast<double>(TPS);
+  this->controllerUpdateSystem.update(this->registry, *renderContext,dt);
+  this->creatureControlSystem.update(this->registry,dt);
+  this->roomLoadSystem.update(this->registry, this->roomManager, dt);
 
-  creatureUpdateSystem.update(this->registry, TPS);
+  creatureUpdateSystem.update(this->registry, dt);
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,
-                          *renderContext);
+                          *renderContext,dt);
 
-  cameraSystem.update(this->registry, *renderContext);
+  cameraSystem.update(this->registry, *renderContext,dt);
 
-  this->worldUpdateSystem.update(this->registry, TPS);
+  this->worldUpdateSystem.update(this->registry, dt);
 }
 
-void Game::cleanupTick() { cleanupSystem.update(this->registry); }
+void Game::cleanupTick(Uint64 TPS) {
+  double dt = 1.0 / static_cast<double>(TPS);
+  cleanupSystem.update(this->registry,dt);
+}
 
-void Game::render() {
-  this->renderBackgroundSystem.update(this->registry, *renderContext);
-  this->debugRenderSystem->update(this->registry);
+void Game::render(Uint64 TPS) {
+  double dt = 1.0 / static_cast<double>(TPS);
+  this->renderBackgroundSystem.update(this->registry, *renderContext,dt);
+  this->debugRenderSystem->update(this->registry,dt);
 
   SDL_RenderPresent(this->renderContext->getSDLRenderer());
 }

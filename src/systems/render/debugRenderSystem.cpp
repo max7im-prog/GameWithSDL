@@ -3,9 +3,12 @@
 #include "physicsComponents.hpp"
 
 DebugRenderSystem::DebugRenderSystem(RenderContext &renderContext)
-    : GameSystem("DebugRenderSystem"),renderer(renderContext) {}
+    : GameSystem("DebugRenderSystem"), renderer(renderContext) {}
 
-void DebugRenderSystem::update(entt::registry &registry) {
+void DebugRenderSystem::update(entt::registry &registry, double secondsPassed) {
+  if (!shouldRun(secondsPassed)) {
+    return;
+  }
   {
     auto v = registry.view<PhysicsShape>();
     for (auto &ent : v) {

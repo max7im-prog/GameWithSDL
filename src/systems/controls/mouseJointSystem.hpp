@@ -16,7 +16,7 @@ public:
   void update(entt::registry &registry, const std::shared_ptr<World> world,
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory,
-              const RenderContext &renderContext);
+              const RenderContext &renderContext, double secondsPassed);
 
 private:
   std::shared_ptr<EmptyShape> mouseShape = nullptr;

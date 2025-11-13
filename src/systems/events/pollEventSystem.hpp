@@ -10,7 +10,7 @@ public:
   PollEventSystem();
   ~PollEventSystem() = default;
 
-  void update(entt::registry &registry);
+  void update(entt::registry &registry, double secondsPassed);
 
 private:
   using EventHandler =

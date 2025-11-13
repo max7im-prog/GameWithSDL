@@ -10,7 +10,10 @@ ControllerUpdateSystem::ControllerUpdateSystem()
     : GameSystem("ControllerUpdateSystem") {}
 
 void ControllerUpdateSystem::update(entt::registry &registry,
-                                    const RenderContext &renderContext) {
+                                    const RenderContext &renderContext, double secondsPassed) {
+  if(!shouldRun(secondsPassed)){
+    return;
+  }
 
   auto controllerView = registry.view<Controller>();
   auto keyPressView = registry.view<PlayerInput, KeyPressEvent>();

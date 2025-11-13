@@ -15,7 +15,7 @@ public:
     QuitSystem();
     ~QuitSystem();
 
-    void update(entt::registry &registry,bool& running);
+    void update(entt::registry &registry,bool& running, double secondsPassed);
 };
 
 

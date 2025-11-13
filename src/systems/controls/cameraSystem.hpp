@@ -8,7 +8,7 @@ class CameraSystem : public GameSystem{
 public:
   CameraSystem();
   ~CameraSystem() = default;
-  void update(entt::registry &registry, RenderContext &renderContext);
+  void update(entt::registry &registry, RenderContext &renderContext, double secondsPassed);
 
 private:
   screenPos initialPressedPos ={0,0};

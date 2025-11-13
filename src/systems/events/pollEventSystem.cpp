@@ -151,7 +151,10 @@ const std::unordered_map<Uint32, PollEventSystem::EventHandler>
 
 };
 
-void PollEventSystem::update(entt::registry &registry) {
+void PollEventSystem::update(entt::registry &registry, double secondsPassed) {
+  if(!shouldRun(secondsPassed)){
+    return;
+  }
   advanceHeld(registry);
   pollEvents(registry);
 }

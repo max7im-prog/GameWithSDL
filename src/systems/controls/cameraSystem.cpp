@@ -6,7 +6,10 @@
 CameraSystem::CameraSystem() : GameSystem("CameraSystem") {}
 
 void CameraSystem::update(entt::registry &registry,
-                          RenderContext &renderContext) {
+                          RenderContext &renderContext, double secondsPassed) {
+  if (!shouldRun(secondsPassed)) {
+    return;
+  }
   updatePosition(registry, renderContext);
   updateZoom(registry, renderContext);
 }

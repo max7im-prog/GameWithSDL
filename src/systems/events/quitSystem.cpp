@@ -9,8 +9,11 @@ QuitSystem::~QuitSystem()
 {
 }
 
-void QuitSystem::update(entt::registry &registry,bool& running)
+void QuitSystem::update(entt::registry &registry,bool& running, double secondsPassed)
 {
+  if(!shouldRun(secondsPassed)){
+    return;
+  }
     auto view = registry.view<QuitEvent>();
     for(auto entity:view){
         running = false;
