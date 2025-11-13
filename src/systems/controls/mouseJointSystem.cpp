@@ -58,7 +58,7 @@ void MouseJointSystem::update(entt::registry &registry,
               config.jointDef.target = mouseLocation;
               config.jointDef.hertz = 5.0f;
               config.jointDef.dampingRatio = 0.7f;
-              config.jointDef.maxForce = 1000.0f;
+              config.jointDef.maxForce = b2Body_GetMass(config.jointDef.bodyIdB) *1000.0f;
               mouseJoint = jointFactory->create<MouseJoint>(config).lock();
               if (!mouseShape)
                 throw std::runtime_error("Failed to create joint for mouse");
