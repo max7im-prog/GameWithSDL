@@ -49,6 +49,7 @@ public:
       return std::weak_ptr<T>();
     }
     derived().template registerObject<T>(ret);
+    derived().template setUp<T>(ret, config);
     return ret;
   }
 
@@ -100,6 +101,18 @@ protected:
    * @param config A configuration defined in T as T::Config
    */
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config);
+
+  /**
+   * @brief A function to set up the additional fields, parameters and
+   * components of an object. Each factory may implement it as it sees fit.
+   *
+   * @tparam T class of an object
+   * @param object
+   * @param config object's configuration that was used during
+   * factory.create(config)
+   */
+  template <typename T>
+  void setUp(std::shared_ptr<T> object, const T::Config &config);
 
 private:
   /**

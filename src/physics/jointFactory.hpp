@@ -27,6 +27,8 @@ protected:
   template <typename T> std::shared_ptr<T> tryCreate(const T::Config &config) {
     return std::shared_ptr<T>(new T(registry, *world, config));
   }
+  template <typename T>
+  void setUp(std::shared_ptr<T> object, const T::Config &config) {}
 
 private:
   const std::shared_ptr<World> world;

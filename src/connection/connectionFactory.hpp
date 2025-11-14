@@ -37,6 +37,8 @@ protected:
     return std::shared_ptr<T>(
         new T(registry, world, config, shapeFactory, jointFactory));
   }
+  template <typename T>
+  void setUp(std::shared_ptr<T> object, const T::Config &config) {}
 
 private:
   const std::shared_ptr<World> world;

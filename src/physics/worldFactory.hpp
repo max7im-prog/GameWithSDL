@@ -23,6 +23,9 @@ protected:
     return ret;
   }
 
+  template <typename T>
+  void setUp(std::shared_ptr<T> object, const T::Config &config) {}
+
 private:
   template <typename> friend class RegistryObjectFactory;
 };

@@ -35,10 +35,7 @@ CapsuleBody::CapsuleBody(entt::registry &registry,
   registerChild(capsule);
 }
 
-void CapsuleBodyConfig::defaultConfig() {
-  shapeCfg .defaultConfig();
-}
-
+void CapsuleBodyConfig::defaultConfig() { shapeCfg.defaultConfig(); }
 
 const std::shared_ptr<Capsule> CapsuleBody::getCapsule() {
 
