@@ -1,8 +1,11 @@
 #include "terrain.hpp"
+#include "body.hpp"
 #include "box2d/types.h"
+#include "connection.hpp"
 #include "jsonUtils.hpp"
 #include "physicsUtils.hpp"
 #include "registryComposite.hpp"
+#include <memory>
 #include <string>
 
 void Terrain::update(float dt) { RegistryComposite::update(dt); }
@@ -56,13 +59,41 @@ TerrainConfig::parseBodyParams(const nlohmann::json &json) {
           materialJson, "friction", ret._shapeDef.material.friction);
       ret._shapeDef.material.restitution = JsonUtils::getOrDefault<float>(
           materialJson, "restitution", ret._shapeDef.material.restitution);
-      ret._shapeDef.material.rollingResistance =
-          JsonUtils::getOrDefault<float>(materialJson, "rollingResistance",
-                                  ret._shapeDef.material.rollingResistance);
+      ret._shapeDef.material.rollingResistance = JsonUtils::getOrDefault<float>(
+          materialJson, "rollingResistance",
+          ret._shapeDef.material.rollingResistance);
     }
-    ret._shapeDef.density =
-        JsonUtils::getOrDefault<float>(shapeJson, "density", ret._shapeDef.density);
+    ret._shapeDef.density = JsonUtils::getOrDefault<float>(
+        shapeJson, "density", ret._shapeDef.density);
   }
 
   return ret;
+}
+
+void Terrain::registerBody(std::weak_ptr<Body> body, const std::string &name) {
+  if (_bodies.find(name) != _bodies.end()) {
+    throw std::runtime_error("Body with name " + name +
+                             " registered more than once");
+  }
+  _bodies[name] = body;
+  registerChild(body);
+}
+
+void Terrain::registerConnection(std::weak_ptr<Connection> connection,
+                                 const std::string &name) {
+  if (_connections.find(name) != _connections.end()) {
+    throw std::runtime_error("Connection with name " + name +
+                             " registered more than once");
+  }
+  _connections[name] = connection;
+  registerChild(connection);
+}
+
+const std::unordered_map<std::string, std::weak_ptr<Body>> &
+Terrain::getBodies() const {
+  return _bodies;
+}
+const std::unordered_map<std::string, std::weak_ptr<Connection>> &
+Terrain::getConnections() const {
+  return _connections;
 }
