@@ -18,6 +18,13 @@ void RegistryComposite::registerChild(std::weak_ptr<RegistryComposite> child) {
   }
   children->push_back(child);
 }
+std::vector<std::weak_ptr<RegistryComposite>>
+RegistryComposite::getChildren() {
+  if(!children){
+   return {};
+  }
+  return *children;
+}
 
 void RegistryComposite::unregisterChild(
     std::weak_ptr<RegistryComposite> child) {

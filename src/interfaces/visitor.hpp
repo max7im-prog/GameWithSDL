@@ -1,5 +1,7 @@
 #pragma once
 
+#include "registryComposite.hpp"
+class RegistryComposite;
 class Shape;
 class Circle;
 class Segment;
@@ -38,6 +40,7 @@ class DemoCreature;
 class Visitor {
 public:
   virtual ~Visitor() = 0;
+  virtual void visit([[maybe_unused]] RegistryComposite *) {}
   virtual void visit([[maybe_unused]] Shape *) {}
   virtual void visit([[maybe_unused]] Circle *) {}
   virtual void visit([[maybe_unused]] Segment *) {}
