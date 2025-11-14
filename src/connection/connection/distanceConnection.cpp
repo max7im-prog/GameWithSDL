@@ -8,7 +8,7 @@ DistanceConnection::DistanceConnection(
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
   distanceJoint = jointFactory->create<DistanceJoint>(config.templateJointCfg);
-  registerChild(distanceJoint);
+  registerJoint(distanceJoint,"distanceJoint");
 }
 
 const std::shared_ptr<DistanceJoint>

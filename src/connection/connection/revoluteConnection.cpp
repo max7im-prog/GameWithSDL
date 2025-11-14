@@ -8,7 +8,7 @@ RevoluteConnection::RevoluteConnection(
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
   revoluteJoint = jointFactory->create<RevoluteJoint>(config.templateJointCfg);
-  registerChild(revoluteJoint);
+  registerJoint(revoluteJoint,"revoluteJoint");
 }
 
 const std::shared_ptr<RevoluteJoint>
