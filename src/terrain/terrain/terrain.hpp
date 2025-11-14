@@ -5,6 +5,8 @@
 #include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
+#include "body.hpp"
+#include "connection.hpp"
 
 struct TerrainConfig : TopLevelObjectConfig {
   static b2Filter defaultFilter();

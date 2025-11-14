@@ -21,6 +21,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   // Create capsules
   segmentLengths = {};
   length = 0;
+  int segNum = 1;
   for (auto seg : config.segments) {
     auto capsuleConfig = config.templateCapsuleConfig;
     capsuleConfig.bodyDef.position = lastPos;
@@ -37,7 +38,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     capsuleConfig.center2 = b2MulSV(len, incrementDir);
     capsuleConfig.radius = seg.radius;
     auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
-    registerChild(capsule);
+    registerShape(capsule,"capsule" + std::to_string(segNum++));
     segments.push_back(capsule);
 
     auto c = capsule.lock();
@@ -78,7 +79,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     jointConfig.jointDef.referenceAngle = 0.0f;
 
     auto joint = jointFactory->create<RevoluteJoint>(jointConfig);
-    registerChild(joint);
+    registerJoint(joint,"joint" + std::to_string(i));
     joints.push_back(joint);
   }
 
