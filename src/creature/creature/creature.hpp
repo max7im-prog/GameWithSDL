@@ -7,7 +7,7 @@
 #include "world.hpp"
 #include <entt/entt.hpp>
 
-struct CreatureConfig : TopLevelObjectConfig{
+struct CreatureConfig : TopLevelObjectConfig {
   static b2Filter defaultFilter();
 };
 
@@ -17,7 +17,7 @@ enum CreatureAbilities {
 
 enum CreatureState { ON_GROUND, IN_AIR, FLYING };
 
-class Creature : public SceneNode{
+class Creature : public SceneNode {
 public:
   virtual ~Creature() = 0;
 
@@ -34,6 +34,12 @@ public:
 
   std::uint32_t getAbilities();
 
+  void registerBody(std::weak_ptr<Body> body, const std::string &name);
+  void registerConnection(std::weak_ptr<Connection> connection,
+                          const std::string &name);
+
+  const std::unordered_map<std::string, std::weak_ptr<Body>> &getBodies() const;
+  const std::unordered_map<std::string, std::weak_ptr<Connection>> &getConnections() const;
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
@@ -42,6 +48,9 @@ protected:
   CreatureState creatureState;
 
   const std::shared_ptr<World> world;
+
+  std::unordered_map<std::string, std::weak_ptr<Body>> _bodies;
+  std::unordered_map<std::string, std::weak_ptr<Connection>> _connections;
 
 private:
   Creature() = delete;

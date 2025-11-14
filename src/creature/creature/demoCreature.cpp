@@ -102,7 +102,7 @@ DemoCreature::DemoCreature(
     // true}};
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftArm = bodyFactory->create<LimbBody>(cfg);
-    registerChild(leftArm);
+    registerBody(leftArm, "leftArm");
   }
   {
     auto cfg = limbConfig;
@@ -125,7 +125,7 @@ DemoCreature::DemoCreature(
     }
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftLeg = bodyFactory->create<LimbBody>(cfg);
-    registerChild(leftLeg);
+    registerBody(leftLeg,"leftLeg");
   }
   {
     auto cfg = limbConfig;
@@ -144,7 +144,7 @@ DemoCreature::DemoCreature(
     }
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     rightArm = bodyFactory->create<LimbBody>(cfg);
-    registerChild(rightArm);
+    registerBody(rightArm,"rightArm");
   }
   {
     auto cfg = limbConfig;
@@ -164,7 +164,7 @@ DemoCreature::DemoCreature(
     cfg.limbControlConfig.KPMultiplier = 100;
     cfg.limbControlConfig.KDMultiplier = 100;
     rightLeg = bodyFactory->create<LimbBody>(cfg);
-    registerChild(rightLeg);
+    registerBody(rightLeg,"rightLeg");
   }
 
   // Torso
@@ -172,7 +172,7 @@ DemoCreature::DemoCreature(
     auto cfg = torsoConfig;
     cfg.shapeCfg.bodyDef.position = {creaturePos};
     torso = bodyFactory->create<PolygonBody>(cfg);
-    registerChild(torso);
+    registerBody(torso,"torso");
   }
 
   // Shoulders and hips
@@ -180,25 +180,25 @@ DemoCreature::DemoCreature(
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = leftShoulderPos;
     leftShoulder = bodyFactory->create<CircleBody>(cfg);
-    registerChild(leftShoulder);
+    registerBody(leftShoulder,"leftShoulder");
   }
   {
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = rightShoulderPos;
     rightShoulder = bodyFactory->create<CircleBody>(cfg);
-    registerChild(rightShoulder);
+    registerBody(rightShoulder,"rightShoulder");
   }
   {
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = leftHipPos;
     leftHip = bodyFactory->create<CircleBody>(cfg);
-    registerChild(leftHip);
+    registerBody(leftHip,"leftHip");
   }
   {
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = rightHipPos;
     rightHip = bodyFactory->create<CircleBody>(cfg);
-    registerChild(rightHip);
+    registerBody(rightHip,"rightHip");
   }
 
   // Create connections
@@ -234,7 +234,7 @@ DemoCreature::DemoCreature(
     cfg.prismTemplate.jointDef.hertz = 10;
 
     hipConnection = connectionFactory->create<GirdleConnection>(cfg);
-    registerChild(hipConnection);
+    registerConnection(hipConnection,"hipConnection");
   }
 
   leftLegLock->connect(connectionFactory, leftHipLock->getCircle(), {0, 0});
@@ -262,7 +262,7 @@ DemoCreature::DemoCreature(
     cfg.prismTemplate.jointDef.hertz = 10;
 
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
-    registerChild(shoulderConnection);
+    registerConnection(shoulderConnection,"shoulderConnection");
   }
 
   leftArmLock->connect(connectionFactory, leftShoulderLock->getCircle(),
