@@ -34,6 +34,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL)
 FetchContent_Declare(
+  SDL_image
+  GIT_REPOSITORY https://github.com/max7im-prog/game-SDL-image.git
+  GIT_TAG release-3.2.x
+  GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(SDL_image)
+FetchContent_Declare(
   entt
   GIT_REPOSITORY https://github.com/max7im-prog/game-entt.git
   GIT_TAG v3.15.0
@@ -74,6 +81,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/room)
 set(EXTERNAL_LIBS
   box2d
   SDL3::SDL3
+  SDL3_image::SDL3_image
   EnTT::EnTT
   nlohmann_json::nlohmann_json
 )

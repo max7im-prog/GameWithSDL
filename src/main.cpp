@@ -7,13 +7,19 @@
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_timer.h"
 #include "game.hpp"
+#include <SDL3_image/SDL_image.h>
+#include <stdexcept>
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
+
+  if (!SDL_Init(SDL_INIT_VIDEO)) {
+    throw std::runtime_error("Failed to initialize SDL");
+  }
+
   Game game(1400, 900);
 
   if (!game.init()) {
-    std::cerr << "Failed to initialize game" << std::endl;
-    return 1;
+    throw std::runtime_error("Failed to initialize game");
   }
   const Uint64 targetTPS = 60;
   const Uint64 targetFPS = 75;
@@ -61,6 +67,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
   }
 
   game.cleanup();
+  SDL_Quit();
 
   return 0;
 }
