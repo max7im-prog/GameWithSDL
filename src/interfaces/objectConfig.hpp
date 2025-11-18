@@ -23,6 +23,27 @@ public:
   virtual void defaultConfig() = 0;
 };
 
+class TopLevelRenderConfig {
+public:
+  class BodyRenderConfig {
+  public:
+    class ShapeRenderConfig {
+    public:
+      using FileName = std::string;
+      // TODO: proper implementation
+      std::vector<FileName> _textures;
+    };
+
+    using ShapeName = std::string;
+    std::vector<ShapeName> _renderSequence;
+    std::unordered_map<ShapeName, ShapeRenderConfig> _shapeRenders;
+  };
+
+  using BodyName = std::string;
+  std::vector<BodyName> _renderSequence;
+  std::unordered_map<BodyName, std::shared_ptr<BodyRenderConfig>> _bodyRenders;
+};
+
 /**
  * @brief Base class for configurations representing top-level entities.
  *
@@ -36,6 +57,27 @@ public:
   virtual ~TopLevelObjectConfig() = 0;
 
   /**
+   * @brief Defines an object's transform in the world
+   *
+   */
+  struct Transform {
+    b2Vec2 _originPos{0, 0};
+    b2Vec2 _relativePos{0, 0};
+    b2Rot _rootRot{b2MakeRot(0)};
+    b2Rot _relativeRot{b2MakeRot(0)};
+    float _scaleX{1.0f};
+    float _scaleY{1.0f};
+    bool _flipX{false};
+    bool _flipY{false};
+  } _transform;
+
+  /**
+   * @brief Optional rendering config, may be nullptr
+   *
+   */
+  std::shared_ptr<TopLevelRenderConfig> _renderConfig;
+
+  /**
    * @brief Load type-specific configuration values from a JSON object.
    *
    * Implementations should read **only type-specific fields** from the provided
@@ -47,17 +89,6 @@ public:
    * data.
    */
   virtual void fromJSON(const nlohmann::json &json) = 0;
-
-  struct Transform {
-    b2Vec2 _originPos{0, 0};
-    b2Vec2 _relativePos{0, 0};
-    b2Rot _rootRot{b2MakeRot(0)};
-    b2Rot _relativeRot{b2MakeRot(0)};
-    float _scaleX{1.0f};
-    float _scaleY{1.0f};
-    bool _flipX{false};
-    bool _flipY{false};
-  } _transform;
 
   /**
    * @brief Composes an objects's transform (size scaling, rotation, position,
@@ -83,5 +114,5 @@ public:
    * @return Transform
    */
   static Transform parseObjectTransform(const nlohmann::json &objectJson,
-                                 const nlohmann::json &roomJson);
+                                        const nlohmann::json &roomJson);
 };

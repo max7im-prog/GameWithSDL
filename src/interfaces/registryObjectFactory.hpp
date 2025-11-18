@@ -43,9 +43,11 @@ public:
     try {
       ret = derived().template tryCreate<T>(config);
     } catch (std::exception &e) {
+      // TODO: log error
       return std::weak_ptr<T>();
     }
     if (!ret) {
+      // TODO: log error
       return std::weak_ptr<T>();
     }
     derived().template registerObject<T>(ret);
