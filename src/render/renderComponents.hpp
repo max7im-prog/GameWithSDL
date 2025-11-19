@@ -1,8 +1,14 @@
 #pragma once
 
-#include <optional>
-#include <SDL3/SDL.h>
+#include <string>
+#include <vector>
 
-struct texture{
-    std::optional<SDL_Texture *> texture;
+struct TextureComponent {
+  using TextureId = std::string;
+  TextureId _textureId;
+};
+
+struct RenderSequence {
+  using ChildId = std::string;
+  std::vector<ChildId> _renderSequence;
 };
