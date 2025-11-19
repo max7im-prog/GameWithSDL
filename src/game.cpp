@@ -167,6 +167,7 @@ void Game::cleanupTick(Uint64 TPS) {
 
 void Game::render(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
+  this->_texturingSystem.update(this->registry, this->_texturer, dt);
   this->renderBackgroundSystem.update(this->registry, *renderContext,dt);
   this->debugRenderSystem->update(this->registry,dt);
 

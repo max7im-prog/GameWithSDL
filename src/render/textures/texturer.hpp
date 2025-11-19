@@ -1,15 +1,22 @@
 #pragma once
+#include "capsuleTerrain.hpp"
+#include "circleTerrain.hpp"
+#include "demoCreature.hpp"
 #include "objectConfig.hpp"
 #include "textureManager.hpp"
 #include "visitor.hpp"
-#include "circle.hpp"
+
 class Texturer : public Visitor {
 public:
   Texturer(RenderContext& renderContext,std::shared_ptr<TextureManager> mgr);
   void setRenderConfig(std::shared_ptr<TopLevelRenderConfig> cfg);
   void resetRenderConfig();
 
-  void visit(Circle *c) override;
+  void visit(DemoCreature *c) override;
+  void visit(CircleTerrain *c) override;
+  void visit(PolygonTerrain *c) override;
+  void visit(SegmentTerrain *c) override;
+  void visit(CapsuleTerrain *c) override;
 
 protected:
   RenderContext& _renderContext;

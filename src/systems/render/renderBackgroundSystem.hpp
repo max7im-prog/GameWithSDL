@@ -1,3 +1,4 @@
+#pragma once
 #include "gameSystem.hpp"
 #include "renderContext.hpp"
 #include <entt/entt.hpp>

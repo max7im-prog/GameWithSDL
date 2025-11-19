@@ -28,6 +28,7 @@
 #include "roomLoadSystem.hpp"
 #include "textureManager.hpp"
 #include "texturer.hpp"
+#include "texturingSystem.hpp"
 #include "worldFactory.hpp"
 #include "worldUpdateSystem.hpp"
 
@@ -84,6 +85,7 @@ private:
   CameraSystem cameraSystem;
   CleanupSystem cleanupSystem;
   RoomLoadSystem roomLoadSystem;
+  TexturingSystem _texturingSystem;
 
   // Render systems
   RenderBackgroundSystem renderBackgroundSystem;

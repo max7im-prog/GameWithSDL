@@ -1,4 +1,4 @@
-
+#pragma once
 #include "debugRenderer.hpp"
 #include "gameSystem.hpp"
 #include "renderContext.hpp"
