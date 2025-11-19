@@ -70,6 +70,10 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
+
+
+  // TODO: remove testing code
+  _renderConfig = std::make_shared<TopLevelRenderConfig>();
 }
 
 b2Vec2 SegmentTerrain::getWorldPos() { return segmentBody.lock()->getWorldPos(); }

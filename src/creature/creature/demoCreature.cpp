@@ -8,6 +8,7 @@
 #include "girdleConnection.hpp"
 #include "limbBody.hpp"
 #include "miscUtils.hpp"
+#include "objectConfig.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
 #include "world.hpp"
@@ -325,6 +326,9 @@ void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   sizeXMeters = json.at("sizeX");
   sizeYMeters = json.at("sizeY");
+
+  // TODO: remove testing code
+  _renderConfig = std::make_shared<TopLevelRenderConfig>();
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {
