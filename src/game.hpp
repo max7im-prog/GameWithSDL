@@ -89,6 +89,9 @@ private:
 
   std::shared_ptr<RenderContext> renderContext;
 
+  std::shared_ptr<TextureManager> _textureManager;
+  std::shared_ptr<Texturer> _texturer;
+
   // Entity factories
   std::shared_ptr<BodyFactory> bodyFactory;
   std::shared_ptr<ConnectionFactory> connectionFactory;

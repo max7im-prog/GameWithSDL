@@ -42,6 +42,9 @@ protected:
   std::shared_ptr<ConnectionFactory> connectionFactory;
   std::shared_ptr<CreatureFactory> creatureFactory;
   std::shared_ptr<TerrainFactory> terrainFactory;
+  std::shared_ptr<Texturer> texturer;
+  std::shared_ptr<TextureManager> textureManager;
+  RenderContext renderContext;
 
   void initFactories() {
 
@@ -50,6 +53,10 @@ protected:
       auto config = BasicWorld::Config::defaultConfig();
       world = worldFactory->create<BasicWorld>(config).lock();
     }
+    textureManager =
+        std::shared_ptr<TextureManager>(new TextureManager(renderContext));
+    texturer =
+        std::shared_ptr<Texturer>(new Texturer(renderContext, textureManager));
 
     shapeFactory = std::make_shared<ShapeFactory>(registry, world);
     jointFactory = std::make_shared<JointFactory>(registry, world);
@@ -58,9 +65,9 @@ protected:
     connectionFactory = std::make_shared<ConnectionFactory>(
         registry, world, shapeFactory, jointFactory);
     creatureFactory = std::make_shared<CreatureFactory>(
-        registry, world, bodyFactory, connectionFactory);
+        registry, world, bodyFactory, connectionFactory, texturer);
     terrainFactory = std::make_shared<TerrainFactory>(
-        registry, world, bodyFactory, connectionFactory);
+        registry, world, bodyFactory, connectionFactory, texturer);
   }
 
   void deinitFactories() {

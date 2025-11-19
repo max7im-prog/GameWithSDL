@@ -15,11 +15,13 @@
 #include "creature/creature/demoCreature.hpp"
 #include "physicsComponents.hpp"
 #include "polygonTerrain.hpp"
+#include "renderContext.hpp"
 #include "roomComponents.hpp"
 #include "roomManager.hpp"
 #include "segmentTerrain.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
+#include "textureManager.hpp"
 
 Game::Game(int w, int h) : WIDTH(w), HEIGHT(h), running(false) {}
 
@@ -55,6 +57,10 @@ bool Game::init() {
       throw std::runtime_error("Failed to create world");
   }
 
+  // Texturing
+  _textureManager = std::shared_ptr<TextureManager>(new TextureManager(*renderContext));
+  _texturer = std::shared_ptr<Texturer>(new Texturer(*renderContext,_textureManager));
+
   // Initialize factories
   shapeFactory =
       std::shared_ptr<ShapeFactory>(new ShapeFactory(registry, world));
@@ -69,10 +75,10 @@ bool Game::init() {
       new ConnectionFactory(registry, world, shapeFactory, jointFactory)};
 
   creatureFactory = std::shared_ptr<CreatureFactory>(
-      new CreatureFactory(registry, world, bodyFactory, connectionFactory));
+      new CreatureFactory(registry, world, bodyFactory, connectionFactory,_texturer));
 
   terrainFactory = std::shared_ptr<TerrainFactory>(
-      new TerrainFactory(registry, world, bodyFactory, connectionFactory));
+      new TerrainFactory(registry, world, bodyFactory, connectionFactory,_texturer));
 
   roomManager =
       std::make_shared<RoomManager>(world, creatureFactory, terrainFactory);
