@@ -10,3 +10,7 @@ void Texturer::setRenderConfig(std::shared_ptr<TopLevelRenderConfig> cfg) {
 }
 
 void Texturer::resetRenderConfig() { _currentTopRenderConfig.reset(); }
+
+void Texturer::visit(Circle *c) {
+  c->getCenter();
+}

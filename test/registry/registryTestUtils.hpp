@@ -65,9 +65,9 @@ protected:
     connectionFactory = std::make_shared<ConnectionFactory>(
         registry, world, shapeFactory, jointFactory);
     creatureFactory = std::make_shared<CreatureFactory>(
-        registry, world, bodyFactory, connectionFactory, texturer);
+        registry, world, bodyFactory, connectionFactory);
     terrainFactory = std::make_shared<TerrainFactory>(
-        registry, world, bodyFactory, connectionFactory, texturer);
+        registry, world, bodyFactory, connectionFactory);
   }
 
   void deinitFactories() {

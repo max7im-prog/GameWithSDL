@@ -75,10 +75,10 @@ bool Game::init() {
       new ConnectionFactory(registry, world, shapeFactory, jointFactory)};
 
   creatureFactory = std::shared_ptr<CreatureFactory>(
-      new CreatureFactory(registry, world, bodyFactory, connectionFactory,_texturer));
+      new CreatureFactory(registry, world, bodyFactory, connectionFactory));
 
   terrainFactory = std::shared_ptr<TerrainFactory>(
-      new TerrainFactory(registry, world, bodyFactory, connectionFactory,_texturer));
+      new TerrainFactory(registry, world, bodyFactory, connectionFactory));
 
   roomManager =
       std::make_shared<RoomManager>(world, creatureFactory, terrainFactory);

@@ -26,6 +26,8 @@
 #include "controllerUpdateSystem.hpp"
 #include "mouseJointSystem.hpp"
 #include "roomLoadSystem.hpp"
+#include "textureManager.hpp"
+#include "texturer.hpp"
 #include "worldFactory.hpp"
 #include "worldUpdateSystem.hpp"
 
