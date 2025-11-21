@@ -29,8 +29,8 @@
         "shapeRenders": {
           "main": {
             "textures": [
-              "terrain/stone.png",
-              "terrain/stone_shadow.png"
+              "res/textures/test/test_1.png",
+              "res/textures/test/test_2.png"
             ]
           }
         }
