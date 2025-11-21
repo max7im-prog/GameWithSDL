@@ -16,7 +16,7 @@ CapsuleTerrain::CapsuleTerrain(
   auto terrainRot =
       b2MulRot(config._transform._rootRot, config._transform._relativeRot);
 
-  std::vector<b2Vec2> transformedVertices = {config.point1,config.point2};
+  std::vector<b2Vec2> transformedVertices = {config.point1, config.point2};
   std::for_each(transformedVertices.begin(), transformedVertices.end(),
                 [&config](b2Vec2 &v) {
                   v.x = config._transform._scaleX * v.x *
@@ -28,12 +28,14 @@ CapsuleTerrain::CapsuleTerrain(
     auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.center1 = transformedVertices[0];
     bodyCfg.shapeCfg.center2 = transformedVertices[1];
-    bodyCfg.shapeCfg.radius = config.radius * std::min(config._transform._scaleX, config._transform._scaleY);
+    bodyCfg.shapeCfg.radius =
+        config.radius *
+        std::min(config._transform._scaleX, config._transform._scaleY);
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     capsuleBody = bodyFactory->create<CapsuleBody>(bodyCfg);
-    registerBody(capsuleBody,"main");
+    registerBody(capsuleBody, "main");
   }
 }
 
@@ -68,15 +70,19 @@ void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
 
   radius = JsonUtils::getOrDefault<float>(json, "radius", 1.0f);
 
-  if(json.contains("bodyParams")){
+  if (json.contains("bodyParams")) {
     auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
-
-  // TODO: remove testing code
-  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
+  if (json.contains("renderConfig")) {
+    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+  } else {
+    _renderConfig = nullptr;
+  }
 }
 
-b2Vec2 CapsuleTerrain::getWorldPos() { return capsuleBody.lock()->getWorldPos(); }
+b2Vec2 CapsuleTerrain::getWorldPos() {
+  return capsuleBody.lock()->getWorldPos();
+}

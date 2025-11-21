@@ -36,7 +36,8 @@ DemoCreature::DemoCreature(
   float torsoWidth = config.sizeXMeters;
   float torsoHeight = config.sizeYMeters;
   auto groupId = ShapeFactory::getNextNegativeId();
-  b2Vec2 creaturePos = b2Add(config._transform._originPos,config._transform._relativePos);
+  b2Vec2 creaturePos =
+      b2Add(config._transform._originPos, config._transform._relativePos);
 
   b2Vec2 leftShoulderPos =
       b2Add(creaturePos, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
@@ -126,12 +127,11 @@ DemoCreature::DemoCreature(
     }
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     leftLeg = bodyFactory->create<LimbBody>(cfg);
-    registerBody(leftLeg,"leftLeg");
+    registerBody(leftLeg, "leftLeg");
   }
   {
     auto cfg = limbConfig;
-    cfg.basePos =
-        b2Add(creaturePos, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
+    cfg.basePos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -145,7 +145,7 @@ DemoCreature::DemoCreature(
     }
     cfg.initialAngleConstraints = std::vector<AngleConstraint>(numSegments);
     rightArm = bodyFactory->create<LimbBody>(cfg);
-    registerBody(rightArm,"rightArm");
+    registerBody(rightArm, "rightArm");
   }
   {
     auto cfg = limbConfig;
@@ -165,7 +165,7 @@ DemoCreature::DemoCreature(
     cfg.limbControlConfig.KPMultiplier = 100;
     cfg.limbControlConfig.KDMultiplier = 100;
     rightLeg = bodyFactory->create<LimbBody>(cfg);
-    registerBody(rightLeg,"rightLeg");
+    registerBody(rightLeg, "rightLeg");
   }
 
   // Torso
@@ -173,7 +173,7 @@ DemoCreature::DemoCreature(
     auto cfg = torsoConfig;
     cfg.shapeCfg.bodyDef.position = {creaturePos};
     torso = bodyFactory->create<PolygonBody>(cfg);
-    registerBody(torso,"torso");
+    registerBody(torso, "torso");
   }
 
   // Shoulders and hips
@@ -181,25 +181,25 @@ DemoCreature::DemoCreature(
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = leftShoulderPos;
     leftShoulder = bodyFactory->create<CircleBody>(cfg);
-    registerBody(leftShoulder,"leftShoulder");
+    registerBody(leftShoulder, "leftShoulder");
   }
   {
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = rightShoulderPos;
     rightShoulder = bodyFactory->create<CircleBody>(cfg);
-    registerBody(rightShoulder,"rightShoulder");
+    registerBody(rightShoulder, "rightShoulder");
   }
   {
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = leftHipPos;
     leftHip = bodyFactory->create<CircleBody>(cfg);
-    registerBody(leftHip,"leftHip");
+    registerBody(leftHip, "leftHip");
   }
   {
     auto cfg = shoulderConfig;
     cfg.shapeCfg.bodyDef.position = rightHipPos;
     rightHip = bodyFactory->create<CircleBody>(cfg);
-    registerBody(rightHip,"rightHip");
+    registerBody(rightHip, "rightHip");
   }
 
   // Create connections
@@ -235,7 +235,7 @@ DemoCreature::DemoCreature(
     cfg.prismTemplate.jointDef.hertz = 10;
 
     hipConnection = connectionFactory->create<GirdleConnection>(cfg);
-    registerConnection(hipConnection,"hipConnection");
+    registerConnection(hipConnection, "hipConnection");
   }
 
   leftLegLock->connect(connectionFactory, leftHipLock->getCircle(), {0, 0});
@@ -263,7 +263,7 @@ DemoCreature::DemoCreature(
     cfg.prismTemplate.jointDef.hertz = 10;
 
     shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
-    registerConnection(shoulderConnection,"shoulderConnection");
+    registerConnection(shoulderConnection, "shoulderConnection");
   }
 
   leftArmLock->connect(connectionFactory, leftShoulderLock->getCircle(),
@@ -327,8 +327,11 @@ void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
   sizeXMeters = json.at("sizeX");
   sizeYMeters = json.at("sizeY");
 
-  // TODO: remove testing code
-  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
+  if (json.contains("renderConfig")) {
+    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+  } else {
+    _renderConfig = nullptr;
+  }
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {

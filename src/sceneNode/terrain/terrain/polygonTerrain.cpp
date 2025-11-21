@@ -77,7 +77,6 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
-  // TODO: remove testing code
   if (json.contains("renderConfig")) {
     _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
   } else {

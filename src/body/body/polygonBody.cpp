@@ -9,7 +9,7 @@ PolygonBody::PolygonBody(entt::registry &registry,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   polygon = shapeFactory->create<Polygon>(config.shapeCfg);
-  registerShape(polygon,"polygon");
+  registerShape(polygon,"main");
 }
 
 void PolygonBodyConfig::defaultConfig() {

@@ -41,10 +41,10 @@
     "bodyRenders": {
       "main": {
         "renderSequence": [
-          "polygon"
+          "main"
         ],
         "shapeRenders": {
-          "polygon": {
+          "main": {
             "textures": [
               "terrain/stone.png",
               "terrain/stone_shadow.png"

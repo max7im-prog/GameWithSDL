@@ -28,7 +28,7 @@ CircleBody::CircleBody(entt::registry &registry,
                        const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   circle = shapeFactory->create<Circle>(config.shapeCfg);
-  registerShape(circle,"circle");
+  registerShape(circle,"main");
 }
 
 void CircleBodyConfig::defaultConfig() { shapeCfg.defaultConfig(); }

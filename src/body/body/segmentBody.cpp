@@ -9,7 +9,7 @@ SegmentBody::SegmentBody(entt::registry &registry,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   segment = shapeFactory->create<Segment>(config.shapeCfg);
-  registerShape(segment,"segment");
+  registerShape(segment,"main");
 }
 
 void SegmentBodyConfig::defaultConfig() {
