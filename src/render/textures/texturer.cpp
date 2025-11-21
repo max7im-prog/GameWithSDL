@@ -78,15 +78,9 @@ void Texturer::visit(SceneNode *n) {
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-void Texturer::visit(PolygonBody *b) {
-  visit(static_cast<Body *>(b));
-}
-void Texturer::visit(CapsuleBody *b) {
-  visit(static_cast<Body *>(b));
-}
-void Texturer::visit(SegmentBody *b) {
-  visit(static_cast<Body *>(b));
-}
+void Texturer::visit(PolygonBody *b) { visit(static_cast<Body *>(b)); }
+void Texturer::visit(CapsuleBody *b) { visit(static_cast<Body *>(b)); }
+void Texturer::visit(SegmentBody *b) { visit(static_cast<Body *>(b)); }
 void Texturer::visit(CircleBody *b) { visit(static_cast<Body *>(b)); }
 
 void Texturer::visit(LimbBody *b) { visit(static_cast<Body *>(b)); }
@@ -145,7 +139,11 @@ void Texturer::visit(Shape *s) {
   for (auto &filename : _currentShapeRenderConfig->_textures) {
     auto t = _textureManager->getTexture(filename);
 
-    textures.push_back(t);
+    if (t) {
+      textures.push_back(t);
+    } else {
+      // TODO: log error
+    }
   }
 
   _registry.emplace_or_replace<TextureComponent>(ent, textures);

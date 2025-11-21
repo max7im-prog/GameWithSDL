@@ -9,15 +9,14 @@ public:
   ~SceneNode() = 0;
   virtual b2Vec2 getWorldPos() = 0;
   const std::unordered_map<std::string, std::weak_ptr<Body>> &getBodies() const;
-  const std::unordered_map<std::string, std::weak_ptr<Connection>> &getConnections() const;
+  const std::unordered_map<std::string, std::weak_ptr<Connection>> &
+  getConnections() const;
 
 protected:
   SceneNode(entt::registry &registry);
   std::unordered_map<std::string, std::weak_ptr<Body>> _bodies;
   std::unordered_map<std::string, std::weak_ptr<Connection>> _connections;
 };
-
-
 
 class SceneNodeRenderConfig {
 public:
@@ -32,7 +31,8 @@ public:
 
     using ShapeName = std::string;
     std::vector<ShapeName> _renderSequence;
-    std::unordered_map<ShapeName, std::shared_ptr<ShapeRenderConfig>> _shapeRenders;
+    std::unordered_map<ShapeName, std::shared_ptr<ShapeRenderConfig>>
+        _shapeRenders;
   };
 
   using BodyName = std::string;
@@ -111,4 +111,7 @@ public:
    */
   static Transform parseObjectTransform(const nlohmann::json &objectJson,
                                         const nlohmann::json &roomJson);
+
+  static std::shared_ptr<SceneNodeRenderConfig>
+  parseRenderConfig(const nlohmann::json &renderConfigJson);
 };

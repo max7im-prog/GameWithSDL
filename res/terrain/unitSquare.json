@@ -33,5 +33,25 @@
       "angularDamping": 0,
       "fixedRotation": false
     }
+  },
+  "renderConfig": {
+    "renderSequence": [
+      "main"
+    ],
+    "bodyRenders": {
+      "main": {
+        "renderSequence": [
+          "polygon"
+        ],
+        "shapeRenders": {
+          "polygon": {
+            "textures": [
+              "terrain/stone.png",
+              "terrain/stone_shadow.png"
+            ]
+          }
+        }
+      }
+    }
   }
 }

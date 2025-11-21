@@ -32,7 +32,7 @@ PolygonTerrain::PolygonTerrain(
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     polygonBody = bodyFactory->create<PolygonBody>(bodyCfg);
-    registerBody(polygonBody,"polygonBody");
+    registerBody(polygonBody, "main");
   }
 }
 
@@ -71,14 +71,20 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
     vertices.push_back({x, y});
   }
 
-  if(json.contains("bodyParams")){
+  if (json.contains("bodyParams")) {
     auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
-
   // TODO: remove testing code
-  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
+  if (json.contains("renderConfig")) {
+    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+  } else {
+    _renderConfig = nullptr;
+  }
 }
-b2Vec2 PolygonTerrain::getWorldPos() { return polygonBody.lock()->getWorldPos(); }
+
+b2Vec2 PolygonTerrain::getWorldPos() {
+  return polygonBody.lock()->getWorldPos();
+}
