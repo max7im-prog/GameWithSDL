@@ -56,7 +56,7 @@ protected:
     textureManager =
         std::shared_ptr<TextureManager>(new TextureManager(renderContext));
     texturer =
-        std::shared_ptr<Texturer>(new Texturer(renderContext, textureManager));
+        std::shared_ptr<Texturer>(new Texturer(registry,renderContext, textureManager));
 
     shapeFactory = std::make_shared<ShapeFactory>(registry, world);
     jointFactory = std::make_shared<JointFactory>(registry, world);

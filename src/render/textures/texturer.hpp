@@ -2,13 +2,16 @@
 #include "capsuleTerrain.hpp"
 #include "circleTerrain.hpp"
 #include "demoCreature.hpp"
+#include "entt/entity/fwd.hpp"
 #include "objectConfig.hpp"
+#include "sceneNode.hpp"
 #include "textureManager.hpp"
 #include "visitor.hpp"
 
 class Texturer : public Visitor {
 public:
-  Texturer(RenderContext& renderContext,std::shared_ptr<TextureManager> mgr);
+  Texturer(entt::registry &registry, RenderContext &renderContext,
+           std::shared_ptr<TextureManager> mgr);
   void setRenderConfig(std::shared_ptr<TopLevelRenderConfig> cfg);
   void resetRenderConfig();
 
@@ -17,11 +20,20 @@ public:
   void visit(PolygonTerrain *c) override;
   void visit(SegmentTerrain *c) override;
   void visit(CapsuleTerrain *c) override;
-  void visit(Creature *c) override;
-  void visit(Terrain *t) override;
+
+  void visit(SceneNode *n) override;
+
+  void visit(PolygonBody *b) override;
+  void visit(CapsuleBody *b) override;
+  void visit(SegmentBody *b) override;
+  void visit(CircleBody *b) override;
+  void visit(LimbBody *b) override;
+
+  void visit(Body *b) override;
 
 protected:
-  RenderContext& _renderContext;
+  entt::registry &_registry;
+  RenderContext &_renderContext;
   std::shared_ptr<TextureManager> _textureManager;
   std::shared_ptr<TopLevelRenderConfig> _currentTopRenderConfig;
   std::shared_ptr<TopLevelRenderConfig::BodyRenderConfig>

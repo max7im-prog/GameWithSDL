@@ -59,7 +59,7 @@ bool Game::init() {
 
   // Texturing
   _textureManager = std::shared_ptr<TextureManager>(new TextureManager(*renderContext));
-  _texturer = std::shared_ptr<Texturer>(new Texturer(*renderContext,_textureManager));
+  _texturer = std::shared_ptr<Texturer>(new Texturer(registry,*renderContext,_textureManager));
 
   // Initialize factories
   shapeFactory =
