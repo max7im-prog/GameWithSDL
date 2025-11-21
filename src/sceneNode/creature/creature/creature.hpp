@@ -38,8 +38,6 @@ public:
   void registerConnection(std::weak_ptr<Connection> connection,
                           const std::string &name);
 
-  const std::unordered_map<std::string, std::weak_ptr<Body>> &getBodies() const;
-  const std::unordered_map<std::string, std::weak_ptr<Connection>> &getConnections() const;
 
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
@@ -49,8 +47,6 @@ protected:
 
   const std::shared_ptr<World> world;
 
-  std::unordered_map<std::string, std::weak_ptr<Body>> _bodies;
-  std::unordered_map<std::string, std::weak_ptr<Connection>> _connections;
 
 private:
   Creature() = delete;

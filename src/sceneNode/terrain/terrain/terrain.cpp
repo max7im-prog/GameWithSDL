@@ -88,12 +88,3 @@ void Terrain::registerConnection(std::weak_ptr<Connection> connection,
   _connections[name] = connection;
   registerChild(connection);
 }
-
-const std::unordered_map<std::string, std::weak_ptr<Body>> &
-Terrain::getBodies() const {
-  return _bodies;
-}
-const std::unordered_map<std::string, std::weak_ptr<Connection>> &
-Terrain::getConnections() const {
-  return _connections;
-}

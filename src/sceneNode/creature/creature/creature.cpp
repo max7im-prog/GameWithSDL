@@ -39,12 +39,3 @@ void Creature::registerConnection(std::weak_ptr<Connection> connection,
   _connections[name] = connection;
   registerChild(connection);
 }
-
-const std::unordered_map<std::string, std::weak_ptr<Body>> &
-Creature::getBodies() const {
-  return _bodies;
-}
-const std::unordered_map<std::string, std::weak_ptr<Connection>> &
-Creature::getConnections() const {
-  return _connections;
-}
