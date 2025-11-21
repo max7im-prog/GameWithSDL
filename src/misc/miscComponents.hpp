@@ -1,8 +1,8 @@
 #pragma once
 
 #include <memory>
-class TopLevelRenderConfig;
+class SceneNodeRenderConfig;
 
 struct EntityRequiresTexturingTag {
-  std::shared_ptr<TopLevelRenderConfig> _cfg;
+  std::shared_ptr<SceneNodeRenderConfig> _cfg;
 };

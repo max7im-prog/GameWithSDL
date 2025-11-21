@@ -13,7 +13,7 @@ Texturer::Texturer(entt::registry &registry, RenderContext &renderContext,
     : _registry(registry), _renderContext(renderContext), _textureManager(mgr),
       _currentBodyRenderConfig(nullptr), _currentTopRenderConfig(nullptr) {}
 
-void Texturer::setRenderConfig(std::shared_ptr<TopLevelRenderConfig> cfg) {
+void Texturer::setRenderConfig(std::shared_ptr<SceneNodeRenderConfig> cfg) {
   _currentTopRenderConfig = cfg;
 }
 

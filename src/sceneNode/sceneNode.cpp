@@ -16,12 +16,12 @@ SceneNode::getConnections() const {
   return _connections;
 }
 
-TopLevelObjectConfig::~TopLevelObjectConfig() = default;
+SceneNodeConfig::~SceneNodeConfig() = default;
 
-TopLevelObjectConfig::Transform
-TopLevelObjectConfig::parseObjectTransform(const nlohmann::json &objectJson,
+SceneNodeConfig::Transform
+SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
                                            const nlohmann::json &roomJson) {
-  TopLevelObjectConfig::Transform ret{};
+  SceneNodeConfig::Transform ret{};
 
   // Position
   float roomX = JsonUtils::getOrDefault<float>(roomJson, "x", 0.0f);

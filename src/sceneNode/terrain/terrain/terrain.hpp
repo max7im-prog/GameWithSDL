@@ -8,7 +8,7 @@
 #include "body.hpp"
 #include "connection.hpp"
 
-struct TerrainConfig : TopLevelObjectConfig {
+struct TerrainConfig : SceneNodeConfig {
   static b2Filter defaultFilter();
 
   struct BodyParams {

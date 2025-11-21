@@ -47,6 +47,6 @@ void CircleTerrainConfig::fromJSON(const nlohmann::json &json) {
 
 
   // TODO: remove testing code
-  _renderConfig = std::make_shared<TopLevelRenderConfig>();
+  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
 }
 b2Vec2 CircleTerrain::getWorldPos() { return circleBody.lock()->getWorldPos(); }

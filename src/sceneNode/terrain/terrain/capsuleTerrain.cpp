@@ -76,7 +76,7 @@ void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
 
 
   // TODO: remove testing code
-  _renderConfig = std::make_shared<TopLevelRenderConfig>();
+  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
 }
 
 b2Vec2 CapsuleTerrain::getWorldPos() { return capsuleBody.lock()->getWorldPos(); }

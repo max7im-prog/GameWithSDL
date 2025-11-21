@@ -328,7 +328,7 @@ void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
   sizeYMeters = json.at("sizeY");
 
   // TODO: remove testing code
-  _renderConfig = std::make_shared<TopLevelRenderConfig>();
+  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
 }
 
 void DemoCreature::aim(b2Vec2 worldPoint, bool aim) {

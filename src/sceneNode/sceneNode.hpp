@@ -19,7 +19,7 @@ protected:
 
 
 
-class TopLevelRenderConfig {
+class SceneNodeRenderConfig {
 public:
   class BodyRenderConfig {
   public:
@@ -47,10 +47,10 @@ public:
  * terrain, or objects placed directly in a room) that can be instantiated
  * from JSON definitions.
  */
-class TopLevelObjectConfig : public ObjectConfig {
+class SceneNodeConfig : public ObjectConfig {
 public:
-  TopLevelObjectConfig() = default;
-  virtual ~TopLevelObjectConfig() = 0;
+  SceneNodeConfig() = default;
+  virtual ~SceneNodeConfig() = 0;
 
   /**
    * @brief Defines an object's transform in the world
@@ -71,7 +71,7 @@ public:
    * @brief Optional rendering config, may be nullptr
    *
    */
-  std::shared_ptr<TopLevelRenderConfig> _renderConfig;
+  std::shared_ptr<SceneNodeRenderConfig> _renderConfig;
 
   /**
    * @brief Load type-specific configuration values from a JSON object.

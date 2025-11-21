@@ -73,7 +73,7 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
 
 
   // TODO: remove testing code
-  _renderConfig = std::make_shared<TopLevelRenderConfig>();
+  _renderConfig = std::make_shared<SceneNodeRenderConfig>();
 }
 
 b2Vec2 SegmentTerrain::getWorldPos() { return segmentBody.lock()->getWorldPos(); }

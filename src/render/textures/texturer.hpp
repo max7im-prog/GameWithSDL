@@ -12,7 +12,7 @@ class Texturer : public Visitor {
 public:
   Texturer(entt::registry &registry, RenderContext &renderContext,
            std::shared_ptr<TextureManager> mgr);
-  void setRenderConfig(std::shared_ptr<TopLevelRenderConfig> cfg);
+  void setRenderConfig(std::shared_ptr<SceneNodeRenderConfig> cfg);
   void resetRenderConfig();
 
   void visit(DemoCreature *c) override;
@@ -42,10 +42,10 @@ protected:
   entt::registry &_registry;
   RenderContext &_renderContext;
   std::shared_ptr<TextureManager> _textureManager;
-  std::shared_ptr<TopLevelRenderConfig> _currentTopRenderConfig;
-  std::shared_ptr<TopLevelRenderConfig::BodyRenderConfig>
+  std::shared_ptr<SceneNodeRenderConfig> _currentTopRenderConfig;
+  std::shared_ptr<SceneNodeRenderConfig::BodyRenderConfig>
       _currentBodyRenderConfig;
-  std::shared_ptr<TopLevelRenderConfig::BodyRenderConfig::ShapeRenderConfig>
+  std::shared_ptr<SceneNodeRenderConfig::BodyRenderConfig::ShapeRenderConfig>
       _currentShapeRenderConfig;
 
 private:

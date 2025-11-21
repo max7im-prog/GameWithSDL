@@ -7,7 +7,7 @@
 #include "world.hpp"
 #include <entt/entt.hpp>
 
-struct CreatureConfig : TopLevelObjectConfig {
+struct CreatureConfig : SceneNodeConfig {
   static b2Filter defaultFilter();
 };
 
