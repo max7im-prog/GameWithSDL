@@ -1,11 +1,13 @@
 #pragma once
 
+#include "SDL3/SDL_render.h"
+#include <memory>
 #include <string>
 #include <vector>
 
 struct TextureComponent {
   using TextureId = std::string;
-  TextureId _textureId;
+  std::vector<std::shared_ptr<SDL_Texture>> _textures;
 };
 
 struct RenderSequence {

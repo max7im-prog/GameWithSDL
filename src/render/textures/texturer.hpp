@@ -31,6 +31,13 @@ public:
 
   void visit(Body *b) override;
 
+  void visit(Capsule *s) override;
+  void visit(Circle *s) override;
+  void visit(Polygon *s) override;
+  void visit(Segment *s) override;
+
+  void visit(Shape *s) override;
+
 protected:
   entt::registry &_registry;
   RenderContext &_renderContext;
@@ -38,6 +45,8 @@ protected:
   std::shared_ptr<TopLevelRenderConfig> _currentTopRenderConfig;
   std::shared_ptr<TopLevelRenderConfig::BodyRenderConfig>
       _currentBodyRenderConfig;
+  std::shared_ptr<TopLevelRenderConfig::BodyRenderConfig::ShapeRenderConfig>
+      _currentShapeRenderConfig;
 
 private:
 };

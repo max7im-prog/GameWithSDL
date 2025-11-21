@@ -36,7 +36,7 @@ public:
 
     using ShapeName = std::string;
     std::vector<ShapeName> _renderSequence;
-    std::unordered_map<ShapeName, ShapeRenderConfig> _shapeRenders;
+    std::unordered_map<ShapeName, std::shared_ptr<ShapeRenderConfig>> _shapeRenders;
   };
 
   using BodyName = std::string;

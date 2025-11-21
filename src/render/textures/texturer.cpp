@@ -116,7 +116,9 @@ void Texturer::visit(Body *b) {
     }
 
     if (auto shapeLock = shapeIt->second.lock()) {
+      _currentShapeRenderConfig = renderIt->second;
       shapeLock->accept(*this);
+      _currentShapeRenderConfig.reset();
     } else {
       // TODO: log error
     }
@@ -125,4 +127,26 @@ void Texturer::visit(Body *b) {
   // Attach a render sequence to body
   auto ent = b->getEntity();
   _registry.emplace_or_replace<RenderSequence>(ent, renderSequence);
+}
+
+void Texturer::visit(Capsule *s) { Texturer::visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Circle *s) { Texturer::visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Polygon *s) { Texturer::visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Segment *s) { Texturer::visit(static_cast<Shape *>(s)); }
+
+void Texturer::visit(Shape *s) {
+  if (!_currentShapeRenderConfig) {
+    throw std::runtime_error("Render config for shape is not set");
+  }
+
+  // Attach a render sequence to body
+  auto ent = s->getEntity();
+  std::vector<std::shared_ptr<SDL_Texture>> textures;
+  for (auto &filename : _currentShapeRenderConfig->_textures) {
+    auto t = _textureManager->getTexture(filename);
+
+    textures.push_back(t);
+  }
+
+  _registry.emplace_or_replace<TextureComponent>(ent, textures);
 }
