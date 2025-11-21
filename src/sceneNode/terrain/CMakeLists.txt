@@ -16,4 +16,5 @@ target_link_libraries(game_terrain_lib
   game_misc_lib
   game_body_lib
   game_interfaces_lib
+  game_scene_node_lib
 )

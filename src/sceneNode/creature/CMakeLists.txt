@@ -17,4 +17,5 @@ target_link_libraries(game_creature_lib
   game_interfaces_lib
   game_controls_lib
   game_misc_lib
+  game_scene_node_lib
 )
