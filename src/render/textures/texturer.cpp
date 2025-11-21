@@ -21,23 +21,23 @@ void Texturer::resetRenderConfig() { _currentTopRenderConfig.reset(); }
 
 void Texturer::visit(DemoCreature *c) {
   // std::cout << "textured demo creature" << std::endl;
-  Texturer::visit(static_cast<SceneNode *>(c));
+  visit(static_cast<SceneNode *>(c));
 }
 void Texturer::visit(CircleTerrain *t) {
   // std::cout << "textured circle terrain" << std::endl;
-  Texturer::visit(static_cast<SceneNode *>(t));
+  visit(static_cast<SceneNode *>(t));
 }
 void Texturer::visit(PolygonTerrain *t) {
   // std::cout << "textured polygon terrain" << std::endl;
-  Texturer::visit(static_cast<SceneNode *>(t));
+  visit(static_cast<SceneNode *>(t));
 }
 void Texturer::visit(SegmentTerrain *t) {
   // std::cout << "textured segment terrain" << std::endl;
-  Texturer::visit(static_cast<SceneNode *>(t));
+  visit(static_cast<SceneNode *>(t));
 }
 void Texturer::visit(CapsuleTerrain *t) {
   // std::cout << "textured capsule terrain" << std::endl;
-  Texturer::visit(static_cast<SceneNode *>(t));
+  visit(static_cast<SceneNode *>(t));
 }
 
 void Texturer::visit(SceneNode *n) {
@@ -63,34 +63,33 @@ void Texturer::visit(SceneNode *n) {
                                " found in bodies");
     }
 
-    _currentBodyRenderConfig = renderIt->second;
-
+    // Propagate visitor to body
     if (auto bodyLock = bodyIt->second.lock()) {
+      _currentBodyRenderConfig = renderIt->second;
       bodyLock->accept(*this);
+      _currentBodyRenderConfig.reset();
     } else {
       // TODO: log error
     }
-
-    _currentBodyRenderConfig.reset();
   }
 
   // Attach a render sequence to scene node
   auto ent = n->getEntity();
-  _registry.emplace_or_replace<RenderSequence>(ent, renderSequence);
+  _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
 void Texturer::visit(PolygonBody *b) {
-  Texturer::visit(static_cast<Body *>(b));
+  visit(static_cast<Body *>(b));
 }
 void Texturer::visit(CapsuleBody *b) {
-  Texturer::visit(static_cast<Body *>(b));
+  visit(static_cast<Body *>(b));
 }
 void Texturer::visit(SegmentBody *b) {
-  Texturer::visit(static_cast<Body *>(b));
+  visit(static_cast<Body *>(b));
 }
-void Texturer::visit(CircleBody *b) { Texturer::visit(static_cast<Body *>(b)); }
+void Texturer::visit(CircleBody *b) { visit(static_cast<Body *>(b)); }
 
-void Texturer::visit(LimbBody *b) { Texturer::visit(static_cast<Body *>(b)); }
+void Texturer::visit(LimbBody *b) { visit(static_cast<Body *>(b)); }
 
 void Texturer::visit(Body *b) {
 
@@ -112,9 +111,10 @@ void Texturer::visit(Body *b) {
     auto shapeIt = shapes.find(shapeName);
     if (shapeIt == shapes.end()) {
       throw std::runtime_error("No shape with name " + shapeName +
-                               " found in bodies");
+                               " found in shapes");
     }
 
+    // Propagate visitor to shape
     if (auto shapeLock = shapeIt->second.lock()) {
       _currentShapeRenderConfig = renderIt->second;
       shapeLock->accept(*this);
@@ -126,20 +126,20 @@ void Texturer::visit(Body *b) {
 
   // Attach a render sequence to body
   auto ent = b->getEntity();
-  _registry.emplace_or_replace<RenderSequence>(ent, renderSequence);
+  _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-void Texturer::visit(Capsule *s) { Texturer::visit(static_cast<Shape *>(s)); }
-void Texturer::visit(Circle *s) { Texturer::visit(static_cast<Shape *>(s)); }
-void Texturer::visit(Polygon *s) { Texturer::visit(static_cast<Shape *>(s)); }
-void Texturer::visit(Segment *s) { Texturer::visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Capsule *s) { visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Circle *s) { visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Polygon *s) { visit(static_cast<Shape *>(s)); }
+void Texturer::visit(Segment *s) { visit(static_cast<Shape *>(s)); }
 
 void Texturer::visit(Shape *s) {
   if (!_currentShapeRenderConfig) {
     throw std::runtime_error("Render config for shape is not set");
   }
 
-  // Attach a render sequence to body
+  // Attach textures to shape
   auto ent = s->getEntity();
   std::vector<std::shared_ptr<SDL_Texture>> textures;
   for (auto &filename : _currentShapeRenderConfig->_textures) {

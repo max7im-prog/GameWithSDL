@@ -10,7 +10,7 @@ struct TextureComponent {
   std::vector<std::shared_ptr<SDL_Texture>> _textures;
 };
 
-struct RenderSequence {
+struct RenderSequenceComponent {
   using ChildId = std::string;
   std::vector<ChildId> _renderSequence;
 };
