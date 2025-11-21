@@ -17,6 +17,8 @@ public:
   void visit(PolygonTerrain *c) override;
   void visit(SegmentTerrain *c) override;
   void visit(CapsuleTerrain *c) override;
+  void visit(Creature *c) override;
+  void visit(Terrain *t) override;
 
 protected:
   RenderContext& _renderContext;
