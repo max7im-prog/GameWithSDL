@@ -9,7 +9,7 @@ struct MouseJointConfig : public JointConfig {
   b2MouseJointDef jointDef;
 };
 
-class MouseJoint : public Joint , public Visitable<MouseJoint>{
+class MouseJoint : public Joint , public VisitableImpl<MouseJoint>{
 public:
   using Config = MouseJointConfig;
   ~MouseJoint() = default;

@@ -10,7 +10,7 @@ struct PrismaticJointConfig : public JointConfig {
   b2PrismaticJointDef jointDef;
 };
 
-class PrismaticJoint : public Joint , public Visitable<PrismaticJoint>{
+class PrismaticJoint : public Joint , public VisitableImpl<PrismaticJoint>{
 public:
   using Config = PrismaticJointConfig;
   ~PrismaticJoint() = default;

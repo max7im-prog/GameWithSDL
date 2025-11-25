@@ -100,7 +100,7 @@ public:
  * argument shows how the visitor should interpret an object in an accept()
  * function. Solves the CRTP problem.
  */
-template <typename Derived> class Visitable : public virtual IVisitable {
+template <typename Derived> class VisitableImpl : public virtual IVisitable {
 public:
   virtual void accept(Visitor &v) override {
     v.visit(static_cast<Derived *>(this));

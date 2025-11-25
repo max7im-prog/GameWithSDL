@@ -9,7 +9,7 @@ struct DistanceJointConfig : public JointConfig {
   b2DistanceJointDef jointDef;
 };
 
-class DistanceJoint : public Joint , public Visitable<DistanceJoint>{
+class DistanceJoint : public Joint , public VisitableImpl<DistanceJoint>{
 public:
   using Config = DistanceJointConfig;
   ~DistanceJoint() = default;

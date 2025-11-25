@@ -8,7 +8,7 @@ struct RevoluteConnectionConfig : ConnectionConfig {
   RevoluteJointConfig templateJointCfg;
   void defaultConfig() override;
 };
-class RevoluteConnection : public Connection , public Visitable<RevoluteConnection>{
+class RevoluteConnection : public Connection , public VisitableImpl<RevoluteConnection>{
 public:
   using Config = RevoluteConnectionConfig;
   const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;

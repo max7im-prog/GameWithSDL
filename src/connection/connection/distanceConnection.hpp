@@ -8,7 +8,7 @@ struct DistanceConnectionConfig : public ConnectionConfig {
   DistanceJointConfig templateJointCfg;
   void defaultConfig() override;
 };
-class DistanceConnection : public Connection , public Visitable<DistanceConnection>{
+class DistanceConnection : public Connection , public VisitableImpl<DistanceConnection>{
 public:
   using Config = DistanceConnectionConfig;
   const std::shared_ptr<DistanceJoint> getDistanceJoint() const;

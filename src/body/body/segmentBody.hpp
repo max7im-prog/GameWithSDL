@@ -9,7 +9,7 @@ struct SegmentBodyConfig : public BodyConfig {
   SegmentConfig shapeCfg;
 };
 
-class SegmentBody : public Body , public Visitable<SegmentBody>{
+class SegmentBody : public Body , public VisitableImpl<SegmentBody>{
 public:
   using Config = SegmentBodyConfig;
   const std::shared_ptr<Segment> getSegment();

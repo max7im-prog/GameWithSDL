@@ -9,7 +9,7 @@ private:
   b2ShapeDef shapeDef;
 };
 
-class EmptyShape : public Shape , public Visitable<EmptyShape>{
+class EmptyShape : public Shape , public VisitableImpl<EmptyShape>{
 public:
   using Config = EmptyShapeConfig;
   virtual ~EmptyShape() = default;

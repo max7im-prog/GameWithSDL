@@ -7,7 +7,7 @@ struct PolygonConfig : public ShapeConfig {
   float radius;
 };
 
-class Polygon : public Shape , public Visitable<Polygon>{
+class Polygon : public Shape , public VisitableImpl<Polygon>{
 public:
   using Config = PolygonConfig;
   virtual ~Polygon() = default;

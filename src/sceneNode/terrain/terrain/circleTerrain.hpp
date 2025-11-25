@@ -9,7 +9,7 @@ struct CircleTerrainConfig : public TerrainConfig {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class CircleTerrain : public Terrain , public Visitable<CircleTerrain>{
+class CircleTerrain : public Terrain , public VisitableImpl<CircleTerrain>{
 public:
   using Config = CircleTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

@@ -9,7 +9,7 @@ struct CapsuleBodyConfig : public BodyConfig {
   CapsuleConfig shapeCfg;
 };
 
-class CapsuleBody : public Body , public Visitable<CapsuleBody>{
+class CapsuleBody : public Body , public VisitableImpl<CapsuleBody>{
 public:
   using Config = CapsuleBodyConfig;
   b2Vec2 getCenter1();

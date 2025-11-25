@@ -12,7 +12,7 @@ struct CapsuleTerrainConfig : public TerrainConfig {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class CapsuleTerrain : public Terrain , public Visitable<CapsuleTerrain>{
+class CapsuleTerrain : public Terrain , public VisitableImpl<CapsuleTerrain>{
 public:
   using Config = CapsuleTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

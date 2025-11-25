@@ -11,7 +11,7 @@ struct PolygonTerrainConfig : public TerrainConfig {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class PolygonTerrain : public Terrain , public Visitable<PolygonTerrain>{
+class PolygonTerrain : public Terrain , public VisitableImpl<PolygonTerrain>{
 public:
   using Config = PolygonTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

@@ -10,7 +10,7 @@ struct SegmentTerrainConfig : public TerrainConfig {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class SegmentTerrain : public Terrain, public Visitable<SegmentTerrain> {
+class SegmentTerrain : public Terrain, public VisitableImpl<SegmentTerrain> {
 public:
   using Config = SegmentTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

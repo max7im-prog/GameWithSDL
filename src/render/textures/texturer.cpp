@@ -52,7 +52,7 @@ void Texturer::visit(SceneNode *n) {
       // TODO: log error
     }
   }
-  std::cout << "textured scene node" << std::endl;
+  // std::cout << "textured scene node" << std::endl;
 
   // Attach a render sequence to scene node
   auto ent = n->getEntity();
@@ -92,7 +92,7 @@ void Texturer::visit(Body *b) {
       // TODO: log error
     }
   }
-  std::cout << "textured body" << std::endl;
+  // std::cout << "textured body" << std::endl;
 
   // Attach a render sequence to body
   auto ent = b->getEntity();
@@ -117,7 +117,7 @@ void Texturer::visit(Shape *s) {
       // TODO: log error
     }
   }
-  std::cout << "textured shape" << std::endl;
+  // std::cout << "textured shape" << std::endl;
 
   _registry.emplace_or_replace<TextureComponent>(ent, textures);
 }
