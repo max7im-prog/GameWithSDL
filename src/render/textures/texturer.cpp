@@ -19,26 +19,6 @@ void Texturer::setRenderConfig(std::shared_ptr<SceneNodeRenderConfig> cfg) {
 
 void Texturer::resetRenderConfig() { _currentTopRenderConfig.reset(); }
 
-void Texturer::visit(DemoCreature *c) {
-  // std::cout << "textured demo creature" << std::endl;
-  visit(static_cast<SceneNode *>(c));
-}
-void Texturer::visit(CircleTerrain *t) {
-  // std::cout << "textured circle terrain" << std::endl;
-  visit(static_cast<SceneNode *>(t));
-}
-void Texturer::visit(PolygonTerrain *t) {
-  // std::cout << "textured polygon terrain" << std::endl;
-  visit(static_cast<SceneNode *>(t));
-}
-void Texturer::visit(SegmentTerrain *t) {
-  // std::cout << "textured segment terrain" << std::endl;
-  visit(static_cast<SceneNode *>(t));
-}
-void Texturer::visit(CapsuleTerrain *t) {
-  // std::cout << "textured capsule terrain" << std::endl;
-  visit(static_cast<SceneNode *>(t));
-}
 
 void Texturer::visit(SceneNode *n) {
 
@@ -72,18 +52,13 @@ void Texturer::visit(SceneNode *n) {
       // TODO: log error
     }
   }
+  std::cout << "textured scene node" << std::endl;
 
   // Attach a render sequence to scene node
   auto ent = n->getEntity();
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-void Texturer::visit(PolygonBody *b) { visit(static_cast<Body *>(b)); }
-void Texturer::visit(CapsuleBody *b) { visit(static_cast<Body *>(b)); }
-void Texturer::visit(SegmentBody *b) { visit(static_cast<Body *>(b)); }
-void Texturer::visit(CircleBody *b) { visit(static_cast<Body *>(b)); }
-
-void Texturer::visit(LimbBody *b) { visit(static_cast<Body *>(b)); }
 
 void Texturer::visit(Body *b) {
 
@@ -117,16 +92,13 @@ void Texturer::visit(Body *b) {
       // TODO: log error
     }
   }
+  std::cout << "textured body" << std::endl;
 
   // Attach a render sequence to body
   auto ent = b->getEntity();
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-void Texturer::visit(Capsule *s) { visit(static_cast<Shape *>(s)); }
-void Texturer::visit(Circle *s) { visit(static_cast<Shape *>(s)); }
-void Texturer::visit(Polygon *s) { visit(static_cast<Shape *>(s)); }
-void Texturer::visit(Segment *s) { visit(static_cast<Shape *>(s)); }
 
 void Texturer::visit(Shape *s) {
   if (!_currentShapeRenderConfig) {
@@ -145,6 +117,7 @@ void Texturer::visit(Shape *s) {
       // TODO: log error
     }
   }
+  std::cout << "textured shape" << std::endl;
 
   _registry.emplace_or_replace<TextureComponent>(ent, textures);
 }

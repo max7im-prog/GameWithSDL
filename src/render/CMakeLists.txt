@@ -21,4 +21,5 @@ target_link_libraries(game_render_lib
   game_connection_lib
   game_creature_lib
   game_terrain_lib
+  game_fallback_visitor_lib
 )

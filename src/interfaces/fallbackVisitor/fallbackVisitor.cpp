@@ -1,5 +1,7 @@
 #include "fallbackVisitor.hpp"
 
+FallbackVisitor::~FallbackVisitor() = default;
+
 void FallbackVisitor::visit([[maybe_unused]] RegistryComposite *node) {
   // TODO: maybe log error????
 }
@@ -12,7 +14,9 @@ void FallbackVisitor::visit([[maybe_unused]] Shape *node) {
   visit(static_cast<RegistryComposite *>(node));
 }
 
-void FallbackVisitor::visit([[maybe_unused]] Circle *node) { visit(static_cast<Shape *>(node)); }
+void FallbackVisitor::visit([[maybe_unused]] Circle *node) {
+  visit(static_cast<Shape *>(node));
+}
 
 void FallbackVisitor::visit([[maybe_unused]] Segment *node) {
   visit(static_cast<Shape *>(node));
