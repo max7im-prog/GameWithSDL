@@ -171,5 +171,7 @@ void Game::render(Uint64 TPS) {
   this->renderBackgroundSystem.update(this->registry, *renderContext,dt);
   this->debugRenderSystem->update(this->registry,dt);
 
+  this->_sandboxSystem.update(registry, *renderContext, _textureManager, dt);
+
   SDL_RenderPresent(this->renderContext->getSDLRenderer());
 }

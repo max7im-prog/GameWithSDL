@@ -6,6 +6,7 @@
 #include "creatureUpdateSystem.hpp"
 #include "jointFactory.hpp"
 #include "roomManager.hpp"
+#include "sandboxSystem.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
@@ -86,6 +87,7 @@ private:
   CleanupSystem cleanupSystem;
   RoomLoadSystem roomLoadSystem;
   TexturingSystem _texturingSystem;
+  SandboxSystem _sandboxSystem;
 
   // Render systems
   RenderBackgroundSystem renderBackgroundSystem;
