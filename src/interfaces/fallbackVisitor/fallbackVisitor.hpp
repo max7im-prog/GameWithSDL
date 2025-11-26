@@ -1,41 +1,49 @@
 #pragma once
 #include "visitor.hpp"
 
-#include "sceneNode.hpp"
-#include "registryComposite.hpp"
-#include "shape.hpp"
-#include "circle.hpp"
-#include "segment.hpp"
-#include "capsule.hpp"
-#include "polygon.hpp"
-#include "joint.hpp"
-#include "distanceJoint.hpp"
-#include "mouseJoint.hpp"
-#include "prismaticJoint.hpp"
-#include "revoluteJoint.hpp"
-#include "weldJoint.hpp"
 #include "body.hpp"
-#include "circleBody.hpp"
-#include "segmentBody.hpp"
+#include "capsule.hpp"
 #include "capsuleBody.hpp"
-#include "polygonBody.hpp"
-#include "limbBody.hpp"
-#include "connection.hpp"
-#include "distanceConnection.hpp"
-#include "girdleConnection.hpp"
-#include "revoluteConnection.hpp"
-#include "weldConnection.hpp"
-#include "terrain.hpp"
 #include "capsuleTerrain.hpp"
+#include "circle.hpp"
+#include "circleBody.hpp"
 #include "circleTerrain.hpp"
-#include "polygonTerrain.hpp"
-#include "segmentTerrain.hpp"
+#include "connection.hpp"
 #include "creature.hpp"
 #include "demoCreature.hpp"
+#include "distanceConnection.hpp"
+#include "distanceJoint.hpp"
+#include "girdleConnection.hpp"
+#include "joint.hpp"
+#include "limbBody.hpp"
+#include "mouseJoint.hpp"
+#include "polygon.hpp"
+#include "polygonBody.hpp"
+#include "polygonTerrain.hpp"
+#include "prismaticJoint.hpp"
+#include "registryComposite.hpp"
+#include "revoluteConnection.hpp"
+#include "revoluteJoint.hpp"
+#include "sceneNode.hpp"
+#include "segment.hpp"
+#include "segmentBody.hpp"
+#include "segmentTerrain.hpp"
+#include "shape.hpp"
+#include "terrain.hpp"
+#include "weldConnection.hpp"
+#include "weldJoint.hpp"
 
-
-
-
+/**
+ * @brief A visitor implementation that routes the visit() method down the
+ * heirarchy.
+ *
+ * Example: visit(DemoCreature) calls visit(Creature) calls
+ * visit(ScencNode) calls visit(REgistryComposite).
+ * It is designed to be a base class for other visitors so that the programmer
+ * wouldn't need to override many similar looking visit() methods and would be
+ * able to just override a visit() method for a base class.
+ *
+ */
 class FallbackVisitor : public Visitor {
 public:
   virtual ~FallbackVisitor() = 0;

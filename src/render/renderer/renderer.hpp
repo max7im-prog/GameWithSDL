@@ -3,7 +3,9 @@
 #include "renderContext.hpp"
 #include "visitor.hpp"
 #include <entt/entt.hpp>
-class Renderer : public Visitor {
+#include "fallbackVisitor.hpp"
+
+class Renderer : public FallbackVisitor  {
 public:
   Renderer(RenderContext &c);
   virtual ~Renderer() = 0;
