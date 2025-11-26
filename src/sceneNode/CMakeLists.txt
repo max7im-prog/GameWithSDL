@@ -15,6 +15,7 @@ target_link_libraries(game_scene_node_lib
   game_body_lib
   game_connection_lib
   game_misc_lib
+  game_common_lib
 )
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/creature)

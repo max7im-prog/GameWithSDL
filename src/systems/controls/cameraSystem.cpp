@@ -18,7 +18,7 @@ void CameraSystem::updatePosition(entt::registry &registry,
                                   RenderContext &renderContext) {
   auto v = registry.view<ButtonPressEvent>();
   bool mmbPressed = false;
-  screenPos positionPressed = {0, 0};
+  ScreenPos positionPressed = {0, 0};
   for (auto &ent : v) {
     auto &event = registry.get<ButtonPressEvent>(ent);
     if (event.event.button.button == SDL_BUTTON_MIDDLE) {
@@ -30,7 +30,7 @@ void CameraSystem::updatePosition(entt::registry &registry,
   }
 
   if (mmbPressed && pressed) {
-    screenPos currentPos;
+    ScreenPos currentPos;
     SDL_GetMouseState(&(currentPos.x), &(currentPos.y));
     auto deltaX = currentPos.x - initialPressedPos.x;
     auto deltaY = currentPos.y - initialPressedPos.y;
@@ -62,7 +62,7 @@ void CameraSystem::updateZoom(entt::registry &registry,
 
     // Adjust position of renderContext's base
     auto prevRatio = renderContext.getPixelToMeterRatio();
-    screenPos mousePos;
+    ScreenPos mousePos;
     mousePos.x = mv.event.wheel.mouse_x;
     mousePos.y = mv.event.wheel.mouse_y;
 

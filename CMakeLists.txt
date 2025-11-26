@@ -63,6 +63,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 # Add subdirectories
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/common)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls)
@@ -98,6 +99,7 @@ set(GAME_LIBS
   game_terrain_lib
   game_connection_lib
   game_room_lib
+  game_common_lib
 )
 add_library(game_run_lib STATIC
   ${CMAKE_CURRENT_SOURCE_DIR}/src/game.hpp

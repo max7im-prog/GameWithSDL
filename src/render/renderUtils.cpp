@@ -6,9 +6,9 @@
 
 #include <vector>
 
-screenPos RenderUtils::b2VecToScreenPos(b2Vec2 meters,
+ScreenPos RenderUtils::b2VecToScreenPos(b2Vec2 meters,
                                         const RenderContext &context) {
-  screenPos ret;
+  ScreenPos ret;
   b2Vec2 base = context.getBasePos();
   auto ratio = context.getPixelToMeterRatio();
 
@@ -17,7 +17,7 @@ screenPos RenderUtils::b2VecToScreenPos(b2Vec2 meters,
   return ret;
 }
 
-b2Vec2 RenderUtils::screenPosTob2Vec(screenPos pixels,
+b2Vec2 RenderUtils::screenPosTob2Vec(ScreenPos pixels,
                                      const RenderContext &context) {
   b2Vec2 ret;
   b2Vec2 base = context.getBasePos();
@@ -85,7 +85,7 @@ b2Vec2 RenderUtils::screenPosTob2Vec(screenPos pixels,
 //   return true;
 // }
 
-void RenderUtils::renderCircle(screenPos pixelCenter, int pixelRadius,
+void RenderUtils::renderCircle(ScreenPos pixelCenter, int pixelRadius,
                                SDL_Color color, const RenderContext &context) {
 
   auto renderer = context.getSDLRenderer();
@@ -113,14 +113,14 @@ void RenderUtils::renderCircle(screenPos pixelCenter, int pixelRadius,
   }
 }
 
-void RenderUtils::renderSegment(screenPos point1, screenPos point2,
+void RenderUtils::renderSegment(ScreenPos point1, ScreenPos point2,
                                 SDL_Color color, const RenderContext &context) {
   auto renderer = context.getSDLRenderer();
   SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
   SDL_RenderLine(renderer, point1.x, point1.y, point2.x, point2.y);
 }
 
-void RenderUtils::renderPolygon(const std::vector<screenPos> &vertices,
+void RenderUtils::renderPolygon(const std::vector<ScreenPos> &vertices,
                                 SDL_Color color, const RenderContext &context) {
 
   if (vertices.size() < 2)
@@ -139,7 +139,7 @@ void RenderUtils::renderPolygon(const std::vector<screenPos> &vertices,
                  vertices[vertices.size() - 1].y);
 }
 
-void RenderUtils::renderCapsule(screenPos center1, screenPos center2,
+void RenderUtils::renderCapsule(ScreenPos center1, ScreenPos center2,
                                 float radius, SDL_Color color,
                                 const RenderContext &context) {
   std::pair<float, float> perpendicular = {-(center1.y - center2.y),
@@ -148,13 +148,13 @@ void RenderUtils::renderCapsule(screenPos center1, screenPos center2,
       pow(pow(perpendicular.first, 2) + pow(perpendicular.second, 2), 0.5f);
   perpendicular = {perpendicular.first / len, perpendicular.second / len};
 
-  screenPos p1 = {center1.x + perpendicular.first * radius,
+  ScreenPos p1 = {center1.x + perpendicular.first * radius,
                   center1.y + perpendicular.second * radius};
-  screenPos p2 = {center1.x - perpendicular.first * radius,
+  ScreenPos p2 = {center1.x - perpendicular.first * radius,
                   center1.y - perpendicular.second * radius};
-  screenPos p3 = {center2.x + perpendicular.first * radius,
+  ScreenPos p3 = {center2.x + perpendicular.first * radius,
                   center2.y + perpendicular.second * radius};
-  screenPos p4 = {center2.x - perpendicular.first * radius,
+  ScreenPos p4 = {center2.x - perpendicular.first * radius,
                   center2.y - perpendicular.second * radius};
 
   renderSegment(p1, p3, color, context);

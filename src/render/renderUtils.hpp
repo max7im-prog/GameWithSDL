@@ -11,26 +11,28 @@
 /**
  * @brief x - offset from the left, y - offset from the top
  */
-typedef SDL_FPoint screenPos;
+typedef SDL_FPoint ScreenPos;
 
 namespace RenderUtils {
 
 // Function to convert from box2d meters to pixels of a window in RenderContext,
 // returns (x, y)
-screenPos b2VecToScreenPos(b2Vec2 meters, const RenderContext &context);
+ScreenPos b2VecToScreenPos(b2Vec2 meters, const RenderContext &context);
 
 // Function to convert from pixels of a window in RenderContext to box2d meters
 // , returns (x, y)
-b2Vec2 screenPosTob2Vec(screenPos pixels, const RenderContext &context);
+b2Vec2 screenPosTob2Vec(ScreenPos pixels, const RenderContext &context);
 
-void renderCircle(screenPos pixelCenter, int pixelRadius, SDL_Color color,
+void renderCircle(ScreenPos pixelCenter, int pixelRadius, SDL_Color color,
                   const RenderContext &context);
-void renderSegment(screenPos pixelPoint1, screenPos pixelPoint2,
+void renderSegment(ScreenPos pixelPoint1, ScreenPos pixelPoint2,
                    SDL_Color color, const RenderContext &context);
-void renderPolygon(const std::vector<screenPos> &pixelVertices, SDL_Color color,
+void renderPolygon(const std::vector<ScreenPos> &pixelVertices, SDL_Color color,
                    const RenderContext &context);
-void renderCapsule(screenPos pixelCenter1, screenPos pixelCenter2,
+void renderCapsule(ScreenPos pixelCenter1, ScreenPos pixelCenter2,
                    float pixelRadius, SDL_Color color,
                    const RenderContext &context);
+
+
 
 }; // namespace RenderUtils

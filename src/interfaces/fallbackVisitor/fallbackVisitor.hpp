@@ -38,7 +38,7 @@
  * heirarchy.
  *
  * Example: visit(DemoCreature) calls visit(Creature) calls
- * visit(ScencNode) calls visit(REgistryComposite).
+ * visit(SceneNode) calls visit(RegistryComposite).
  * It is designed to be a base class for other visitors so that the programmer
  * wouldn't need to override many similar looking visit() methods and would be
  * able to just override a visit() method for a base class.

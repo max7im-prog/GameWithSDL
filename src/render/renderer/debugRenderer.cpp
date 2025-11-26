@@ -21,10 +21,10 @@ void DebugRenderer::visit(Circle *c) {
 
 void DebugRenderer::visit(Polygon *p) {
   auto vertices = p->getVertices();
-  std::vector<screenPos> screenPoints;
+  std::vector<ScreenPos> screenPoints;
   screenPoints.resize(vertices.size());
   std::transform(vertices.begin(), vertices.end(), screenPoints.begin(),
-                 [&](const b2Vec2 &pos) -> screenPos {
+                 [&](const b2Vec2 &pos) -> ScreenPos {
                    return RenderUtils::b2VecToScreenPos(pos, context);
                  });
   RenderUtils::renderPolygon(screenPoints,

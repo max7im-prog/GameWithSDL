@@ -11,7 +11,7 @@ public:
   void update(entt::registry &registry, RenderContext &renderContext, double secondsPassed);
 
 private:
-  screenPos initialPressedPos ={0,0};
+  ScreenPos initialPressedPos ={0,0};
   b2Vec2 initialBasePos ={0,0};
   bool pressed = false;
   void updatePosition(entt::registry& registry, RenderContext& renderContext);
