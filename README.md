@@ -29,7 +29,7 @@ The program uses google tests to facilitate testing. After the program is built,
 The program has doxygen configured. In order to generate documentation, go to the project's root and run
 
 ```sh
-doxygen ./docs/Doxyfile
+cmake --build build --target docs
 ```
 
-The documentation will be generated in **/docs**
+The documentation will be generated in **/build/docs**
