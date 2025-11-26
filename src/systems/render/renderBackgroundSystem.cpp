@@ -20,7 +20,7 @@ void RenderBackgroundSystem::update(entt::registry &registry,const RenderContext
     return;
   }
   auto renderer = renderContext.getSDLRenderer();
-    if(!SDL_SetRenderDrawColor(renderer,255,255,255,255)){
+    if(!SDL_SetRenderDrawColor(renderer,0,0,0,255)){
         std::cerr <<"failed to set render color" <<std::endl;
     }
     if(!SDL_RenderClear(renderer)){

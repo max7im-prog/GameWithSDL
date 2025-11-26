@@ -150,5 +150,5 @@ void RenderUtils::renderTexture(SDL_Texture *texture,
   destRect.y = destRectCenterScreenPos.y - destRect.h / 2;
 
   SDL_RenderTextureRotated(renderer, texture, &textureRegion, &destRect,
-                           b2Rot_GetAngle(finalRot), nullptr, flip);
+                           b2Rot_GetAngle(finalRot)/B2_PI*-180, nullptr, flip);
 }
