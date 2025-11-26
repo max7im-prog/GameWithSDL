@@ -1,8 +1,12 @@
 #include "renderUtils.hpp"
 #include "SDL3/SDL.h"
+#include "SDL3/SDL_rect.h"
+#include "SDL3/SDL_render.h"
+#include "SDL3/SDL_surface.h"
 #include "box2d/box2d.h"
 #include "box2d/id.h"
 #include "box2d/math_functions.h"
+#include "renderContext.hpp"
 
 #include <vector>
 
@@ -27,63 +31,6 @@ b2Vec2 RenderUtils::screenPosTob2Vec(ScreenPos pixels,
   ret.y = base.y - pixels.y / ratio;
   return ret;
 }
-
-// bool RenderUtils::renderShape(b2ShapeId shapeId, const RenderContext &context) {
-//   if (!b2Shape_IsValid(shapeId)) {
-//     return false;
-//   }
-//   auto type = b2Shape_GetType(shapeId);
-//   auto bodyId = b2Shape_GetBody(shapeId);
-
-//   if (type == b2_circleShape) {
-//     auto circle = b2Shape_GetCircle(shapeId);
-//     auto transform = b2Body_GetTransform(bodyId);
-//     b2Vec2 worldCenter = b2TransformPoint(transform, circle.center);
-
-//     screenPos pixelCenter =
-//         b2VecToScreenPos({worldCenter.x, worldCenter.y}, context);
-//     int pixelRadius = circle.radius * context.pixelToMeterRatio;
-
-//     renderCircle(pixelCenter, pixelRadius, {255, 0, 0, 255}, context);
-//   } else if (type == b2_capsuleShape) {
-//     auto capsule = b2Shape_GetCapsule(shapeId);
-//     auto transform = b2Body_GetTransform(bodyId);
-//     b2Vec2 worldPoint1 = b2TransformPoint(transform, capsule.center1);
-//     b2Vec2 worldPoint2 = b2TransformPoint(transform, capsule.center2);
-//     auto pixelPoint1 =
-//         b2VecToScreenPos({worldPoint1.x, worldPoint1.y}, context);
-//     auto pixelPoint2 =
-//         b2VecToScreenPos({worldPoint2.x, worldPoint2.y}, context);
-//     float pixelRadius = capsule.radius * context.pixelToMeterRatio;
-//     renderCapsule(pixelPoint1, pixelPoint2, pixelRadius, {255, 0, 255, 255},
-//                   context);
-//   } else if (type == b2_segmentShape) {
-//     auto segment = b2Shape_GetSegment(shapeId);
-//     auto transform = b2Body_GetTransform(bodyId);
-//     b2Vec2 worldPoint1 = b2TransformPoint(transform, segment.point1);
-//     b2Vec2 worldPoint2 = b2TransformPoint(transform, segment.point2);
-//     auto pixelPoint1 =
-//         b2VecToScreenPos({worldPoint1.x, worldPoint1.y}, context);
-//     auto pixelPoint2 =
-//         b2VecToScreenPos({worldPoint2.x, worldPoint2.y}, context);
-//     renderSegment(pixelPoint1, pixelPoint2, {0, 255, 0, 255}, context);
-//   } else if (type == b2_polygonShape) {
-//     auto polygon = b2Shape_GetPolygon(shapeId);
-//     auto transform = b2Body_GetTransform(bodyId);
-//     std::vector<screenPos> points = {};
-//     for (int i = 0; i < polygon.count; i++) {
-//       b2Vec2 worldPoint = b2TransformPoint(transform, polygon.vertices[i]);
-//       auto pixelPoint = b2VecToScreenPos({worldPoint.x, worldPoint.y}, context);
-//       points.push_back(pixelPoint);
-//     }
-//     renderPolygon(points, {0, 0, 255, 255}, context);
-//   } else {
-
-//     return false;
-//   }
-
-//   return true;
-// }
 
 void RenderUtils::renderCircle(ScreenPos pixelCenter, int pixelRadius,
                                SDL_Color color, const RenderContext &context) {
@@ -163,37 +110,45 @@ void RenderUtils::renderCapsule(ScreenPos center1, ScreenPos center2,
   renderCircle(center2, radius, color, context);
 }
 
-// bool RenderUtils::renderJoint(b2JointId jointId, const RenderContext &context) {
-//   b2JointType type = b2Joint_GetType(jointId);
-//   b2BodyId bodyAId = b2Joint_GetBodyA(jointId);
-//   b2BodyId bodyBId = b2Joint_GetBodyB(jointId);
-//   b2Vec2 localPointA = b2Joint_GetLocalAnchorA(jointId);
-//   b2Vec2 localPointB = b2Joint_GetLocalAnchorB(jointId);
-//   b2Vec2 worldPointA = b2Body_GetWorldPoint(bodyAId, localPointA);
-//   b2Vec2 worldPointB = b2Body_GetWorldPoint(bodyBId, localPointB);
+void RenderUtils::renderTexture(SDL_Texture *texture,
+                                const SDL_FRect &textureRegion,
+                                float widthMeters, float heightMeters,
+                                const Common::Transform &textureTransform,
+                                const RenderContext &context) {
+  if (!texture) {
+    // TODO: log error??? or throw???
+    return;
+  }
 
-//   if (type == b2JointType::b2_distanceJoint) {
-//     auto pixelPointA =
-//         b2VecToScreenPos({worldPointA.x, worldPointA.y}, context);
-//     auto pixelPointB =
-//         b2VecToScreenPos({worldPointB.x, worldPointB.y}, context);
-//     renderSegment(pixelPointA, pixelPointB, {100, 100, 100, 255}, context);
-//   }
-//   if (type == b2JointType::b2_mouseJoint) {
-//     auto pixelPointA =
-//         b2VecToScreenPos({worldPointA.x, worldPointA.y}, context);
-//     auto pixelPointB =
-//         b2VecToScreenPos({worldPointB.x, worldPointB.y}, context);
-//     renderSegment(pixelPointA, pixelPointB, {50, 50, 50, 255}, context);
-//   } else if (type == b2JointType::b2_revoluteJoint) {
-//     auto pixelPointA =
-//         b2VecToScreenPos({worldPointA.x, worldPointA.y}, context);
-//     auto pixelPointB =
-//         b2VecToScreenPos({worldPointB.x, worldPointB.y}, context);
-//     renderCircle(pixelPointA, 1, {255, 0, 0, 255}, context);
-//     renderCircle(pixelPointB, 2, {0, 255, 0, 255}, context);
-//   } else {
-//     return false;
-//   }
-//   return true;
-// }
+  auto renderer = context.getSDLRenderer();
+
+  SDL_FlipMode flip{SDL_FlipMode::SDL_FLIP_NONE};
+  b2Rot finalRot =
+      b2MulRot(textureTransform._relativeRot, textureTransform._rootRot);
+
+  if (textureTransform._flipX && textureTransform._flipY) {
+    finalRot = b2MulRot(finalRot, b2MakeRot(B2_PI));
+    flip = SDL_FlipMode::SDL_FLIP_NONE;
+  } else if (textureTransform._flipX) {
+    flip = SDL_FlipMode::SDL_FLIP_HORIZONTAL;
+  } else if (textureTransform._flipY) {
+    flip = SDL_FlipMode::SDL_FLIP_VERTICAL;
+  } else {
+    flip = SDL_FlipMode::SDL_FLIP_NONE;
+  }
+
+  SDL_FRect destRect{0, 0, 0, 0};
+  auto ratio = context.getPixelToMeterRatio();
+  b2Vec2 destRectCenterWorldPos =
+      b2Add(textureTransform._originPos, textureTransform._relativePos);
+  auto destRectCenterScreenPos =
+      RenderUtils::b2VecToScreenPos(destRectCenterWorldPos, context);
+
+  destRect.h = heightMeters * ratio * textureTransform._scaleY;
+  destRect.w = widthMeters * ratio * textureTransform._scaleX;
+  destRect.x = destRectCenterScreenPos.x - destRect.w / 2;
+  destRect.y = destRectCenterScreenPos.y - destRect.h / 2;
+
+  SDL_RenderTextureRotated(renderer, texture, &textureRegion, &destRect,
+                           b2Rot_GetAngle(finalRot), nullptr, flip);
+}

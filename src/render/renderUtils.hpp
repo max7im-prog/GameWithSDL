@@ -4,6 +4,7 @@
 #include <box2d/box2d.h>
 
 #include "box2d/math_functions.h"
+#include "commonClasses.hpp"
 #include "renderContext.hpp"
 
 #include <SDL3/SDL.h>
@@ -33,6 +34,9 @@ void renderCapsule(ScreenPos pixelCenter1, ScreenPos pixelCenter2,
                    float pixelRadius, SDL_Color color,
                    const RenderContext &context);
 
-
+void renderTexture(SDL_Texture *texture, const SDL_FRect &textureRegion,
+                   float widthMeters, float heightMeters,
+                   const Common::Transform &textureTransform,
+                   const RenderContext &context);
 
 }; // namespace RenderUtils

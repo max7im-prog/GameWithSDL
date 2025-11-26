@@ -17,4 +17,6 @@ struct Transform {
   bool _flipX{false};
   bool _flipY{false};
 };
+
+
 }; // namespace Common
