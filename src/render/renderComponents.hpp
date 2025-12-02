@@ -10,7 +10,7 @@ struct TextureComponent {
   std::shared_ptr<SDL_Texture> _texture;
   int _numTextures;
   SDL_FRect _initialRect;
-  SDL_FPoint _offsetPerTexture; 
+  SDL_FPoint _offsetPerTexture;
 };
 
 struct RenderSequenceComponent {

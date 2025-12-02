@@ -16,7 +16,7 @@
 #include "debugRenderSystem.hpp"
 #include "renderBackgroundSystem.hpp"
 #include "renderContext.hpp"
-#include "renderPhysicsJointsSystem.hpp"
+// #include "renderPhysicsJointsSystem.hpp"
 
 // Events
 #include "pollEventSystem.hpp"
