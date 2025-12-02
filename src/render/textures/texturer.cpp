@@ -107,17 +107,23 @@ void Texturer::visit(Shape *s) {
 
   // Attach textures to shape
   auto ent = s->getEntity();
-  std::vector<std::shared_ptr<SDL_Texture>> textures;
+  std::shared_ptr<SDL_Texture> texture;
   for (auto &filename : _currentShapeRenderConfig->_textures) {
     auto t = _textureManager->getTexture(filename);
 
     if (t) {
-      textures.push_back(t);
+      texture = t;
+      break;
     } else {
       // TODO: log error
     }
   }
   // std::cout << "textured shape" << std::endl;
 
-  _registry.emplace_or_replace<TextureComponent>(ent, textures);
+  // FIXME: wrong sdl frect
+  auto el = _registry.emplace_or_replace<TextureComponent>(ent);
+  el._texture = texture;
+  el._offsetPerTexture = {0,0};
+  el._numTextures = 1;
+  el._initialRect = SDL_FRect();
 }

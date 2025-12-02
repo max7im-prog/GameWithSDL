@@ -58,8 +58,10 @@ bool Game::init() {
   }
 
   // Texturing
-  _textureManager = std::shared_ptr<TextureManager>(new TextureManager(*renderContext));
-  _texturer = std::shared_ptr<Texturer>(new Texturer(registry,*renderContext,_textureManager));
+  _textureManager =
+      std::shared_ptr<TextureManager>(new TextureManager(*renderContext));
+  _texturer = std::shared_ptr<Texturer>(
+      new Texturer(registry, *renderContext, _textureManager));
 
   // Initialize factories
   shapeFactory =
@@ -133,7 +135,6 @@ bool Game::init() {
   // }
 
 
-
   return true;
 }
 
@@ -141,35 +142,35 @@ void Game::cleanup() { this->registry.clear(); }
 
 void Game::handleEvents(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  this->pollEventSystem.update(this->registry,dt);
-  this->quitSystem.update(this->registry, running,dt);
+  this->pollEventSystem.update(this->registry, dt);
+  this->quitSystem.update(this->registry, running, dt);
 }
 
 void Game::update(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  this->controllerUpdateSystem.update(this->registry, *renderContext,dt);
-  this->creatureControlSystem.update(this->registry,dt);
+  this->controllerUpdateSystem.update(this->registry, *renderContext, dt);
+  this->creatureControlSystem.update(this->registry, dt);
   this->roomLoadSystem.update(this->registry, this->roomManager, dt);
 
   creatureUpdateSystem.update(this->registry, dt);
   mouseJointSystem.update(registry, world, shapeFactory, jointFactory,
-                          *renderContext,dt);
+                          *renderContext, dt);
 
-  cameraSystem.update(this->registry, *renderContext,dt);
+  cameraSystem.update(this->registry, *renderContext, dt);
 
   this->worldUpdateSystem.update(this->registry, dt);
 }
 
 void Game::cleanupTick(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  cleanupSystem.update(this->registry,dt);
+  cleanupSystem.update(this->registry, dt);
 }
 
 void Game::render(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
   this->_texturingSystem.update(this->registry, this->_texturer, dt);
-  this->renderBackgroundSystem.update(this->registry, *renderContext,dt);
-  this->debugRenderSystem->update(this->registry,dt);
+  this->renderBackgroundSystem.update(this->registry, *renderContext, dt);
+  this->debugRenderSystem->update(this->registry, dt);
 
   this->_sandboxSystem.update(registry, *renderContext, _textureManager, dt);
 
