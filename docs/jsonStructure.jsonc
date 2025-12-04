@@ -1,6 +1,6 @@
 // This file kinda describes the structure of the configuration files for a game
-// Maybe later I will just add a schema for them or something
-// Each entry in a json describes the structure that a ceratain element has to follow
+// Maybe later I will just add a schemas for them or something
+// Each entry in a json describes the structure that a certain element has to follow
 {
 	// World layout (example - res/worldLayout/worldLayout.json)
 	"layout_worldLayoutExample": {
@@ -19,41 +19,43 @@
 			}
 		]
 	},
-	// Room layout
+	// Room layout (example -  res/room/testRoom.json)
 	"layout_roomLayoutExample": {
 		// Parameters of a room's bounding box in world meters
 		"dim": {
-			"w": 100,
-			"h": 100
+			"w": 100, // meters
+			"h": 100 // meters
 		},
 		// List of entities
 		"entities": [
 			{
 				// An ID has to be unique inside a roomLayout for management of entities to work properly
 				"id": "creature_001",
-				// Path to the creature configuration file (see layout_creatureExample)
+				// Path to the creature configuration file (see layout_creatureExample). Acts as a prefab.
 				"configFile": "res/creature/testCreature.json",
-				// A type is probably not needed here, so  TODO: remove
-				"type": "creature",
 				// Position of an entity inside a room
 				"pos": {
 					"x": 50,
 					"y": 20
 				},
-				// Entity's rotation,scale and flip are defined inside the room layout
+				// Entity's rotation, scale and flip are defined inside the room layout
 				"transform": {
 					"scaleX": 1,
 					"scaleY": 1,
 					"flipX": false,
 					"flipY": false,
 					"rotation": 0 // Rotation In dergees
+				},
+				// An optional field to everride fields from an entity's configuration file.
+				// Has to apply a deep merge of fields.
+				"overrides": {
+					"sizeX": 5
 				}
 			},
 			{
 				"id": "floor_001",
 				// Path to the terrain configuration file (see layout_terrainExample)
 				"configFile": "res/terrain/unitSquare.json",
-				"type": "terrain",
 				"pos": {
 					"x": 50,
 					"y": 20
@@ -65,17 +67,22 @@
 					"flipY": false,
 					"rotation": 0
 				}
+				// field "overrides" is optional, so it is not presented for this entity, but it has to be
+				// supported
 			}
 		]
 	},
+	// Creature layout (example - res/creature/testCreature.json)
 	"layout_creatureExample": {
 		// Defines what entity will be instantiated 
 		"type": "DemoCreature",
-		// Entity-specific fields. Here only the size is represented.
+		// Entity-specific fields. Only the size is represented here.
 		"sizeX": 2,
 		"sizeY": 4
 		// Also, the renderConfig field is going to be used, but it is not here yet
+		// (see element_renderConfigExample)
 	},
+	// Creature layout (example - res/terrain/unitSquare.json)
 	"layout_terrainExample": {
 		// Defines what entity will be instantiated 
 		"type": "PolygonTerrain",
@@ -98,7 +105,8 @@
 				"y": -0.5
 			}
 		],
-		// This structure is shared between many terrains. The one here may be outdated. (see element_bodyParamsExample)
+		// This structure is shared between many terrains. The one here may be outdated
+		// (see element_bodyParamsExample)
 		"bodyParams": {
 			"shape": {
 				"material": {
@@ -115,7 +123,8 @@
 				"fixedRotation": false
 			}
 		},
-		// The renderConfig will be used all accross the configurations. The one here may be outdated. (see element_renderConfigExample)
+		// The renderConfig will be used all accross the configurations. The one here may be outdated.
+		// (see element_renderConfigExample)
 		"renderConfig": {
 			"renderSequence": [
 				"main"
@@ -139,7 +148,8 @@
 	},
 	// This element describes the way a scene node (terrain, creature) should be rendered
 	"element_renderConfigExample": {
-		// Sequence in which the rendering of bodies will occur. This the produces the component that will be attached to sceneNode's entity.
+		// Sequence in which the rendering of bodies will occur. 
+		// This produces the component that will be attached to sceneNode's entity.
 		"renderSequence": [
 			"mainBody"
 		],
@@ -147,18 +157,19 @@
 		"bodyRenders": {
 			//Name of a body to be rendered
 			"mainBody": {
-				//Sequence in which the rendering of shapes in a body will occur. This produces the component that will be attached to the body's entity.
+				//Sequence in which the rendering of shapes in a body will occur.
+				// This produces the component that will be attached to the body's entity.
 				"renderSequence": [
 					"mainShape"
 				],
 				// Describes how each shape in a body will be rendered
 				"shapeRenders": {
-					// Name of a shape to be rendered
+					// Name of a shape to be rendered.
+					//
 					// Each shape has a texture assigned to it. The texture is basically a spritesheet.
 					// Along with the texture there is a dimension of a single sprite and a per-sprite
 					// offset with the number of sprites on a spritesheet.
-					// Each shape also has the dimensions that the sprite will take in the world 
-					// (meters)
+					// Each shape also has the dimensions of a sprite in the world (meters)
 					"mainShape": {
 						// Path to the texture
 						"spriteSheet": "res/textures/test/test_1.png",
