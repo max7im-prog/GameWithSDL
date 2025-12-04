@@ -1,0 +1,191 @@
+// This file kinda describes the structure of the configuration files for a game
+// Maybe later I will just add a schema for them or something
+// Each entry in a json describes the structure that a ceratain element has to follow
+{
+	// World layout (example - res/worldLayout/worldLayout.json)
+	"layout_worldLayoutExample": {
+		// A list of rooms in a world layout
+		"rooms": [
+			{
+				// An ID has to be unique inside a worldLayout for roomManager to work properly
+				"id": "room_001",
+				// World position of a room in world meters (top left corner)
+				"x": 0,
+				"y": 0,
+				//Path to the room configuration file (see layout_roomLayoutExample)
+				"configFile": "res/room/testRoom.json"
+			}
+		]
+	},
+	// Room layout
+	"layout_roomLayoutExample": {
+		// Parameters of a room's bounding box in world meters
+		"width": 100,
+		"height": 100,
+		// List of entities
+		"entities": [
+			{
+				// An ID has to be unique inside a roomLayout for management of entities to work properly
+				"id": "creature_001",
+				// A type is probably not needed here, so  TODO: remove
+				"type": "creature",
+				// Position of an entity inside a room
+				"x": 50,
+				"y": 20,
+				// Entity's rotation,scale and flip are defined inside the room layout
+				"scaleX": 1,
+				"scaleY": 1,
+				"flipX": false,
+				"flipY": false,
+				"rotation": 0,
+				// Path to the creature configuration file (see layout_creatureExample)
+				"configFile": "res/creature/testCreature.json"
+			},
+			{
+				"id": "floor_001",
+				"type": "terrain",
+				"x": 50,
+				"y": 8,
+				"scaleX": 65,
+				"scaleY": 2,
+				"flipX": false,
+				"flipY": false,
+				"rotation": 0,
+				// Path to the terrain configuration file (see layout_terrainExample)
+				"configFile": "res/terrain/unitSquare.json"
+			}
+		]
+	},
+	"layout_creatureExample": {
+		// Defines what entity will be instantiated 
+		"type": "DemoCreature",
+		// Entity-specific fields. Here only the size is represented.
+		"sizeX": 2,
+		"sizeY": 4
+		// Also, the renderConfig field is going to be used, but it is not here yet
+	},
+	"layout_terrainExample": {
+		// Defines what entity will be instantiated 
+		"type": "PolygonTerrain",
+		// Entity-specific fields
+		"vertices": [
+			{
+				"x": -0.5,
+				"y": -0.5
+			},
+			{
+				"x": -0.5,
+				"y": 0.5
+			},
+			{
+				"x": 0.5,
+				"y": 0.5
+			},
+			{
+				"x": 0.5,
+				"y": -0.5
+			}
+		],
+		// This structure is shared between many terrains. The one here may be outdated. (see element_bodyParamsExample)
+		"bodyParams": {
+			"shape": {
+				"material": {
+					"friction": 0.5,
+					"restitution": 0.5,
+					"rollingResistance": 0
+				},
+				"density": 1
+			},
+			"body": {
+				"type": "static",
+				"linearDamping": 0,
+				"angularDamping": 0,
+				"fixedRotation": false
+			}
+		},
+		// The renderConfig will be used all accross the configurations. The one here may be outdated. (see element_renderConfigExample)
+		"renderConfig": {
+			"renderSequence": [
+				"main"
+			],
+			"bodyRenders": {
+				"main": {
+					"renderSequence": [
+						"main"
+					],
+					"shapeRenders": {
+						"main": {
+							"texture": "res/textures/test/test_1.png",
+							"numTextures": 1,
+							"textureWidthPixels": 1,
+							"textureHeightPixels": 1
+						}
+					}
+				}
+			}
+		}
+	},
+	// This element describes the way a scene node (terrain, creature) should be rendered
+	"element_renderConfigExample": {
+		// Sequence in which the rendering of bodies will occur. This the produces the component that will be attached to sceneNode's entity.
+		"renderSequence": [
+			"mainBody"
+		],
+		// Describes how each body of a scene node will be rendered
+		"bodyRenders": {
+			//Name of a body to be rendered
+			"mainBody": {
+				//Sequence in which the rendering of shapes in a body will occur. This produces the component that will be attached to the body's entity.
+				"renderSequence": [
+					"mainShape"
+				],
+				// Describes how each shape in a body will be rendered
+				"shapeRenders": {
+					// Name of a shape to be rendered
+					// Each shape has a texture assigned to it. The texture is basically a spritesheet.
+					// Along with the texture there is a dimension of a single sprite and a per-sprite
+					// offset with the number of sprites on a spritesheet.
+					// Each shape also has the dimensions that the sprite will take in the world 
+					// (meters)
+					"mainShape": {
+						// Path to the texture
+						"spriteSheet": "res/textures/test/test_1.png",
+						"numSprites": 1,
+						"spriteDim": {
+							"w": 100, // pixels
+							"h": 100 // pixels
+						},
+						"worldDim": {
+							"w": 2, // meters
+							"h": 4 // meters
+						},
+						"perSpriteOffset": {
+							"x": 0, // pixels
+							"y": 0 // pixels
+						}
+					}
+				}
+			}
+		}
+	},
+	// An element that describes physical properties of a terrain. Mirrors the structure of a box2d body and
+	// box2d shape
+	"element_bodyParamsExample": {
+		//Mirrors the structure of box2d shape
+		"shape": {
+			"material": {
+				"friction": 0.5,
+				"restitution": 0.5,
+				"rollingResistance": 0
+			},
+			"density": 1
+		},
+		//Mirrors the structure of box2d body
+		"body": {
+			"type": "static",
+			"linearDamping": 0,
+			"angularDamping": 0,
+			"fixedRotation": false
+		}
+	}
+}
