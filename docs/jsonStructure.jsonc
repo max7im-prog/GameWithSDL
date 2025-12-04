@@ -10,9 +10,11 @@
 				// An ID has to be unique inside a worldLayout for roomManager to work properly
 				"id": "room_001",
 				// World position of a room in world meters (top left corner)
-				"x": 0,
-				"y": 0,
-				//Path to the room configuration file (see layout_roomLayoutExample)
+				"pos": {
+					"x": 0,
+					"y": 0
+				},
+				// Path to the room configuration file (see layout_roomLayoutExample)
 				"configFile": "res/room/testRoom.json"
 			}
 		]
@@ -20,39 +22,49 @@
 	// Room layout
 	"layout_roomLayoutExample": {
 		// Parameters of a room's bounding box in world meters
-		"width": 100,
-		"height": 100,
+		"dim": {
+			"w": 100,
+			"h": 100
+		},
 		// List of entities
 		"entities": [
 			{
 				// An ID has to be unique inside a roomLayout for management of entities to work properly
 				"id": "creature_001",
+				// Path to the creature configuration file (see layout_creatureExample)
+				"configFile": "res/creature/testCreature.json",
 				// A type is probably not needed here, so  TODO: remove
 				"type": "creature",
 				// Position of an entity inside a room
-				"x": 50,
-				"y": 20,
+				"pos": {
+					"x": 50,
+					"y": 20
+				},
 				// Entity's rotation,scale and flip are defined inside the room layout
-				"scaleX": 1,
-				"scaleY": 1,
-				"flipX": false,
-				"flipY": false,
-				"rotation": 0,
-				// Path to the creature configuration file (see layout_creatureExample)
-				"configFile": "res/creature/testCreature.json"
+				"transform": {
+					"scaleX": 1,
+					"scaleY": 1,
+					"flipX": false,
+					"flipY": false,
+					"rotation": 0 // Rotation In dergees
+				}
 			},
 			{
 				"id": "floor_001",
-				"type": "terrain",
-				"x": 50,
-				"y": 8,
-				"scaleX": 65,
-				"scaleY": 2,
-				"flipX": false,
-				"flipY": false,
-				"rotation": 0,
 				// Path to the terrain configuration file (see layout_terrainExample)
-				"configFile": "res/terrain/unitSquare.json"
+				"configFile": "res/terrain/unitSquare.json",
+				"type": "terrain",
+				"pos": {
+					"x": 50,
+					"y": 20
+				},
+				"transform": {
+					"scaleX": 65,
+					"scaleY": 2,
+					"flipX": false,
+					"flipY": false,
+					"rotation": 0
+				}
 			}
 		]
 	},
