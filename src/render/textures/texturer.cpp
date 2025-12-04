@@ -19,7 +19,6 @@ void Texturer::setRenderConfig(std::shared_ptr<SceneNodeRenderConfig> cfg) {
 
 void Texturer::resetRenderConfig() { _currentTopRenderConfig.reset(); }
 
-
 void Texturer::visit(SceneNode *n) {
 
   if (!_currentTopRenderConfig) {
@@ -58,7 +57,6 @@ void Texturer::visit(SceneNode *n) {
   auto ent = n->getEntity();
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
-
 
 void Texturer::visit(Body *b) {
 
@@ -99,31 +97,28 @@ void Texturer::visit(Body *b) {
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-
 void Texturer::visit(Shape *s) {
   if (!_currentShapeRenderConfig) {
     throw std::runtime_error("Render config for shape is not set");
   }
 
-  // Attach textures to shape
+  // Attach texture to shape
   auto ent = s->getEntity();
   std::shared_ptr<SDL_Texture> texture;
-  for (auto &filename : _currentShapeRenderConfig->_textures) {
-    auto t = _textureManager->getTexture(filename);
+  auto &filename = _currentShapeRenderConfig->_texture;
+  auto t = _textureManager->getTexture(filename);
 
-    if (t) {
-      texture = t;
-      break;
-    } else {
-      // TODO: log error
-    }
+  if (t) {
+    texture = t;
+  } else {
+    // TODO: log error
   }
   // std::cout << "textured shape" << std::endl;
 
   // FIXME: wrong sdl frect
   auto el = _registry.emplace_or_replace<TextureComponent>(ent);
   el._texture = texture;
-  el._offsetPerTexture = {0,0};
+  el._offsetPerTexture = {0, 0};
   el._numTextures = 1;
   el._initialRect = SDL_FRect();
 }

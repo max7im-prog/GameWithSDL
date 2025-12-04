@@ -86,6 +86,5 @@
       "rotation": 90,
       "configFile": "res/terrain/unitCapsule.json"
     }
-
   ]
 }

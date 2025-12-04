@@ -104,19 +104,26 @@ SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
             continue;
 
           auto shapeCfg = std::make_shared<ShapeConfig>();
-
-          //
-          // 2.2.1 Textures list
-          //
-          if (shapeJson.contains("textures") &&
-              shapeJson["textures"].is_array()) {
-            for (auto &tex : shapeJson["textures"]) {
-              if (tex.is_string()) {
-                shapeCfg->_textures.push_back(tex.get<std::string>());
-              }
+          {
+            auto texture =
+                JsonUtils::getOptional<std::string>(shapeJson, "texture");
+            if (texture) {
+              shapeCfg->_texture = *texture;
             }
           }
 
+          {
+            auto numTextures =
+                JsonUtils::getOptional<int>(shapeJson, "numTextures");
+            if (numTextures) {
+              shapeCfg->_numTextures = *numTextures;
+              
+            }
+          }
+          {
+            shapeCfg->_offsetPerTexture = {0,0};
+            // shapeCfg->_initialRect = ;
+          }
           bodyCfg->_shapeRenders[shapeName] = shapeCfg;
         }
       }

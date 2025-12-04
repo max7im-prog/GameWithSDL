@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SDL3/SDL_rect.h"
 #include "box2d/math_functions.h"
 #include "commonClasses.hpp"
 #include "objectConfig.hpp"
@@ -26,8 +27,14 @@ public:
     class ShapeRenderConfig {
     public:
       using FileName = std::string;
-      // TODO: proper implementation
-      std::vector<FileName> _textures;
+      FileName _texture;
+      SDL_FRect _initialRect;
+      SDL_FPoint _offsetPerTexture;
+      Uint32 _numTextures;
+      struct {
+        float _w;
+        float _h;
+      } worldSize;
     };
 
     using ShapeName = std::string;

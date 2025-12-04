@@ -10,7 +10,12 @@ struct TextureComponent {
   std::shared_ptr<SDL_Texture> _texture;
   int _numTextures;
   SDL_FRect _initialRect;
+  SDL_FRect _currentRect;
   SDL_FPoint _offsetPerTexture;
+  struct {
+    float _w;
+    float _h;
+  } worldSize;
 };
 
 struct RenderSequenceComponent {
