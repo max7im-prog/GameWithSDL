@@ -1,6 +1,7 @@
 #include "sceneNode.hpp"
 #include "jsonUtils.hpp"
 #include "registryComposite.hpp"
+#include <iostream>
 
 SceneNode::~SceneNode() = default;
 
@@ -24,27 +25,51 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
   SceneNodeConfig::Transform ret{};
 
   // Position
-  float roomX = JsonUtils::getOrDefault<float>(roomJson, "x", 0.0f);
-  float roomY = JsonUtils::getOrDefault<float>(roomJson, "y", 0.0f);
-  float offsetX = JsonUtils::getOrDefault<float>(objectJson, "x", 0.0f);
-  float offsetY = JsonUtils::getOrDefault<float>(objectJson, "y", 0.0f);
+
+  float roomX{0};
+  float roomY{0};
+  float offsetX{0};
+  float offsetY{0};
+
+  if (roomJson.contains("pos")) {
+    roomX = JsonUtils::getOrDefault<float>(roomJson["pos"], "x", 0.0f);
+    roomY = JsonUtils::getOrDefault<float>(roomJson["pos"], "y", 0.0f);
+  } else {
+    // TODO: log error
+  }
+
+  if (objectJson.contains("pos")) {
+    offsetX = JsonUtils::getOrDefault<float>(objectJson["pos"], "x", 0.0f);
+
+    offsetY = JsonUtils::getOrDefault<float>(objectJson["pos"], "y", 0.0f);
+  } else {
+    // TODO: log error
+  }
   ret._originPos = {roomX, roomY};
   ret._relativePos = {offsetX, offsetY};
 
-  // Rotation
-  float rotationAngle =
-      JsonUtils::getOrDefault<float>(objectJson, "rotation", 0);
-  float rootAngle = 0;
-  ret._relativeRot = b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f);
-  ret._rootRot = b2MakeRot((B2_PI * 2) * rootAngle / 360.0f);
+  if (objectJson.contains("transform")) {
+    // Rotation
+    float rotationAngle =
+        JsonUtils::getOrDefault<float>(objectJson["transform"], "rotation", 0);
+    float rootAngle = 0;
+    ret._relativeRot = b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f);
+    ret._rootRot = b2MakeRot((B2_PI * 2) * rootAngle / 360.0f);
 
-  // Scale
-  ret._scaleX = JsonUtils::getOrDefault<float>(objectJson, "scaleX", 1.0f);
-  ret._scaleY = JsonUtils::getOrDefault<float>(objectJson, "scaleY", 1.0f);
+    // Scale
+    ret._scaleX =
+        JsonUtils::getOrDefault<float>(objectJson["transform"], "scaleX", 1.0f);
+    ret._scaleY =
+        JsonUtils::getOrDefault<float>(objectJson["transform"], "scaleY", 1.0f);
 
-  // Flip
-  ret._flipX = JsonUtils::getOrDefault<bool>(objectJson, "flipX", false);
-  ret._flipY = JsonUtils::getOrDefault<bool>(objectJson, "flipY", false);
+    // Flip
+    ret._flipX =
+        JsonUtils::getOrDefault<bool>(objectJson["transform"], "flipX", false);
+    ret._flipY =
+        JsonUtils::getOrDefault<bool>(objectJson["transform"], "flipY", false);
+  } else {
+    // TODO: log error
+  }
 
   return ret;
 }
@@ -117,11 +142,10 @@ SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
                 JsonUtils::getOptional<int>(shapeJson, "numTextures");
             if (numTextures) {
               shapeCfg->_numTextures = *numTextures;
-              
             }
           }
           {
-            shapeCfg->_offsetPerTexture = {0,0};
+            shapeCfg->_offsetPerTexture = {0, 0};
             // shapeCfg->_initialRect = ;
           }
           bodyCfg->_shapeRenders[shapeName] = shapeCfg;

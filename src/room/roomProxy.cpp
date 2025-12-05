@@ -71,8 +71,9 @@ void RoomProxy::loadJSONIntoMemory() const {
     throw std::runtime_error("Failed to parse JSON: " + _roomFile);
   }
   _json = *temp;
-  _json["x"] = _origin.x;
-  _json["y"] = _origin.y;
+  _json["pos"] = nlohmann::basic_json<>();
+  _json["pos"]["x"] = _origin.x;
+  _json["pos"]["y"] = _origin.y;
   _json["id"] = _roomId;
   _JSONloadedIntoMemory = true;
 }
