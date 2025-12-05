@@ -112,13 +112,17 @@ void Texturer::visit(Shape *s) {
     texture = t;
   } else {
     // TODO: log error
+    return;
   }
   // std::cout << "textured shape" << std::endl;
 
-  // FIXME: wrong sdl frect
   auto el = _registry.emplace_or_replace<TextureComponent>(ent);
+
   el._texture = texture;
-  el._offsetPerTexture = {0, 0};
-  el._numTextures = 1;
-  el._initialRect = SDL_FRect();
+  el._offsetPerTexture = _currentShapeRenderConfig->_offsetPerTexture;
+  el._numTextures = _currentShapeRenderConfig->_numTextures;
+  el._initialRect = _currentShapeRenderConfig->_initialRect;
+  el._currentRect = el._initialRect;
+  el._worldSize._h = _currentShapeRenderConfig->worldSize._h;
+  el._worldSize._w = _currentShapeRenderConfig->worldSize._w;
 }

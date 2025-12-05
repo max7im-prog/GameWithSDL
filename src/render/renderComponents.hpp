@@ -15,7 +15,7 @@ struct TextureComponent {
   struct {
     float _w;
     float _h;
-  } worldSize;
+  } _worldSize;
 };
 
 struct RenderSequenceComponent {
