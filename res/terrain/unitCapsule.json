@@ -36,10 +36,10 @@
         ],
         "shapeRenders": {
           "main": {
-            "textures": [
-              "res/textures/test/test_1.png",
-              "res/textures/test/test_2.png"
-            ]
+            "texture": "res/textures/test/test_1.png",
+            "numTextures": 1,
+            "textureWidthPixels": 100,
+            "texturePixels": 100
           }
         }
       }

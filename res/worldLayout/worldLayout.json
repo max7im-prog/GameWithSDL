@@ -1,101 +1,132 @@
 {
-  "rooms":
-  [
+  "rooms": [
     {
       "id": "room_001",
-      "x": 0,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 0,
+        "y": 0
+      }
     },
     {
       "id": "room_002",
-      "x": 65,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 65,
+        "y": 0
+      }
     },
     {
       "id": "room_003",
-      "x": 130,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 130,
+        "y": 0
+      }
     },
     {
       "id": "room_004",
-      "x": 195,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 195,
+        "y": 0
+      }
     },
     {
       "id": "room_005",
-      "x": 260,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 260,
+        "y": 0
+      }
     },
     {
       "id": "room_006",
-      "x": 325,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 325,
+        "y": 0
+      }
     },
     {
       "id": "room_007",
-      "x": 390,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 390,
+        "y": 0
+      }
     },
     {
       "id": "room_008",
-      "x": 455,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 455,
+        "y": 0
+      }
     },
     {
       "id": "room_009",
-      "x": 520,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 520,
+        "y": 0
+      }
     },
     {
       "id": "room_010",
-      "x": 585,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 585,
+        "y": 0
+      }
     },
     {
       "id": "room_011",
-      "x": 650,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 650,
+        "y": 0
+      }
     },
     {
       "id": "room_012",
-      "x": 715,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 715,
+        "y": 0
+      }
     },
     {
       "id": "room_013",
-      "x": 780,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 780,
+        "y": 0
+      }
     },
     {
       "id": "room_014",
-      "x": 845,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 845,
+        "y": 0
+      }
     },
     {
       "id": "room_015",
-      "x": 910,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 910,
+        "y": 0
+      }
     },
     {
       "id": "room_016",
-      "x": 975,
-      "y": 0,
-      "configFile": "res/room/testRoom.json"
+      "configFile": "res/room/testRoom.json",
+      "pos": {
+        "x": 975,
+        "y": 0
+      }
     }
   ]
 }
