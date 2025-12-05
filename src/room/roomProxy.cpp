@@ -6,16 +6,18 @@
 #include <string_view>
 
 namespace {
-bool canPreload(const nlohmann::json &json) {
-  return json.contains("id") && json.contains("x") && json.contains("y") &&
-         json.contains("height") && json.contains("width");
+bool canPreloadRoom(const nlohmann::json &json) {
+  return json.contains("id") && json.contains("pos") &&
+         json.at("pos").contains("x") && json.at("pos").contains("y") &&
+         json.contains("dim") && json.at("dim").contains("h") &&
+         json.at("dim").contains("w");
 }
 b2AABB getAABBfromJSON(const nlohmann::json &json) {
   b2AABB ret;
-  float x = json.at("x").get<float>();
-  float y = json.at("y").get<float>();
-  float width = json.at("width").get<float>();
-  float height = json.at("height").get<float>();
+  float x = json.at("pos").at("x").get<float>();
+  float y = json.at("pos").at("y").get<float>();
+  float width = json.at("dim").at("w").get<float>();
+  float height = json.at("dim").at("h").get<float>();
   ret.lowerBound = {x, y};
   ret.upperBound = {x + width, y + height};
   return ret;
@@ -23,7 +25,8 @@ b2AABB getAABBfromJSON(const nlohmann::json &json) {
 } // namespace
 
 RoomProxy::RoomProxy()
-    : _roomFile(), _roomId(), _JSONloadedIntoMemory(false), _aabb(), _json(),_origin() {}
+    : _roomFile(), _roomId(), _JSONloadedIntoMemory(false), _aabb(), _json(),
+      _origin() {}
 
 std::optional<RoomId> RoomProxy::preload(std::string_view roomFile,
                                          b2Vec2 origin, const RoomId &roomId) {
@@ -32,10 +35,11 @@ std::optional<RoomId> RoomProxy::preload(std::string_view roomFile,
     return std::nullopt;
   }
   auto json = *temp;
-  json["x"] = origin.x;
-  json["y"] = origin.y;
   json["id"] = roomId;
-  if (!canPreload(json)) {
+  json["pos"] = nlohmann::basic_json<>();
+  json["pos"]["x"] = origin.x;
+  json["pos"]["y"] = origin.y;
+  if (!canPreloadRoom(json)) {
     return std::nullopt;
   }
 

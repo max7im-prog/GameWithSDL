@@ -161,16 +161,16 @@ std::optional<RoomId> RoomManager::preloadRoom(std::string_view roomFile,
 }
 
 const std::unordered_map<RoomId, std::shared_ptr<RoomProxy>> &
-RoomManager::getRooms() const{
+RoomManager::getRooms() const {
   return _rooms;
 }
 
 const std::unordered_map<EntityId, std::weak_ptr<SceneNode>> &
-RoomManager::getEntities() const{
+RoomManager::getEntities() const {
   return _entities;
 }
 
-std::shared_ptr<RoomProxy> RoomManager::getRoom(const RoomId &roomId){
+std::shared_ptr<RoomProxy> RoomManager::getRoom(const RoomId &roomId) {
   return _rooms[roomId];
 }
 
@@ -257,18 +257,25 @@ RoomManager::preloadRoomLayout(std::string_view roomLayoutFile) {
   }
 
   for (auto &room : json["rooms"]) {
-    if (!room.contains("id") || !room.contains("x") || !room.contains("y") ||
+    if (!room.contains("id") || !room.contains("pos") ||
         !room.contains("configFile")) {
       // TODO: log error
       continue;
     }
-    b2Vec2 origin = {JsonUtils::getOrDefault<float>(room, "x", 0.0f),
-                     JsonUtils::getOrDefault<float>(room, "y", 0.0f)};
-    RoomId roomId = *JsonUtils::getOptional<std::string>(room, "id");
-    std::string roomConfigFile =
-        *JsonUtils::getOptional<std::string>(room, "configFile");
+    auto pos = room["pos"];
 
-    auto id = preloadRoom(roomConfigFile, origin, roomId);
+    b2Vec2 origin = {JsonUtils::getOrDefault<float>(pos, "x", 0.0f),
+                     JsonUtils::getOrDefault<float>(pos, "y", 0.0f)};
+    RoomId roomId = *JsonUtils::getOptional<std::string>(room, "id");
+
+    auto roomConfigFile =
+        JsonUtils::getOptional<std::string>(room, "configFile");
+    if (!roomConfigFile) {
+      // TODO: log error
+      continue;
+    }
+
+    auto id = preloadRoom(*roomConfigFile, origin, roomId);
     if (id) {
       ret.push_back(*id);
     } else {
