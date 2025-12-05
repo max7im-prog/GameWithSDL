@@ -1,4 +1,6 @@
 #include "sceneNode.hpp"
+#include "SDL3/SDL.h"
+#include "SDL3/SDL_rect.h"
 #include "jsonUtils.hpp"
 #include "registryComposite.hpp"
 #include <iostream>
@@ -128,10 +130,13 @@ SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
           if (!shapeJson.is_object())
             continue;
 
+          // std::cout <<shapeJson.dump(4);
+
           auto shapeCfg = std::make_shared<ShapeConfig>();
+
           {
             auto texture =
-                JsonUtils::getOptional<std::string>(shapeJson, "texture");
+                JsonUtils::getOptional<std::string>(shapeJson, "spriteSheet");
             if (texture) {
               shapeCfg->_texture = *texture;
             }
@@ -139,15 +144,39 @@ SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
 
           {
             auto numTextures =
-                JsonUtils::getOptional<int>(shapeJson, "numTextures");
+                JsonUtils::getOptional<int>(shapeJson, "numSprites");
             if (numTextures) {
               shapeCfg->_numTextures = *numTextures;
             }
           }
-          {
-            shapeCfg->_offsetPerTexture = {0, 0};
-            // shapeCfg->_initialRect = ;
+
+          if (shapeJson.contains("spriteDim")) {
+            float w = JsonUtils::getOrDefault(shapeJson["spriteDim"], "w", 0);
+            float h = JsonUtils::getOrDefault(shapeJson["spriteDim"], "h", 0);
+            shapeCfg->_initialRect = SDL_FRect();
+            shapeCfg->_initialRect.h = h;
+            shapeCfg->_initialRect.w = w;
+
+            shapeCfg->_initialRect.x = 0;
+            shapeCfg->_initialRect.y = 0;
           }
+
+          if (shapeJson.contains("perSpriteOffset")) {
+            float x =
+                JsonUtils::getOrDefault(shapeJson["perSpriteOffset"], "x", 0);
+            float y =
+                JsonUtils::getOrDefault(shapeJson["perSpriteOffset"], "y", 0);
+            shapeCfg->_offsetPerTexture.x = x;
+            shapeCfg->_offsetPerTexture.y = y;
+          }
+
+          if (shapeJson.contains("worldDim")) {
+            float w = JsonUtils::getOrDefault(shapeJson["worldDim"], "w", 0);
+            float h = JsonUtils::getOrDefault(shapeJson["worldDim"], "h", 0);
+            shapeCfg->worldSize._h = h;
+            shapeCfg->worldSize._w = w;
+          }
+
           bodyCfg->_shapeRenders[shapeName] = shapeCfg;
         }
       }

@@ -45,10 +45,20 @@
         ],
         "shapeRenders": {
           "main": {
-            "texture": "res/textures/test/test_2.png",
-            "numTextures": 1,
-            "textureWidthPixels": 100,
-            "texturePixels": 100
+            "spriteSheet": "res/textures/test/test_1.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 100,
+              "h": 100
+            },
+            "worldDim": {
+              "w": 2,
+              "h": 4
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
           }
         }
       }
