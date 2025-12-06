@@ -2,11 +2,15 @@
 
 #include "SDL3/SDL_rect.h"
 #include "SDL3/SDL_render.h"
+#include "commonClasses.hpp"
 #include <memory>
 #include <string>
 #include <vector>
 
 struct TextureComponent {
+  using Transform = Common::Transform;
+
+  Transform _initialTransform;
   std::shared_ptr<SDL_Texture> _texture;
   int _numTextures;
   SDL_FRect _initialRect;

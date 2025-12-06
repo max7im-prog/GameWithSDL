@@ -52,8 +52,8 @@
               "h": 4000
             },
             "worldDim": {
-              "w": 2,
-              "h": 4
+              "w": 1,
+              "h": 1
             },
             "perSpriteOffset": {
               "x": 0,

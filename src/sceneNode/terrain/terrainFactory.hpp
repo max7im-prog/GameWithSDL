@@ -42,7 +42,7 @@ protected:
   void setUp(std::shared_ptr<T> object, const T::Config &config) {
 
     if (config._renderConfig) {
-      registry.emplace_or_replace<EntityRequiresTexturingTag>(object->getEntity(), config._renderConfig);
+      registry.emplace_or_replace<EntityRequiresTexturingTag>(object->getEntity(), config._renderConfig,config._transform);
     }
   }
 

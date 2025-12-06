@@ -1,6 +1,7 @@
 #include "texturer.hpp"
 #include "capsuleTerrain.hpp"
 #include "circleTerrain.hpp"
+#include "commonClasses.hpp"
 #include "polygonTerrain.hpp"
 #include "renderComponents.hpp"
 #include "sceneNode.hpp"
@@ -117,6 +118,10 @@ void Texturer::visit(Shape *s) {
   // std::cout << "textured shape" << std::endl;
 
   auto &el = _registry.emplace_or_replace<TextureComponent>(ent);
+  Common::Transform initialTextureTransform{};
+  el._initialTransform = initialTextureTransform;
+
+
 
   el._texture = texture;
   el._offsetPerTexture = _currentShapeRenderConfig->_offsetPerTexture;

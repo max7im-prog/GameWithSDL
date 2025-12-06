@@ -46,12 +46,14 @@ void SandboxSystem::update(entt::registry &registry,
   {
     auto view = registry.view<PhysicsShape, TextureComponent>();
     for (auto &ent : view) {
-      const auto shape = view.get<PhysicsShape>(ent).shape;
+      const auto &shape = view.get<PhysicsShape>(ent).shape;
       const auto &tex = view.get<TextureComponent>(ent);
       b2Vec2 pos = shape->getWorldPos();
       Common::Transform transform;
       transform._originPos = {0,0};
       transform._relativePos = pos;
+      transform._rootRot = b2MakeRot(0);
+      transform._relativeRot= shape->getRotation();
       RenderUtils::renderTexture(tex._texture.get(), tex._currentRect,
                                  tex._worldSize._h, tex._worldSize._w,
                                  transform, renderContext);
