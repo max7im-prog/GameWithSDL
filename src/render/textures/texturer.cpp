@@ -116,7 +116,7 @@ void Texturer::visit(Shape *s) {
   }
   // std::cout << "textured shape" << std::endl;
 
-  auto el = _registry.emplace_or_replace<TextureComponent>(ent);
+  auto &el = _registry.emplace_or_replace<TextureComponent>(ent);
 
   el._texture = texture;
   el._offsetPerTexture = _currentShapeRenderConfig->_offsetPerTexture;

@@ -3,6 +3,8 @@
 #include "SDL3/SDL_rect.h"
 #include "commonClasses.hpp"
 #include "gameSystem.hpp"
+#include "physicsComponents.hpp"
+#include "renderComponents.hpp"
 #include "renderUtils.hpp"
 
 SandboxSystem::SandboxSystem() : GameSystem("SandboxSystem") {
@@ -35,8 +37,24 @@ void SandboxSystem::update(entt::registry &registry,
 
   _currentTransform._relativeRot =
       b2MulRot(_currentTransform._relativeRot, b2MakeRot(B2_PI / 100));
-  // _currentTransform._relativePos= b2Add(_currentTransform._relativePos,{0.1,0.1});
+  // _currentTransform._relativePos=
+  // b2Add(_currentTransform._relativePos,{0.1,0.1});
 
   RenderUtils::renderTexture(texture.get(), region, 10, 10, _currentTransform,
                              renderContext);
+
+  {
+    auto view = registry.view<PhysicsShape, TextureComponent>();
+    for (auto &ent : view) {
+      const auto shape = view.get<PhysicsShape>(ent).shape;
+      const auto &tex = view.get<TextureComponent>(ent);
+      b2Vec2 pos = shape->getWorldPos();
+      Common::Transform transform;
+      transform._originPos = {0,0};
+      transform._relativePos = pos;
+      RenderUtils::renderTexture(tex._texture.get(), tex._currentRect,
+                                 tex._worldSize._h, tex._worldSize._w,
+                                 transform, renderContext);
+    }
+  }
 }

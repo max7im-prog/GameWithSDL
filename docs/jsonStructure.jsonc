@@ -126,24 +126,7 @@
 		// The renderConfig will be used all accross the configurations. The one here may be outdated.
 		// (see element_renderConfigExample)
 		"renderConfig": {
-			"renderSequence": [
-				"main"
-			],
-			"bodyRenders": {
-				"main": {
-					"renderSequence": [
-						"main"
-					],
-					"shapeRenders": {
-						"main": {
-							"texture": "res/textures/test/test_1.png",
-							"numTextures": 1,
-							"textureWidthPixels": 1,
-							"textureHeightPixels": 1
-						}
-					}
-				}
-			}
+			// See element_renderConfigExample for structure
 		}
 	},
 	// This element describes the way a scene node (terrain, creature) should be rendered

@@ -8,6 +8,8 @@
 #include "box2d/math_functions.h"
 #include "renderContext.hpp"
 
+#include <iostream>
+#include <ostream>
 #include <vector>
 
 ScreenPos RenderUtils::b2VecToScreenPos(b2Vec2 meters,
@@ -149,6 +151,10 @@ void RenderUtils::renderTexture(SDL_Texture *texture,
   destRect.x = destRectCenterScreenPos.x - destRect.w / 2;
   destRect.y = destRectCenterScreenPos.y - destRect.h / 2;
 
-  SDL_RenderTextureRotated(renderer, texture, &textureRegion, &destRect,
-                           b2Rot_GetAngle(finalRot)/B2_PI*-180, nullptr, flip);
+  if (!SDL_RenderTextureRotated(renderer, texture, &textureRegion, &destRect,
+                                b2Rot_GetAngle(finalRot) / B2_PI * -180,
+                                nullptr, flip)) {
+    // TODO: log error
+    // std::cout << "failed to render texture rotated" << std::endl;
+  }
 }

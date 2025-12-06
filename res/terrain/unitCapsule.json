@@ -39,8 +39,8 @@
             "spriteSheet": "res/textures/test/test_1.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 100,
-              "h": 100
+              "w": 4000,
+              "h": 4000
             },
             "worldDim": {
               "w": 2,
