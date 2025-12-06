@@ -1,6 +1,7 @@
 #pragma once
 #include "capsuleTerrain.hpp"
 #include "circleTerrain.hpp"
+#include "commonClasses.hpp"
 #include "demoCreature.hpp"
 #include "entt/entity/fwd.hpp"
 #include "fallbackVisitor/fallbackVisitor.hpp"
@@ -13,8 +14,8 @@ class Texturer : public FallbackVisitor {
 public:
   Texturer(entt::registry &registry, RenderContext &renderContext,
            std::shared_ptr<TextureManager> mgr);
-  void setRenderConfig(std::shared_ptr<SceneNodeRenderConfig> cfg);
-  void resetRenderConfig();
+  void setupTexturing(std::shared_ptr<SceneNodeRenderConfig> cfg, const Common::Transform& transform);
+  void resetTexturing();
 
 
   void visit(SceneNode *n) override;
@@ -29,6 +30,7 @@ protected:
   entt::registry &_registry;
   RenderContext &_renderContext;
   std::shared_ptr<TextureManager> _textureManager;
+  Common::Transform _currentSceneNodeTransform;
   std::shared_ptr<SceneNodeRenderConfig> _currentTopRenderConfig;
   std::shared_ptr<SceneNodeRenderConfig::BodyRenderConfig>
       _currentBodyRenderConfig;

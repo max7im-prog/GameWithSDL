@@ -14,11 +14,16 @@ Texturer::Texturer(entt::registry &registry, RenderContext &renderContext,
     : _registry(registry), _renderContext(renderContext), _textureManager(mgr),
       _currentBodyRenderConfig(nullptr), _currentTopRenderConfig(nullptr) {}
 
-void Texturer::setRenderConfig(std::shared_ptr<SceneNodeRenderConfig> cfg) {
+void Texturer::setupTexturing(std::shared_ptr<SceneNodeRenderConfig> cfg,
+                              const Common::Transform &t) {
   _currentTopRenderConfig = cfg;
+  _currentSceneNodeTransform = t;
 }
 
-void Texturer::resetRenderConfig() { _currentTopRenderConfig.reset(); }
+void Texturer::resetTexturing() {
+  _currentTopRenderConfig.reset();
+  _currentSceneNodeTransform = Common::Transform{};
+}
 
 void Texturer::visit(SceneNode *n) {
 
@@ -119,9 +124,11 @@ void Texturer::visit(Shape *s) {
 
   auto &el = _registry.emplace_or_replace<TextureComponent>(ent);
   Common::Transform initialTextureTransform{};
+  initialTextureTransform._flipX = _currentSceneNodeTransform._flipX;
+  initialTextureTransform._flipY = _currentSceneNodeTransform._flipY;
+  initialTextureTransform._scaleX = _currentSceneNodeTransform._scaleX;
+  initialTextureTransform._scaleY = _currentSceneNodeTransform._scaleY;
   el._initialTransform = initialTextureTransform;
-
-
 
   el._texture = texture;
   el._offsetPerTexture = _currentShapeRenderConfig->_offsetPerTexture;

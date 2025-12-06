@@ -16,6 +16,7 @@ struct Transform {
   float _scaleY{1.0f};
   bool _flipX{false};
   bool _flipY{false};
+  static Transform composeTransform(const Transform& a, const Transform& b);
 };
 
 

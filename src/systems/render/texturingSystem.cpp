@@ -20,22 +20,24 @@ void TexturingSystem::update(entt::registry &registry,
   {
     auto v = registry.view<PhysicsCreature, EntityRequiresTexturingTag>();
     for (auto ent : v) {
-      auto renderConfig = v.get<EntityRequiresTexturingTag>(ent)._cfg;
-      auto creature = v.get<PhysicsCreature>(ent).creature;
-      texturer->setRenderConfig(renderConfig);
+      auto& renderConfig = v.get<EntityRequiresTexturingTag>(ent)._cfg;
+      auto& transform = v.get<EntityRequiresTexturingTag>(ent)._sceneNodeOverallTransform;
+      auto& creature = v.get<PhysicsCreature>(ent).creature;
+      texturer->setupTexturing(renderConfig,transform);
       creature->accept(*texturer);
-      texturer->resetRenderConfig();
+      texturer->resetTexturing();
       registry.remove<EntityRequiresTexturingTag>(ent);
     }
   }
   {
     auto v = registry.view<PhysicsTerrain, EntityRequiresTexturingTag>();
     for (auto ent : v) {
-      auto renderConfig = v.get<EntityRequiresTexturingTag>(ent)._cfg;
+      auto& renderConfig = v.get<EntityRequiresTexturingTag>(ent)._cfg;
+      auto& transform = v.get<EntityRequiresTexturingTag>(ent)._sceneNodeOverallTransform;
       auto terrain = v.get<PhysicsTerrain>(ent).terrain;
-      texturer->setRenderConfig(renderConfig);
+      texturer->setupTexturing(renderConfig,transform);
       terrain->accept(*texturer);
-      texturer->resetRenderConfig();
+      texturer->resetTexturing();
       registry.remove<EntityRequiresTexturingTag>(ent);
     }
   }
