@@ -134,7 +134,6 @@ bool Game::init() {
   //   }
   // }
 
-
   return true;
 }
 

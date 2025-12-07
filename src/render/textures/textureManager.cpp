@@ -26,6 +26,7 @@ TextureManager::getTexture(const std::string &filename) {
       // TODO: log error
       return nullptr;
     }
+    SDL_SetTextureScaleMode(texture.get(), SDL_SCALEMODE_NEAREST);
 
     _textures.emplace(filename, texture);
     return texture;
