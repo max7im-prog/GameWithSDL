@@ -79,6 +79,6 @@ void SceneRenderer::visit(Shape *s) {
       Common::Transform::composeTransform(initialTransform, relativeTransform);
 
   RenderUtils::renderTexture(tex._texture.get(), tex._currentRect,
-                             tex._worldSize._h, tex._worldSize._w,
+                             tex._worldSize._w, tex._worldSize._h,
                              finalTransform, _renderContext);
 }

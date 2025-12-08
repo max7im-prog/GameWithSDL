@@ -52,7 +52,7 @@
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 4,
               "h": 1
             },
             "perSpriteOffset": {
@@ -204,7 +204,7 @@
         ],
         "shapeRenders": {
           "main": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/circle.png",
             "numSprites": 1,
             "spriteDim": {
               "w": 32,
@@ -227,7 +227,7 @@
         ],
         "shapeRenders": {
           "main": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/circle.png",
             "numSprites": 1,
             "spriteDim": {
               "w": 32,
@@ -250,7 +250,7 @@
         ],
         "shapeRenders": {
           "main": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/circle.png",
             "numSprites": 1,
             "spriteDim": {
               "w": 32,
@@ -273,7 +273,7 @@
         ],
         "shapeRenders": {
           "main": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/circle.png",
             "numSprites": 1,
             "spriteDim": {
               "w": 32,
