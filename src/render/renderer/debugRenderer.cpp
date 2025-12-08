@@ -13,10 +13,10 @@ const std::map<DebugRenderer::RenderColor, SDL_Color>
 DebugRenderer::DebugRenderer(RenderContext &c) : Renderer(c) {}
 
 void DebugRenderer::visit(Circle *c) {
-  auto center = RenderUtils::b2VecToScreenPos(c->getCenter(), context);
-  auto radius = c->getRadius() * context.getPixelToMeterRatio();
+  auto center = RenderUtils::b2VecToScreenPos(c->getCenter(), _renderContext);
+  auto radius = c->getRadius() * _renderContext.getPixelToMeterRatio();
   RenderUtils::renderCircle(center, radius,
-                            getSDLColor(RenderColor::CIRCLE_COLOR), context);
+                            getSDLColor(RenderColor::CIRCLE_COLOR), _renderContext);
 }
 
 void DebugRenderer::visit(Polygon *p) {
@@ -25,25 +25,25 @@ void DebugRenderer::visit(Polygon *p) {
   screenPoints.resize(vertices.size());
   std::transform(vertices.begin(), vertices.end(), screenPoints.begin(),
                  [&](const b2Vec2 &pos) -> ScreenPos {
-                   return RenderUtils::b2VecToScreenPos(pos, context);
+                   return RenderUtils::b2VecToScreenPos(pos, _renderContext);
                  });
   RenderUtils::renderPolygon(screenPoints,
-                             getSDLColor(RenderColor::POLYGON_COLOR), context);
+                             getSDLColor(RenderColor::POLYGON_COLOR), _renderContext);
 }
 
 void DebugRenderer::visit(Segment *s) {
-  auto p1 = RenderUtils::b2VecToScreenPos(s->getPoint1(), context);
-  auto p2 = RenderUtils::b2VecToScreenPos(s->getPoint2(), context);
+  auto p1 = RenderUtils::b2VecToScreenPos(s->getPoint1(), _renderContext);
+  auto p2 = RenderUtils::b2VecToScreenPos(s->getPoint2(), _renderContext);
   RenderUtils::renderSegment(p1, p2, getSDLColor(RenderColor::SEGMENT_COLOR),
-                             context);
+                             _renderContext);
 }
 
 void DebugRenderer::visit(Capsule *c) {
-  auto p1 = RenderUtils::b2VecToScreenPos(c->getCenter1(), context);
-  auto p2 = RenderUtils::b2VecToScreenPos(c->getCenter2(), context);
-  auto radius = c->getRadius() * context.getPixelToMeterRatio();
+  auto p1 = RenderUtils::b2VecToScreenPos(c->getCenter1(), _renderContext);
+  auto p2 = RenderUtils::b2VecToScreenPos(c->getCenter2(), _renderContext);
+  auto radius = c->getRadius() * _renderContext.getPixelToMeterRatio();
   RenderUtils::renderCapsule(p1, p2, radius,
-                             getSDLColor(RenderColor::CAPSULE_COLOR), context);
+                             getSDLColor(RenderColor::CAPSULE_COLOR), _renderContext);
 }
 
 void DebugRenderer::visit(MouseJoint *) {}

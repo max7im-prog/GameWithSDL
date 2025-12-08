@@ -1,7 +1,6 @@
 #pragma once
 
 #include "renderContext.hpp"
-#include "visitor.hpp"
 #include <entt/entt.hpp>
 #include "fallbackVisitor.hpp"
 
@@ -11,7 +10,7 @@ public:
   virtual ~Renderer() = 0;
 
 protected:
-  RenderContext &context;
+  RenderContext &_renderContext;
 
 private:
 };
