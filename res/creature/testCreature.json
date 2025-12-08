@@ -45,14 +45,14 @@
         ],
         "shapeRenders": {
           "capsule1": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 4,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -61,14 +61,14 @@
             }
           },
           "capsule2": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -85,14 +85,14 @@
         ],
         "shapeRenders": {
           "capsule1": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -101,14 +101,14 @@
             }
           },
           "capsule2": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -125,14 +125,14 @@
         ],
         "shapeRenders": {
           "capsule1": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -141,14 +141,14 @@
             }
           },
           "capsule2": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 2,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -165,14 +165,14 @@
         ],
         "shapeRenders": {
           "capsule1": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {
@@ -181,14 +181,14 @@
             }
           },
           "capsule2": {
-            "spriteSheet": "res/textures/test/square.png",
+            "spriteSheet": "res/textures/test/capsule.png",
             "numSprites": 1,
             "spriteDim": {
-              "w": 32,
+              "w": 64,
               "h": 32
             },
             "worldDim": {
-              "w": 1,
+              "w": 3,
               "h": 1
             },
             "perSpriteOffset": {

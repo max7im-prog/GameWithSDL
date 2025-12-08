@@ -18,10 +18,9 @@ void CapsuleConfig::defaultConfig() {
   shapeDef = b2DefaultShapeDef();
   bodyDef = b2DefaultBodyDef();
   radius = 1;
-  center1 = {0, 0};
-  center2 = {0, -1};
+  center1 = {-0.5, 0};
+  center2 = {0.5, 0};
 }
-
 
 b2Vec2 Capsule::getCenter1() {
   b2Capsule capsule = b2Shape_GetCapsule(shapeId);

@@ -32,7 +32,7 @@ DemoCreature::DemoCreature(
   constexpr size_t numSegments = 2;
   float segmentLen = b2Length(b2Vec2(config.sizeXMeters, config.sizeYMeters)) *
                      0.7f / numSegments;
-  float segmentRadius = segmentLen / 16;
+  float segmentRadius = config.sizeXMeters/4;
   float torsoWidth = config.sizeXMeters;
   float torsoHeight = config.sizeYMeters;
   auto groupId = ShapeFactory::getNextNegativeId();
@@ -60,7 +60,7 @@ DemoCreature::DemoCreature(
   CircleBodyConfig shoulderConfig;
   shoulderConfig.defaultConfig();
   shoulderConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
-  shoulderConfig.shapeCfg.radius = segmentRadius * 4;
+  shoulderConfig.shapeCfg.radius = segmentRadius * 1.2f;
   shoulderConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   shoulderConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
 
@@ -274,19 +274,20 @@ DemoCreature::DemoCreature(
   // Configure controllers
   {
     float inertia = torsoLock->getPolygon()->getRotationalInertia();
-    PIDScalarControllerConfig cfg = {.kp = inertia * 160.0f,
+    PIDScalarControllerConfig cfg = {.kp = inertia * 400.0f,
                                      .ki = 0.0f,
                                      .kd = inertia * 49.0f,
-                                     .maxForce = inertia * 150};
+                                     .maxForce = inertia * 1000};
     torsoAngleController = PIDScalarController(cfg);
   }
   {
+    
     float force = torsoLock->getPolygon()->getMass() *
                   b2Length(b2World_GetGravity(world->getWorldId()));
-    PIDScalarControllerConfig cfg = {.kp = force * 2.0f,
+    PIDScalarControllerConfig cfg = {.kp = force * 10.0f,
                                      .ki = force * 0.5f,
                                      .kd = force * 16.0f,
-                                     .maxForce = force * 3};
+                                     .maxForce = force * 15};
     leftLegHeightController = PIDScalarController(cfg);
     rightLegHeightController = PIDScalarController(cfg);
   }
@@ -310,7 +311,7 @@ DemoCreature::DemoCreature(
   }
 
   // Assign values
-  legHeight = segmentLen * numSegments * 0.9;
+  legHeight = segmentLen * numSegments  + segmentRadius;
   creatureState = CreatureState::ON_GROUND;
   creatureAbilities = CreatureAbilities::CAN_JUMP;
   moveContext.maxSpeedMultiplier = 3;

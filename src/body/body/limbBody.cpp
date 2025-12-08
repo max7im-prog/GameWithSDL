@@ -24,27 +24,29 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   int segNum = 1;
   for (auto seg : config.segments) {
     auto capsuleConfig = config.templateCapsuleConfig;
-    capsuleConfig.bodyDef.position = lastPos;
     b2Vec2 offset = b2Sub(seg.endPos, lastPos);
     float len = b2Length(offset);
     b2Vec2 norm = b2Normalize(offset);
     float angle = b2Atan2(norm.y, norm.x);
 
+    auto segIncr = b2MulSV(len, incrementDir);
+    capsuleConfig.bodyDef.position = b2Add(lastPos, b2MulSV(0.5f, segIncr));
+
     b2Rot rot = b2MakeRot(angle);
     segmentLengths.push_back(len);
     length += len;
     capsuleConfig.bodyDef.rotation = rot;
-    capsuleConfig.center1 = {0, 0};
-    capsuleConfig.center2 = b2MulSV(len, incrementDir);
+    capsuleConfig.center1 = b2MulSV(-0.5f, segIncr);
+    capsuleConfig.center2 = b2MulSV(0.5f, segIncr);
     capsuleConfig.radius = seg.radius;
     auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
-    registerShape(capsule,"capsule" + std::to_string(segNum++));
+    registerShape(capsule, "capsule" + std::to_string(segNum++));
     segments.push_back(capsule);
 
     auto c = capsule.lock();
     if (!c)
       throw std::runtime_error("Capsule expired");
-    lastPos = c->getCenter2();
+    lastPos = seg.endPos;
   }
 
   // Configure Inverse Kinematics template
@@ -79,7 +81,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     jointConfig.jointDef.referenceAngle = 0.0f;
 
     auto joint = jointFactory->create<RevoluteJoint>(jointConfig);
-    registerJoint(joint,"joint" + std::to_string(i));
+    registerJoint(joint, "joint" + std::to_string(i));
     joints.push_back(joint);
   }
 
@@ -111,7 +113,6 @@ void LimbBodyConfig::defaultConfig() {
 
   initialAngleConstraints = {};
 }
-
 
 b2Vec2 LimbBody::getBasePos() {
   if (segments.size() == 0) {
@@ -263,7 +264,7 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
 
     cfg.templateJointCfg.jointDef.bodyIdB = firstSegmentLock->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
-    cfg.templateJointCfg.jointDef.localAnchorB = {0, 0};
+    cfg.templateJointCfg.jointDef.localAnchorB = firstSegmentLock->getLocalCenter1();
     cfg.templateJointCfg.jointDef.enableLimit =
         rootIKTask.angleConstraints[0].enable;
     cfg.templateJointCfg.jointDef.lowerAngle =
@@ -300,6 +301,4 @@ b2Rot LimbBody::getAdjustedRootRot() {
 
   return ret;
 }
-b2Vec2 LimbBody::getWorldPos(){
-  return getBasePos();
-}
+b2Vec2 LimbBody::getWorldPos() { return getBasePos(); }
