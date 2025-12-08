@@ -1,5 +1,295 @@
 {
   "type": "DemoCreature",
   "sizeX": 2,
-  "sizeY": 4
+  "sizeY": 4,
+  "renderConfig": {
+    "renderSequence": [
+      "torso",
+      "leftLeg",
+      "rightLeg",
+      "leftArm",
+      "rightArm",
+      "leftHip",
+      "rightHip",
+      "leftShoulder",
+      "rightShoulder"
+    ],
+    "bodyRenders": {
+      "torso": {
+        "renderSequence": [
+          "main"
+        ],
+        "shapeRenders": {
+          "main": {
+            "spriteSheet": "",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 4,
+              "h": 2
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "leftLeg": {
+        "renderSequence": [
+          "capsule1",
+          "capsule2"
+        ],
+        "shapeRenders": {
+          "capsule1": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "capsule2": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "rightLeg": {
+        "renderSequence": [
+          "capsule1",
+          "capsule2"
+        ],
+        "shapeRenders": {
+          "capsule1": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "capsule2": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "leftArm": {
+        "renderSequence": [
+          "capsule1",
+          "capsule2"
+        ],
+        "shapeRenders": {
+          "capsule1": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "capsule2": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 2,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "rightArm": {
+        "renderSequence": [
+          "capsule1",
+          "capsule2"
+        ],
+        "shapeRenders": {
+          "capsule1": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          },
+          "capsule2": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "leftShoulder": {
+        "renderSequence": [
+          "main"
+        ],
+        "shapeRenders": {
+          "main": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "rightShoulder": {
+        "renderSequence": [
+          "main"
+        ],
+        "shapeRenders": {
+          "main": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "rightHip": {
+        "renderSequence": [
+          "main"
+        ],
+        "shapeRenders": {
+          "main": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      },
+      "leftHip": {
+        "renderSequence": [
+          "main"
+        ],
+        "shapeRenders": {
+          "main": {
+            "spriteSheet": "res/textures/test/square.png",
+            "numSprites": 1,
+            "spriteDim": {
+              "w": 32,
+              "h": 32
+            },
+            "worldDim": {
+              "w": 1,
+              "h": 1
+            },
+            "perSpriteOffset": {
+              "x": 0,
+              "y": 0
+            }
+          }
+        }
+      }
+    }
+  }
 }
