@@ -3,14 +3,12 @@
 #include "renderUtils.hpp"
 
 SceneRenderer::SceneRenderer(entt::registry &registry,
-                             RenderContext &renderContext,
-                             std::shared_ptr<TextureManager> mgr)
+                             RenderContext &renderContext)
     : Renderer(renderContext), _registry(registry) {}
 
 void SceneRenderer::visit(SceneNode *n) {
   auto ent = n->getEntity();
   if (!_registry.all_of<RenderSequenceComponent>(ent)) {
-  } else {
     return;
     // TODO: log error
   }
@@ -36,7 +34,6 @@ void SceneRenderer::visit(SceneNode *n) {
 void SceneRenderer::visit(Body *b) {
   auto ent = b->getEntity();
   if (!_registry.all_of<RenderSequenceComponent>(ent)) {
-  } else {
     return;
     // TODO: log error
   }
@@ -62,7 +59,6 @@ void SceneRenderer::visit(Body *b) {
 void SceneRenderer::visit(Shape *s) {
   auto ent = s->getEntity();
   if (!_registry.all_of<TextureComponent, PhysicsShape>(ent)) {
-  } else {
     return;
     // TODO: log error
   }

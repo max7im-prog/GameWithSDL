@@ -43,26 +43,26 @@ void SandboxSystem::update(entt::registry &registry,
   RenderUtils::renderTexture(texture.get(), region, 10, 10, _currentTransform,
                              renderContext);
 
-  {
-    auto view = registry.view<PhysicsShape, TextureComponent>();
-    for (auto &ent : view) {
-      const auto &shape = view.get<PhysicsShape>(ent).shape;
-      const auto &tex = view.get<TextureComponent>(ent);
-      b2Vec2 pos = shape->getWorldPos();
-
-      Common::Transform relativeTransform;
-      relativeTransform._originPos = {0,0};
-      relativeTransform._relativePos = pos;
-      relativeTransform._rootRot = b2MakeRot(0);
-      relativeTransform._relativeRot= shape->getRotation();
-
-      auto& initialTransform = tex._initialTransform;
-
-      auto finalTransform = Common::Transform::composeTransform(initialTransform, relativeTransform);
-
-      RenderUtils::renderTexture(tex._texture.get(), tex._currentRect,
-                                 tex._worldSize._h, tex._worldSize._w,
-                                 finalTransform, renderContext);
-    }
-  }
+  // {
+  //   auto view = registry.view<PhysicsShape, TextureComponent>();
+  //   for (auto &ent : view) {
+  //     const auto &shape = view.get<PhysicsShape>(ent).shape;
+  //     const auto &tex = view.get<TextureComponent>(ent);
+  //     b2Vec2 pos = shape->getWorldPos();
+  //
+  //     Common::Transform relativeTransform;
+  //     relativeTransform._originPos = {0,0};
+  //     relativeTransform._relativePos = pos;
+  //     relativeTransform._rootRot = b2MakeRot(0);
+  //     relativeTransform._relativeRot= shape->getRotation();
+  //
+  //     auto& initialTransform = tex._initialTransform;
+  //
+  //     auto finalTransform = Common::Transform::composeTransform(initialTransform, relativeTransform);
+  //
+  //     RenderUtils::renderTexture(tex._texture.get(), tex._currentRect,
+  //                                tex._worldSize._h, tex._worldSize._w,
+  //                                finalTransform, renderContext);
+  //   }
+  // }
 }

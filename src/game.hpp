@@ -7,6 +7,7 @@
 #include "jointFactory.hpp"
 #include "roomManager.hpp"
 #include "sandboxSystem.hpp"
+#include "sceneRenderSystem.hpp"
 #include "shapeFactory.hpp"
 #include "terrainFactory.hpp"
 
@@ -92,6 +93,7 @@ private:
   // Render systems
   RenderBackgroundSystem renderBackgroundSystem;
   std::shared_ptr<DebugRenderSystem> debugRenderSystem;
+  std::shared_ptr<SceneRenderSystem> _sceneRenderSystem;
 
   std::shared_ptr<RenderContext> renderContext;
 

@@ -44,6 +44,8 @@ bool Game::init() {
     renderContext = RenderContext::createNewRenderContext(cfg);
   }
   debugRenderSystem = std::make_unique<DebugRenderSystem>(*renderContext);
+  _sceneRenderSystem = std::make_unique<SceneRenderSystem>(registry,*renderContext);
+  
 
   this->running = true;
 
@@ -169,6 +171,7 @@ void Game::render(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
   this->_texturingSystem.update(this->registry, this->_texturer, dt);
   this->renderBackgroundSystem.update(this->registry, *renderContext, dt);
+  this->_sceneRenderSystem->update(this->registry, dt);
   this->debugRenderSystem->update(this->registry, dt);
 
   this->_sandboxSystem.update(registry, *renderContext, _textureManager, dt);
