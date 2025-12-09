@@ -466,7 +466,7 @@ void DemoCreature::updateJump(float dt) {
         jumpContext.lastJumpCall = std::chrono::system_clock::now();
         float gravForce = b2Length(b2World_GetGravity(world->getWorldId())) *
                           torsoLock->getPolygon()->getMass();
-        b2Vec2 impulse = b2MulSV(gravForce * 3.0, {0, 1});
+        b2Vec2 impulse = b2MulSV(gravForce * 10.0, {0, 1});
         b2Body_ApplyLinearImpulseToCenter(torsoLock->getPolygon()->getBodyId(),
                                           impulse, true);
       }
