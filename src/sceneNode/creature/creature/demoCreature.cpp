@@ -65,6 +65,8 @@ DemoCreature::DemoCreature(
   shoulderConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
 
   LimbBodyConfig limbConfig;
+  limbConfig.templateJointConfig.jointDef.dampingRatio = -1000;
+
   limbConfig.defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
   limbConfig.templateCapsuleConfig.shapeDef.filter =
@@ -73,7 +75,9 @@ DemoCreature::DemoCreature(
   limbConfig.limbControlConfig = {.KPMultiplier = 7.0f,
                                   .KIMultiplier = 0.3f,
                                   .KDMultiplier = 10.0f,
-                                  .maxForceMultiplier = 15.0f};
+                                  .maxForceMultiplier = 30.0f};
+
+  limbConfig.templateCapsuleConfig.bodyDef.angularDamping = 6;
 
   limbConfig.rootRot = b2MakeRot(-B2_PI / 2);
 
@@ -526,7 +530,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
   if (b2Distance(legBase, context.trackingPoint) > leg->getLength() * 1.2f) {
     leg->setTracking({0, 0}, false);
     std::vector<b2Vec2> groundPoints = {};
-    b2Vec2 defaultTranslation = {0, -leg->getLength()};
+    b2Vec2 defaultTranslation = {0, -leg->getLength()*1.5f};
     b2QueryFilter filter = b2DefaultQueryFilter();
     filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
     float stepSize = B2_PI / 36;
