@@ -125,7 +125,7 @@
         ],
         "shapeRenders": {
           "capsule1": {
-            "spriteSheet": "res/textures/test/capsule.png",
+            "spriteSheet": "res/textures/creature/knight/arm_left_top.png",
             "numSprites": 1,
             "spriteDim": {
               "w": 64,
@@ -141,7 +141,7 @@
             }
           },
           "capsule2": {
-            "spriteSheet": "res/textures/test/capsule.png",
+            "spriteSheet": "res/textures/creature/knight/arm_left_bot.png",
             "numSprites": 1,
             "spriteDim": {
               "w": 64,
