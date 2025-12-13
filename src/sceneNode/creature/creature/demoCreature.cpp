@@ -249,7 +249,7 @@ DemoCreature::DemoCreature(
   {
     GirdleConnectionConfig cfg;
     cfg.defaultConfig();
-    cfg.girdleWidth = torsoWidth * 0.8f;
+    cfg.girdleWidth = torsoWidth * 1.6f;
     cfg.centerAttach.shape = torsoLock->getPolygon();
     cfg.centerAttach.localPoint = {0, torsoHeight / 2.0f};
 
