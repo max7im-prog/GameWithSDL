@@ -137,7 +137,7 @@ bool Game::init() {
   // }
 
 
-  // debugRenderSystem->setEnabled(false);
+  debugRenderSystem->setEnabled(true);
 
   return true;
 }
