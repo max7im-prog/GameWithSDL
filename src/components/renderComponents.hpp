@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+
 struct TextureComponent {
   using Transform = Common::Transform;
 

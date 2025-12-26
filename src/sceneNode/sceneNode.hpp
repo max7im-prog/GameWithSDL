@@ -3,6 +3,7 @@
 #include "SDL3/SDL_rect.h"
 #include "box2d/math_functions.h"
 #include "commonClasses.hpp"
+#include "nlohmann/json_fwd.hpp"
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "visitor.hpp"

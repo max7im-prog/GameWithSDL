@@ -11,4 +11,11 @@ set(INCLUDE_DIRS
 
 add_library(game_physics_lib STATIC ${SOURCES})
 target_include_directories(game_physics_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_physics_lib PUBLIC box2d EnTT::EnTT game_interfaces_lib)
+target_link_libraries(game_physics_lib 
+    PRIVATE 
+    box2d 
+    EnTT::EnTT
+    nlohmann_json::nlohmann_json
+    game_interfaces_lib 
+    game_components_lib
+)

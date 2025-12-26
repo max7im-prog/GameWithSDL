@@ -1,6 +1,4 @@
 #pragma once
-#include "box2d/math_functions.h"
-#include <nlohmann/json.hpp>
 
 /**
  * @brief Abstract base class for all configuration objects.

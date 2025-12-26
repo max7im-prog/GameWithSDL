@@ -8,4 +8,4 @@ set(INCLUDE_DIRS
 
 add_library(game_events_lib STATIC ${SOURCES})
 target_include_directories(game_events_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_events_lib PUBLIC SDL3::SDL3 EnTT::EnTT)
+target_link_libraries(game_events_lib PRIVATE SDL3::SDL3 EnTT::EnTT game_components_lib)

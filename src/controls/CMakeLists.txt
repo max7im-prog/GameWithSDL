@@ -10,4 +10,4 @@ set(INCLUDE_DIRS
 
 add_library(game_controls_lib STATIC ${SOURCES})
 target_include_directories(game_controls_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_controls_lib PUBLIC box2d EnTT::EnTT)
+target_link_libraries(game_controls_lib PRIVATE box2d EnTT::EnTT)

@@ -1,5 +1,4 @@
 #pragma once
-#include "entt/entt.hpp"
 #include "registryObject.hpp"
 #include "registryObjectFactory.hpp"
 

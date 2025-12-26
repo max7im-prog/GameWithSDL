@@ -11,5 +11,5 @@ add_library(game_misc_lib STATIC ${SOURCES})
 target_include_directories(game_misc_lib PUBLIC ${INCLUDE_DIRS})
 
 # The library SHOLUD NOT link to any user-defined libraries
-target_link_libraries(game_misc_lib PUBLIC nlohmann_json::nlohmann_json box2d)
+target_link_libraries(game_misc_lib PRIVATE nlohmann_json::nlohmann_json box2d)
 

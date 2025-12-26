@@ -8,10 +8,14 @@ set(INCLUDE_DIRS
 
 add_library(game_debug_lib STATIC ${SOURCES})
 target_include_directories(game_debug_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_debug_lib PUBLIC
+target_link_libraries(game_debug_lib PRIVATE
     game_physics_lib
     game_interfaces_lib
     game_controls_lib
     game_render_lib
     game_events_lib
+    EnTT::EnTT
+    game_components_lib
+    box2d
+    game_common_lib
 )

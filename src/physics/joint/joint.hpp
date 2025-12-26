@@ -1,9 +1,6 @@
 #pragma once
 
-#include "box2d/box2d.h"
-#include "box2d/id.h"
 #include "box2d/types.h"
-#include "entt/entity/entity.hpp"
 #include "entt/entt.hpp"
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"

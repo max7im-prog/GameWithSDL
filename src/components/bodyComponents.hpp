@@ -1,5 +1,7 @@
 #pragma once
-#include "body.hpp"
+
+#include <memory>
+class Body;
 
 struct PhysicsBody {
   std::shared_ptr<Body> body;

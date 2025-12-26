@@ -1,5 +1,4 @@
 #pragma once
-#include "box2d/box2d.h"
 #include "joint.hpp"
 #include "objectConfig.hpp"
 #include "pseudo3d.hpp"

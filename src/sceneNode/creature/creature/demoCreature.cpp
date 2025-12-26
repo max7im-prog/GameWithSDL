@@ -8,12 +8,12 @@
 #include "girdleConnection.hpp"
 #include "limbBody.hpp"
 #include "miscUtils.hpp"
-#include "objectConfig.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
 #include "world.hpp"
 #include <chrono>
 #include <sys/types.h>
+#include <nlohmann/json.hpp>
 
 void DemoCreature::move(b2Vec2 dir, float intensity) {
   moveContext.intensity = intensity;
