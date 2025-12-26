@@ -10,7 +10,7 @@ set(INCLUDE_DIRS
 add_library(game_creature_lib STATIC ${SOURCES})
 target_include_directories(game_creature_lib PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(game_creature_lib
-  PRIVATE
+  PUBLIC
   game_scene_node_lib
   game_physics_lib
   game_connection_lib

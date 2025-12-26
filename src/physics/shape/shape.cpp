@@ -2,6 +2,7 @@
 #include "box2d/box2d.h"
 #include "box2d/id.h"
 #include "registryComposite.hpp"
+#include "renderComponents.hpp"
 
 b2BodyId Shape::getBodyId() { return bodyId; }
 
@@ -44,6 +45,12 @@ b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) const {
 b2Vec2 Shape::getWorldPos() { return b2Body_GetWorldPoint(bodyId, {0, 0}); }
 
 void Shape::performRotation(b2Rot rot) {
+  auto curRot = get3dRot();
+  if (b2Rot_GetAngle(rot) == b2Rot_GetAngle(curRot)) {
+    return;
+  }
+
+  registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
 
   // TODO: complete
 }

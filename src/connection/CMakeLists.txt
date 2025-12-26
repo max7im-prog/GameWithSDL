@@ -10,7 +10,7 @@ set(INCLUDE_DIRS
 add_library(game_connection_lib STATIC ${SOURCES})
 target_include_directories(game_connection_lib PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(game_connection_lib 
-  PRIVATE 
+  PUBLIC 
   box2d 
   EnTT::EnTT 
   game_interfaces_lib 

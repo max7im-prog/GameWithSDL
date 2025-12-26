@@ -11,7 +11,7 @@ set(INCLUDE_DIRS
 add_library(game_render_lib STATIC ${SOURCES})
 target_include_directories(game_render_lib PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(game_render_lib
-  PRIVATE
+  PUBLIC
   SDL3::SDL3
   SDL3_image::SDL3_image
   EnTT::EnTT

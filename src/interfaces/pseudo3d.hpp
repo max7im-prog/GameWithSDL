@@ -23,7 +23,7 @@ class Pseudo3d {
 public:
   virtual ~Pseudo3d() = 0;
   void set3dRot(b2Rot rot);
-  b2Rot get3dRot();
+  b2Rot get3dRot() const;
 
 protected:
   /**

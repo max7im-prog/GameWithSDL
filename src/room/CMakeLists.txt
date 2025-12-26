@@ -9,7 +9,7 @@ set(INCLUDE_DIRS
 add_library(game_room_lib STATIC ${SOURCES})
 target_include_directories(game_room_lib PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(game_room_lib 
-  PRIVATE 
+  PUBLIC 
   EnTT::EnTT 
   game_misc_lib 
   game_terrain_lib 

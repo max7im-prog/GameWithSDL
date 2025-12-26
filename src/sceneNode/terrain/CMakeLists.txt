@@ -10,7 +10,7 @@ set(INCLUDE_DIRS
 add_library(game_terrain_lib STATIC ${SOURCES})
 target_include_directories(game_terrain_lib PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(game_terrain_lib
-  PRIVATE
+  PUBLIC
   game_physics_lib
   game_connection_lib
   game_misc_lib
