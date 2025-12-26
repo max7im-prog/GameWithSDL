@@ -3,6 +3,7 @@
 #include "box2d/id.h"
 #include "registryComposite.hpp"
 
+
 b2BodyId Shape::getBodyId() { return bodyId; }
 
 b2ShapeId Shape::getShapeId() { return shapeId; };
@@ -37,8 +38,13 @@ b2Vec2 Shape::getLocalPoint(b2Vec2 worldPoint) {
   return b2Body_GetLocalPoint(bodyId, worldPoint);
 }
 
-b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) const{
+b2Vec2 Shape::getWorldPoint(b2Vec2 localPoint) const {
   return b2Body_GetWorldPoint(bodyId, localPoint);
 }
 
 b2Vec2 Shape::getWorldPos() { return b2Body_GetWorldPoint(bodyId, {0, 0}); }
+
+void Shape::performRotation(b2Rot rot) {
+  
+  // TODO: complete
+}

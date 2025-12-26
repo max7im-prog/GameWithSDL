@@ -2,12 +2,15 @@
 #include "box2d/box2d.h"
 #include "joint.hpp"
 #include "objectConfig.hpp"
+#include "pseudo3d.hpp"
 #include "registryComposite.hpp"
 #include "shape.hpp"
 
 struct BodyConfig : public ObjectConfig {};
 
-class Body : public RegistryComposite, public virtual IVisitable {
+class Body : public RegistryComposite,
+             public virtual IVisitable,
+             public Pseudo3d {
 public:
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Body();
@@ -27,6 +30,8 @@ protected:
 
   std::unordered_map<std::string, std::weak_ptr<Shape>> _shapes;
   std::unordered_map<std::string, std::weak_ptr<Joint>> _joints;
+
+  virtual void performRotation(b2Rot rot) override;
 
 private:
   friend class BodyFactory;

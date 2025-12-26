@@ -1,6 +1,7 @@
 #pragma once
 #include "box2d/id.h"
 #include "objectConfig.hpp"
+#include "pseudo3d.hpp"
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
@@ -9,12 +10,14 @@
 #include <entt/entt.hpp>
 #include <optional>
 
-struct ShapeConfig : public ObjectConfig{
+struct ShapeConfig : public ObjectConfig {
   b2BodyDef bodyDef;
   b2ShapeDef shapeDef;
 };
 
-class Shape : public RegistryComposite, public virtual IVisitable {
+class Shape : public RegistryComposite,
+              public virtual IVisitable,
+              public Pseudo3d {
 public:
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
@@ -42,6 +45,8 @@ protected:
 
   b2BodyId bodyId = b2_nullBodyId;
   b2ShapeId shapeId = b2_nullShapeId;
+
+  virtual void performRotation(b2Rot rot) override;
 
   friend class ShapeFactory;
 };

@@ -33,3 +33,7 @@ const std::unordered_map<std::string, std::weak_ptr<Joint>> &
 Body::getJoints() const {
   return _joints;
 }
+
+void Body::performRotation(b2Rot rot) {
+  // TODO: complete
+}

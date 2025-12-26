@@ -26,3 +26,5 @@ struct RenderSequenceComponent {
   using ChildId = std::string;
   std::vector<ChildId> _renderSequence;
 };
+
+struct RenderRequiresUpdateTag {};
