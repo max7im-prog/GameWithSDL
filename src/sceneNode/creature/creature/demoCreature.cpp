@@ -13,8 +13,8 @@
 #include "renderComponents.hpp"
 #include "world.hpp"
 #include <chrono>
-#include <sys/types.h>
 #include <nlohmann/json.hpp>
+#include <sys/types.h>
 
 void DemoCreature::move(b2Vec2 dir, float intensity) {
   _moveContext._intensity = intensity;
@@ -33,7 +33,7 @@ DemoCreature::DemoCreature(
   constexpr size_t numSegments = 2;
   float segmentLen = b2Length(b2Vec2(config.sizeXMeters, config.sizeYMeters)) *
                      0.7f / numSegments;
-  float segmentRadius = config.sizeXMeters/4;
+  float segmentRadius = config.sizeXMeters / 4;
   float torsoWidth = config.sizeXMeters;
   float torsoHeight = config.sizeYMeters;
   auto groupId = ShapeFactory::getNextNegativeId();
@@ -286,7 +286,7 @@ DemoCreature::DemoCreature(
     _torsoAngleController = PIDScalarController(cfg);
   }
   {
-    
+
     float force = torsoLock->getPolygon()->getMass() *
                   b2Length(b2World_GetGravity(world->getWorldId()));
     PIDScalarControllerConfig cfg = {.kp = force * 10.0f,
@@ -316,7 +316,7 @@ DemoCreature::DemoCreature(
   }
 
   // Assign values
-  _legHeight = segmentLen * numSegments  + segmentRadius;
+  _legHeight = segmentLen * numSegments + segmentRadius;
   creatureState = CreatureState::ON_GROUND;
   creatureAbilities = CreatureAbilities::CAN_JUMP;
   _moveContext._maxSpeedMultiplier = 3;
@@ -356,6 +356,8 @@ void DemoCreature::update(float dt) {
   updateJump(dt);
   updateMove(dt);
   updateFeet(dt);
+  updateLookAt(dt);
+  updateRotation(dt);
   Creature::update(dt);
 }
 
@@ -531,7 +533,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
   if (b2Distance(legBase, context.trackingPoint) > leg->getLength() * 1.2f) {
     leg->setTracking({0, 0}, false);
     std::vector<b2Vec2> groundPoints = {};
-    b2Vec2 defaultTranslation = {0, -leg->getLength()*1.5f};
+    b2Vec2 defaultTranslation = {0, -leg->getLength() * 1.5f};
     b2QueryFilter filter = b2DefaultQueryFilter();
     filter.maskBits = filter.maskBits & (~ObjectCategory::CREATURE);
     float stepSize = B2_PI / 36;
@@ -593,10 +595,19 @@ void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   _registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
 }
 
+void DemoCreature::updateLookAt(float dt) {}
+void DemoCreature::updateRotation(float dt) {}
+
 b2Vec2 DemoCreature::getWorldPos() {
 
   auto torsoLock = _torso.lock();
   if (!torsoLock)
     throw std::runtime_error("Torso expired");
   return torsoLock->getPolygon()->getWorldPos();
+}
+
+const b2Rot &DemoCreature::getRotation() const {
+  return _rotationContext._rotation;
+
+
 }

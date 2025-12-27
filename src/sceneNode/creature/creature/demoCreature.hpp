@@ -17,7 +17,7 @@ struct DemoCreatureConfig : public CreatureConfig {
   float sizeYMeters = 1;
 };
 
-class DemoCreature : public Creature , public VisitableImpl<DemoCreature>{
+class DemoCreature : public Creature, public VisitableImpl<DemoCreature> {
 public:
   using Config = DemoCreatureConfig;
 
@@ -29,6 +29,8 @@ public:
   virtual ~DemoCreature() = default;
 
   b2Vec2 getWorldPos() override;
+
+  const b2Rot &getRotation()const;
 
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
@@ -78,6 +80,16 @@ private:
     float _defaultSpeedMpS = 10;
   } _moveContext;
 
+  void updateRotation(float dt);
+  struct RotationContext {
+    b2Rot _rotation;
+  } _rotationContext;
+
+  void updateLookAt(float dt);
+  struct {
+    b2Vec2 _worldPoint;
+  } _lookAtContext;
+
   void updateFeet(float dt);
   struct FootContext {
     b2Vec2 trackingPoint = {999999, 999999};
@@ -85,9 +97,5 @@ private:
   void updateLeg(float dt, FootContext &context,
                  const std::shared_ptr<LimbBody> leg, Direction moveDir);
 
-  struct RotationContext{
-    b2Rot _rotation;
-
-  } _rotationContext;
   friend class CreatureFactory;
 };
