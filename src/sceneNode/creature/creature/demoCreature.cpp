@@ -317,8 +317,6 @@ DemoCreature::DemoCreature(
 
   // Assign values
   _legHeight = segmentLen * numSegments + segmentRadius;
-  creatureState = CreatureState::ON_GROUND;
-  creatureAbilities = CreatureAbilities::CAN_JUMP;
   _moveContext._maxSpeedMultiplier = 3;
   _moveContext._defaultSpeedMpS = 5;
 }
@@ -608,6 +606,4 @@ b2Vec2 DemoCreature::getWorldPos() {
 
 const b2Rot &DemoCreature::getRotation() const {
   return _rotationContext._rotation;
-
-
 }

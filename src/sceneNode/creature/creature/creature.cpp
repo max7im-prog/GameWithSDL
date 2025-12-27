@@ -6,7 +6,6 @@
 #include "registryComposite.hpp"
 #include <stdexcept>
 
-std::uint32_t Creature::getAbilities() { return creatureAbilities; }
 
 Creature::Creature(entt::registry &registry, const std::shared_ptr<World> world)
     : SceneNode(registry), world(world) {}

@@ -1,8 +1,6 @@
 #pragma once
 #include "body.hpp"
 #include "box2d/types.h"
-#include "objectConfig.hpp"
-#include "registryComposite.hpp"
 #include "sceneNode.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
@@ -11,11 +9,6 @@ struct CreatureConfig : SceneNodeConfig {
   static b2Filter defaultFilter();
 };
 
-enum CreatureAbilities {
-  CAN_JUMP = 1 << 0,
-};
-
-enum CreatureState { ON_GROUND, IN_AIR, FLYING };
 
 class Creature : public SceneNode {
 public:
@@ -34,19 +27,15 @@ public:
 
   std::uint32_t getAbilities();
 
-  void registerBody(std::weak_ptr<Body> body, const std::string &name);
-  void registerConnection(std::weak_ptr<Connection> connection,
-                          const std::string &name);
-
-
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
 
-  std::uint32_t creatureAbilities = 0;
-  CreatureState creatureState;
-
   const std::shared_ptr<World> world;
 
+  void registerBody(std::weak_ptr<Body> body, const std::string &name);
+
+  void registerConnection(std::weak_ptr<Connection> connection,
+                          const std::string &name);
 
 private:
   Creature() = delete;

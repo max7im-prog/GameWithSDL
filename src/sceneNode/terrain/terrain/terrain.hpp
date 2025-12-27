@@ -1,12 +1,12 @@
 #pragma once
+#include "body.hpp"
+#include "connection.hpp"
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "sceneNode.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
-#include "body.hpp"
-#include "connection.hpp"
 
 struct TerrainConfig : SceneNodeConfig {
   static b2Filter defaultFilter();
@@ -44,21 +44,19 @@ struct TerrainConfig : SceneNodeConfig {
   static BodyParams parseBodyParams(const nlohmann::json &json);
 };
 
-class Terrain : public SceneNode{
+class Terrain : public SceneNode {
 public:
   virtual void update(float dt) override;
   virtual ~Terrain() = 0;
-
-  void registerBody(std::weak_ptr<Body> body, const std::string &name);
-  void registerConnection(std::weak_ptr<Connection> connection,
-                          const std::string &name);
-
 
 protected:
   Terrain(entt::registry &registry, const std::shared_ptr<World> world);
 
   const std::shared_ptr<World> world;
 
+  void registerBody(std::weak_ptr<Body> body, const std::string &name);
+  void registerConnection(std::weak_ptr<Connection> connection,
+                          const std::string &name);
 
 private:
   Terrain() = delete;
