@@ -27,8 +27,8 @@ public:
 protected:
   RegistryObject(entt::registry &registry);
   void setEntity(entt::entity e);
-  entt::registry &registry;
-  entt::entity entity;
+  entt::registry &_registry;
+  entt::entity _entity;
 
 private:
   RegistryObject() = delete;

@@ -63,52 +63,52 @@ public:
   void cleanup();
 
 private:
-  entt::registry registry;
+  entt::registry _registry;
   // Window parameters
-  int WIDTH = 800;
-  int HEIGHT = 600;
+  int _WIDTH = 800;
+  int _HEIGHT = 600;
 
   // Used to determine if game loop is active
-  bool running = false;
+  bool _running = false;
 
   // Event systems
-  PollEventSystem pollEventSystem;
-  QuitSystem quitSystem;
+  PollEventSystem _pollEventSystem;
+  QuitSystem _quitSystem;
 
   // Room manager
-  std::shared_ptr<RoomManager> roomManager;
+  std::shared_ptr<RoomManager> _roomManager;
 
   // Update systems
-  WorldUpdateSystem worldUpdateSystem;
-  ControllerUpdateSystem controllerUpdateSystem;
-  CreatureControlSystem creatureControlSystem;
-  MouseJointSystem mouseJointSystem;
-  CreatureUpdateSystem creatureUpdateSystem;
-  CameraSystem cameraSystem;
-  CleanupSystem cleanupSystem;
-  RoomLoadSystem roomLoadSystem;
+  WorldUpdateSystem _worldUpdateSystem;
+  ControllerUpdateSystem _controllerUpdateSystem;
+  CreatureControlSystem _creatureControlSystem;
+  MouseJointSystem _mouseJointSystem;
+  CreatureUpdateSystem _creatureUpdateSystem;
+  CameraSystem _cameraSystem;
+  CleanupSystem _cleanupSystem;
+  RoomLoadSystem _roomLoadSystem;
   TexturingSystem _texturingSystem;
   SandboxSystem _sandboxSystem;
 
   // Render systems
-  RenderBackgroundSystem renderBackgroundSystem;
-  std::shared_ptr<DebugRenderSystem> debugRenderSystem;
+  RenderBackgroundSystem _renderBackgroundSystem;
+  std::shared_ptr<DebugRenderSystem> _debugRenderSystem;
   std::shared_ptr<SceneRenderSystem> _sceneRenderSystem;
 
-  std::shared_ptr<RenderContext> renderContext;
+  std::shared_ptr<RenderContext> _renderContext;
 
   std::shared_ptr<TextureManager> _textureManager;
   std::shared_ptr<Texturer> _texturer;
 
   // Entity factories
-  std::shared_ptr<BodyFactory> bodyFactory;
-  std::shared_ptr<ConnectionFactory> connectionFactory;
-  std::shared_ptr<CreatureFactory> creatureFactory;
-  std::shared_ptr<TerrainFactory> terrainFactory;
-  std::shared_ptr<JointFactory> jointFactory;
-  std::shared_ptr<ShapeFactory> shapeFactory;
-  std::shared_ptr<WorldFactory> worldFactory;
+  std::shared_ptr<BodyFactory> _bodyFactory;
+  std::shared_ptr<ConnectionFactory> _connectionFactory;
+  std::shared_ptr<CreatureFactory> _creatureFactory;
+  std::shared_ptr<TerrainFactory> _terrainFactory;
+  std::shared_ptr<JointFactory> _jointFactory;
+  std::shared_ptr<ShapeFactory> _shapeFactory;
+  std::shared_ptr<WorldFactory> _worldFactory;
 
   // World
-  std::shared_ptr<World> world;
+  std::shared_ptr<World> _world;
 };

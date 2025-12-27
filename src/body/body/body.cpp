@@ -42,7 +42,7 @@ void Body::performRotation(b2Rot rot) {
     return;
   }
 
-  registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
+  _registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
   auto rotIncr = b2InvMulRot(curRot, rot);
   for (auto &[name, shape] : getShapes()) {
     if (auto lock = shape.lock()) {

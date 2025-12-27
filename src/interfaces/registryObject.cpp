@@ -1,26 +1,26 @@
 #include "registryObject.hpp"
 
-entt::entity RegistryObject::getEntity() { return entity; }
+entt::entity RegistryObject::getEntity() { return _entity; }
 
 void RegistryObject::setEntity(entt::entity e) {
   if (isValid()) {
-    registry.destroy(entity);
+    _registry.destroy(_entity);
   }
-  entity = e;
+  _entity = e;
 }
 
-bool RegistryObject::isValid() const { return registry.valid(entity); }
+bool RegistryObject::isValid() const { return _registry.valid(_entity); }
 
 void RegistryObject::remove() {
-  if (!registry.valid(entity)) {
-    entity = entt::null;
+  if (!_registry.valid(_entity)) {
+    _entity = entt::null;
     return;
   }
-  registry.destroy(entity);
-  entity = entt::null;
+  _registry.destroy(_entity);
+  _entity = entt::null;
 }
 
 RegistryObject::~RegistryObject() { remove(); }
 
 RegistryObject::RegistryObject(entt::registry &registry)
-    : registry(registry), entity(entt::null) {}
+    : _registry(registry), _entity(entt::null) {}

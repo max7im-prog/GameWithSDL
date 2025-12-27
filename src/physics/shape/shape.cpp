@@ -50,7 +50,7 @@ void Shape::performRotation(b2Rot rot) {
     return;
   }
 
-  registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
+  _registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
 
   // TODO: complete
 }

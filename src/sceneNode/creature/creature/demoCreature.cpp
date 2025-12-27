@@ -10,6 +10,7 @@
 #include "miscUtils.hpp"
 #include "physicsUtils.hpp"
 #include "polygonBody.hpp"
+#include "renderComponents.hpp"
 #include "world.hpp"
 #include <chrono>
 #include <sys/types.h>
@@ -588,6 +589,8 @@ void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   float desiredAngle = b2Atan2(translationX, planeDist);
   shoulderConnectionLock->rotate3D(desiredAngle);
   hipConnectionLock->rotate3D(desiredAngle);
+
+  _registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
 }
 
 b2Vec2 DemoCreature::getWorldPos() {
