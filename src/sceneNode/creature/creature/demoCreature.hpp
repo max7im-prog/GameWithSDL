@@ -28,7 +28,7 @@ public:
 
   b2Vec2 getWorldPos() override;
 
-  const b2Rot getRotation()const;
+  const b2Rot getRotation() const;
 
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
@@ -49,8 +49,9 @@ protected:
   std::weak_ptr<GirdleConnection> _shoulderConnection;
   std::weak_ptr<GirdleConnection> _hipConnection;
 
-  void aim(b2Vec2 worldPoint,bool aim);
+  void aim(b2Vec2 worldPoint, bool aim);
   void jump();
+
 private:
   void keepTorsoUpright(float dt);
   PIDScalarController _torsoAngleController;
@@ -88,6 +89,8 @@ private:
   void updateLookAt(float dt);
   struct {
     b2Vec2 _worldPoint;
+    float _desiredHipShoulderAngle;
+    b2Rot _desiredHipShoulderRot;
   } _lookAtContext;
 
   void updateFeet(float dt);

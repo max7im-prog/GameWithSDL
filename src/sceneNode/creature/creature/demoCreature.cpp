@@ -603,20 +603,38 @@ void DemoCreature::lookAt(b2Vec2 worldPoint) {
   auto &[shoulderConnectionLock, hipConnectionLock] = *locks;
 
   b2Vec2 creaturePos = getWorldPos();
-
   float translationX = b2Sub(worldPoint, creaturePos).x;
-
   float desiredAngle = b2Atan2(translationX, planeDist);
-  shoulderConnectionLock->rotate3D(desiredAngle);
-  hipConnectionLock->rotate3D(desiredAngle);
 
   _lookAtContext._worldPoint = worldPoint;
+  _lookAtContext._desiredHipShoulderAngle = desiredAngle;
+  _lookAtContext._desiredHipShoulderRot = b2MakeRot(desiredAngle);
+}
 
+void DemoCreature::updateLookAt(float dt) {
+  auto locks = MiscUtils::lockAll(_shoulderConnection, _hipConnection);
+  if (!locks)
+    throw std::runtime_error("One or more elements expired");
+  auto &[shoulderConnectionLock, hipConnectionLock] = *locks;
+  shoulderConnectionLock->rotate3D(_lookAtContext._desiredHipShoulderAngle);
+  hipConnectionLock->rotate3D(_lookAtContext._desiredHipShoulderAngle);
   _registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
 }
 
-void DemoCreature::updateLookAt(float dt) {}
-void DemoCreature::updateRotation(float dt) {}
+void DemoCreature::updateRotation(float dt) {
+  b2Rot curRot = getRotation();
+  b2Rot rotIncr = b2InvMulRot(_lookAtContext._desiredHipShoulderRot, curRot);
+  _rotationContext._rotation = _lookAtContext._desiredHipShoulderRot;
+  if (b2Rot_GetAngle(rotIncr) < B2_PI * 0.01) {
+    return;
+  }
+  for (auto &[name, ptr] : getBodies()) {
+    if (auto lk = ptr.lock()) {
+      auto curChildRot = lk->get3dRot();
+      lk->set3dRot(b2MulRot(curChildRot, rotIncr));
+    }
+  }
+}
 
 b2Vec2 DemoCreature::getWorldPos() {
 
