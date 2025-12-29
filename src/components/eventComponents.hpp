@@ -6,6 +6,7 @@ enum InputState {
   HELD_PRESSED,
   JUST_RELEASED,
   SINGLE_FRAME_EVENT,
+  NOT_PRESSED
 };
 
 struct PlayerInput {

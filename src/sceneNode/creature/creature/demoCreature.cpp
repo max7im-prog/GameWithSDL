@@ -28,6 +28,7 @@ DemoCreature::DemoCreature(
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Creature(registry, world) {
+
   // Bind actions
   _actions = {{CreatureAction::PrimaryAttack,
                [&](bool pressed) -> void { aim({0, 0}, pressed); }},

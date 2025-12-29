@@ -1,28 +1,18 @@
 #pragma once
+#include "creature.hpp"
+#include "eventComponents.hpp"
 #include <box2d/box2d.h>
 #include <entt/entt.hpp>
 
 struct PlayerControlled {};
 
 struct Controller {
-  entt::entity creature = entt::null;
+  using ActionState = struct ActionState {
+    InputState _inputState = InputState::NOT_PRESSED;
+  };
 
-  bool jump = false;
-  bool attack = false;
-  bool defend = false;
-  struct AimContext {
-    b2Vec2 worldPoint = {0, 0};
-    bool aim = false;
-    bool update = false;
-  } aimContext;
-  struct LookContext {
-    b2Vec2 worldPoint = {0, 0};
-    bool look = false;
-    bool update = false;
-  } lookContext;
-  struct MoveContext {
-    b2Vec2 moveDir = {0, 0};
-    float moveIntensity = 0;
-    bool update = false;
-  } moveContext;
+  entt::entity _creature = entt::null;
+  std::map<CreatureAction, ActionState> _actions;
+  b2Vec2 _lookWorldPoint = {0, 0};
+  b2Vec2 _moveDir = {0, 0};
 };

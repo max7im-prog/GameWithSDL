@@ -24,8 +24,7 @@ class Creature : public SceneNode {
 public:
   virtual ~Creature() = 0;
   virtual void move(b2Vec2 dir) = 0;
-  virtual void lookAt([[maybe_unused]] b2Vec2 worldPoint,
-                      [[maybe_unused]] bool look) {};
+  virtual void lookAt([[maybe_unused]] b2Vec2 worldPoint) {};
   virtual void perform(CreatureAction action, bool pressed);
   virtual void update(float dt) override;
 

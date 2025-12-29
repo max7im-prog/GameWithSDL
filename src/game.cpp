@@ -101,7 +101,7 @@ bool Game::init() {
         auto ent = _registry.create();
         auto &controller = _registry.emplace_or_replace<Controller>(ent);
 
-        controller.creature = creature->getEntity();
+        controller._creature = creature->getEntity();
       }
       {
         float interval = 200;
