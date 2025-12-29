@@ -3,6 +3,7 @@
 #include "box2d/types.h"
 #include "sceneNode.hpp"
 #include "world.hpp"
+#include <cstddef>
 #include <entt/entt.hpp>
 
 struct CreatureConfig : SceneNodeConfig {
@@ -22,8 +23,8 @@ enum class CreatureAction {
 class Creature : public SceneNode {
 public:
   virtual ~Creature() = 0;
-  virtual void move(const b2Vec2 &dir) = 0;
-  virtual void lookAt([[maybe_unused]] const b2Vec2 &worldPoint,
+  virtual void move(b2Vec2 dir) = 0;
+  virtual void lookAt([[maybe_unused]] b2Vec2 worldPoint,
                       [[maybe_unused]] bool look) {};
   virtual void perform(CreatureAction action, bool pressed);
   virtual void update(float dt) override;
@@ -36,6 +37,8 @@ protected:
                           const std::string &name);
 
   const std::shared_ptr<World> world;
+
+  std::unordered_map<CreatureAction, std::function<void(bool)>> _actions;
 
 private:
   Creature() = delete;

@@ -1,11 +1,12 @@
 #include "creature.hpp"
+
 #include "body.hpp"
 #include "box2d/types.h"
-#include "demoCreature.hpp"
+#include "connection.hpp"
 #include "physicsUtils.hpp"
 #include "registryComposite.hpp"
-#include <stdexcept>
 
+#include <stdexcept>
 
 Creature::Creature(entt::registry &registry, const std::shared_ptr<World> world)
     : SceneNode(registry), world(world) {}
@@ -37,4 +38,12 @@ void Creature::registerConnection(std::weak_ptr<Connection> connection,
   }
   _connections[name] = connection;
   registerChild(connection);
+}
+
+void Creature::perform(CreatureAction action, bool pressed) {
+  if (auto it = _actions.find(action); it != _actions.end()) {
+    it->second(pressed);
+  } else {
+    // TODO: log
+  }
 }

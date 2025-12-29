@@ -16,8 +16,8 @@
 #include <nlohmann/json.hpp>
 #include <sys/types.h>
 
-void DemoCreature::move(b2Vec2 dir, float intensity) {
-  _moveContext._intensity = intensity;
+void DemoCreature::move(b2Vec2 dir) {
+  _moveContext._intensity = 5;
   _moveContext._dir = dir;
   _moveContext._move = true;
 }
@@ -28,6 +28,17 @@ DemoCreature::DemoCreature(
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Creature(registry, world) {
+  // Bind actions
+  _actions = {{CreatureAction::PrimaryAttack,
+               [&](bool pressed) -> void { aim({0, 0}, pressed); }},
+              {CreatureAction::PrimaryMobility,
+               [&](bool pressed) -> void {
+                 if (pressed) {
+                   jump();
+                 }
+               }}
+
+  };
 
   // Calculate stuff
   constexpr size_t numSegments = 2;
@@ -604,6 +615,6 @@ b2Vec2 DemoCreature::getWorldPos() {
   return torsoLock->getPolygon()->getWorldPos();
 }
 
-const b2Rot &DemoCreature::getRotation() const {
+const b2Rot DemoCreature::getRotation() const {
   return _rotationContext._rotation;
 }

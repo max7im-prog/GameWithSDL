@@ -21,16 +21,14 @@ class DemoCreature : public Creature, public VisitableImpl<DemoCreature> {
 public:
   using Config = DemoCreatureConfig;
 
-  void move(b2Vec2 dir, float intensity) override;
-  void aim(b2Vec2 worldPoint, bool aim) override;
+  void move(b2Vec2 dir) override;
   void lookAt(b2Vec2 worldPoint, bool aim) override;
-  void jump() override;
   virtual void update(float dt) override;
   virtual ~DemoCreature() = default;
 
   b2Vec2 getWorldPos() override;
 
-  const b2Rot &getRotation()const;
+  const b2Rot getRotation()const;
 
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
@@ -51,6 +49,8 @@ protected:
   std::weak_ptr<GirdleConnection> _shoulderConnection;
   std::weak_ptr<GirdleConnection> _hipConnection;
 
+  void aim(b2Vec2 worldPoint,bool aim);
+  void jump();
 private:
   void keepTorsoUpright(float dt);
   PIDScalarController _torsoAngleController;
