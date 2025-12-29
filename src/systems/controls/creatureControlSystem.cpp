@@ -23,7 +23,7 @@ void CreatureControlSystem::update(entt::registry &registry,
         creature->lookAt(controller._lookWorldPoint);
         creature->move(controller._moveDir);
         for (auto &[action, actionState]: controller._actions) {
-          creature->perform(action, actionState._pressed);
+          creature->perform(action, actionState._inputState);
         }
       }
     }

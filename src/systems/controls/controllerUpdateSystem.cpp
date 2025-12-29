@@ -32,13 +32,13 @@ void ControllerUpdateSystem::update(entt::registry &registry,
     Uint8 _buttonCode = 0;
     InputState _inputState = InputState::NOT_PRESSED;
   };
-  std::set<KeyInfo> pressedKeys = {};
+  std::vector<KeyInfo> pressedKeys = {};
   for (auto [ent, input, kp] : keyPressView.each()) {
-    pressedKeys.insert(KeyInfo{kp.event.key.key, input.state});
+    pressedKeys.push_back(KeyInfo{kp.event.key.key, input.state});
   }
-  std::set<ButtonInfo> pressedButtons = {};
+  std::vector<ButtonInfo> pressedButtons = {};
   for (auto [ent, input, bp] : buttonPressView.each()) {
-    pressedButtons.insert({bp.event.button.button, input.state});
+    pressedButtons.push_back({bp.event.button.button, input.state});
   }
   b2Vec2 mouseLocation;
   {
@@ -71,15 +71,18 @@ void ControllerUpdateSystem::update(entt::registry &registry,
         break;
       case SDLK_D:
         movementDir = b2Add(movementDir, {1, 0});
+        break;
 
       case SDLK_SPACE:
         controller._actions[CreatureAction::PrimaryMobility] = {};
-        controller._actions[CreatureAction::PrimaryMobility]._inputState = key._inputState;
+        controller._actions[CreatureAction::PrimaryMobility]._inputState =
+            key._inputState;
         break;
 
       case SDLK_LSHIFT:
         controller._actions[CreatureAction::SecondaryMobility] = {};
-        controller._actions[CreatureAction::SecondaryMobility]._inputState = key._inputState;
+        controller._actions[CreatureAction::SecondaryMobility]._inputState =
+            key._inputState;
         break;
 
       default:
@@ -92,11 +95,13 @@ void ControllerUpdateSystem::update(entt::registry &registry,
       switch (button._buttonCode) {
       case SDL_BUTTON_LEFT:
         controller._actions[CreatureAction::PrimaryAttack] = {};
-        controller._actions[CreatureAction::PrimaryAttack]._inputState = button._inputState;
+        controller._actions[CreatureAction::PrimaryAttack]._inputState =
+            button._inputState;
         break;
       case SDL_BUTTON_RIGHT:
         controller._actions[CreatureAction::SecondaryAttack] = {};
-        controller._actions[CreatureAction::SecondaryAttack]._inputState = button._inputState;
+        controller._actions[CreatureAction::SecondaryAttack]._inputState =
+            button._inputState;
         break;
       default:
         break;

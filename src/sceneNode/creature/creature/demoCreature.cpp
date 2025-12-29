@@ -5,6 +5,7 @@
 #include "box2d/types.h"
 #include "circleBody.hpp"
 #include "creature.hpp"
+#include "eventComponents.hpp"
 #include "girdleConnection.hpp"
 #include "limbBody.hpp"
 #include "miscUtils.hpp"
@@ -31,10 +32,17 @@ DemoCreature::DemoCreature(
 
   // Bind actions
   _actions = {{CreatureAction::PrimaryAttack,
-               [&](bool pressed) -> void { aim({0, 0}, pressed); }},
+               [&](InputState inputState) -> void {
+                 if (inputState == InputState::JUST_PRESSED ||
+                     inputState == InputState::HELD_PRESSED) {
+                   aim(_lookAtContext._worldPoint, true);
+                 } else {
+                   aim(_lookAtContext._worldPoint, false);
+                 }
+               }},
               {CreatureAction::PrimaryMobility,
-               [&](bool pressed) -> void {
-                 if (pressed) {
+               [&](InputState inputState) -> void {
+                 if (inputState == InputState::JUST_PRESSED) {
                    jump();
                  }
                }}
@@ -587,7 +595,7 @@ void DemoCreature::updateLeg(float dt, DemoCreature::FootContext &context,
   }
 }
 
-void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
+void DemoCreature::lookAt(b2Vec2 worldPoint) {
   constexpr float planeDist = 15;
   auto locks = MiscUtils::lockAll(_shoulderConnection, _hipConnection);
   if (!locks)
@@ -601,6 +609,8 @@ void DemoCreature::lookAt(b2Vec2 worldPoint, bool aim) {
   float desiredAngle = b2Atan2(translationX, planeDist);
   shoulderConnectionLock->rotate3D(desiredAngle);
   hipConnectionLock->rotate3D(desiredAngle);
+
+  _lookAtContext._worldPoint = worldPoint;
 
   _registry.emplace_or_replace<RenderRequiresUpdateTag>(getEntity());
 }

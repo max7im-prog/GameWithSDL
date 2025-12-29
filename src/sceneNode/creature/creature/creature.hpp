@@ -1,6 +1,7 @@
 #pragma once
 #include "body.hpp"
 #include "box2d/types.h"
+#include "eventComponents.hpp"
 #include "sceneNode.hpp"
 #include "world.hpp"
 #include <cstddef>
@@ -25,7 +26,7 @@ public:
   virtual ~Creature() = 0;
   virtual void move(b2Vec2 dir) = 0;
   virtual void lookAt([[maybe_unused]] b2Vec2 worldPoint) {};
-  virtual void perform(CreatureAction action, bool pressed);
+  virtual void perform(CreatureAction action, InputState inputState);
   virtual void update(float dt) override;
 
 protected:
@@ -37,7 +38,7 @@ protected:
 
   const std::shared_ptr<World> world;
 
-  std::unordered_map<CreatureAction, std::function<void(bool)>> _actions;
+  std::unordered_map<CreatureAction, std::function<void(InputState)>> _actions;
 
 private:
   Creature() = delete;

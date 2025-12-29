@@ -22,7 +22,7 @@ public:
   using Config = DemoCreatureConfig;
 
   void move(b2Vec2 dir) override;
-  void lookAt(b2Vec2 worldPoint, bool aim) override;
+  void lookAt(b2Vec2 worldPoint) override;
   virtual void update(float dt) override;
   virtual ~DemoCreature() = default;
 

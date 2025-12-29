@@ -40,9 +40,9 @@ void Creature::registerConnection(std::weak_ptr<Connection> connection,
   registerChild(connection);
 }
 
-void Creature::perform(CreatureAction action, bool pressed) {
+void Creature::perform(CreatureAction action, InputState inputState) {
   if (auto it = _actions.find(action); it != _actions.end()) {
-    it->second(pressed);
+    it->second(inputState);
   } else {
     // TODO: log
   }
