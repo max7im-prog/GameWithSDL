@@ -18,13 +18,13 @@ public:
   void resetTexturing();
 
 
-  void visit(SceneNode *n) override;
+  void visit(SceneNode &n) override;
 
 
-  void visit(Body *b) override;
+  void visit(Body &b) override;
 
 
-  void visit(Shape *s) override;
+  void visit(Shape &s) override;
 
 protected:
   entt::registry &_registry;

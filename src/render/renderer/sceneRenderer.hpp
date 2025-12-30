@@ -9,11 +9,11 @@ class SceneRenderer : public Renderer {
 public:
   SceneRenderer(entt::registry &registry, RenderContext &renderContext);
 
-  void visit(SceneNode *n) override;
+  void visit(SceneNode &n) override;
 
-  void visit(Body *b) override;
+  void visit(Body &b) override;
 
-  void visit(Shape *s) override;
+  void visit(Shape &s) override;
 
 protected:
   entt::registry &_registry;

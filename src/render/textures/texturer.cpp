@@ -25,7 +25,7 @@ void Texturer::resetTexturing() {
   _currentSceneNodeTransform = Common::Transform{};
 }
 
-void Texturer::visit(SceneNode *n) {
+void Texturer::visit(SceneNode &n) {
 
   if (!_currentTopRenderConfig) {
     throw std::runtime_error("Render config for terrain is not set");
@@ -33,7 +33,7 @@ void Texturer::visit(SceneNode *n) {
 
   auto &renderSequence = _currentTopRenderConfig->_renderSequence;
 
-  auto &bodies = n->getBodies();
+  auto &bodies = n.getBodies();
 
   for (auto &bodyName : renderSequence) {
     auto renderIt = _currentTopRenderConfig->_bodyRenders.find(bodyName);
@@ -60,11 +60,11 @@ void Texturer::visit(SceneNode *n) {
   // std::cout << "textured scene node" << std::endl;
 
   // Attach a render sequence to scene node
-  auto ent = n->getEntity();
+  auto ent = n.getEntity();
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-void Texturer::visit(Body *b) {
+void Texturer::visit(Body &b) {
 
   if (!_currentBodyRenderConfig) {
     throw std::runtime_error("Render config for body is not set");
@@ -72,7 +72,7 @@ void Texturer::visit(Body *b) {
 
   auto &renderSequence = _currentBodyRenderConfig->_renderSequence;
 
-  auto &shapes = b->getShapes();
+  auto &shapes = b.getShapes();
 
   for (auto &shapeName : renderSequence) {
     auto renderIt = _currentBodyRenderConfig->_shapeRenders.find(shapeName);
@@ -99,17 +99,17 @@ void Texturer::visit(Body *b) {
   // std::cout << "textured body" << std::endl;
 
   // Attach a render sequence to body
-  auto ent = b->getEntity();
+  auto ent = b.getEntity();
   _registry.emplace_or_replace<RenderSequenceComponent>(ent, renderSequence);
 }
 
-void Texturer::visit(Shape *s) {
+void Texturer::visit(Shape &s) {
   if (!_currentShapeRenderConfig) {
     throw std::runtime_error("Render config for shape is not set");
   }
 
   // Attach texture to shape
-  auto ent = s->getEntity();
+  auto ent = s.getEntity();
   std::shared_ptr<SDL_Texture> texture;
   auto &filename = _currentShapeRenderConfig->_texture;
   auto t = _textureManager->getTexture(filename);

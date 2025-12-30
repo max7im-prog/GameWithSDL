@@ -44,44 +44,44 @@ class Visitor {
 public:
   virtual ~Visitor() = 0;
 
-  virtual void visit([[maybe_unused]] RegistryComposite *) {}
+  virtual void visit([[maybe_unused]] RegistryComposite &) {}
 
-  virtual void visit([[maybe_unused]] SceneNode *) {}
+  virtual void visit([[maybe_unused]] SceneNode &) {}
 
-  virtual void visit([[maybe_unused]] Shape *) {}
-  virtual void visit([[maybe_unused]] Circle *) {}
-  virtual void visit([[maybe_unused]] Segment *) {}
-  virtual void visit([[maybe_unused]] Capsule *) {}
-  virtual void visit([[maybe_unused]] Polygon *) {}
+  virtual void visit([[maybe_unused]] Shape &) {}
+  virtual void visit([[maybe_unused]] Circle &) {}
+  virtual void visit([[maybe_unused]] Segment &) {}
+  virtual void visit([[maybe_unused]] Capsule &) {}
+  virtual void visit([[maybe_unused]] Polygon &) {}
 
-  virtual void visit([[maybe_unused]] Joint *) {}
-  virtual void visit([[maybe_unused]] DistanceJoint *) {}
-  virtual void visit([[maybe_unused]] MouseJoint *) {}
-  virtual void visit([[maybe_unused]] PrismaticJoint *) {}
-  virtual void visit([[maybe_unused]] RevoluteJoint *) {}
-  virtual void visit([[maybe_unused]] WeldJoint *) {}
+  virtual void visit([[maybe_unused]] Joint &) {}
+  virtual void visit([[maybe_unused]] DistanceJoint &) {}
+  virtual void visit([[maybe_unused]] MouseJoint &) {}
+  virtual void visit([[maybe_unused]] PrismaticJoint &) {}
+  virtual void visit([[maybe_unused]] RevoluteJoint &) {}
+  virtual void visit([[maybe_unused]] WeldJoint &) {}
 
-  virtual void visit([[maybe_unused]] Body *) {}
-  virtual void visit([[maybe_unused]] CircleBody *) {}
-  virtual void visit([[maybe_unused]] SegmentBody *) {}
-  virtual void visit([[maybe_unused]] CapsuleBody *) {}
-  virtual void visit([[maybe_unused]] PolygonBody *) {}
-  virtual void visit([[maybe_unused]] LimbBody *) {}
+  virtual void visit([[maybe_unused]] Body &) {}
+  virtual void visit([[maybe_unused]] CircleBody &) {}
+  virtual void visit([[maybe_unused]] SegmentBody &) {}
+  virtual void visit([[maybe_unused]] CapsuleBody &) {}
+  virtual void visit([[maybe_unused]] PolygonBody &) {}
+  virtual void visit([[maybe_unused]] LimbBody &) {}
 
-  virtual void visit([[maybe_unused]] Connection *) {}
-  virtual void visit([[maybe_unused]] DistanceConnection *) {}
-  virtual void visit([[maybe_unused]] GirdleConnection *) {}
-  virtual void visit([[maybe_unused]] RevoluteConnection *) {}
-  virtual void visit([[maybe_unused]] WeldConnection *) {}
+  virtual void visit([[maybe_unused]] Connection &) {}
+  virtual void visit([[maybe_unused]] DistanceConnection &) {}
+  virtual void visit([[maybe_unused]] GirdleConnection &) {}
+  virtual void visit([[maybe_unused]] RevoluteConnection &) {}
+  virtual void visit([[maybe_unused]] WeldConnection &) {}
 
-  virtual void visit([[maybe_unused]] Terrain *) {}
-  virtual void visit([[maybe_unused]] CapsuleTerrain *) {}
-  virtual void visit([[maybe_unused]] CircleTerrain *) {}
-  virtual void visit([[maybe_unused]] PolygonTerrain *) {}
-  virtual void visit([[maybe_unused]] SegmentTerrain *) {}
+  virtual void visit([[maybe_unused]] Terrain &) {}
+  virtual void visit([[maybe_unused]] CapsuleTerrain &) {}
+  virtual void visit([[maybe_unused]] CircleTerrain &) {}
+  virtual void visit([[maybe_unused]] PolygonTerrain &) {}
+  virtual void visit([[maybe_unused]] SegmentTerrain &) {}
 
-  virtual void visit([[maybe_unused]] Creature *) {}
-  virtual void visit([[maybe_unused]] DemoCreature *) {}
+  virtual void visit([[maybe_unused]] Creature &) {}
+  virtual void visit([[maybe_unused]] DemoCreature &) {}
 
 protected:
 private:
@@ -103,6 +103,6 @@ public:
 template <typename Derived> class VisitableImpl : public virtual IVisitable {
 public:
   virtual void accept(Visitor &v) override {
-    v.visit(static_cast<Derived *>(this));
+    v.visit(static_cast<Derived &>(*this));
   }
 };

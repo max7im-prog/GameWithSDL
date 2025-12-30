@@ -12,15 +12,15 @@
 
 class DebugRenderer : public Renderer {
 public:
-  DebugRenderer( RenderContext &c);
-  void visit(Circle *c);
-  void visit(Polygon *p);
-  void visit(Segment *s);
-  void visit(Capsule *c);
-  void visit(MouseJoint *);
-  void visit(PrismaticJoint *);
-  void visit(RevoluteJoint *);
-  void visit(WeldJoint *);
+  DebugRenderer(RenderContext &c);
+  void visit(Circle &c) override;
+  void visit(Polygon &p) override;
+  void visit(Segment &s) override;
+  void visit(Capsule &c) override;
+  void visit(MouseJoint &) override;
+  void visit(PrismaticJoint &) override;
+  void visit(RevoluteJoint &) override;
+  void visit(WeldJoint &) override;
 
   enum RenderColor {
     CIRCLE_COLOR,

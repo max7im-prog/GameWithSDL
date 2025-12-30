@@ -6,8 +6,8 @@ SceneRenderer::SceneRenderer(entt::registry &registry,
                              RenderContext &renderContext)
     : Renderer(renderContext), _registry(registry) {}
 
-void SceneRenderer::visit(SceneNode *n) {
-  auto ent = n->getEntity();
+void SceneRenderer::visit(SceneNode &n) {
+  auto ent = n.getEntity();
   if (!_registry.all_of<RenderSequenceComponent>(ent)) {
     return;
     // TODO: log error
@@ -15,7 +15,7 @@ void SceneRenderer::visit(SceneNode *n) {
 
   auto renderSeq = _registry.get<RenderSequenceComponent>(ent);
 
-  const auto &bodies = n->getBodies();
+  const auto &bodies = n.getBodies();
   for (auto childId : renderSeq._renderSequence) {
     if (bodies.contains(childId)) {
       auto body = bodies.at(childId).lock();
@@ -31,8 +31,8 @@ void SceneRenderer::visit(SceneNode *n) {
   }
 }
 
-void SceneRenderer::visit(Body *b) {
-  auto ent = b->getEntity();
+void SceneRenderer::visit(Body &b) {
+  auto ent = b.getEntity();
   if (!_registry.all_of<RenderSequenceComponent>(ent)) {
     return;
     // TODO: log error
@@ -40,7 +40,7 @@ void SceneRenderer::visit(Body *b) {
 
   auto renderSeq = _registry.get<RenderSequenceComponent>(ent);
 
-  const auto &shapes = b->getShapes();
+  const auto &shapes = b.getShapes();
   for (auto childId : renderSeq._renderSequence) {
     if (shapes.contains(childId)) {
       auto shape = shapes.at(childId).lock();
@@ -56,8 +56,8 @@ void SceneRenderer::visit(Body *b) {
   }
 }
 
-void SceneRenderer::visit(Shape *s) {
-  auto ent = s->getEntity();
+void SceneRenderer::visit(Shape &s) {
+  auto ent = s.getEntity();
   if (!_registry.all_of<TextureComponent, PhysicsShape>(ent)) {
     return;
     // TODO: log error
