@@ -177,6 +177,12 @@ SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
             shapeCfg->worldSize._w = w;
           }
 
+          {
+            auto initRotDegrees = JsonUtils::getOrDefault<float>(
+                shapeJson, "initialRotationOffsetDegrees", 0.0f);
+            shapeCfg->_initialRotationOffset = b2MakeRot(B2_PI*2.0f*initRotDegrees/360.0f);
+          }
+
           bodyCfg->_shapeRenders[shapeName] = shapeCfg;
         }
       }

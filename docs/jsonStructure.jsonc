@@ -157,6 +157,7 @@
 						// Path to the texture
 						"spriteSheet": "res/textures/test/test_1.png",
 						"numSprites": 1,
+						"initialRotationOffsetDegrees": 0,
 						"spriteDim": {
 							"w": 100, // pixels
 							"h": 100 // pixels

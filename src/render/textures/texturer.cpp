@@ -132,6 +132,7 @@ void Texturer::visit(Shape &s) {
 
   el._texture = texture;
   el._offsetPerTexture = _currentShapeRenderConfig->_offsetPerTexture;
+  el._initialRotationOffset = _currentShapeRenderConfig->_initialRotationOffset;
   el._numTextures = _currentShapeRenderConfig->_numTextures;
   el._initialRect = _currentShapeRenderConfig->_initialRect;
   el._currentRect = el._initialRect;
