@@ -1,11 +1,14 @@
 
 #include "sandboxSystem.hpp"
 #include "SDL3/SDL_rect.h"
+#include "box2d/math_functions.h"
 #include "commonClasses.hpp"
+#include "creatureComponents.hpp"
 #include "gameSystem.hpp"
 #include "physicsComponents.hpp"
 #include "renderComponents.hpp"
 #include "renderUtils.hpp"
+#include <iostream>
 
 SandboxSystem::SandboxSystem() : GameSystem("SandboxSystem") {
   _currentTransform._scaleX = 4;
@@ -16,6 +19,10 @@ SandboxSystem::SandboxSystem() : GameSystem("SandboxSystem") {
 
 SandboxSystem::~SandboxSystem() {}
 
+void SandboxSystem::setCreature(std::weak_ptr<DemoCreature> cr) {
+  _creature = cr;
+}
+
 void SandboxSystem::update(entt::registry &registry,
                            const RenderContext &renderContext,
                            std::shared_ptr<TextureManager> textureManager,
@@ -24,6 +31,7 @@ void SandboxSystem::update(entt::registry &registry,
     return;
   }
 
+  //------------------------------------------TREE-----------------------------------------
   auto texture = textureManager->getTexture("res/textures/test/test_2.png");
   if (!texture) {
     return;
@@ -43,26 +51,24 @@ void SandboxSystem::update(entt::registry &registry,
   RenderUtils::renderTexture(texture.get(), region, 10, 10, _currentTransform,
                              renderContext);
 
-  // {
-  //   auto view = registry.view<PhysicsShape, TextureComponent>();
-  //   for (auto &ent : view) {
-  //     const auto &shape = view.get<PhysicsShape>(ent).shape;
-  //     const auto &tex = view.get<TextureComponent>(ent);
-  //     b2Vec2 pos = shape->getWorldPos();
-  //
-  //     Common::Transform relativeTransform;
-  //     relativeTransform._originPos = {0,0};
-  //     relativeTransform._relativePos = pos;
-  //     relativeTransform._rootRot = b2MakeRot(0);
-  //     relativeTransform._relativeRot= shape->getRotation();
-  //
-  //     auto& initialTransform = tex._initialTransform;
-  //
-  //     auto finalTransform = Common::Transform::composeTransform(initialTransform, relativeTransform);
-  //
-  //     RenderUtils::renderTexture(tex._texture.get(), tex._currentRect,
-  //                                tex._worldSize._h, tex._worldSize._w,
-  //                                finalTransform, renderContext);
-  //   }
-  // }
+  //------------------------------------------UPDATE_RENDER-----------------------------------------
+
+  if (!_renderUpdater) {
+    _renderUpdater = std::make_unique<RenderUpdater>(registry);
+  }
+
+  {
+    auto v = registry.view<PhysicsCreature>();
+    for (auto ent : v) {
+      auto &comp = v.get<PhysicsCreature>(ent);
+      auto &creature = comp.creature;
+      creature->accept(*_renderUpdater);
+    }
+  }
+
+  if (auto lk = _creature.lock()) {
+    auto curAngle = lk->_lookAtContext._desiredHipShoulderAngle;
+    lk->_lookAtContext._desiredHipShoulderAngle = curAngle + B2_PI / 300;
+    // std::cout << "get rotated! " << curAngle / B2_PI * 180.0f << std::endl;
+  }
 }

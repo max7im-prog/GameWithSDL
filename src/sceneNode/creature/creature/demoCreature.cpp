@@ -14,6 +14,7 @@
 #include "renderComponents.hpp"
 #include "world.hpp"
 #include <chrono>
+#include <iostream>
 #include <nlohmann/json.hpp>
 #include <sys/types.h>
 
@@ -608,7 +609,6 @@ void DemoCreature::lookAt(b2Vec2 worldPoint) {
 
   _lookAtContext._worldPoint = worldPoint;
   _lookAtContext._desiredHipShoulderAngle = desiredAngle;
-  _lookAtContext._desiredHipShoulderRot = b2MakeRot(desiredAngle);
 }
 
 void DemoCreature::updateLookAt(float dt) {
@@ -623,15 +623,17 @@ void DemoCreature::updateLookAt(float dt) {
 
 void DemoCreature::updateRotation(float dt) {
   b2Rot curRot = getRotation();
-  b2Rot rotIncr = b2InvMulRot(_lookAtContext._desiredHipShoulderRot, curRot);
-  _rotationContext._rotation = _lookAtContext._desiredHipShoulderRot;
+  b2Rot rotIncr = b2InvMulRot(b2MakeRot(_lookAtContext._desiredHipShoulderAngle), curRot);
   if (b2Rot_GetAngle(rotIncr) < B2_PI * 0.01) {
     return;
   }
+  _rotationContext._rotationAngle = _lookAtContext._desiredHipShoulderAngle;
+
   for (auto &[name, ptr] : getBodies()) {
     if (auto lk = ptr.lock()) {
       auto curChildRot = lk->get3dRot();
-      lk->set3dRot(b2MulRot(curChildRot, rotIncr));
+      auto arg = b2MulRot(curChildRot, rotIncr);
+      lk->set3dRot(arg);
     }
   }
 }
@@ -645,5 +647,5 @@ b2Vec2 DemoCreature::getWorldPos() {
 }
 
 const b2Rot DemoCreature::getRotation() const {
-  return _rotationContext._rotation;
+  return b2MakeRot(_rotationContext._rotationAngle);
 }

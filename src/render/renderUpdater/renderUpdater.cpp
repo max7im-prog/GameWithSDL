@@ -1,6 +1,9 @@
 #include "renderUpdater.hpp"
 #include "box2d/math_functions.h"
 #include "renderComponents.hpp"
+#include <iostream>
+
+RenderUpdater::RenderUpdater(entt::registry &registry) : _registry(registry) {}
 
 void RenderUpdater::visit(Shape &shape) {
   auto ent = shape.getEntity();
@@ -31,6 +34,11 @@ void RenderUpdater::visit(Shape &shape) {
   float angleIncr = B2_PI * 2.0f / static_cast<float>(numFaces);
 
   int currentFace = std::floor(adjustedAngle / angleIncr);
+
+  // std::cout << "initial rot: " << b2Rot_GetAngle(initialRot) / B2_PI * 180
+  //           << " relative rot: " << b2Rot_GetAngle(relativeRot) / B2_PI * 180
+  //           << " Composite rot: " << b2Rot_GetAngle(compositeRot) / B2_PI * 180
+  //           << ", face: " << currentFace << std::endl;
 
   // Apply changes to the texture component
   texture._currentRect.x =

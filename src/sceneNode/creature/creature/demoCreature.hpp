@@ -83,14 +83,13 @@ private:
 
   void updateRotation(float dt);
   struct RotationContext {
-    b2Rot _rotation;
+    float _rotationAngle;
   } _rotationContext;
 
   void updateLookAt(float dt);
   struct {
     b2Vec2 _worldPoint;
     float _desiredHipShoulderAngle;
-    b2Rot _desiredHipShoulderRot;
   } _lookAtContext;
 
   void updateFeet(float dt);
@@ -101,4 +100,7 @@ private:
                  const std::shared_ptr<LimbBody> leg, Direction moveDir);
 
   friend class CreatureFactory;
+
+  // TODO: remove friend testing class
+  friend class SandboxSystem;
 };

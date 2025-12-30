@@ -36,5 +36,5 @@ protected:
   virtual void performRotation(b2Rot rot) = 0;
 
 private:
-  b2Rot _3dRot{b2MakeRot(0)};
+  float _3dAngle{0};
 };

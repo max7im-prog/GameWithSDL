@@ -33,7 +33,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -57,11 +57,12 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           },
           "capsule2": {
             "spriteSheet": "res/textures/creature/knight/leg_bot.png",
+            "initialRotationOffsetDegrees": 0,
             "numSprites": 4,
             "spriteDim": {
               "w": 64,
@@ -73,7 +74,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -86,6 +87,7 @@
         "shapeRenders": {
           "capsule1": {
             "spriteSheet": "res/textures/creature/knight/leg_top.png",
+            "initialRotationOffsetDegrees": 0,
             "numSprites": 1,
             "spriteDim": {
               "w": 64,
@@ -97,7 +99,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           },
           "capsule2": {
@@ -113,7 +115,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -137,7 +139,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           },
           "capsule2": {
@@ -153,7 +155,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -177,7 +179,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           },
           "capsule2": {
@@ -193,7 +195,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -216,7 +218,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -239,7 +241,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -262,7 +264,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }
@@ -285,7 +287,7 @@
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 0
+              "y": 16
             }
           }
         }

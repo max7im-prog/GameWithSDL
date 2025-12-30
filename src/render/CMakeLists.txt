@@ -6,6 +6,7 @@ set(INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/renderer
   ${CMAKE_CURRENT_SOURCE_DIR}/textures
+  ${CMAKE_CURRENT_SOURCE_DIR}/renderUpdater
 )
 
 add_library(game_render_lib STATIC ${SOURCES})
