@@ -21,7 +21,7 @@ struct GirdleConnectionConfig : public ConnectionConfig {
 
   b2Vec2 rotationAxis;
   float girdleWidth;
-  b2Rot initial3DRotation;
+  float initial3DRotationRad;
 };
 
 class GirdleConnection : public Connection , public VisitableImpl<GirdleConnection>{
@@ -41,8 +41,8 @@ protected:
   std::weak_ptr<PrismaticJoint> rightPrism;
 
   float girdleWidth;
-  b2Rot current3DRotation;
-  b2Rot target3DRotation;
+  float current3DRotationRad;
+  float target3DRotationRad;
   float rotationSpeedRadPerSec;
 
   PIDRotController rotationController;

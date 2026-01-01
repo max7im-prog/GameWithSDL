@@ -10,7 +10,7 @@ GirdleConnection::GirdleConnection(
     const std::shared_ptr<ShapeFactory> shapeFactory,
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world), girdleWidth(config.girdleWidth),
-      current3DRotation(config.initial3DRotation) {
+      current3DRotationRad(config.initial3DRotationRad) {
   if (!config.centerAttach.shape || !config.leftAttach.shape ||
       !config.rightAttach.shape) {
     throw std::invalid_argument("One of the attachments is invalid");
@@ -38,7 +38,7 @@ GirdleConnection::GirdleConnection(
       cfg.jointDef.localAnchorB = config.leftAttach.localPoint;
       cfg.jointDef.targetTranslation = -config.girdleWidth / 2;
       leftPrism = jointFactory->create<PrismaticJoint>(cfg);
-      registerJoint(leftPrism,"leftPrism");
+      registerJoint(leftPrism, "leftPrism");
     }
     {
       auto cfg = prismCfg;
@@ -46,7 +46,7 @@ GirdleConnection::GirdleConnection(
       cfg.jointDef.localAnchorB = config.rightAttach.localPoint;
       cfg.jointDef.targetTranslation = config.girdleWidth / 2;
       rightPrism = jointFactory->create<PrismaticJoint>(cfg);
-      registerJoint(rightPrism,"rightPrism");
+      registerJoint(rightPrism, "rightPrism");
     }
   }
 
@@ -58,9 +58,8 @@ void GirdleConnectionConfig::defaultConfig() {
   prismTemplate.defaultConfig();
   girdleWidth = 1;
   rotationAxis = {0, 1};
-  initial3DRotation = b2MakeRot(0);
+  initial3DRotationRad = 0.0f;
 }
-
 
 void GirdleConnection::update(float dt) {
   updateRotation(dt);
@@ -72,13 +71,16 @@ void GirdleConnection::updateRotation(float dt) {
     auto &[leftPrismLock, rightPrismLock] = *locks;
 
     constexpr float ROTATIONAL_SENSITIVITY = 0.01;
-    if (std::abs(b2Rot_GetAngle(target3DRotation) -
-                 b2Rot_GetAngle(current3DRotation)) > ROTATIONAL_SENSITIVITY) {
+    if (std::abs(target3DRotationRad - current3DRotationRad) >
+        ROTATIONAL_SENSITIVITY) {
+      b2Rot current3DRotation = b2MakeRot(current3DRotationRad);
+      b2Rot target3DRotation = b2MakeRot(target3DRotationRad);
 
       // Calculate the error
       b2Rot error = b2InvMulRot(current3DRotation, target3DRotation);
       b2Rot rotIncr = rotationController.update(error, dt);
-      current3DRotation = b2MulRot(current3DRotation, rotIncr);
+      current3DRotationRad =
+          b2Rot_GetAngle(b2MulRot(current3DRotation, rotIncr));
 
       // Change target offsets of the prismatic joints in a girdle
       float newOffset = girdleWidth / 2 * current3DRotation.c;
@@ -89,7 +91,9 @@ void GirdleConnection::updateRotation(float dt) {
 }
 
 void GirdleConnection::rotate3D(float angle) {
-  target3DRotation = b2MakeRot(angle);
+  target3DRotationRad = b2Rot_GetAngle(b2MakeRot(angle));
 }
 
-void GirdleConnection::rotate3D(b2Rot rot) { target3DRotation = rot; }
+void GirdleConnection::rotate3D(b2Rot rot) {
+  target3DRotationRad = b2Rot_GetAngle(rot);
+}
