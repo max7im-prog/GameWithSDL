@@ -374,7 +374,7 @@ void DemoCreature::update(float dt) {
   dampHorizontalMovement(dt);
   updateJump(dt);
   updateMove(dt);
-  updateFeet(dt);
+  // updateFeet(dt);
   updateLookAt(dt);
   updateRotation(dt);
   Creature::update(dt);
@@ -605,7 +605,8 @@ void DemoCreature::lookAt(b2Vec2 worldPoint) {
 
   b2Vec2 creaturePos = getWorldPos();
   float translationX = b2Sub(worldPoint, creaturePos).x;
-  float desiredAngle = b2Atan2(translationX, planeDist);
+  // float desiredAngle = b2Atan2(translationX, planeDist);
+  float desiredAngle = translationX*B2_PI/6;
 
   _lookAtContext._worldPoint = worldPoint;
   _lookAtContext._desiredHipShoulderAngle = desiredAngle;
@@ -628,14 +629,17 @@ void DemoCreature::updateRotation(float dt) {
     return;
   }
   _rotationContext._rotationAngle = _lookAtContext._desiredHipShoulderAngle;
+  // std::cout << "------start-----"  << std::endl;
 
   for (auto &[name, ptr] : getBodies()) {
     if (auto lk = ptr.lock()) {
+      // std::cout << name << std::endl;
       auto curChildRot = lk->get3dRot();
       auto arg = b2MulRot(curChildRot, rotIncr);
       lk->set3dRot(arg);
     }
   }
+  // std::cout << "------end-------"  << std::endl;
 }
 
 b2Vec2 DemoCreature::getWorldPos() {

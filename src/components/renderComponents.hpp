@@ -14,7 +14,7 @@ struct TextureComponent {
   Transform _initialTransform;
   std::shared_ptr<SDL_Texture> _texture;
   int _numTextures;
-  b2Rot _initialRotationOffset;
+  float _initialRotationOffset;
   SDL_FRect _initialRect;
   SDL_FRect _currentRect;
   SDL_FPoint _offsetPerTexture;

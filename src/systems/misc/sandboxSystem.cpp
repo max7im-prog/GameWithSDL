@@ -65,10 +65,4 @@ void SandboxSystem::update(entt::registry &registry,
       creature->accept(*_renderUpdater);
     }
   }
-
-  if (auto lk = _creature.lock()) {
-    auto curAngle = lk->_lookAtContext._desiredHipShoulderAngle;
-    lk->_lookAtContext._desiredHipShoulderAngle = curAngle + B2_PI / 300;
-    // std::cout << "get rotated! " << curAngle / B2_PI * 180.0f << std::endl;
-  }
 }

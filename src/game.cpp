@@ -98,16 +98,16 @@ bool Game::init() {
     if (auto creature =
             _roomManager->getEntity<DemoCreature>("room_001/creature_001")
                 .lock()) {
-      // {
-      //   auto ent = _registry.create();
-      //   auto &controller = _registry.emplace_or_replace<Controller>(ent);
-      //
-      //   controller._creature = creature->getEntity();
-      // }
+      {
+        auto ent = _registry.create();
+        auto &controller = _registry.emplace_or_replace<Controller>(ent);
+
+        controller._creature = creature->getEntity();
+      }
 
       _sandboxSystem.setCreature(creature);
       {
-        float interval = 20;
+        float interval = 200;
         auto ent = creature->getEntity();
         auto &loadContext =
             _registry.emplace_or_replace<CreatureLoadsRoomsTag>(ent);

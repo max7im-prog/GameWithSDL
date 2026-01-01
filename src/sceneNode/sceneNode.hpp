@@ -31,7 +31,7 @@ public:
       FileName _texture;
       SDL_FRect _initialRect;
       SDL_FPoint _offsetPerTexture;
-      b2Rot _initialRotationOffset;
+      float _initialRotationOffset;
       Uint32 _numTextures;
       struct {
         float _w;

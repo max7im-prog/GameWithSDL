@@ -100,7 +100,4 @@ private:
                  const std::shared_ptr<LimbBody> leg, Direction moveDir);
 
   friend class CreatureFactory;
-
-  // TODO: remove friend testing class
-  friend class SandboxSystem;
 };

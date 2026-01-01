@@ -21,7 +21,7 @@ void RenderUpdater::visit(Shape &shape) {
   b2Rot relativeRot = shape.get3dRot();
 
   // Change the texture that is chosen for a render based on rotation
-  b2Rot initialRot = texture._initialRotationOffset;
+  b2Rot initialRot = b2MakeRot(texture._initialRotationOffset);
   b2Rot compositeRot = b2MulRot(initialRot, relativeRot);
 
   float angle3d = b2Rot_GetAngle(compositeRot);
@@ -35,22 +35,29 @@ void RenderUpdater::visit(Shape &shape) {
 
   int currentFace = std::floor(adjustedAngle / angleIncr);
 
-  // std::cout << "initial rot: " << b2Rot_GetAngle(initialRot) / B2_PI * 180
-  //           << " relative rot: " << b2Rot_GetAngle(relativeRot) / B2_PI * 180
-  //           << " Composite rot: " << b2Rot_GetAngle(compositeRot) / B2_PI * 180
-  //           << ", face: " << currentFace << std::endl;
-
   // Apply changes to the texture component
   texture._currentRect.x =
       texture._offsetPerTexture.x * static_cast<float>(currentFace);
   texture._currentRect.y =
       texture._offsetPerTexture.y * static_cast<float>(currentFace);
+
+  // std::cout << "shape: " << b2Rot_GetAngle(shape.get3dRot()) / B2_PI * 180
+  //           << " face: " << currentFace
+  //           << " initial rot: " << b2Rot_GetAngle(initialRot) / B2_PI * 180
+  //           << " relative rot: " << b2Rot_GetAngle(relativeRot) / B2_PI * 180
+  //           << " Composite rot: " << b2Rot_GetAngle(compositeRot) / B2_PI * 180
+  //           << std::endl;
 }
 
 void RenderUpdater::visit(Body &body) {
   auto ent = body.getEntity();
   if (_registry.all_of<RenderRequiresUpdateTag>(ent)) {
     _registry.remove<RenderRequiresUpdateTag>(ent);
+  }
+
+  if (auto lb = dynamic_cast<LimbBody *>(&body)) {
+    // std::cout << "limbBody: " << b2Rot_GetAngle(lb->get3dRot()) / B2_PI * 180
+    //           << std::endl;
   }
 
   for (auto &[name, ptr] : body.getShapes()) {
@@ -66,14 +73,16 @@ void RenderUpdater::visit(Creature &creature) {
     _registry.remove<RenderRequiresUpdateTag>(ent);
   }
 
+  // std::cout << "---------------start--------------------" << std::endl;
   for (auto &[name, ptr] : creature.getBodies()) {
+    // std::cout << name << std::endl;
     if (auto lk = ptr.lock()) {
       lk->accept(*this);
     }
   }
+  // std::cout << "----------------end---------------------" << std::endl;
 }
 
 void RenderUpdater::visit(DemoCreature &creature) {
-
   visit(static_cast<Creature &>(creature));
 }
