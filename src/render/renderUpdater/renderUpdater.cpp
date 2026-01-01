@@ -30,10 +30,11 @@ void RenderUpdater::visit(Shape &shape) {
   float adjustedAngle = angle3d + B2_PI;
 
   int numFaces = texture._numTextures;
-
   float angleIncr = B2_PI * 2.0f / static_cast<float>(numFaces);
-
-  int currentFace = std::floor(adjustedAngle / angleIncr);
+  float rotBegin = -angleIncr / 2.0f;
+  float angleFromBegin = adjustedAngle - rotBegin;
+  int currentFace =
+      static_cast<int>(std::floor(angleFromBegin / angleIncr)) % numFaces;
 
   // Apply changes to the texture component
   texture._currentRect.x =
@@ -45,7 +46,8 @@ void RenderUpdater::visit(Shape &shape) {
   //           << " face: " << currentFace
   //           << " initial rot: " << b2Rot_GetAngle(initialRot) / B2_PI * 180
   //           << " relative rot: " << b2Rot_GetAngle(relativeRot) / B2_PI * 180
-  //           << " Composite rot: " << b2Rot_GetAngle(compositeRot) / B2_PI * 180
+  //           << " Composite rot: " << b2Rot_GetAngle(compositeRot) / B2_PI *
+  //           180
   //           << std::endl;
 }
 
