@@ -70,8 +70,8 @@ void SceneRenderer::visit(Shape &s) {
   Common::Transform relativeTransform;
   relativeTransform._originPos = {0, 0};
   relativeTransform._relativePos = pos;
-  relativeTransform._rootRot = b2MakeRot(0);
-  relativeTransform._relativeRot = shape->getRotation();
+  relativeTransform._rootRotRad = 0.0f;
+  relativeTransform._relativeRotRad = b2Rot_GetAngle(shape->getRotation());
 
   auto &initialTransform = tex._initialTransform;
 

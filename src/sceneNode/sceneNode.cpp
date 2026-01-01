@@ -55,8 +55,8 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
     float rotationAngle =
         JsonUtils::getOrDefault<float>(objectJson["transform"], "rotation", 0);
     float rootAngle = 0;
-    ret._relativeRot = b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f);
-    ret._rootRot = b2MakeRot((B2_PI * 2) * rootAngle / 360.0f);
+    ret._relativeRotRad = b2Rot_GetAngle(b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f));
+    ret._rootRotRad = b2Rot_GetAngle(b2MakeRot((B2_PI * 2) * rootAngle / 360.0f));
 
     // Scale
     ret._scaleX =

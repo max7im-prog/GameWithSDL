@@ -15,7 +15,7 @@ PolygonTerrain::PolygonTerrain(
   auto terrainPos =
       b2Add(config._transform._originPos, config._transform._relativePos);
   auto terrainRot =
-      b2MulRot(config._transform._rootRot, config._transform._relativeRot);
+      b2MulRot(b2MakeRot(config._transform._rootRotRad), b2MakeRot(config._transform._relativeRotRad));
 
   auto transformedVertices = config.vertices;
   std::for_each(transformedVertices.begin(), transformedVertices.end(),

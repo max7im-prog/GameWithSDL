@@ -10,14 +10,13 @@ namespace Common {
 struct Transform {
   b2Vec2 _originPos{0, 0};
   b2Vec2 _relativePos{0, 0};
-  b2Rot _rootRot{b2MakeRot(0)};
-  b2Rot _relativeRot{b2MakeRot(0)};
+  float _rootRotRad{0};
+  float _relativeRotRad{0};
   float _scaleX{1.0f};
   float _scaleY{1.0f};
   bool _flipX{false};
   bool _flipY{false};
-  static Transform composeTransform(const Transform& a, const Transform& b);
+  static Transform composeTransform(const Transform &a, const Transform &b);
 };
-
 
 }; // namespace Common

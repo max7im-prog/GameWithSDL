@@ -126,7 +126,7 @@ void RenderUtils::renderTexture(SDL_Texture *texture,
 
   SDL_FlipMode flip{SDL_FlipMode::SDL_FLIP_NONE};
   b2Rot finalRot =
-      b2MulRot(textureTransform._relativeRot, textureTransform._rootRot);
+      b2MulRot(b2MakeRot(textureTransform._relativeRotRad), b2MakeRot(textureTransform._rootRotRad));
 
   if (textureTransform._flipX && textureTransform._flipY) {
     finalRot = b2MulRot(finalRot, b2MakeRot(B2_PI));

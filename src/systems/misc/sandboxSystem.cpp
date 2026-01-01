@@ -43,8 +43,8 @@ void SandboxSystem::update(entt::registry &registry,
   region.w = texture->w;
   region.h = texture->h;
 
-  _currentTransform._relativeRot =
-      b2MulRot(_currentTransform._relativeRot, b2MakeRot(B2_PI / 100));
+  _currentTransform._relativeRotRad = b2Rot_GetAngle(b2MulRot(
+      b2MakeRot(_currentTransform._relativeRotRad), b2MakeRot(B2_PI / 100)));
   // _currentTransform._relativePos=
   // b2Add(_currentTransform._relativePos,{0.1,0.1});
 
