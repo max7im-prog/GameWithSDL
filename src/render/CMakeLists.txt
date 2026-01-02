@@ -1,32 +1,26 @@
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
-  "*.cpp"
-  "*.hpp"
-)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 set(INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/renderer
-  ${CMAKE_CURRENT_SOURCE_DIR}/textures
-  ${CMAKE_CURRENT_SOURCE_DIR}/renderUpdater
-)
+    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/renderer
+    ${CMAKE_CURRENT_SOURCE_DIR}/textures
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderUpdater)
 
 add_library(game_render_lib STATIC ${SOURCES})
 target_include_directories(game_render_lib PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(game_render_lib
-  PUBLIC
-  SDL3::SDL3
-  SDL3_image::SDL3_image
-  EnTT::EnTT
-  box2d
-  nlohmann_json::nlohmann_json
-  game_interfaces_lib
-  game_physics_lib
-  game_body_lib
-  game_connection_lib
-  game_creature_lib
-  game_terrain_lib
-  game_fallback_visitor_lib
-  game_components_lib
-  game_common_lib
-  game_controls_lib
-  game_scene_node_lib 
-)
+target_link_libraries(
+  game_render_lib
+  PUBLIC SDL3::SDL3
+         SDL3_image::SDL3_image
+         EnTT::EnTT
+         box2d
+         nlohmann_json::nlohmann_json
+         game_interfaces_lib
+         game_physics_lib
+         game_body_lib
+         game_connection_lib
+         game_creature_lib
+         game_terrain_lib
+         game_fallback_visitor_lib
+         game_components_lib
+         game_common_lib
+         game_controls_lib
+         game_scene_node_lib)

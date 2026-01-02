@@ -1,12 +1,7 @@
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
-    "*.cpp"
-    "*.hpp"
-)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 set(INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/kinematics
-    ${CMAKE_CURRENT_SOURCE_DIR}/PID
-)
+    ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/kinematics
+    ${CMAKE_CURRENT_SOURCE_DIR}/PID)
 
 add_library(game_controls_lib STATIC ${SOURCES})
 target_include_directories(game_controls_lib PUBLIC ${INCLUDE_DIRS})
