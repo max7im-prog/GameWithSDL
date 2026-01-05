@@ -606,7 +606,11 @@ void DemoCreature::lookAt(b2Vec2 worldPoint) {
   b2Vec2 creaturePos = getWorldPos();
   float translationX = b2Sub(worldPoint, creaturePos).x;
   // float desiredAngle = b2Atan2(translationX, planeDist);
-  float desiredAngle = translationX*B2_PI/6;
+
+  float maxAngle = B2_PI / 2;
+
+  float desiredAngle =
+      std::min(std::max(translationX * B2_PI / 6, -maxAngle), maxAngle);
 
   _lookAtContext._worldPoint = worldPoint;
   _lookAtContext._desiredHipShoulderAngle = desiredAngle;
@@ -624,12 +628,12 @@ void DemoCreature::updateLookAt(float dt) {
 
 void DemoCreature::updateRotation(float dt) {
   b2Rot curRot = getRotation();
-  b2Rot rotIncr = b2InvMulRot(b2MakeRot(_lookAtContext._desiredHipShoulderAngle), curRot);
-  if (b2Rot_GetAngle(rotIncr) < B2_PI * 0.01) {
-    return;
-  }
+  b2Rot rotIncr =
+      b2InvMulRot(b2MakeRot(_lookAtContext._desiredHipShoulderAngle), curRot);
+  // if (b2Rot_GetAngle(rotIncr) < B2_PI * 0.01) {
+  //   return;
+  // }
   _rotationContext._rotationAngle = _lookAtContext._desiredHipShoulderAngle;
-  // std::cout << "------start-----"  << std::endl;
 
   for (auto &[name, ptr] : getBodies()) {
     if (auto lk = ptr.lock()) {
@@ -639,7 +643,6 @@ void DemoCreature::updateRotation(float dt) {
       lk->set3dRot(arg);
     }
   }
-  // std::cout << "------end-------"  << std::endl;
 }
 
 b2Vec2 DemoCreature::getWorldPos() {

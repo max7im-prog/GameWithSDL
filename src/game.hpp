@@ -5,6 +5,7 @@
 #include "creatureFactory.hpp"
 #include "creatureUpdateSystem.hpp"
 #include "jointFactory.hpp"
+#include "renderUpdateSystem.hpp"
 #include "roomManager.hpp"
 #include "sandboxSystem.hpp"
 #include "sceneRenderSystem.hpp"
@@ -99,6 +100,8 @@ private:
 
   std::shared_ptr<TextureManager> _textureManager;
   std::shared_ptr<Texturer> _texturer;
+
+  std::shared_ptr<RenderUpdateSystem> _renderUpdateSystem;
 
   // Entity factories
   std::shared_ptr<BodyFactory> _bodyFactory;

@@ -1,6 +1,5 @@
 #include "game.hpp"
 
-
 #include <SDL3/SDL.h>
 #include <box2d/box2d.h>
 
@@ -40,8 +39,10 @@ bool Game::init() {
     _renderContext = RenderContext::createNewRenderContext(cfg);
   }
   _debugRenderSystem = std::make_unique<DebugRenderSystem>(*_renderContext);
-  _sceneRenderSystem = std::make_unique<SceneRenderSystem>(_registry,*_renderContext);
-  
+  _sceneRenderSystem =
+      std::make_unique<SceneRenderSystem>(_registry, *_renderContext);
+
+  _renderUpdateSystem = std::make_unique<RenderUpdateSystem>(_registry);
 
   this->_running = true;
 
@@ -134,7 +135,6 @@ bool Game::init() {
   //   }
   // }
 
-
   _debugRenderSystem->setEnabled(true);
 
   return true;
@@ -156,7 +156,7 @@ void Game::update(Uint64 TPS) {
 
   _creatureUpdateSystem.update(this->_registry, dt);
   _mouseJointSystem.update(_registry, _world, _shapeFactory, _jointFactory,
-                          *_renderContext, dt);
+                           *_renderContext, dt);
 
   _cameraSystem.update(this->_registry, *_renderContext, dt);
 
@@ -171,6 +171,7 @@ void Game::cleanupTick(Uint64 TPS) {
 void Game::render(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
   this->_texturingSystem.update(this->_registry, this->_texturer, dt);
+  this->_renderUpdateSystem->update(this->_registry, dt);
   this->_renderBackgroundSystem.update(this->_registry, *_renderContext, dt);
   this->_sceneRenderSystem->update(this->_registry, dt);
   this->_debugRenderSystem->update(this->_registry, dt);
