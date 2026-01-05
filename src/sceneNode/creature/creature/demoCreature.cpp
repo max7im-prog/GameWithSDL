@@ -74,10 +74,10 @@ DemoCreature::DemoCreature(
   torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   torsoConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
-  torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 4), (0)},
-                                   {(-torsoWidth / 4), (torsoHeight)},
-                                   {(torsoWidth / 4), (torsoHeight)},
-                                   {(torsoWidth / 4), (0)}};
+  torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 4), (-torsoHeight / 2)},
+                                   {(-torsoWidth / 4), (torsoHeight / 2)},
+                                   {(torsoWidth / 4), (torsoHeight / 2)},
+                                   {(torsoWidth / 4), (-torsoHeight / 2)}};
 
   CircleBodyConfig shoulderConfig;
   shoulderConfig.defaultConfig();
@@ -107,8 +107,7 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.segments.clear();
-    cfg.basePos =
-        b2Add(creaturePos, b2Vec2(-torsoWidth * 0.5, torsoHeight / 2));
+    cfg.basePos = b2Add(creaturePos, b2Vec2(-torsoWidth * 0.5, 0));
     {
 
       auto lastPos = cfg.basePos;
@@ -135,7 +134,8 @@ DemoCreature::DemoCreature(
   {
     auto cfg = limbConfig;
     cfg.segments.clear();
-    cfg.basePos = b2Add(creaturePos, b2Vec2(-torsoWidth * 0.3, 0));
+    cfg.basePos =
+        b2Add(creaturePos, b2Vec2(-torsoWidth * 0.3, -torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       b2Rot baseRot = b2MakeRot(-B2_PI * 3 / 4);
@@ -157,7 +157,7 @@ DemoCreature::DemoCreature(
   }
   {
     auto cfg = limbConfig;
-    cfg.basePos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.5, torsoHeight / 2));
+    cfg.basePos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.5, 0));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -175,7 +175,8 @@ DemoCreature::DemoCreature(
   }
   {
     auto cfg = limbConfig;
-    cfg.basePos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.3, 0));
+    cfg.basePos =
+        b2Add(creaturePos, b2Vec2(torsoWidth * 0.3, -torsoHeight / 2));
     {
       auto lastPos = cfg.basePos;
       for (size_t i = 0; i < numSegments; i++) {
@@ -245,7 +246,7 @@ DemoCreature::DemoCreature(
     cfg.defaultConfig();
     cfg.girdleWidth = torsoWidth * 0.4;
     cfg.centerAttach.shape = torsoLock->getPolygon();
-    cfg.centerAttach.localPoint = {0, 0};
+    cfg.centerAttach.localPoint = {0, -torsoHeight / 2};
 
     cfg.leftAttach.shape = leftHipLock->getCircle();
     cfg.leftAttach.localPoint = {0, 0};
@@ -273,7 +274,7 @@ DemoCreature::DemoCreature(
     cfg.defaultConfig();
     cfg.girdleWidth = torsoWidth * 1.6f;
     cfg.centerAttach.shape = torsoLock->getPolygon();
-    cfg.centerAttach.localPoint = {0, torsoHeight / 2.0f};
+    cfg.centerAttach.localPoint = {0, 0};
 
     cfg.leftAttach.shape = leftShoulderLock->getCircle();
     cfg.leftAttach.localPoint = {0, 0};
@@ -610,7 +611,8 @@ void DemoCreature::lookAt(b2Vec2 worldPoint) {
   float maxAngle = B2_PI / 2;
 
   float desiredAngle =
-      std::min(std::max(translationX * B2_PI / 12, -maxAngle), maxAngle);
+      std::min(std::max(-translationX * B2_PI / 12, -maxAngle), maxAngle) +
+      B2_PI;
 
   _lookAtContext._worldPoint = worldPoint;
   _lookAtContext._desiredHipShoulderAngle = desiredAngle;

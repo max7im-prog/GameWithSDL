@@ -21,19 +21,19 @@
         ],
         "shapeRenders": {
           "main": {
-            "spriteSheet": "",
-            "numSprites": 1,
+            "spriteSheet": "res/textures/creature/knight/torso.png",
+            "numSprites": 4,
             "spriteDim": {
               "w": 32,
-              "h": 32
+              "h": 64
             },
             "worldDim": {
-              "w": 4,
-              "h": 2
+              "w": 2,
+              "h": 4
             },
             "perSpriteOffset": {
               "x": 0,
-              "y": 32
+              "y": 64
             }
           }
         }
