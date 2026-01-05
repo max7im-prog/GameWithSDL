@@ -86,5 +86,67 @@ void RenderUpdater::visit(Creature &creature) {
 }
 
 void RenderUpdater::visit(DemoCreature &creature) {
+  auto ent = creature.getEntity();
+  auto &seq = _registry.get<RenderSequenceComponent>(creature.getEntity());
+  auto rot = creature.getRotation();
+  auto angle = b2Rot_GetAngle(rot);
+  std::cout << "--------------------start----------------------" << std::endl;
+  for (const auto &el : seq._renderSequence) {
+    std::cout << el << std::endl;
+  }
+  std::cout << "---------------------end-----------------------" << std::endl;
+
+  constexpr std::string_view t = "torso";
+  constexpr std::string_view ll = "leftLeg";
+  constexpr std::string_view rl = "rightLeg";
+  constexpr std::string_view la = "leftArm";
+  constexpr std::string_view ra = "rightArm";
+  constexpr std::string_view lh = "leftHip";
+  constexpr std::string_view rh = "rightHip";
+  constexpr std::string_view ls = "leftShoulder";
+  constexpr std::string_view rs = "rightShoulder";
+  constexpr int NUM_BODIES = 9;
+
+  enum Side { FRONT, LEFT, BACK, RIGHT } curSide;
+
+  if (-B2_PI / 4.0f < angle && angle < B2_PI / 4.0f) {
+    curSide = Side::FRONT;
+  } else if (-B2_PI * 3.0f / 4.0f < angle && angle < -B2_PI / 4.0f) {
+    curSide = Side::RIGHT;
+  } else if (B2_PI / 4.0f < angle && angle < B2_PI * 3.0f / 4.0f) {
+    curSide = Side::LEFT;
+  } else if (-B2_PI * 3.0f / 4.0f < angle || angle > B2_PI * 3.0f / 4.0f) {
+    curSide = Side::BACK;
+  } else {
+    curSide = Side::FRONT;
+  }
+
+  seq._renderSequence.clear();
+  seq._renderSequence.reserve(NUM_BODIES);
+
+  switch (curSide) {
+  case Side::FRONT:
+    for (std::string_view sv : {t, ls, rs, lh, rh, ll, rl, la, ra}) {
+      seq._renderSequence.emplace_back(sv);
+    }
+
+    break;
+  case Side::RIGHT:
+    for (std::string_view sv : {ra, rs, rh, rl, t, ll, lh, ls, la}) {
+      seq._renderSequence.emplace_back(sv);
+    }
+    break;
+  case Side::LEFT:
+    for (std::string_view sv : {la, ls, lh, ll, t, rl, rh, rs, ra}) {
+      seq._renderSequence.emplace_back(sv);
+    }
+    break;
+  case Side::BACK:
+    for (std::string_view sv : {ls, rs, lh, rh, ll, rl, la, ra, t}) {
+      seq._renderSequence.emplace_back(sv);
+    }
+    break;
+  }
+
   visit(static_cast<Creature &>(creature));
 }
