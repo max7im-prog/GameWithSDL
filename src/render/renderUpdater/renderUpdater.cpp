@@ -90,11 +90,6 @@ void RenderUpdater::visit(DemoCreature &creature) {
   auto &seq = _registry.get<RenderSequenceComponent>(creature.getEntity());
   auto rot = creature.getRotation();
   auto angle = b2Rot_GetAngle(rot);
-  std::cout << "--------------------start----------------------" << std::endl;
-  for (const auto &el : seq._renderSequence) {
-    std::cout << el << std::endl;
-  }
-  std::cout << "---------------------end-----------------------" << std::endl;
 
   constexpr std::string_view t = "torso";
   constexpr std::string_view ll = "leftLeg";
