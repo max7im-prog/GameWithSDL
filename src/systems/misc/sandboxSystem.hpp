@@ -20,10 +20,7 @@ public:
   void update(entt::registry &registry, const RenderContext &renderContext,
               std::shared_ptr<TextureManager> textureManager,
               double secondsPassed);
-  void setCreature(std::weak_ptr<DemoCreature> cr);
 
 private:
   Common::Transform _currentTransform;
-  std::shared_ptr<RenderUpdater> _renderUpdater = nullptr;
-  std::weak_ptr<DemoCreature> _creature;
 };

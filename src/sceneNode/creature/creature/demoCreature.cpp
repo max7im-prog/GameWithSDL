@@ -610,7 +610,7 @@ void DemoCreature::lookAt(b2Vec2 worldPoint) {
   float maxAngle = B2_PI / 2;
 
   float desiredAngle =
-      std::min(std::max(translationX * B2_PI / 6, -maxAngle), maxAngle);
+      std::min(std::max(translationX * B2_PI / 12, -maxAngle), maxAngle);
 
   _lookAtContext._worldPoint = worldPoint;
   _lookAtContext._desiredHipShoulderAngle = desiredAngle;

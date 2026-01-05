@@ -48,6 +48,24 @@ public:
   // Initializes Game, including SDL
   bool init();
 
+  /**
+   * @brief Initialzed rendering
+   */
+  bool initRendering();
+  /**
+   * @brief Initialzed factories, room loaders, texture loaders, etc
+   */
+  bool initResourceManagers();
+  /**
+   * @brief Initialzed systems
+   */
+  bool initSystems();
+  /**
+   * @brief Initialized the initial structure of the world (rooms, creatures,
+   * etc)
+   */
+  bool initWorld();
+
   // Cleans all the objects that expire at the end of the tick
   void cleanupTick(Uint64 TPS);
 
@@ -65,6 +83,7 @@ public:
 
 private:
   entt::registry _registry;
+
   // Window parameters
   int _WIDTH = 800;
   int _HEIGHT = 600;
@@ -72,36 +91,35 @@ private:
   // Used to determine if game loop is active
   bool _running = false;
 
-  // Event systems
-  PollEventSystem _pollEventSystem;
-  QuitSystem _quitSystem;
-
   // Room manager
   std::shared_ptr<RoomManager> _roomManager;
 
+  // Event systems
+  std::shared_ptr<PollEventSystem> _pollEventSystem;
+  std::shared_ptr<QuitSystem> _quitSystem;
+
   // Update systems
-  WorldUpdateSystem _worldUpdateSystem;
-  ControllerUpdateSystem _controllerUpdateSystem;
-  CreatureControlSystem _creatureControlSystem;
-  MouseJointSystem _mouseJointSystem;
-  CreatureUpdateSystem _creatureUpdateSystem;
-  CameraSystem _cameraSystem;
-  CleanupSystem _cleanupSystem;
-  RoomLoadSystem _roomLoadSystem;
-  TexturingSystem _texturingSystem;
-  SandboxSystem _sandboxSystem;
+  std::shared_ptr<WorldUpdateSystem> _worldUpdateSystem;
+  std::shared_ptr<ControllerUpdateSystem> _controllerUpdateSystem;
+  std::shared_ptr<CreatureControlSystem> _creatureControlSystem;
+  std::shared_ptr<MouseJointSystem> _mouseJointSystem;
+  std::shared_ptr<CreatureUpdateSystem> _creatureUpdateSystem;
+  std::shared_ptr<CameraSystem> _cameraSystem;
+  std::shared_ptr<CleanupSystem> _cleanupSystem;
+  std::shared_ptr<RoomLoadSystem> _roomLoadSystem;
+  std::shared_ptr<SandboxSystem> _sandboxSystem;
 
   // Render systems
-  RenderBackgroundSystem _renderBackgroundSystem;
+  std::shared_ptr<RenderBackgroundSystem> _renderBackgroundSystem;
   std::shared_ptr<DebugRenderSystem> _debugRenderSystem;
   std::shared_ptr<SceneRenderSystem> _sceneRenderSystem;
-
-  std::shared_ptr<RenderContext> _renderContext;
+  std::shared_ptr<RenderUpdateSystem> _renderUpdateSystem;
+  std::shared_ptr<TexturingSystem> _texturingSystem;
 
   std::shared_ptr<TextureManager> _textureManager;
   std::shared_ptr<Texturer> _texturer;
 
-  std::shared_ptr<RenderUpdateSystem> _renderUpdateSystem;
+  std::shared_ptr<RenderContext> _renderContext;
 
   // Entity factories
   std::shared_ptr<BodyFactory> _bodyFactory;

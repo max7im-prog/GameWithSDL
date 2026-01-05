@@ -19,10 +19,6 @@ SandboxSystem::SandboxSystem() : GameSystem("SandboxSystem") {
 
 SandboxSystem::~SandboxSystem() {}
 
-void SandboxSystem::setCreature(std::weak_ptr<DemoCreature> cr) {
-  _creature = cr;
-}
-
 void SandboxSystem::update(entt::registry &registry,
                            const RenderContext &renderContext,
                            std::shared_ptr<TextureManager> textureManager,

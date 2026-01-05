@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <box2d/box2d.h>
+#include <memory>
 
 #include "basicWorld.hpp"
 #include "bodyFactory.hpp"
@@ -27,8 +28,23 @@ bool Game::isRunning() { return this->_running; }
 void Game::setRunning(bool val) { this->_running = val; }
 
 bool Game::init() {
+  if (!initRendering()) {
+    return false;
+  }
+  if (!initResourceManagers()) {
+    return false;
+  }
+  if (!initSystems()) {
+    return false;
+  }
+  if (!initWorld()) {
+    return false;
+  }
+  _running = true;
+  return true;
+}
 
-  // Initialize render context and renderers
+bool Game::initRendering() {
   {
     auto cfg = RenderContextConfig::defaultConfig();
     cfg.basePos = {0, 70};
@@ -38,13 +54,10 @@ bool Game::init() {
     cfg.WindowTitle = "Game";
     _renderContext = RenderContext::createNewRenderContext(cfg);
   }
-  _debugRenderSystem = std::make_unique<DebugRenderSystem>(*_renderContext);
-  _sceneRenderSystem =
-      std::make_unique<SceneRenderSystem>(_registry, *_renderContext);
+  return true;
+}
 
-  _renderUpdateSystem = std::make_unique<RenderUpdateSystem>(_registry);
-
-  this->_running = true;
+bool Game::initResourceManagers() {
 
   // World and worldFactory
   _worldFactory = std::shared_ptr<WorldFactory>(new WorldFactory(_registry));
@@ -84,6 +97,32 @@ bool Game::init() {
   _roomManager =
       std::make_shared<RoomManager>(_world, _creatureFactory, _terrainFactory);
 
+  return true;
+}
+
+bool Game::initSystems() {
+  _pollEventSystem = std::make_unique<PollEventSystem>();
+  _quitSystem = std::make_unique<QuitSystem>();
+  _worldUpdateSystem = std::make_shared<WorldUpdateSystem>();
+  _controllerUpdateSystem = std::make_shared<ControllerUpdateSystem>();
+  _creatureControlSystem = std::make_shared<CreatureControlSystem>();
+  _mouseJointSystem = std::make_shared<MouseJointSystem>();
+  _creatureUpdateSystem = std::make_unique<CreatureUpdateSystem>();
+  _cameraSystem = std::make_unique<CameraSystem>();
+  _cleanupSystem = std::make_unique<CleanupSystem>();
+  _roomLoadSystem = std::make_unique<RoomLoadSystem>();
+  _sandboxSystem = std::make_unique<SandboxSystem>();
+  _renderBackgroundSystem = std::make_unique<RenderBackgroundSystem>();
+  _debugRenderSystem = std::make_unique<DebugRenderSystem>(*_renderContext);
+  _sceneRenderSystem =
+      std::make_unique<SceneRenderSystem>(_registry, *_renderContext);
+  _renderUpdateSystem = std::make_unique<RenderUpdateSystem>(_registry);
+  _texturingSystem = std::make_unique<TexturingSystem>();
+
+  return true;
+}
+
+bool Game::initWorld() {
   // Load something into world
   {
     auto rooms =
@@ -92,7 +131,7 @@ bool Game::init() {
     _roomManager->loadRoom("room_001");
     // roomManager->loadRoom("room_016");
   }
-  _roomLoadSystem.setUpdateInterval(0.25);
+  _roomLoadSystem->setUpdateInterval(0.25);
 
   // Controller and loader for a creature
   {
@@ -106,7 +145,6 @@ bool Game::init() {
         controller._creature = creature->getEntity();
       }
 
-      _sandboxSystem.setCreature(creature);
       {
         float interval = 200;
         auto ent = creature->getEntity();
@@ -118,24 +156,6 @@ bool Game::init() {
       }
     }
   }
-  // Loader for another creature
-  // {
-  //   if (auto creature =
-  //           roomManager->getEntity<DemoCreature>("room_016/creature_001")
-  //               .lock()) {
-  //     {
-  //       float interval = 200;
-  //       auto ent = creature->getEntity();
-  //       auto &loadContext =
-  //           registry.emplace_or_replace<CreatureLoadsRoomsTag>(ent);
-  //       loadContext.loadBorder = {interval, interval};
-  //       loadContext.unloadBorder = {interval * 2, interval * 2};
-  //       loadContext.destroyBorder = {interval * 3, interval * 3};
-  //     }
-  //   }
-  // }
-
-  _debugRenderSystem->setEnabled(true);
 
   return true;
 }
@@ -144,39 +164,39 @@ void Game::cleanup() { this->_registry.clear(); }
 
 void Game::handleEvents(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  this->_pollEventSystem.update(this->_registry, dt);
-  this->_quitSystem.update(this->_registry, _running, dt);
+  _pollEventSystem->update(this->_registry, dt);
+  _quitSystem->update(this->_registry, _running, dt);
 }
 
 void Game::update(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  this->_controllerUpdateSystem.update(this->_registry, *_renderContext, dt);
-  this->_creatureControlSystem.update(this->_registry, dt);
-  this->_roomLoadSystem.update(this->_registry, this->_roomManager, dt);
+  _controllerUpdateSystem->update(this->_registry, *_renderContext, dt);
+  _creatureControlSystem->update(this->_registry, dt);
+  _roomLoadSystem->update(this->_registry, this->_roomManager, dt);
 
-  _creatureUpdateSystem.update(this->_registry, dt);
-  _mouseJointSystem.update(_registry, _world, _shapeFactory, _jointFactory,
-                           *_renderContext, dt);
+  _creatureUpdateSystem->update(this->_registry, dt);
+  _mouseJointSystem->update(_registry, _world, _shapeFactory, _jointFactory,
+                            *_renderContext, dt);
 
-  _cameraSystem.update(this->_registry, *_renderContext, dt);
+  _cameraSystem->update(this->_registry, *_renderContext, dt);
 
-  this->_worldUpdateSystem.update(this->_registry, dt);
+  _worldUpdateSystem->update(this->_registry, dt);
 }
 
 void Game::cleanupTick(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  _cleanupSystem.update(this->_registry, dt);
+  _cleanupSystem->update(this->_registry, dt);
 }
 
 void Game::render(Uint64 TPS) {
   double dt = 1.0 / static_cast<double>(TPS);
-  this->_texturingSystem.update(this->_registry, this->_texturer, dt);
-  this->_renderUpdateSystem->update(this->_registry, dt);
-  this->_renderBackgroundSystem.update(this->_registry, *_renderContext, dt);
-  this->_sceneRenderSystem->update(this->_registry, dt);
-  this->_debugRenderSystem->update(this->_registry, dt);
+  _texturingSystem->update(this->_registry, this->_texturer, dt);
+  _renderUpdateSystem->update(this->_registry, dt);
+  _renderBackgroundSystem->update(this->_registry, *_renderContext, dt);
+  _sceneRenderSystem->update(this->_registry, dt);
+  _debugRenderSystem->update(this->_registry, dt);
 
-  this->_sandboxSystem.update(_registry, *_renderContext, _textureManager, dt);
+  _sandboxSystem->update(_registry, *_renderContext, _textureManager, dt);
 
-  SDL_RenderPresent(this->_renderContext->getSDLRenderer());
+  SDL_RenderPresent(_renderContext->getSDLRenderer());
 }
