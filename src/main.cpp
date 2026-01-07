@@ -1,4 +1,3 @@
-#include <iostream>
 
 #include <SDL3/SDL.h>
 #include <box2d/box2d.h>
@@ -7,23 +6,30 @@
 #include "SDL3/SDL_stdinc.h"
 #include "SDL3/SDL_timer.h"
 #include "game.hpp"
+#include "loggingUtils.hpp"
 #include <SDL3_image/SDL_image.h>
 #include <stdexcept>
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
 
+  // Initialize SDL
   if (!SDL_Init(SDL_INIT_VIDEO)) {
     throw std::runtime_error("Failed to initialize SDL");
   }
 
-  Game game(1400, 900);
+  // Initialize logger
+  if (!LoggingUtils::initLogger("logs/gameLog.txt")) {
+    throw std::runtime_error("Failed to initialize logging");
+  }
 
+  // Initialize Game itself
+  Game game(1400, 900);
   if (!game.init()) {
     throw std::runtime_error("Failed to initialize game");
   }
+
   const Uint64 targetTPS = 60;
   const Uint64 targetFPS = 75;
-
   Uint64 currentTime{SDL_GetPerformanceCounter()};
   Uint64 freq{SDL_GetPerformanceFrequency()};
   Uint64 accumulator{0};
@@ -32,6 +38,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
   const Uint64 maxFrameTime{freq / 4};
   Uint64 lastRenderTime{currentTime};
 
+  // Main loop
   while (game.isRunning()) {
 
     Uint64 newTime{SDL_GetPerformanceCounter()};
@@ -66,6 +73,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     }
   }
 
+  // Cleanup
   game.cleanup();
   SDL_Quit();
 

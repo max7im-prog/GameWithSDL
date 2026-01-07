@@ -81,7 +81,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/room)
 
 # Game libraries
 set(EXTERNAL_LIBS box2d SDL3::SDL3 SDL3_image::SDL3_image EnTT::EnTT
-                  nlohmann_json::nlohmann_json)
+                  nlohmann_json::nlohmann_json spdlog::spdlog)
 set(GAME_LIBS
     game_body_lib
     game_controls_lib

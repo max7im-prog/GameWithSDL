@@ -13,4 +13,5 @@ target_link_libraries(
          EnTT::EnTT
          game_components_lib
          box2d
-         game_common_lib)
+         game_common_lib
+         spdlog::spdlog)
