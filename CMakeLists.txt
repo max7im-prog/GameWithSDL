@@ -27,11 +27,16 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(box2d)
 FetchContent_Declare(
+  spdlog
+  GIT_REPOSITORY https://github.com/max7im-prog/game-spdlog
+  GIT_TAG v1.17.0
+  GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(spdlog)
+FetchContent_Declare(
   SDL
   GIT_REPOSITORY https://github.com/max7im-prog/game-SDL.git
   GIT_TAG release-3.2.16
   GIT_SHALLOW TRUE)
-
 FetchContent_MakeAvailable(SDL)
 FetchContent_Declare(
   SDL_image
@@ -47,7 +52,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(entt)
 FetchContent_Declare(
   nlohmann-json
-  GIT_REPOSITORY https://github.com/nlohmann/json.git
+  GIT_REPOSITORY https://github.com/max7im-prog/game-nlohmann-json
   GIT_TAG v3.11.3
   GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(nlohmann-json)

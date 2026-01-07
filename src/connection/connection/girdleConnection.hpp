@@ -17,14 +17,15 @@ struct GirdleConnectionConfig : public ConnectionConfig {
   struct {
     std::shared_ptr<Shape> shape = nullptr;
     b2Vec2 localPoint = {0, 0};
-  } centerAttach, leftAttach,rightAttach;
+  } centerAttach, leftAttach, rightAttach;
 
   b2Vec2 rotationAxis;
   float girdleWidth;
   float initial3DRotationRad;
 };
 
-class GirdleConnection : public Connection , public VisitableImpl<GirdleConnection>{
+class GirdleConnection : public Connection,
+                         public VisitableImpl<GirdleConnection> {
 public:
   using Config = GirdleConnectionConfig;
   virtual void update(float dt) override;
