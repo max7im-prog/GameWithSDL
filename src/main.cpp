@@ -22,6 +22,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     throw std::runtime_error("Failed to initialize logging");
   }
 
+  spdlog::info("PROGRAM START");
+
   // Initialize Game itself
   Game game(1400, 900);
   if (!game.init()) {
@@ -76,6 +78,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
   // Cleanup
   game.cleanup();
   SDL_Quit();
+
+  spdlog::info("PROGRAM END");
 
   return 0;
 }

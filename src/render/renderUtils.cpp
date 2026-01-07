@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <ostream>
+#include <spdlog/spdlog.h>
 #include <vector>
 
 ScreenPos RenderUtils::b2VecToScreenPos(b2Vec2 meters,
@@ -39,7 +40,10 @@ void RenderUtils::renderCircle(ScreenPos pixelCenter, int pixelRadius,
 
   auto renderer = context.getSDLRenderer();
 
-  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+  if (!SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a)) {
+    spdlog::debug("RenderUtils: SDL_SetRenderDrawColor failed: '{}'",
+                  SDL_GetError());
+  }
   const int sides = 16;
   const double angleStep = 2.0 * M_PI / sides;
 
@@ -57,35 +61,52 @@ void RenderUtils::renderCircle(ScreenPos pixelCenter, int pixelRadius,
   }
 
   for (int i = 0; i < sides; ++i) {
-    SDL_RenderLine(renderer, points[i].x, points[i].y, points[i + 1].x,
-                   points[i + 1].y);
+    if (!SDL_RenderLine(renderer, points[i].x, points[i].y, points[i + 1].x,
+                        points[i + 1].y)) {
+      spdlog::debug("RenderUtils: SDL_RenderLine failed: '{}'", SDL_GetError());
+    }
   }
 }
 
 void RenderUtils::renderSegment(ScreenPos point1, ScreenPos point2,
                                 SDL_Color color, const RenderContext &context) {
   auto renderer = context.getSDLRenderer();
-  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-  SDL_RenderLine(renderer, point1.x, point1.y, point2.x, point2.y);
+  if (!SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a)) {
+    spdlog::debug("RenderUtils: SDL_SetRenderDrawColor failed: '{}'",
+                  SDL_GetError());
+  }
+  if (!SDL_RenderLine(renderer, point1.x, point1.y, point2.x, point2.y)) {
+    spdlog::debug("RenderUtils: SDL_RenderLine failed: '{}'", SDL_GetError());
+  }
 }
 
 void RenderUtils::renderPolygon(const std::vector<ScreenPos> &vertices,
                                 SDL_Color color, const RenderContext &context) {
 
-  if (vertices.size() < 2)
+  if (vertices.size() < 2) {
+    spdlog::warn("RenderUtils::renderPolygon called with {} vertices",
+                 vertices.size());
     return;
+  }
 
   auto renderer = context.getSDLRenderer();
 
-  SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+  if (!SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a)) {
+    spdlog::debug("RenderUtils: SDL_SetRenderDrawColor failed: '{}'",
+                  SDL_GetError());
+  }
 
   for (size_t i = 0; i < vertices.size() - 1; i++) {
-    SDL_RenderLine(renderer, vertices[i].x, vertices[i].y, vertices[i + 1].x,
-                   vertices[i + 1].y);
+    if (!SDL_RenderLine(renderer, vertices[i].x, vertices[i].y,
+                        vertices[i + 1].x, vertices[i + 1].y)) {
+      spdlog::debug("RenderUtils: SDL_RenderLine failed: '{}'", SDL_GetError());
+    }
   }
-  SDL_RenderLine(renderer, vertices[0].x, vertices[0].y,
-                 vertices[vertices.size() - 1].x,
-                 vertices[vertices.size() - 1].y);
+  if (!SDL_RenderLine(renderer, vertices[0].x, vertices[0].y,
+                      vertices[vertices.size() - 1].x,
+                      vertices[vertices.size() - 1].y)) {
+    spdlog::debug("RenderUtils: SDL_RenderLine failed: '{}'", SDL_GetError());
+  }
 }
 
 void RenderUtils::renderCapsule(ScreenPos center1, ScreenPos center2,
@@ -118,15 +139,15 @@ void RenderUtils::renderTexture(SDL_Texture *texture,
                                 const Common::Transform &textureTransform,
                                 const RenderContext &context) {
   if (!texture) {
-    // TODO: log error??? or throw???
+    spdlog::error("RenderUtils::renderTexture called with null texture");
     return;
   }
 
   auto renderer = context.getSDLRenderer();
 
   SDL_FlipMode flip{SDL_FlipMode::SDL_FLIP_NONE};
-  b2Rot finalRot =
-      b2MulRot(b2MakeRot(textureTransform._relativeRotRad), b2MakeRot(textureTransform._rootRotRad));
+  b2Rot finalRot = b2MulRot(b2MakeRot(textureTransform._relativeRotRad),
+                            b2MakeRot(textureTransform._rootRotRad));
 
   if (textureTransform._flipX && textureTransform._flipY) {
     finalRot = b2MulRot(finalRot, b2MakeRot(B2_PI));
@@ -154,7 +175,8 @@ void RenderUtils::renderTexture(SDL_Texture *texture,
   if (!SDL_RenderTextureRotated(renderer, texture, &textureRegion, &destRect,
                                 b2Rot_GetAngle(finalRot) / B2_PI * -180,
                                 nullptr, flip)) {
-    // TODO: log error
+    spdlog::debug("RenderUtils: SDL_RenderTestureRotated failed: '{}'",
+                  SDL_GetError());
     // std::cout << "failed to render texture rotated" << std::endl;
   }
 }
