@@ -37,7 +37,8 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
     roomX = JsonUtils::getOrDefault<float>(roomJson["pos"], "x", 0.0f);
     roomY = JsonUtils::getOrDefault<float>(roomJson["pos"], "y", 0.0f);
   } else {
-    // TODO: log error
+    spdlog::error(
+        "SceneNodeConfig::parseObjectTransform: room JSON has no 'pos' field");
   }
 
   if (objectJson.contains("pos")) {
@@ -45,7 +46,8 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
 
     offsetY = JsonUtils::getOrDefault<float>(objectJson["pos"], "y", 0.0f);
   } else {
-    // TODO: log error
+    spdlog::error("SceneNodeConfig::parseObjectTransform: object JSON has no "
+                  "'pos' field");
   }
   ret._originPos = {roomX, roomY};
   ret._relativePos = {offsetX, offsetY};
@@ -55,8 +57,10 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
     float rotationAngle =
         JsonUtils::getOrDefault<float>(objectJson["transform"], "rotation", 0);
     float rootAngle = 0;
-    ret._relativeRotRad = b2Rot_GetAngle(b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f));
-    ret._rootRotRad = b2Rot_GetAngle(b2MakeRot((B2_PI * 2) * rootAngle / 360.0f));
+    ret._relativeRotRad =
+        b2Rot_GetAngle(b2MakeRot((B2_PI * 2) * rotationAngle / 360.0f));
+    ret._rootRotRad =
+        b2Rot_GetAngle(b2MakeRot((B2_PI * 2) * rootAngle / 360.0f));
 
     // Scale
     ret._scaleX =
@@ -70,7 +74,8 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
     ret._flipY =
         JsonUtils::getOrDefault<bool>(objectJson["transform"], "flipY", false);
   } else {
-    // TODO: log error
+    spdlog::error("SceneNodeConfig::parseObjectTransform: object JSON has no "
+                  "'transform' field");
   }
 
   return ret;
@@ -180,7 +185,8 @@ SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
           {
             float initRotDegrees = JsonUtils::getOrDefault<float>(
                 shapeJson, "initialRotationOffsetDegrees", 0.0f);
-            shapeCfg->_initialRotationOffset = B2_PI*2.0f*initRotDegrees/360.0f;
+            shapeCfg->_initialRotationOffset =
+                B2_PI * 2.0f * initRotDegrees / 360.0f;
           }
 
           bodyCfg->_shapeRenders[shapeName] = shapeCfg;

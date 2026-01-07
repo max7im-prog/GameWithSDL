@@ -38,7 +38,8 @@ TerrainConfig::parseBodyParams(const nlohmann::json &json) {
         } else if (*bodyType == "kinematic") {
           ret._bodyDef.type = b2_kinematicBody;
         } else {
-          // TODO: log unknown body type
+          spdlog::error("TerrainConfig::parseBodyParams: unknown body type: {}",
+                        *bodyType);
         }
       }
     }

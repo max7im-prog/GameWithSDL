@@ -14,8 +14,8 @@ PolygonTerrain::PolygonTerrain(
   // A single polygon
   auto terrainPos =
       b2Add(config._transform._originPos, config._transform._relativePos);
-  auto terrainRot =
-      b2MulRot(b2MakeRot(config._transform._rootRotRad), b2MakeRot(config._transform._relativeRotRad));
+  auto terrainRot = b2MulRot(b2MakeRot(config._transform._rootRotRad),
+                             b2MakeRot(config._transform._relativeRotRad));
 
   auto transformedVertices = config.vertices;
   std::for_each(transformedVertices.begin(), transformedVertices.end(),
@@ -55,7 +55,8 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
     {
       auto temp = JsonUtils::getOptional<float>(v, "x");
       if (!temp) {
-        // TODO: log error
+        spdlog::error("PolygonTerrainConfig: Failed to parse JSON: no 'x' "
+                      "position for a vertice");
         continue;
       }
       x = *temp;
@@ -63,7 +64,8 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
     {
       auto temp = JsonUtils::getOptional<float>(v, "y");
       if (!temp) {
-        // TODO: log error
+        spdlog::error("PolygonTerrainConfig: Failed to parse JSON: no 'y' "
+                      "position for a vertice");
         continue;
       }
       y = *temp;

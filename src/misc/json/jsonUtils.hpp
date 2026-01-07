@@ -42,7 +42,6 @@ public:
       try {
         return it->get<T>();
       } catch (const nlohmann::json::exception &) {
-        // TODO: log key not found???
         return defaultValue; // wrong type, fallback
       }
     }

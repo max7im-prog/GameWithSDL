@@ -14,8 +14,8 @@ SegmentTerrain::SegmentTerrain(
   // A single segment
   auto terrainPos =
       b2Add(config._transform._originPos, config._transform._relativePos);
-  auto terrainRot =
-      b2MulRot(b2MakeRot(config._transform._rootRotRad), b2MakeRot(config._transform._relativeRotRad));
+  auto terrainRot = b2MulRot(b2MakeRot(config._transform._rootRotRad),
+                             b2MakeRot(config._transform._relativeRotRad));
 
   std::vector<b2Vec2> transformedVertices = {config.point1, config.point2};
   std::for_each(transformedVertices.begin(), transformedVertices.end(),
@@ -33,7 +33,7 @@ SegmentTerrain::SegmentTerrain(
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
     segmentBody = bodyFactory->create<SegmentBody>(bodyCfg);
-    registerBody(segmentBody,"main");
+    registerBody(segmentBody, "main");
   }
 }
 
@@ -50,17 +50,23 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
   if (json.contains("point1")) {
     point1 = JsonUtils::parseB2Vec2(json["point1"]);
   } else {
-    // TODO: log error
+    spdlog::error(
+        "CapsuleTerrainConfig: failed to parse JSON - no 'point1' field");
   }
 
   if (json.contains("point2")) {
     point2 = JsonUtils::parseB2Vec2(json["point2"]);
   } else {
-    // TODO: log error
+    spdlog::error(
+        "CapsuleTerrainConfig: failed to parse JSON - no 'point2' field");
   }
 
   if (b2Distance(point1, point2) == 0) {
-    // TODO: log error (segments of length zero lead to crashes)
+    spdlog::error(
+        "SegmentTerrainConfig: capsule veritces [{},{}], [{},{}] are set to "
+        "default variables "
+        "(segments of length zero lead to crashes)",
+        point1.x, point1.y, point2.x, point2.y);
     point1 = {0, 0};
     point1 = {1, 0};
   }
@@ -71,7 +77,6 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
-
   if (json.contains("renderConfig")) {
     _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
   } else {
@@ -79,4 +84,6 @@ void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
   }
 }
 
-b2Vec2 SegmentTerrain::getWorldPos() { return segmentBody.lock()->getWorldPos(); }
+b2Vec2 SegmentTerrain::getWorldPos() {
+  return segmentBody.lock()->getWorldPos();
+}

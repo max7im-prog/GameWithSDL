@@ -13,8 +13,8 @@ CapsuleTerrain::CapsuleTerrain(
   // A single capsule
   auto terrainPos =
       b2Add(config._transform._originPos, config._transform._relativePos);
-  auto terrainRot =
-      b2MulRot(b2MakeRot(config._transform._rootRotRad), b2MakeRot(config._transform._relativeRotRad));
+  auto terrainRot = b2MulRot(b2MakeRot(config._transform._rootRotRad),
+                             b2MakeRot(config._transform._relativeRotRad));
 
   std::vector<b2Vec2> transformedVertices = {config.point1, config.point2};
   std::for_each(transformedVertices.begin(), transformedVertices.end(),
@@ -53,17 +53,23 @@ void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
   if (json.contains("point1")) {
     point1 = JsonUtils::parseB2Vec2(json["point1"]);
   } else {
-    // TODO: log error
+    spdlog::error(
+        "CapsuleTerrainConfig: failed to parse JSON - no 'point1' field");
   }
 
   if (json.contains("point2")) {
     point2 = JsonUtils::parseB2Vec2(json["point2"]);
   } else {
-    // TODO: log error
+    spdlog::error(
+        "CapsuleTerrainConfig: failed to parse JSON - no 'point2' field");
   }
 
   if (b2Distance(point1, point2) == 0) {
-    // TODO: log error (segments of length zero lead to crashes)
+    spdlog::error(
+        "CapsuleTerrainConfig: capsule veritces [{},{}], [{},{}] are set to "
+        "default variables "
+        "(segments of length zero lead to crashes)",
+        point1.x, point1.y, point2.x, point2.y);
     point1 = {0, 0};
     point2 = {1, 0};
   }
