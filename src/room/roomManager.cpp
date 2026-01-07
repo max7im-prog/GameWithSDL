@@ -48,10 +48,16 @@ const std::map<std::string,
            auto entityId =
                createEntityId(context._room->getJSON(), context._metadataJson);
            if (!entityId) {
-             // TODO: log error
+
+             spdlog::error("RoomManager: failed to parse entity id for "
+                           "PolygonTerrain in a room "
+                           "with ID = '{}'",
+                           context._room->getRoomId());
              return;
            }
            if (context._mgr._entities.contains(*entityId)) {
+             spdlog::debug("Duplicate entity id '{}' in room '{}', skipping",
+                           *entityId, context._room->getRoomId());
              return;
            }
 
@@ -70,10 +76,15 @@ const std::map<std::string,
            auto entityId =
                createEntityId(context._room->getJSON(), context._metadataJson);
            if (!entityId) {
-             // TODO: log error
+             spdlog::error("RoomManager: failed to parse entity id for "
+                           "CapsuleTerrain in a room "
+                           "with ID = '{}'",
+                           context._room->getRoomId());
              return;
            }
            if (context._mgr._entities.contains(*entityId)) {
+             spdlog::debug("Duplicate entity id '{}' in room '{}', skipping",
+                           *entityId, context._room->getRoomId());
              return;
            }
            CapsuleTerrain::Config cfg;
@@ -91,10 +102,15 @@ const std::map<std::string,
            auto entityId =
                createEntityId(context._room->getJSON(), context._metadataJson);
            if (!entityId) {
-             // TODO: log error
+             spdlog::error("RoomManager: failed to parse entity id for "
+                           "SegmantTerrain in a room "
+                           "with ID = '{}'",
+                           context._room->getRoomId());
              return;
            }
            if (context._mgr._entities.contains(*entityId)) {
+             spdlog::debug("Duplicate entity id '{}' in room '{}', skipping",
+                           *entityId, context._room->getRoomId());
              return;
            }
            SegmentTerrain::Config cfg;
@@ -112,10 +128,15 @@ const std::map<std::string,
            auto entityId =
                createEntityId(context._room->getJSON(), context._metadataJson);
            if (!entityId) {
-             // TODO: log error
+             spdlog::error("RoomManager: failed to parse entity id for "
+                           "CircleTerrain in a room "
+                           "with ID = '{}'",
+                           context._room->getRoomId());
              return;
            }
            if (context._mgr._entities.contains(*entityId)) {
+             spdlog::debug("Duplicate entity id '{}' in room '{}', skipping",
+                           *entityId, context._room->getRoomId());
              return;
            }
            CircleTerrain::Config cfg;
@@ -132,10 +153,15 @@ const std::map<std::string,
            auto entityId =
                createEntityId(context._room->getJSON(), context._metadataJson);
            if (!entityId) {
-             // TODO: log error
+             spdlog::error("RoomManager: failed to parse entity id for "
+                           "DemoCreature in a room "
+                           "with ID = '{}'",
+                           context._room->getRoomId());
              return;
            }
            if (context._mgr._entities.contains(*entityId)) {
+             spdlog::debug("Duplicate entity id '{}' in room '{}', skipping",
+                           *entityId, context._room->getRoomId());
              return;
            }
            DemoCreature::Config cfg;
@@ -187,16 +213,21 @@ void RoomManager::unloadEntity(const EntityId &entityId) {
 
 std::optional<RoomId> RoomManager::loadRoom(const RoomId &roomId) {
   auto it = _rooms.find(roomId);
-  if (it == _rooms.end())
-    // TODO: log room not found
+  if (it == _rooms.end()) {
+    spdlog::warn(
+        "RoomManager: room with id '{}' is not preloaded into memory, skipping",
+        roomId);
     return std::nullopt;
+  }
 
   auto room = it->second;
   const auto &roomJson = room->getJSON();
 
   auto entitiesIt = roomJson.find("entities");
   if (entitiesIt == roomJson.end() || !entitiesIt->is_array()) {
-    // TODO: log error: "Room missing valid 'entities' array"
+    spdlog::error("RoomManager: room with id '{}' is missing a valid "
+                  "'entities' array, skipping",
+                  roomId);
     return std::nullopt;
   }
 
@@ -205,20 +236,28 @@ std::optional<RoomId> RoomManager::loadRoom(const RoomId &roomId) {
     const auto configFile =
         JsonUtils::getOptional<std::string>(entityMetadataJson, "configFile");
     if (!configFile) {
-      // TODO: log error
+      spdlog::error(
+          "RoomManager: Entity with missing config file in room with id = '{}'"
+          ", skipping",
+          roomId);
       continue;
     }
 
     const auto entityConfigJson = JsonUtils::parseJSON(*configFile);
     if (!entityConfigJson) {
-      // TODO: log error
+      spdlog::error("RoomManager: failed to parse config file: '{}' for an "
+                    "entity in room with id = '{}'",
+                    *configFile, roomId);
       continue;
     }
 
     const auto entityType =
         JsonUtils::getOptional<std::string>(*entityConfigJson, "type");
     if (!entityType) {
-      // TODO: log error
+      spdlog::error(
+          "RoomManager: missing entity type in config file: '{}' for an "
+          "entity in room with id = '{}'",
+          *configFile, roomId);
       continue;
     }
 
@@ -229,13 +268,18 @@ std::optional<RoomId> RoomManager::loadRoom(const RoomId &roomId) {
       try {
         dispatchIt->second(context);
       } catch (const nlohmann::json::exception &e) {
-        // TODO: log json error
+        spdlog::error(
+            "JSON error while loading entity from '{}' in room '{}': {}",
+            *configFile, roomId, e.what());
       } catch (const std::exception &e) {
-        // TODO: log factory/runtime error
+        spdlog::error(
+            "Failed to create entity of type '{}' from '{}' in room '{}': {}",
+            *entityType, *configFile, roomId, e.what());
       }
 
     } else {
-      // TODO: log: unknown entity type
+      spdlog::error("Unknown entity type '{}' in config '{}' (room '{}')",
+                    *entityType, *configFile, roomId);
     }
   }
 
@@ -247,20 +291,26 @@ RoomManager::preloadRoomLayout(std::string_view roomLayoutFile) {
   std::vector<RoomId> ret;
   auto temp = JsonUtils::parseJSON(std::string(roomLayoutFile));
   if (!temp) {
-    // TODO: log error
+    spdlog::error("RoomManager: Failed to parse room layout file '{}'",
+                  roomLayoutFile);
     return {};
   }
 
   auto json = *temp;
   if (!json.contains("rooms")) {
-    // TODO: log error
+    spdlog::error(
+        "RoomManager: Room layout '{}' missing required 'rooms' array",
+        roomLayoutFile);
     return {};
   }
 
   for (auto &room : json["rooms"]) {
     if (!room.contains("id") || !room.contains("pos") ||
         !room.contains("configFile")) {
-      // TODO: log error
+      spdlog::error(
+          "RoomManager: Room entry in layout '{}' missing required fields (id, "
+          "pos, configFile)",
+          roomLayoutFile);
       continue;
     }
     auto pos = room["pos"];
@@ -272,7 +322,9 @@ RoomManager::preloadRoomLayout(std::string_view roomLayoutFile) {
     auto roomConfigFile =
         JsonUtils::getOptional<std::string>(room, "configFile");
     if (!roomConfigFile) {
-      // TODO: log error
+      spdlog::error("RoomManager: Room entry in world layout '{}' missing "
+                    "required field 'configFile'",
+                    roomLayoutFile);
       continue;
     }
 
@@ -280,7 +332,8 @@ RoomManager::preloadRoomLayout(std::string_view roomLayoutFile) {
     if (id) {
       ret.push_back(*id);
     } else {
-      // TODO: log error
+      spdlog::error("Failed to preload room '{}' from config '{}'", roomId,
+                    *roomConfigFile);
     }
   }
   return ret;
