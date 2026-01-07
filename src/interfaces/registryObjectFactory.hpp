@@ -1,4 +1,5 @@
 #pragma once
+#include "spdlog/spdlog.h"
 #include <entt/entt.hpp>
 
 /**
@@ -43,11 +44,19 @@ public:
     try {
       ret = derived().template tryCreate<T>(config);
     } catch (std::exception &e) {
-      // TODO: log error
+      spdlog::error("Factory {} failed to create type {}: {}",
+                    typeid(Derived).name(), typeid(T).name(), e.what());
+
+      return std::weak_ptr<T>();
+    } catch (...) {
+      spdlog::error("Factory {} failed to create {}: unknown exception",
+                    typeid(Derived).name(), typeid(T).name());
       return std::weak_ptr<T>();
     }
+
     if (!ret) {
-      // TODO: log error
+      spdlog::error("Factory {} returned null while creating {}",
+                    typeid(Derived).name(), typeid(T).name());
       return std::weak_ptr<T>();
     }
     derived().template registerObject<T>(ret);

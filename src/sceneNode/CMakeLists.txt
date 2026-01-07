@@ -12,6 +12,7 @@ target_link_libraries(
          game_misc_lib
          game_common_lib
          EnTT::EnTT
+         spdlog::spdlog
          nlohmann_json::nlohmann_json)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/creature)

@@ -54,7 +54,9 @@ void Texturer::visit(SceneNode &n) {
       bodyLock->accept(*this);
       _currentBodyRenderConfig.reset();
     } else {
-      // TODO: log error
+      spdlog::warn(
+          "Texturer: body '{}' in scene node {} has expired (skipping)",
+          bodyName, static_cast<uint32_t>(n.getEntity()));
     }
   }
   // std::cout << "textured scene node" << std::endl;
@@ -93,7 +95,10 @@ void Texturer::visit(Body &b) {
       shapeLock->accept(*this);
       _currentShapeRenderConfig.reset();
     } else {
-      // TODO: log error
+
+      spdlog::warn("Texturer: shape '{}' in body '{}' (entity {}) has expired "
+                   "(skipping)",
+                   shapeName, "{}", static_cast<uint32_t>(b.getEntity()));
     }
   }
   // std::cout << "textured body" << std::endl;
@@ -117,10 +122,10 @@ void Texturer::visit(Shape &s) {
   if (t) {
     texture = t;
   } else {
-    // TODO: log error
+    spdlog::warn("Texturer: failed to load texture '{}' for shape entity {}",
+                 filename, static_cast<uint32_t>(s.getEntity()));
     return;
   }
-  // std::cout << "textured shape" << std::endl;
 
   auto &el = _registry.emplace_or_replace<TextureComponent>(ent);
   Common::Transform initialTextureTransform{};

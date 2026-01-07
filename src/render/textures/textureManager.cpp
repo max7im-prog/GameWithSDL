@@ -3,6 +3,7 @@
 #include "SDL3/SDL_surface.h"
 #include <SDL3_image/SDL_image.h>
 #include <memory>
+#include <spdlog/spdlog.h>
 
 TextureManager::TextureManager(const RenderContext &renderContext)
     : _renderContext(renderContext) {}
@@ -14,7 +15,9 @@ TextureManager::getTexture(const std::string &filename) {
     std::shared_ptr<SDL_Surface> surface{IMG_Load(filename.c_str()),
                                          SDL_DestroySurface};
     if (!surface) {
-      // TODO: log error
+      spdlog::error("TextureManager: IMG_Load failed for '{}': {}", filename,
+                    SDL_GetError());
+
       return nullptr;
     }
 
@@ -23,7 +26,9 @@ TextureManager::getTexture(const std::string &filename) {
                                      surface.get()),
         SDL_DestroyTexture};
     if (!texture) {
-      // TODO: log error
+      spdlog::error(
+          "TextureManager: SDL_CreateTextureFromSurface failed for '{}': {}",
+          filename, SDL_GetError());
       return nullptr;
     }
     SDL_SetTextureScaleMode(texture.get(), SDL_SCALEMODE_NEAREST);
