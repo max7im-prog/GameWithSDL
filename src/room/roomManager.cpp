@@ -22,7 +22,7 @@ createEntityId(const nlohmann::json &roomJson,
   EntityId ret = "";
   auto roomId = JsonUtils::getOptional<std::string>(roomJson, "id");
   if (!roomId) {
-    // TODO: log error
+    spdlog::error("Room JSON missing required field 'id'");
     return std::nullopt;
   }
   ret += *roomId;
@@ -30,7 +30,8 @@ createEntityId(const nlohmann::json &roomJson,
   auto localEntityId =
       JsonUtils::getOptional<std::string>(entityMetadataJson, "id");
   if (!localEntityId) {
-    // TODO: log error
+    spdlog::error("Entity metadata in room '{}' missing required field 'id'",
+                  *roomId);
     return std::nullopt;
   }
   ret += *localEntityId;
