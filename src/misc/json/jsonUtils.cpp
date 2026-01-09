@@ -29,3 +29,37 @@ b2Vec2 JsonUtils::parseB2Vec2(const nlohmann::json &json) {
   ret.y = JsonUtils::getOrDefault<float>(json, "y", 0.0f);
   return ret;
 }
+
+const nlohmann::json *
+JsonUtils::findNode(const nlohmann::json &json,
+                    std::initializer_list<JsonPathStep> steps) {
+  const nlohmann::json *current = &json;
+
+  for (const auto &step : steps) {
+    switch (step._kind) {
+    case JsonPathStep::Kind::Index: {
+      if (!current->is_array()) {
+        return nullptr;
+      }
+      if (step._index >= current->size()) {
+        return nullptr;
+      }
+      current = &(current->at(step._index));
+      break;
+    }
+    case JsonPathStep::Kind::Key: {
+      if (!current->is_object()) {
+        return nullptr;
+      }
+      auto it = current->find(step._key);
+      if (it == current->end()) {
+        return nullptr;
+      }
+      current = &(it.value());
+      break;
+    }
+    }
+  }
+
+  return current;
+}
