@@ -78,6 +78,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/connection)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/room)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/behavior)
 
 # Game libraries
 set(EXTERNAL_LIBS box2d SDL3::SDL3 SDL3_image::SDL3_image EnTT::EnTT
@@ -99,7 +100,8 @@ set(GAME_LIBS
     game_common_lib
     game_components_lib
     game_scene_node_lib
-    game_fallback_visitor_lib)
+    game_fallback_visitor_lib
+    game_behavior_lib)
 add_library(game_run_lib STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/game.hpp
                                 ${CMAKE_CURRENT_SOURCE_DIR}/src/game.cpp)
 target_include_directories(game_run_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

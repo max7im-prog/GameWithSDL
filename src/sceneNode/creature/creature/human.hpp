@@ -5,6 +5,17 @@
 #include "creature.hpp"
 #include <entt/entt.hpp>
 
+// Here are the responsibilities of models:
+//
+// HumanArticulationModel - skeletal constraints (hips,shoulders,angle
+// constraints forarms and legs, pseudo 3d rotation, joint limits
+//
+// HumanLocomotionModel - leg movement logic, jump state, movement state
+//
+// HumanBalanceModel - torso vertical offset, horizontal damping, etc.
+//
+// HumaAimModel - where arms point at, head inclination
+
 struct HumanConfig : public CreatureConfig {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
