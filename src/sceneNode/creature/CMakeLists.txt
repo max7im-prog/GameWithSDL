@@ -16,6 +16,7 @@ target_link_libraries(
          game_scene_node_lib
          game_components_lib
          game_common_lib
+         game_behavior_lib
          box2d
          EnTT::EnTT
          nlohmann_json::nlohmann_json)

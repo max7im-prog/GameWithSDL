@@ -13,7 +13,12 @@ Creature::Creature(entt::registry &registry, const std::shared_ptr<World> world)
 
 Creature::~Creature() {}
 
-void Creature::update(float dt) { RegistryComposite::update(dt); }
+void Creature::update(float dt) {
+  for (auto &behavior : _behaviors) {
+    behavior->update(dt);
+  }
+  SceneNode::update(dt);
+}
 
 b2Filter CreatureConfig::defaultFilter() {
   b2Filter ret = b2DefaultFilter();
@@ -45,3 +50,9 @@ void Creature::perform(CreatureAction action, InputState inputState) {
     it->second(inputState);
   }
 }
+
+void Creature::registerBehavior(std::shared_ptr<IBehaviorModel> behavior) {
+  _behaviors.push_back(behavior);
+}
+
+void Creature::clearBehaviors() { _behaviors.clear(); }

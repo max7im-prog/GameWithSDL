@@ -1,4 +1,5 @@
 #pragma once
+#include "IBehaviorModel.hpp"
 #include "body.hpp"
 #include "box2d/types.h"
 #include "eventComponents.hpp"
@@ -40,7 +41,12 @@ protected:
 
   std::unordered_map<CreatureAction, std::function<void(InputState)>> _actions;
 
+  void registerBehavior(std::shared_ptr<IBehaviorModel> behavior);
+  void clearBehaviors();
+
 private:
+  std::vector<std::shared_ptr<IBehaviorModel>> _behaviors;
+
   Creature() = delete;
   Creature(Creature &other) = delete;
   Creature(Creature &&other) = delete;
