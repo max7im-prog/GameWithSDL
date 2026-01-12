@@ -75,5 +75,42 @@ protected:
   std::weak_ptr<LimbBody> _legRight;
 
 private:
+  // A struct used during initialization of a human, not used anywhere else
+  struct InitInfo {
+    int _groupId;
+    struct {
+      b2Vec2 _basePos;
+      b2Vec2 _leftShoulderPos;
+      b2Vec2 _righShoulderPos;
+      b2Vec2 _leftHipPos;
+      b2Vec2 _headPos;
+      b2Vec2 _neckPos;
+    } _initDimensions;
+  };
+
+  // A struct used during initialization of a human to hold templates for bodies
+  // and connections, not used anywhere else
+  struct InitAnatomyTemplates {
+    LimbBody::Config _limbTemplate;
+    PolygonBody::Config _torsoTemplate;
+    PolygonBody::Config _headTemplate;
+    CapsuleBody::Config _neckTemplate;
+    CircleBody::Config _shoulderTemplate;
+    CircleBody::Config _hipTemplate;
+
+    GirdleConnection::Config _shoulderGirdleTemplate;
+    GirdleConnection::Config _hipGirdleTemplate;
+  };
+
+  InitInfo computeInitInfo(const Human::Config &config);
+  InitAnatomyTemplates createAnatomyTemplates(const Human::Config &config);
+  void
+  createAnatomy(const Human::Config &config, const InitInfo &initInfo,
+                const InitAnatomyTemplates &initAnatomyTemplates,
+                const std::shared_ptr<BodyFactory> &bodyFactory,
+                const std::shared_ptr<ConnectionFactory> &connectionFactory);
+  void bindActions();
+  void bindBehavior();
+
   friend class CreatureFactory;
 };
