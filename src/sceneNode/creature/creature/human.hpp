@@ -19,8 +19,28 @@
 struct HumanConfig : public CreatureConfig {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
-  float sizeXMeters = 1;
-  float sizeYMeters = 1;
+  struct {
+    float _baseSizeMeters = 1.0f;
+
+    float _shoulderWidthRatio = 0.3f;
+    float _shoulderSizeRatio = 0.3f;
+
+    float _hipRatio = 0.3f;
+    float _hipSizeRatio = 0.3f;
+
+    float _torsoHeightRatio = 0.4;
+    float _torsoWidthRatio = 0.4;
+
+    float _headHeightRatio = 0.1f;
+    float _headWidthRatio = 0.1f;
+
+    float _limbThicknessRatio = 0.1f;
+    float _neckRatio = 0.1f;
+    float _leftArmRatio = 0.4f;
+    float _rightArmRatio = 0.4f;
+    float _leftLegRatio = 0.4f;
+    float _rightLegRatio = 0.4f;
+  } _proportions;
 };
 
 class Human : public Creature, public VisitableImpl<Human> {
