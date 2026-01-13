@@ -4,6 +4,8 @@ class IBehaviorModel {
 public:
   virtual void update([[maybe_unused]] double secondsPassed) = 0;
   virtual ~IBehaviorModel() = 0;
+
+protected:
   IBehaviorModel() = default;
 
 private:

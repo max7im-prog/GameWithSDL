@@ -3,6 +3,10 @@
 #include "bodyFactory.hpp"
 #include "connectionFactory.hpp"
 #include "creature.hpp"
+#include "humanAimModel.hpp"
+#include "humanArticulationModel.hpp"
+#include "humanBalanceModel.hpp"
+#include "humanLocomotionModel.hpp"
 #include <entt/entt.hpp>
 
 // Here are the responsibilities of models:
@@ -41,6 +45,18 @@ struct HumanConfig : public CreatureConfig {
     float _leftLegRatio = 0.4f;
     float _rightLegRatio = 0.4f;
   } _proportions;
+
+  struct {
+    float _totalMassKg = 80.0f;
+
+    float _torsoRatio = 0.3f;
+    float _headRatio = 0.05f;
+    float _neckRatio = 0.05f;
+    float _shoulderRatio = 0.1f; // Both combined
+    float _hipRatio = 0.1f;      // Both combined
+    float _legRatio = 0.2f;      // Both combined
+    float _armRatio = 0.2f;      // Both combined
+  } _massDistribution;
 };
 
 class Human : public Creature, public VisitableImpl<Human> {
@@ -62,34 +78,61 @@ protected:
         const std::shared_ptr<BodyFactory> bodyFactory,
         const std::shared_ptr<ConnectionFactory> connectionFactory);
 
-  std::weak_ptr<PolygonBody> _head;
-  std::weak_ptr<CapsuleBody> _neck;
-  std::weak_ptr<PolygonBody> _torso;
-  std::weak_ptr<CircleBody> _shoulderLeft;
-  std::weak_ptr<CircleBody> _shoulderRight;
-  std::weak_ptr<CircleBody> _hipLeft;
-  std::weak_ptr<CircleBody> _hipRight;
-  std::weak_ptr<LimbBody> _armLeft;
-  std::weak_ptr<LimbBody> _armRight;
-  std::weak_ptr<LimbBody> _legLeft;
-  std::weak_ptr<LimbBody> _legRight;
+  struct {
+    std::weak_ptr<PolygonBody> _head;
+    std::weak_ptr<CapsuleBody> _neck;
+    std::weak_ptr<PolygonBody> _torso;
+    std::weak_ptr<CircleBody> _shoulderLeft;
+    std::weak_ptr<CircleBody> _shoulderRight;
+    std::weak_ptr<CircleBody> _hipLeft;
+    std::weak_ptr<CircleBody> _hipRight;
+    std::weak_ptr<LimbBody> _armLeft;
+    std::weak_ptr<LimbBody> _armRight;
+    std::weak_ptr<LimbBody> _legLeft;
+    std::weak_ptr<LimbBody> _legRight;
+  } _bodies;
+
+  struct {
+    HumanLocomotionModel *_locomotion;
+    HumanAimModel *_aim;
+    HumanArticulationModel *_articulatein;
+    HumanBalanceModel *_balance;
+  } _behaviors;
 
 private:
-  // A struct used during initialization of a human, not used anywhere else
+  /**
+   * @brief A struct used during initialization of a human, not used anywhere
+   * else
+   */
   struct InitInfo {
     int _groupId;
     struct {
-      b2Vec2 _basePos;
-      b2Vec2 _leftShoulderPos;
-      b2Vec2 _righShoulderPos;
-      b2Vec2 _leftHipPos;
-      b2Vec2 _headPos;
-      b2Vec2 _neckPos;
+      b2Vec2 _basePos = {0, 0};
+      b2Vec2 _leftShoulderPos = {0, 0};
+      b2Vec2 _rightShoulderPos = {0, 0};
+      b2Vec2 _leftHipPos = {0, 0};
+      b2Vec2 _rightHipPos = {0, 0};
+      b2Vec2 _headPos = {0, 0};
+      b2Vec2 _neckPos = {0, 0};
     } _initDimensions;
+
+    struct {
+      float _torso = 0.1f;
+      float _shoulder = 0.1f;
+      float _hip = 0.1f;
+      float _head = 0.1f;
+      float _neck = 0.1f;
+      float _rightLeg = 0.1f;
+      float _leftLeg = 0.1f;
+      float _rightArm = 0.1f;
+      float _leftArm = 0.1f;
+    } _densities;
   };
 
-  // A struct used during initialization of a human to hold templates for bodies
-  // and connections, not used anywhere else
+  /**
+   * @brief A struct used during initialization of a human to hold templates for
+   * bodies and connections, not used anywhere else
+   */
   struct InitAnatomyTemplates {
     LimbBody::Config _limbTemplate;
     PolygonBody::Config _torsoTemplate;
@@ -103,14 +146,15 @@ private:
   };
 
   InitInfo computeInitInfo(const Human::Config &config);
-  InitAnatomyTemplates createAnatomyTemplates(const Human::Config &config);
+  InitAnatomyTemplates createAnatomyTemplates(const Human::Config &config,
+                                              const InitInfo &initInfo);
   void
   createAnatomy(const Human::Config &config, const InitInfo &initInfo,
                 const InitAnatomyTemplates &initAnatomyTemplates,
                 const std::shared_ptr<BodyFactory> &bodyFactory,
                 const std::shared_ptr<ConnectionFactory> &connectionFactory);
-  void bindActions();
   void bindBehavior();
+  void bindActions();
 
   friend class CreatureFactory;
 };

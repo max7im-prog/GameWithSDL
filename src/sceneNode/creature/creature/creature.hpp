@@ -45,7 +45,7 @@ protected:
   void clearBehaviors();
 
 private:
-  std::vector<std::shared_ptr<IBehaviorModel>> _behaviors;
+  std::vector<std::unique_ptr<IBehaviorModel>> _behaviors;
 
   Creature() = delete;
   Creature(Creature &other) = delete;
