@@ -51,8 +51,8 @@ void Creature::perform(CreatureAction action, InputState inputState) {
   }
 }
 
-void Creature::registerBehavior(std::shared_ptr<IBehaviorModel> behavior) {
-  _behaviors.push_back(behavior);
+void Creature::registerBehavior(std::unique_ptr<IBehaviorModel> &&behavior) {
+  _behaviors.push_back(std::move(behavior));
 }
 
 void Creature::clearBehaviors() { _behaviors.clear(); }

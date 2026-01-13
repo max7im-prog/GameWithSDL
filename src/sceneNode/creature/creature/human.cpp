@@ -3,6 +3,7 @@
 #include "box2d/box2d.h"
 #include "box2d/collision.h"
 #include "box2d/types.h"
+#include "limbBody.hpp"
 #include "shapeFactory.hpp"
 
 Human::Human(entt::registry &registry, const std::shared_ptr<World> world,
@@ -157,6 +158,8 @@ void Human::createAnatomy(
   // Torso
   {
     PolygonBody::Config cfg = initAnatomyTemplates._torsoTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._basePos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._torso;
     cfg.shapeCfg.vertices = {{(config._proportions._baseSizeMeters *
                                -config._proportions._torsoWidthRatio / 2.0f),
                               (config._proportions._baseSizeMeters *
@@ -179,6 +182,61 @@ void Human::createAnatomy(
     _bodies._torso = bodyFactory->create<PolygonBody>(cfg);
     registerBody(_bodies._torso, "torso");
   }
+
+  // Neck
+  {
+    CapsuleBody::Config cfg = initAnatomyTemplates._neckTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._neckPos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._neck;
+    cfg.shapeCfg.center1 = {0, -config._proportions._baseSizeMeters *
+                                   config._proportions._neckRatio / 2.0f};
+    cfg.shapeCfg.center2 = {0, config._proportions._baseSizeMeters *
+                                   config._proportions._neckRatio / 2.0f};
+    _bodies._neck = bodyFactory->create<CapsuleBody>(cfg);
+    registerBody(_bodies._neck, "neck");
+  }
+
+  // Head
+  {
+    PolygonBody::Config cfg = initAnatomyTemplates._torsoTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._headPos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._head;
+    cfg.shapeCfg.vertices = {{(config._proportions._baseSizeMeters *
+                               -config._proportions._headWidthRatio / 2.0f),
+                              (config._proportions._baseSizeMeters *
+                               -config._proportions._headHeightRatio / 2.0f)},
+
+                             {(config._proportions._baseSizeMeters *
+                               -config._proportions._headWidthRatio / 2.0f),
+                              (config._proportions._baseSizeMeters *
+                               config._proportions._headHeightRatio / 2.0f)},
+
+                             {(config._proportions._baseSizeMeters *
+                               config._proportions._headWidthRatio / 2.0f),
+                              (config._proportions._baseSizeMeters *
+                               config._proportions._headHeightRatio / 2.0f)},
+
+                             {(config._proportions._baseSizeMeters *
+                               config._proportions._headWidthRatio / 2.0f),
+                              (config._proportions._baseSizeMeters *
+                               -config._proportions._headHeightRatio / 2.0f)}};
+    _bodies._head = bodyFactory->create<PolygonBody>(cfg);
+    registerBody(_bodies._head, "head");
+  }
+
+  constexpr int segmentsPerLimb = 2;
+
+  // Left arm
+  {
+    LimbBody::Config cfg = initAnatomyTemplates._limbTemplate;
+    cfg.basePos = initInfo._initDimensions._leftShoulderPos;
+    cfg.templateCapsuleConfig.shapeDef.density = initInfo._densities._leftArm;
+    cfg.rootRot = b2MakeRot(-B2_PI);
+    for (int i{0}; i < segmentsPerLimb; ++i) {
+      LimbSegmentConfig seg;
+    }
+  }
+
   // TODO: complete
 }
 

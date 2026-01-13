@@ -5,7 +5,6 @@
 #include "eventComponents.hpp"
 #include "sceneNode.hpp"
 #include "world.hpp"
-#include <cstddef>
 #include <entt/entt.hpp>
 
 struct CreatureConfig : SceneNodeConfig {
@@ -41,7 +40,7 @@ protected:
 
   std::unordered_map<CreatureAction, std::function<void(InputState)>> _actions;
 
-  void registerBehavior(std::shared_ptr<IBehaviorModel> behavior);
+  void registerBehavior(std::unique_ptr<IBehaviorModel> &&behavior);
   void clearBehaviors();
 
 private:
