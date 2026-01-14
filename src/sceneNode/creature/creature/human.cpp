@@ -29,19 +29,19 @@ Human::InitInfo Human::computeInitInfo(const Human::Config &config) {
 
   ret._initDimensions._leftShoulderPos =
       b2Add(ret._initDimensions._basePos,
-            {baseSize * config._proportions._shoulderWidthRatio / 2.0f,
+            {baseSize * config._proportions._shoulderGirdleWIdhtRatio / 2.0f,
              baseSize * config._proportions._torsoHeightRatio / 2.0f});
   ret._initDimensions._rightShoulderPos =
       b2Add(ret._initDimensions._basePos,
-            {-baseSize * config._proportions._shoulderWidthRatio / 2.0f,
+            {-baseSize * config._proportions._shoulderGirdleWIdhtRatio / 2.0f,
              baseSize * config._proportions._torsoHeightRatio / 2.0f});
   ret._initDimensions._leftHipPos =
       b2Add(ret._initDimensions._basePos,
-            {baseSize * config._proportions._shoulderWidthRatio / 2.0f,
+            {baseSize * config._proportions._shoulderGirdleWIdhtRatio / 2.0f,
              -baseSize * config._proportions._torsoHeightRatio / 2.0f});
   ret._initDimensions._rightHipPos =
       b2Add(ret._initDimensions._basePos,
-            {-baseSize * config._proportions._shoulderWidthRatio / 2.0f,
+            {-baseSize * config._proportions._shoulderGirdleWIdhtRatio / 2.0f,
              -baseSize * config._proportions._torsoHeightRatio / 2.0f});
   ret._initDimensions._neckPos =
       b2Add(ret._initDimensions._basePos,
@@ -141,7 +141,6 @@ Human::createAnatomyTemplates(const Human::Config &config,
   templates._limbTemplate.rootRot = b2MakeRot(-B2_PI / 2);
 
   // Hip Girdle
-  // TODO: magic number
   templates._hipGirdleTemplate.defaultConfig();
 
   // Shoulder Girdle
@@ -192,6 +191,8 @@ void Human::createAnatomy(
                                    config._proportions._neckRatio / 2.0f};
     cfg.shapeCfg.center2 = {0, config._proportions._baseSizeMeters *
                                    config._proportions._neckRatio / 2.0f};
+    cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
+                          config._proportions._limbThicknessRatio / 2.0f;
     _bodies._neck = bodyFactory->create<CapsuleBody>(cfg);
     registerBody(_bodies._neck, "neck");
   }
@@ -224,8 +225,51 @@ void Human::createAnatomy(
     registerBody(_bodies._head, "head");
   }
 
-  constexpr int segmentsPerLimb = 2;
+  // Left Shoulder
+  {
+    CircleBody::Config cfg = initAnatomyTemplates._shoulderTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._leftShoulderPos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._shoulder;
+    cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
+                          config._proportions._shoulderSizeRatio / 2.0f;
+    _bodies._shoulderLeft = bodyFactory->create<CircleBody>(cfg);
+    registerBody(_bodies._shoulderLeft, "leftShoulder");
+  }
 
+  // Right Shoulder
+  {
+    CircleBody::Config cfg = initAnatomyTemplates._shoulderTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._rightShoulderPos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._shoulder;
+    cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
+                          config._proportions._shoulderSizeRatio / 2.0f;
+    _bodies._shoulderRight = bodyFactory->create<CircleBody>(cfg);
+    registerBody(_bodies._shoulderRight, "rightShoulder");
+  }
+
+  // Left Hip
+  {
+    CircleBody::Config cfg = initAnatomyTemplates._hipTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._leftHipPos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._hip;
+    cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
+                          config._proportions._hipSizeRatio / 2.0f;
+    _bodies._hipLeft = bodyFactory->create<CircleBody>(cfg);
+    registerBody(_bodies._hipLeft, "leftHip");
+  }
+
+  // Right Hip
+  {
+    CircleBody::Config cfg = initAnatomyTemplates._hipTemplate;
+    cfg.shapeCfg.bodyDef.position = initInfo._initDimensions._rightHipPos;
+    cfg.shapeCfg.shapeDef.density = initInfo._densities._hip;
+    cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
+                          config._proportions._hipSizeRatio / 2.0f;
+    _bodies._hipRight = bodyFactory->create<CircleBody>(cfg);
+    registerBody(_bodies._hipRight, "rightHip");
+  }
+
+  constexpr int segmentsPerLimb = 2;
   // Left arm
   {
     LimbBody::Config cfg = initAnatomyTemplates._limbTemplate;
