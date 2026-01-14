@@ -322,6 +322,55 @@ void Human::createAnatomy(
     registerBody(_bodies._armRight, "rightArm");
   }
 
+  // Left leg
+  {
+    LimbBody::Config cfg = initAnatomyTemplates._limbTemplate;
+    cfg.basePos = initInfo._initDimensions._leftHipPos;
+    cfg.templateCapsuleConfig.shapeDef.density = initInfo._densities._leftLeg;
+    cfg.rootRot = b2MakeRot(-B2_PI / 2);
+    cfg.segments.clear();
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(segmentsPerLimb);
+    b2Vec2 lastPos{0, 0};
+    b2Vec2 incr{b2MulSV(config._proportions._baseSizeMeters *
+                            config._proportions._leftLegRatio / segmentsPerLimb,
+                        {1, 0})};
+    for (int i{0}; i < segmentsPerLimb; ++i) {
+      LimbSegmentConfig seg;
+      seg.radius = config._proportions._limbThicknessRatio *
+                   config._proportions._baseSizeMeters / 2.0f;
+      lastPos = b2Add(lastPos, incr);
+      seg.endPos = lastPos;
+      cfg.segments.push_back(seg);
+    }
+    _bodies._legLeft = bodyFactory->create<LimbBody>(cfg);
+    registerBody(_bodies._legLeft, "leftLeg");
+  }
+
+  // Right leg
+  {
+    LimbBody::Config cfg = initAnatomyTemplates._limbTemplate;
+    cfg.basePos = initInfo._initDimensions._rightHipPos;
+    cfg.templateCapsuleConfig.shapeDef.density = initInfo._densities._rightLeg;
+    cfg.rootRot = b2MakeRot(-B2_PI / 2);
+    cfg.segments.clear();
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(segmentsPerLimb);
+    b2Vec2 lastPos{0, 0};
+    b2Vec2 incr{b2MulSV(config._proportions._baseSizeMeters *
+                            config._proportions._rightLegRatio /
+                            segmentsPerLimb,
+                        {1, 0})};
+    for (int i{0}; i < segmentsPerLimb; ++i) {
+      LimbSegmentConfig seg;
+      seg.radius = config._proportions._limbThicknessRatio *
+                   config._proportions._baseSizeMeters / 2.0f;
+      lastPos = b2Add(lastPos, incr);
+      seg.endPos = lastPos;
+      cfg.segments.push_back(seg);
+    }
+    _bodies._legRight = bodyFactory->create<LimbBody>(cfg);
+    registerBody(_bodies._legRight, "rightLeg");
+  }
+
   // TODO: complete
 }
 

@@ -20,20 +20,22 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   length = 0;
   int segNum{1};
   b2Vec2 lastPos{0, 0};
+  b2Vec2 lastPosRotated{0, 0};
   b2Rot rootRot{config.rootRot};
   for (const auto &seg : config.segments) {
     // Compute position of the next segment of a limb adjucted to rootRot
     b2Vec2 segOffset{b2Sub(seg.endPos, lastPos)};
     b2Vec2 segOffsetRotated{b2RotateVector(rootRot, segOffset)};
-    b2Vec2 newPos{b2Add(lastPos, segOffsetRotated)};
+    b2Vec2 newPos{b2Add(lastPos, segOffset)};
+    b2Vec2 newPosRotated{b2Add(lastPosRotated, segOffsetRotated)};
 
     // Convert computed positions of a segment into rotated capsule with
     // y-offset of 0, and origin in the middle of a capsule
-    float segLen{b2Length(segOffsetRotated)};
+    float segLen{b2Length(segOffset)};
     b2Vec2 segLocalCenter1{-segLen / 2.0f, 0};
     b2Vec2 segLocalCenter2{segLen / 2.0f, 0};
-    b2Vec2 segWorldPos{
-        b2Add(config.basePos, b2MulSV(0.5f, b2Add(newPos, lastPos)))};
+    b2Vec2 segWorldPos{b2Add(
+        config.basePos, b2MulSV(0.5f, b2Add(newPosRotated, lastPosRotated)))};
     b2Rot segRot{
         b2NormalizeRot({.c = segOffsetRotated.x, .s = segOffsetRotated.y})};
 
@@ -50,6 +52,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
 
     // Post increment (kinda)
     lastPos = newPos;
+    lastPosRotated = newPosRotated;
     segmentLengths.push_back(segLen);
   }
 
