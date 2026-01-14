@@ -10,7 +10,7 @@
 #include "shapeFactory.hpp"
 
 struct LimbSegmentConfig {
-  b2Vec2 endPos = {0, 0};
+  b2Vec2 endPos = {0, 0}; // Position in local coordinates
   float radius = 0.25;
 };
 
@@ -27,14 +27,14 @@ struct LimbBodyConfig : public BodyConfig {
   RevoluteJointConfig templateJointConfig;
   LimbControlConfig limbControlConfig;
 
-  std::vector<LimbSegmentConfig> segments;
+  std::vector<LimbSegmentConfig> segments; // Positions in local coordinates
   b2Vec2 basePos;
 
   std::vector<AngleConstraint> initialAngleConstraints = {};
   b2Rot rootRot;
 };
 
-class LimbBody : public Body , public VisitableImpl<LimbBody>{
+class LimbBody : public Body, public VisitableImpl<LimbBody> {
 public:
   using Config = LimbBodyConfig;
   b2Vec2 getBasePos();
@@ -46,7 +46,7 @@ public:
    * @brief Get the root rotation adjusted for the rotation of a connected body
    */
   b2Rot getAdjustedRootRot();
-  
+
   void setAngleConstraints(const std::vector<AngleConstraint> &constraints);
   const std::vector<float> &getSegmentLengths();
   const std::vector<std::weak_ptr<Capsule>> &getSegments() const;

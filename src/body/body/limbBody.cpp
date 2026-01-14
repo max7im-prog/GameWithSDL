@@ -18,36 +18,73 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   constexpr b2Vec2 incrementDir = {1, 0};
 
   // Create capsules
+  // segmentLengths = {};
+  // length = 0;
+  // int segNum = 1;
+  // b2Vec2 lastPos = config.basePos;
+  // b2Rot rootRot = config.rootRot;
+  // for (auto seg : config.segments) {
+  //   auto capsuleConfig = config.templateCapsuleConfig;
+  //   b2Vec2 offset = b2Sub(seg.endPos, lastPos);
+  //   float len = b2Length(offset);
+  //   b2Vec2 norm = b2Normalize(offset);
+  //   float angle = b2Atan2(norm.y, norm.x);
+  //
+  //   auto segIncr = b2MulSV(len, incrementDir);
+  //   capsuleConfig.bodyDef.position = b2Add(lastPos, b2MulSV(0.5f, segIncr));
+  //
+  //   b2Rot rot = b2MakeRot(angle);
+  //   segmentLengths.push_back(len);
+  //   length += len;
+  //   capsuleConfig.bodyDef.rotation = rot;
+  //   capsuleConfig.center1 = b2MulSV(-0.5f, segIncr);
+  //   capsuleConfig.center2 = b2MulSV(0.5f, segIncr);
+  //   capsuleConfig.radius = seg.radius;
+  //   auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
+  //   registerShape(capsule, "capsule" + std::to_string(segNum++));
+  //   segments.push_back(capsule);
+  //
+  //   auto c = capsule.lock();
+  //   if (!c)
+  //     throw std::runtime_error("Capsule expired");
+  //   lastPos = seg.endPos;
+  // }
+
+  // Create capsules
   segmentLengths = {};
   length = 0;
   int segNum = 1;
   b2Vec2 lastPos = config.basePos;
   b2Rot rootRot = config.rootRot;
-  for (auto seg : config.segments) {
-    auto capsuleConfig = config.templateCapsuleConfig;
-    b2Vec2 offset = b2Sub(seg.endPos, lastPos);
-    float len = b2Length(offset);
-    b2Vec2 norm = b2Normalize(offset);
-    float angle = b2Atan2(norm.y, norm.x);
+  for (const auto &seg : config.segments) {
 
-    auto segIncr = b2MulSV(len, incrementDir);
-    capsuleConfig.bodyDef.position = b2Add(lastPos, b2MulSV(0.5f, segIncr));
+    // Compute position of the next segment of a limb adjucted to rootRot
+    b2Vec2 segOffset{b2Sub(seg.endPos, lastPos)};
+    b2Vec2 segOffsetRotated{b2RotateVector(rootRot, segOffset)};
+    b2Vec2 newPos{b2Add(lastPos, segOffsetRotated)};
 
-    b2Rot rot = b2MakeRot(angle);
-    segmentLengths.push_back(len);
-    length += len;
-    capsuleConfig.bodyDef.rotation = rot;
-    capsuleConfig.center1 = b2MulSV(-0.5f, segIncr);
-    capsuleConfig.center2 = b2MulSV(0.5f, segIncr);
-    capsuleConfig.radius = seg.radius;
-    auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
+    // Convert computed positions of a segment into rotated capsule with
+    // y-offset of 0, and origin in the middle of a capsule
+    float segLen{b2Length(segOffsetRotated)};
+    b2Vec2 segLocalCenter1{-segLen / 2.0f, 0};
+    b2Vec2 segLocalCenter2{segLen / 2.0f, 0};
+    b2Vec2 segWorldPos{b2MulSV(0.5f, b2Add(newPos, lastPos))};
+    b2Rot segRot{
+        b2NormalizeRot({.c = segOffsetRotated.x, .s = segOffsetRotated.y})};
+
+    // Actually create capsule
+    auto cfg{config.templateCapsuleConfig};
+    cfg.center1 = segLocalCenter1;
+    cfg.center2 = segLocalCenter2;
+    cfg.radius = seg.radius;
+    cfg.bodyDef.position = segWorldPos;
+    auto capsule = shapeFactory->create<Capsule>(cfg);
     registerShape(capsule, "capsule" + std::to_string(segNum++));
     segments.push_back(capsule);
 
-    auto c = capsule.lock();
-    if (!c)
-      throw std::runtime_error("Capsule expired");
-    lastPos = seg.endPos;
+    // Post increment (kinda)
+    lastPos = newPos;
+    segmentLengths.push_back(segLen);
   }
 
   // Configure Inverse Kinematics template

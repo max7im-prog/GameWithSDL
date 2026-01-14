@@ -109,16 +109,9 @@ DemoCreature::DemoCreature(
     cfg.segments.clear();
     cfg.basePos = b2Add(creaturePos, b2Vec2(-torsoWidth * 0.5, 0));
     {
-
       auto lastPos = cfg.basePos;
-      b2Rot baseRot = b2MakeRot(-B2_PI * 3 / 4);
-      b2Rot incrRot = b2MakeRot(0);
-      b2Rot q = baseRot;
-
       for (size_t i = 0; i < numSegments; i++) {
         auto incr = b2MulSV(segmentLen, b2Vec2(1, 0));
-        q = b2MulRot(q, incrRot);
-        incr = b2RotateVector(q, incr);
         auto newPos = b2Add(incr, lastPos);
         cfg.segments.push_back({.endPos = newPos, .radius = segmentRadius});
         lastPos = newPos;
