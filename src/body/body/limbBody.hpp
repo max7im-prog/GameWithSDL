@@ -28,7 +28,7 @@ struct LimbBodyConfig : public BodyConfig {
   LimbControlConfig limbControlConfig;
 
   std::vector<LimbSegmentConfig> segments; // Positions in local coordinates
-  b2Vec2 basePos;
+  b2Vec2 basePos;                          // Position in world coordinates
 
   std::vector<AngleConstraint> initialAngleConstraints = {};
   b2Rot rootRot;

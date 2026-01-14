@@ -15,8 +15,6 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world), config(c) {
 
-  constexpr b2Vec2 incrementDir = {1, 0};
-
   // Create capsules
   // segmentLengths = {};
   // length = 0;
@@ -53,11 +51,10 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   // Create capsules
   segmentLengths = {};
   length = 0;
-  int segNum = 1;
-  b2Vec2 lastPos = config.basePos;
-  b2Rot rootRot = config.rootRot;
+  int segNum{1};
+  b2Vec2 lastPos{0, 0};
+  b2Rot rootRot{config.rootRot};
   for (const auto &seg : config.segments) {
-
     // Compute position of the next segment of a limb adjucted to rootRot
     b2Vec2 segOffset{b2Sub(seg.endPos, lastPos)};
     b2Vec2 segOffsetRotated{b2RotateVector(rootRot, segOffset)};
@@ -68,7 +65,8 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     float segLen{b2Length(segOffsetRotated)};
     b2Vec2 segLocalCenter1{-segLen / 2.0f, 0};
     b2Vec2 segLocalCenter2{segLen / 2.0f, 0};
-    b2Vec2 segWorldPos{b2MulSV(0.5f, b2Add(newPos, lastPos))};
+    b2Vec2 segWorldPos{
+        b2Add(config.basePos, b2MulSV(0.5f, b2Add(newPos, lastPos)))};
     b2Rot segRot{
         b2NormalizeRot({.c = segOffsetRotated.x, .s = segOffsetRotated.y})};
 
