@@ -15,13 +15,14 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world), config(c) {
 
-  b2Vec2 lastPos = config.basePos;
-  const b2Vec2 incrementDir = {1, 0};
+  constexpr b2Vec2 incrementDir = {1, 0};
 
   // Create capsules
   segmentLengths = {};
   length = 0;
   int segNum = 1;
+  b2Vec2 lastPos = config.basePos;
+  b2Rot rootRot = config.rootRot;
   for (auto seg : config.segments) {
     auto capsuleConfig = config.templateCapsuleConfig;
     b2Vec2 offset = b2Sub(seg.endPos, lastPos);
@@ -264,7 +265,8 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
 
     cfg.templateJointCfg.jointDef.bodyIdB = firstSegmentLock->getBodyId();
     cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
-    cfg.templateJointCfg.jointDef.localAnchorB = firstSegmentLock->getLocalCenter1();
+    cfg.templateJointCfg.jointDef.localAnchorB =
+        firstSegmentLock->getLocalCenter1();
     cfg.templateJointCfg.jointDef.enableLimit =
         rootIKTask.angleConstraints[0].enable;
     cfg.templateJointCfg.jointDef.lowerAngle =

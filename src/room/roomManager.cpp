@@ -1,5 +1,6 @@
 #include "roomManager.hpp"
 #include "demoCreature.hpp"
+#include "human.hpp"
 #include "jsonUtils.hpp"
 #include "objectConfig.hpp"
 #include "polygonTerrain.hpp"
@@ -149,7 +150,8 @@ const std::map<std::string,
            auto ent = factory->create<CircleTerrain>(cfg);
            context._mgr._entities.insert({*entityId, ent});
          }},
-        {"DemoCreature", [](const RoomManager::EntityDispatchContext &context) {
+        {"DemoCreature",
+         [](const RoomManager::EntityDispatchContext &context) {
            auto entityId =
                createEntityId(context._room->getJSON(), context._metadataJson);
            if (!entityId) {
@@ -172,6 +174,31 @@ const std::map<std::string,
 
            auto factory = context._mgr._creatureFactory;
            auto ent = factory->create<DemoCreature>(cfg);
+           context._mgr._entities.insert({*entityId, ent});
+         }},
+        {"Human", [](const RoomManager::EntityDispatchContext &context) {
+           auto entityId =
+               createEntityId(context._room->getJSON(), context._metadataJson);
+           if (!entityId) {
+             spdlog::error("RoomManager: failed to parse entity id for "
+                           "DemoCreature in a room "
+                           "with ID = '{}'",
+                           context._room->getRoomId());
+             return;
+           }
+           if (context._mgr._entities.contains(*entityId)) {
+             spdlog::debug("Duplicate entity id '{}' in room '{}', skipping",
+                           *entityId, context._room->getRoomId());
+             return;
+           }
+           Human::Config cfg;
+           cfg.defaultConfig();
+           cfg.fromJSON(context._configJson);
+           cfg._transform = SceneNodeConfig::parseObjectTransform(
+               context._metadataJson, context._room->getJSON());
+
+           auto factory = context._mgr._creatureFactory;
+           auto ent = factory->create<Human>(cfg);
            context._mgr._entities.insert({*entityId, ent});
          }}};
 

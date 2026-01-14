@@ -247,3 +247,36 @@ void Human::bindActions() {
 void Human::bindBehavior() {
   // TODO: complete
 }
+
+void Human::Config::defaultConfig() {
+  // TODO: implement
+}
+
+void HumanConfig::fromJSON(const nlohmann::json &json) {
+  // TODO: implement
+}
+
+void Human::move(b2Vec2 dir) {
+  // TODO: implement
+}
+
+void Human::lookAt(b2Vec2 worldPoint) {
+  // TODO: implement
+}
+
+void Human::update(float dt) {
+  // TODO: implement
+}
+
+b2Vec2 Human::getWorldPos() {
+  // TODO: implement
+  if (auto l = _bodies._torso.lock()) {
+    return l->getWorldPos();
+  }
+  return {0, 0};
+}
+
+b2Rot Human::getRotation() const {
+  // TODO: implement
+  return {};
+}

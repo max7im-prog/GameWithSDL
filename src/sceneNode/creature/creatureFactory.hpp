@@ -4,20 +4,19 @@
 #include "connectionFactory.hpp"
 #include "creatureComponents.hpp"
 #include "demoCreature.hpp"
+#include "human.hpp"
 #include "miscComponents.hpp"
 #include "world.hpp"
 #include <entt/entt.hpp>
- 
 
 class CreatureFactory : public RegistryObjectFactory<CreatureFactory> {
 public:
   CreatureFactory(entt::registry &registry, std::shared_ptr<World> world,
                   std::shared_ptr<BodyFactory> bodyFactory,
-                  std::shared_ptr<ConnectionFactory> connectionFactory
-                );
+                  std::shared_ptr<ConnectionFactory> connectionFactory);
 
   template <typename T> static constexpr bool supports() {
-    return std::is_same_v<T, DemoCreature>;
+    return (std::is_same_v<T, DemoCreature> || std::is_same_v<T, Human>);
   }
 
 protected:
@@ -36,10 +35,10 @@ protected:
   template <typename T>
   void setUp(std::shared_ptr<T> object, const T::Config &config) {
 
-    if(config._renderConfig){
-      registry.emplace_or_replace<EntityRequiresTexturingTag>(object->getEntity(), config._renderConfig);
+    if (config._renderConfig) {
+      registry.emplace_or_replace<EntityRequiresTexturingTag>(
+          object->getEntity(), config._renderConfig);
     }
-
   }
 
 private:

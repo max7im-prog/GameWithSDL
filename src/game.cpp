@@ -156,7 +156,7 @@ bool Game::initWorld() {
       }
     }
   }
-  _debugRenderSystem->setEnabled(false);
+  _debugRenderSystem->setEnabled(true);
 
   return true;
 }

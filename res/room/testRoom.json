@@ -8,7 +8,23 @@
       "id": "creature_001",
       "configFile": "res/creature/testCreature.json",
       "pos": {
-        "x": 50,
+        "x": 40,
+        "y": 20
+      },
+      "transform": {
+        "scaleX": 1,
+        "scaleY": 1,
+        "flipX": false,
+        "flipY": false,
+        "rotation": 0
+      },
+      "overrides": {}
+    },
+    {
+      "id": "creature_002",
+      "configFile": "res/creature/testHuman.json",
+      "pos": {
+        "x": 60,
         "y": 20
       },
       "transform": {

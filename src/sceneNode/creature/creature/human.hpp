@@ -70,7 +70,7 @@ public:
 
   b2Vec2 getWorldPos() override;
 
-  const b2Rot getRotation() const;
+  b2Rot getRotation() const;
 
 protected:
   Human(entt::registry &registry, const std::shared_ptr<World> world,
