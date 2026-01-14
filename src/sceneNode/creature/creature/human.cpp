@@ -3,6 +3,7 @@
 #include "box2d/box2d.h"
 #include "box2d/collision.h"
 #include "box2d/types.h"
+#include "kinematicUtils.hpp"
 #include "limbBody.hpp"
 #include "shapeFactory.hpp"
 
@@ -269,16 +270,56 @@ void Human::createAnatomy(
     registerBody(_bodies._hipRight, "rightHip");
   }
 
+  // Limbs
   constexpr int segmentsPerLimb = 2;
+
   // Left arm
   {
     LimbBody::Config cfg = initAnatomyTemplates._limbTemplate;
     cfg.basePos = initInfo._initDimensions._leftShoulderPos;
     cfg.templateCapsuleConfig.shapeDef.density = initInfo._densities._leftArm;
-    cfg.rootRot = b2MakeRot(-B2_PI);
+    cfg.rootRot = b2MakeRot(0);
+    cfg.segments.clear();
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(segmentsPerLimb);
+    b2Vec2 lastPos{0, 0};
+    b2Vec2 incr{b2MulSV(config._proportions._baseSizeMeters *
+                            config._proportions._leftArmRatio / segmentsPerLimb,
+                        {1, 0})};
     for (int i{0}; i < segmentsPerLimb; ++i) {
       LimbSegmentConfig seg;
+      seg.radius = config._proportions._limbThicknessRatio *
+                   config._proportions._baseSizeMeters / 2.0f;
+      lastPos = b2Add(lastPos, incr);
+      seg.endPos = lastPos;
+      cfg.segments.push_back(seg);
     }
+    _bodies._armLeft = bodyFactory->create<LimbBody>(cfg);
+    registerBody(_bodies._armLeft, "leftArm");
+  }
+
+  // Right arm
+  {
+    LimbBody::Config cfg = initAnatomyTemplates._limbTemplate;
+    cfg.basePos = initInfo._initDimensions._rightShoulderPos;
+    cfg.templateCapsuleConfig.shapeDef.density = initInfo._densities._rightArm;
+    cfg.rootRot = b2MakeRot(B2_PI);
+    cfg.segments.clear();
+    cfg.initialAngleConstraints = std::vector<AngleConstraint>(segmentsPerLimb);
+    b2Vec2 lastPos{0, 0};
+    b2Vec2 incr{b2MulSV(config._proportions._baseSizeMeters *
+                            config._proportions._rightArmRatio /
+                            segmentsPerLimb,
+                        {1, 0})};
+    for (int i{0}; i < segmentsPerLimb; ++i) {
+      LimbSegmentConfig seg;
+      seg.radius = config._proportions._limbThicknessRatio *
+                   config._proportions._baseSizeMeters / 2.0f;
+      lastPos = b2Add(lastPos, incr);
+      seg.endPos = lastPos;
+      cfg.segments.push_back(seg);
+    }
+    _bodies._armRight = bodyFactory->create<LimbBody>(cfg);
+    registerBody(_bodies._armRight, "rightArm");
   }
 
   // TODO: complete

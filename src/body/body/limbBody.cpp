@@ -16,39 +16,6 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     : Body(registry, world), config(c) {
 
   // Create capsules
-  // segmentLengths = {};
-  // length = 0;
-  // int segNum = 1;
-  // b2Vec2 lastPos = config.basePos;
-  // b2Rot rootRot = config.rootRot;
-  // for (auto seg : config.segments) {
-  //   auto capsuleConfig = config.templateCapsuleConfig;
-  //   b2Vec2 offset = b2Sub(seg.endPos, lastPos);
-  //   float len = b2Length(offset);
-  //   b2Vec2 norm = b2Normalize(offset);
-  //   float angle = b2Atan2(norm.y, norm.x);
-  //
-  //   auto segIncr = b2MulSV(len, incrementDir);
-  //   capsuleConfig.bodyDef.position = b2Add(lastPos, b2MulSV(0.5f, segIncr));
-  //
-  //   b2Rot rot = b2MakeRot(angle);
-  //   segmentLengths.push_back(len);
-  //   length += len;
-  //   capsuleConfig.bodyDef.rotation = rot;
-  //   capsuleConfig.center1 = b2MulSV(-0.5f, segIncr);
-  //   capsuleConfig.center2 = b2MulSV(0.5f, segIncr);
-  //   capsuleConfig.radius = seg.radius;
-  //   auto capsule = shapeFactory->create<Capsule>(capsuleConfig);
-  //   registerShape(capsule, "capsule" + std::to_string(segNum++));
-  //   segments.push_back(capsule);
-  //
-  //   auto c = capsule.lock();
-  //   if (!c)
-  //     throw std::runtime_error("Capsule expired");
-  //   lastPos = seg.endPos;
-  // }
-
-  // Create capsules
   segmentLengths = {};
   length = 0;
   int segNum{1};
@@ -76,6 +43,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     cfg.center2 = segLocalCenter2;
     cfg.radius = seg.radius;
     cfg.bodyDef.position = segWorldPos;
+    cfg.bodyDef.rotation = segRot;
     auto capsule = shapeFactory->create<Capsule>(cfg);
     registerShape(capsule, "capsule" + std::to_string(segNum++));
     segments.push_back(capsule);
