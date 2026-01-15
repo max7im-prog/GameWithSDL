@@ -5,7 +5,7 @@
 
 CircleTerrain::CircleTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const CircleTerrainConfig &config,
+    const CircleTerrain::Config &config,
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
@@ -28,14 +28,14 @@ CircleTerrain::CircleTerrain(
   }
 }
 
-void CircleTerrainConfig::defaultConfig() {
+void CircleTerrain::Config::defaultConfig() {
   templateBodyCfg.defaultConfig();
   radius = 1;
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
-void CircleTerrainConfig::fromJSON(const nlohmann::json &json) {
+void CircleTerrain::Config::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   radius = JsonUtils::getOrDefault<float>(json, "radius", 1.0f);
 

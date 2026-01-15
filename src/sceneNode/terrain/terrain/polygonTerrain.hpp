@@ -5,20 +5,19 @@
 #include "polygonBody.hpp"
 #include "terrain.hpp"
 
-struct PolygonTerrainConfig : public Terrain::Config {
-  PolygonBody::Config templateBodyCfg;
-  std::vector<b2Vec2> vertices;
-  void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
-};
 class PolygonTerrain : public Terrain, public VisitableImpl<PolygonTerrain> {
 public:
-  using Config = PolygonTerrainConfig;
+  struct Config : public Terrain::Config {
+    PolygonBody::Config templateBodyCfg;
+    std::vector<b2Vec2> vertices;
+    void defaultConfig() override;
+    void fromJSON(const nlohmann::json &json) override;
+  };
   virtual b2Vec2 getWorldPos() override;
 
 protected:
   PolygonTerrain(entt::registry &registry, const std::shared_ptr<World> world,
-                 const PolygonTerrainConfig &config,
+                 const PolygonTerrain::Config &config,
                  const std::shared_ptr<BodyFactory> bodyFactory,
                  const std::shared_ptr<ConnectionFactory> connectionFactory);
 

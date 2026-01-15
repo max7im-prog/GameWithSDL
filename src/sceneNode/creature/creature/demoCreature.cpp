@@ -26,7 +26,7 @@ void DemoCreature::move(b2Vec2 dir) {
 
 DemoCreature::DemoCreature(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const DemoCreatureConfig &config,
+    const DemoCreature::Config &config,
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Creature(registry, world) {
@@ -329,12 +329,12 @@ DemoCreature::DemoCreature(
   _moveContext._defaultSpeedMpS = 5;
 }
 
-void DemoCreatureConfig::defaultConfig() {
+void DemoCreature::Config::defaultConfig() {
   sizeXMeters = 1;
   sizeYMeters = 1;
 }
 
-void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
+void DemoCreature::Config::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   sizeXMeters = json.at("sizeX");
   sizeYMeters = json.at("sizeY");

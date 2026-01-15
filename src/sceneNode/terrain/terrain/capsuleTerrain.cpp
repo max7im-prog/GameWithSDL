@@ -5,7 +5,7 @@
 
 CapsuleTerrain::CapsuleTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const CapsuleTerrainConfig &config,
+    const CapsuleTerrain::Config &config,
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
@@ -39,7 +39,7 @@ CapsuleTerrain::CapsuleTerrain(
   }
 }
 
-void CapsuleTerrainConfig::defaultConfig() {
+void CapsuleTerrain::Config::defaultConfig() {
   templateBodyCfg.defaultConfig();
   point1 = {0, 0};
   point2 = {1, 0};
@@ -48,7 +48,7 @@ void CapsuleTerrainConfig::defaultConfig() {
   templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
-void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
+void CapsuleTerrain::Config::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   if (json.contains("point1")) {
     point1 = JsonUtils::parseB2Vec2(json["point1"]);

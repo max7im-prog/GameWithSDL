@@ -6,7 +6,7 @@
 
 PolygonTerrain::PolygonTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const PolygonTerrainConfig &config,
+    const PolygonTerrain::Config &config,
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
@@ -36,14 +36,14 @@ PolygonTerrain::PolygonTerrain(
   }
 }
 
-void PolygonTerrainConfig::defaultConfig() {
+void PolygonTerrain::Config::defaultConfig() {
   vertices = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
   templateBodyCfg.defaultConfig();
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
   templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
-void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
+void PolygonTerrain::Config::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   auto vtcs = json.at("vertices");
   vertices = {};

@@ -11,7 +11,7 @@
 #include <stdexcept>
 
 Human::Human(entt::registry &registry, const std::shared_ptr<World> world,
-             const HumanConfig &config,
+             const Human::Config &config,
              const std::shared_ptr<BodyFactory> bodyFactory,
              const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Creature(registry, world) {
@@ -495,7 +495,7 @@ void Human::Config::defaultConfig() {
   // TODO: implement
 }
 
-void HumanConfig::fromJSON(const nlohmann::json &json) {
+void Human::Config::fromJSON(const nlohmann::json &json) {
   // TODO: implement
 }
 

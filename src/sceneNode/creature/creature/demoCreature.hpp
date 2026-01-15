@@ -10,16 +10,14 @@
 
 enum Direction { LEFT, RIGHT, STANDING };
 
-struct DemoCreatureConfig : public Creature::Config {
-  void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
-  float sizeXMeters = 1;
-  float sizeYMeters = 1;
-};
-
 class DemoCreature : public Creature, public VisitableImpl<DemoCreature> {
 public:
-  using Config = DemoCreatureConfig;
+  struct Config : public Creature::Config {
+    void defaultConfig() override;
+    void fromJSON(const nlohmann::json &json) override;
+    float sizeXMeters = 1;
+    float sizeYMeters = 1;
+  };
 
   void move(b2Vec2 dir) override;
   void lookAt(b2Vec2 worldPoint) override;
@@ -32,7 +30,7 @@ public:
 
 protected:
   DemoCreature(entt::registry &registry, const std::shared_ptr<World> world,
-               const DemoCreatureConfig &config,
+               const DemoCreature::Config &config,
                const std::shared_ptr<BodyFactory> bodyFactory,
                const std::shared_ptr<ConnectionFactory> connectionFactory);
 

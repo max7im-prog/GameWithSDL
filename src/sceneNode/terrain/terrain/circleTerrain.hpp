@@ -3,20 +3,19 @@
 #include "connectionFactory.hpp"
 #include "terrain.hpp"
 
-struct CircleTerrainConfig : public Terrain::Config {
-  CircleBody::Config templateBodyCfg;
-  float radius;
-  void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
-};
 class CircleTerrain : public Terrain, public VisitableImpl<CircleTerrain> {
 public:
-  using Config = CircleTerrainConfig;
+  struct Config : public Terrain::Config {
+    CircleBody::Config templateBodyCfg;
+    float radius;
+    void defaultConfig() override;
+    void fromJSON(const nlohmann::json &json) override;
+  };
   virtual b2Vec2 getWorldPos() override;
 
 protected:
   CircleTerrain(entt::registry &registry, const std::shared_ptr<World> world,
-                const CircleTerrainConfig &config,
+                const CircleTerrain::Config &config,
                 const std::shared_ptr<BodyFactory> bodyFactory,
                 const std::shared_ptr<ConnectionFactory> connectionFactory);
 

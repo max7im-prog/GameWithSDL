@@ -4,20 +4,19 @@
 #include "connectionFactory.hpp"
 #include "terrain.hpp"
 
-struct SegmentTerrainConfig : public Terrain::Config {
-  SegmentBody::Config templateBodyCfg;
-  b2Vec2 point1, point2;
-  void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
-};
 class SegmentTerrain : public Terrain, public VisitableImpl<SegmentTerrain> {
 public:
-  using Config = SegmentTerrainConfig;
+  struct Config : public Terrain::Config {
+    SegmentBody::Config templateBodyCfg;
+    b2Vec2 point1, point2;
+    void defaultConfig() override;
+    void fromJSON(const nlohmann::json &json) override;
+  };
   virtual b2Vec2 getWorldPos() override;
 
 protected:
   SegmentTerrain(entt::registry &registry, const std::shared_ptr<World> world,
-                 const SegmentTerrainConfig &config,
+                 const SegmentTerrain::Config &config,
                  const std::shared_ptr<BodyFactory> bodyFactory,
                  const std::shared_ptr<ConnectionFactory> connectionFactory);
 

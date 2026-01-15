@@ -21,48 +21,46 @@
 //
 // HumaAimModel - where arms point at, head inclination
 
-struct HumanConfig : public Creature::Config {
-  void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
-  struct {
-    float _baseSizeMeters = 5.0f;
-
-    float _shoulderGirdleWIdhtRatio = 0.3f;
-    float _shoulderSizeRatio = 0.15f;
-
-    float _hipGirdleWidthRatio = 0.3f;
-    float _hipSizeRatio = 0.15f;
-
-    float _torsoHeightRatio = 0.4;
-    float _torsoWidthRatio = 0.2;
-
-    float _headHeightRatio = 0.2f;
-    float _headWidthRatio = 0.15f;
-
-    float _limbThicknessRatio = 0.1f;
-    float _neckRatio = 0.1f;
-    float _leftArmRatio = 0.4f;
-    float _rightArmRatio = 0.4f;
-    float _leftLegRatio = 0.4f;
-    float _rightLegRatio = 0.4f;
-  } _proportions;
-
-  struct {
-    float _totalMassKg = 80.0f;
-
-    float _torsoRatio = 0.3f;
-    float _headRatio = 0.05f;
-    float _neckRatio = 0.05f;
-    float _shoulderRatio = 0.1f; // Both combined
-    float _hipRatio = 0.1f;      // Both combined
-    float _legRatio = 0.2f;      // Both combined
-    float _armRatio = 0.2f;      // Both combined
-  } _massDistribution;
-};
-
 class Human : public Creature, public VisitableImpl<Human> {
 public:
-  using Config = HumanConfig;
+  struct Config : public Creature::Config {
+    void defaultConfig() override;
+    void fromJSON(const nlohmann::json &json) override;
+    struct {
+      float _baseSizeMeters = 5.0f;
+
+      float _shoulderGirdleWIdhtRatio = 0.3f;
+      float _shoulderSizeRatio = 0.15f;
+
+      float _hipGirdleWidthRatio = 0.3f;
+      float _hipSizeRatio = 0.15f;
+
+      float _torsoHeightRatio = 0.4;
+      float _torsoWidthRatio = 0.2;
+
+      float _headHeightRatio = 0.2f;
+      float _headWidthRatio = 0.15f;
+
+      float _limbThicknessRatio = 0.1f;
+      float _neckRatio = 0.1f;
+      float _leftArmRatio = 0.4f;
+      float _rightArmRatio = 0.4f;
+      float _leftLegRatio = 0.4f;
+      float _rightLegRatio = 0.4f;
+    } _proportions;
+
+    struct {
+      float _totalMassKg = 80.0f;
+
+      float _torsoRatio = 0.3f;
+      float _headRatio = 0.05f;
+      float _neckRatio = 0.05f;
+      float _shoulderRatio = 0.1f; // Both combined
+      float _hipRatio = 0.1f;      // Both combined
+      float _legRatio = 0.2f;      // Both combined
+      float _armRatio = 0.2f;      // Both combined
+    } _massDistribution;
+  };
 
   void move(b2Vec2 dir) override;
   void lookAt(b2Vec2 worldPoint) override;
@@ -75,7 +73,7 @@ public:
 
 protected:
   Human(entt::registry &registry, const std::shared_ptr<World> world,
-        const HumanConfig &config,
+        const Human::Config &config,
         const std::shared_ptr<BodyFactory> bodyFactory,
         const std::shared_ptr<ConnectionFactory> connectionFactory);
 

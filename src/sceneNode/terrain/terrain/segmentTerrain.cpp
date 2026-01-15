@@ -6,7 +6,7 @@
 
 SegmentTerrain::SegmentTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const SegmentTerrainConfig &config,
+    const SegmentTerrain::Config &config,
     const std::shared_ptr<BodyFactory> bodyFactory,
     const std::shared_ptr<ConnectionFactory> connectionFactory)
     : Terrain(registry, world) {
@@ -37,7 +37,7 @@ SegmentTerrain::SegmentTerrain(
   }
 }
 
-void SegmentTerrainConfig::defaultConfig() {
+void SegmentTerrain::Config::defaultConfig() {
   templateBodyCfg.defaultConfig();
   point1 = {0, 0};
   point2 = {1, 0};
@@ -45,7 +45,7 @@ void SegmentTerrainConfig::defaultConfig() {
   templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
-void SegmentTerrainConfig::fromJSON(const nlohmann::json &json) {
+void SegmentTerrain::Config::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   if (json.contains("point1")) {
     point1 = JsonUtils::parseB2Vec2(json["point1"]);

@@ -5,21 +5,20 @@
 #include "connectionFactory.hpp"
 #include "terrain.hpp"
 
-struct CapsuleTerrainConfig : public Terrain::Config {
-  CapsuleBody::Config templateBodyCfg;
-  b2Vec2 point1, point2;
-  float radius;
-  void defaultConfig() override;
-  void fromJSON(const nlohmann::json &json) override;
-};
 class CapsuleTerrain : public Terrain, public VisitableImpl<CapsuleTerrain> {
 public:
-  using Config = CapsuleTerrainConfig;
+  struct Config : public Terrain::Config {
+    CapsuleBody::Config templateBodyCfg;
+    b2Vec2 point1, point2;
+    float radius;
+    void defaultConfig() override;
+    void fromJSON(const nlohmann::json &json) override;
+  };
   virtual b2Vec2 getWorldPos() override;
 
 protected:
   CapsuleTerrain(entt::registry &registry, const std::shared_ptr<World> world,
-                 const CapsuleTerrainConfig &config,
+                 const CapsuleTerrain::Config &config,
                  const std::shared_ptr<BodyFactory> bodyFactory,
                  const std::shared_ptr<ConnectionFactory> connectionFactory);
 
