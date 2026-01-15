@@ -37,10 +37,6 @@ public:
 protected:
   Shape() = delete;
   Shape(entt::registry &registry);
-  Shape(Shape &other) = delete;
-  Shape(Shape &&other) = delete;
-  Shape &operator=(Shape &other) = delete;
-  Shape &operator=(Shape &&other) = delete;
 
   b2BodyId bodyId = b2_nullBodyId;
   b2ShapeId shapeId = b2_nullShapeId;

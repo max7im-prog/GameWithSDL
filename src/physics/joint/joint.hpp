@@ -18,10 +18,6 @@ public:
 protected:
   Joint() = delete;
   Joint(entt::registry &registry);
-  Joint(Joint &other) = delete;
-  Joint(Joint &&other) = delete;
-  Joint &operator=(Joint &other) = delete;
-  Joint &operator=(Joint &&other) = delete;
 
   b2JointId jointId = b2_nullJointId;
 
