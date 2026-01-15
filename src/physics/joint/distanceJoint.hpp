@@ -4,20 +4,18 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct DistanceJointConfig : public Joint::Config {
-  void defaultConfig() override;
-  b2DistanceJointDef jointDef;
-};
-
 class DistanceJoint : public Joint, public VisitableImpl<DistanceJoint> {
 public:
-  using Config = DistanceJointConfig;
+  struct Config : public Joint::Config {
+    void defaultConfig() override;
+    b2DistanceJointDef jointDef;
+  };
   ~DistanceJoint() = default;
 
 protected:
   DistanceJoint() = delete;
   DistanceJoint(entt::registry &registry, const World &world,
-                const DistanceJointConfig &config);
+                const DistanceJoint::Config &config);
 
   friend class JointFactory;
 };

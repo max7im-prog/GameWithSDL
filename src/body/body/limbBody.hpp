@@ -26,7 +26,7 @@ public:
   struct Config : public Body::Config {
     void defaultConfig() override;
     Capsule::Config templateCapsuleConfig;
-    RevoluteJointConfig templateJointConfig;
+    RevoluteJoint::Config templateJointConfig;
     LimbControlConfig limbControlConfig;
 
     std::vector<LimbSegmentConfig> segments; // Positions in local coordinates

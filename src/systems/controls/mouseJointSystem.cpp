@@ -55,7 +55,7 @@ void MouseJointSystem::update(entt::registry &registry,
             }
             // Mouse joint
             {
-              MouseJointConfig config;
+              MouseJoint::Config config;
               config.defaultConfig();
               config.jointDef.bodyIdA = mouseShape->getBodyId();
               config.jointDef.bodyIdB = b2Shape_GetBody(shapesAtMouse[0]);

@@ -5,7 +5,7 @@
 #include "weldJoint.hpp"
 
 struct WeldConnectionConfig : Connection::Config {
-  WeldJointConfig templateJointCfg;
+  WeldJoint::Config templateJointCfg;
   void defaultConfig() override;
 };
 class WeldConnection : public Connection, public VisitableImpl<WeldConnection> {

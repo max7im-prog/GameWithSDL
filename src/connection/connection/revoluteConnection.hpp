@@ -5,7 +5,7 @@
 #include "shapeFactory.hpp"
 
 struct RevoluteConnectionConfig : Connection::Config {
-  RevoluteJointConfig templateJointCfg;
+  RevoluteJoint::Config templateJointCfg;
   void defaultConfig() override;
 };
 class RevoluteConnection : public Connection,

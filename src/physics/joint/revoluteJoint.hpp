@@ -4,21 +4,19 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct RevoluteJointConfig : public Joint::Config {
-  void defaultConfig() override;
-  b2RevoluteJointDef jointDef;
-};
-
 class RevoluteJoint : public Joint, public VisitableImpl<RevoluteJoint> {
 public:
-  using Config = RevoluteJointConfig;
+  struct Config : public Joint::Config {
+    void defaultConfig() override;
+    b2RevoluteJointDef jointDef;
+  };
   ~RevoluteJoint() = default;
   void setAngleLimits(float lower, float upper);
 
 protected:
   RevoluteJoint() = delete;
   RevoluteJoint(entt::registry &registry, const World &world,
-                const RevoluteJointConfig &config);
+                const RevoluteJoint::Config &config);
 
   friend class JointFactory;
 };

@@ -4,20 +4,18 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct WeldJointConfig : public Joint::Config {
-  void defaultConfig() override;
-  b2WeldJointDef jointDef;
-};
-
 class WeldJoint : public Joint, public VisitableImpl<WeldJoint> {
 public:
-  using Config = WeldJointConfig;
+  struct Config : public Joint::Config {
+    void defaultConfig() override;
+    b2WeldJointDef jointDef;
+  };
   ~WeldJoint() = default;
 
 protected:
   WeldJoint() = delete;
   WeldJoint(entt::registry &registry, const World &world,
-            const WeldJointConfig &config);
+            const WeldJoint::Config &config);
 
   friend class JointFactory;
 };

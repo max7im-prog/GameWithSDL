@@ -11,7 +11,7 @@
 struct GirdleConnectionConfig : public Connection::Config {
   void defaultConfig() override;
 
-  PrismaticJointConfig prismTemplate;
+  PrismaticJoint::Config prismTemplate;
   PIDRotControllerConfig rotationControlTemplate;
 
   struct {

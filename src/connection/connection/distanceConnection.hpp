@@ -5,7 +5,7 @@
 #include "shapeFactory.hpp"
 
 struct DistanceConnectionConfig : public Connection::Config {
-  DistanceJointConfig templateJointCfg;
+  DistanceJoint::Config templateJointCfg;
   void defaultConfig() override;
 };
 class DistanceConnection : public Connection,

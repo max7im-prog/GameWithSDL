@@ -3,13 +3,12 @@
 #include "box2d/box2d.h"
 #include "box2d/types.h"
 
-void PrismaticJointConfig::defaultConfig() {
+void PrismaticJoint::Config::defaultConfig() {
   jointDef = b2DefaultPrismaticJointDef();
 }
 
-
 PrismaticJoint::PrismaticJoint(entt::registry &registry, const World &world,
-                               const PrismaticJointConfig &config)
+                               const PrismaticJoint::Config &config)
     : Joint(registry) {
   jointId = b2CreatePrismaticJoint(world.getWorldId(), &(config.jointDef));
 }

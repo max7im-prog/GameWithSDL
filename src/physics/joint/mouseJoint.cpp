@@ -2,12 +2,12 @@
 #include "box2d/box2d.h"
 #include "box2d/types.h"
 
-void MouseJointConfig::defaultConfig() {
+void MouseJoint::Config::defaultConfig() {
   jointDef = b2DefaultMouseJointDef();
 }
 
 MouseJoint::MouseJoint(entt::registry &registry, const World &world,
-                             const MouseJointConfig &config)
+                       const MouseJoint::Config &config)
     : Joint(registry) {
   jointId = b2CreateMouseJoint(world.getWorldId(), &(config.jointDef));
 }
