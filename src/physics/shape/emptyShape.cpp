@@ -4,13 +4,13 @@
 #include <box2d/box2d.h>
 
 EmptyShape::EmptyShape(entt::registry &registry, const World &world,
-                       const EmptyShapeConfig &config)
+                       const EmptyShape::Config &config)
     : Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
   shapeId = b2_nullShapeId;
 }
 
-void EmptyShapeConfig::defaultConfig() {
+void EmptyShape::Config::defaultConfig() {
   shapeDef = b2DefaultShapeDef();
   bodyDef = b2DefaultBodyDef();
   bodyDef.type = b2_staticBody;

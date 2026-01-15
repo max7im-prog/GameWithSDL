@@ -1,23 +1,22 @@
 #pragma once
 #include "shape.hpp"
 
-struct EmptyShapeConfig : public Shape::Config {
-  void defaultConfig() override;
-
-private:
-  // Not used in EmptyShape
-  b2ShapeDef shapeDef;
-};
-
 class EmptyShape : public Shape, public VisitableImpl<EmptyShape> {
 public:
-  using Config = EmptyShapeConfig;
+  struct Config : public Shape::Config {
+    void defaultConfig() override;
+
+  private:
+    // Not used in EmptyShape
+    b2ShapeDef shapeDef;
+  };
+
   virtual ~EmptyShape() = default;
 
 protected:
   EmptyShape() = delete;
   EmptyShape(entt::registry &registry, const World &world,
-             const EmptyShapeConfig &config);
+             const EmptyShape::Config &config);
 
   friend class ShapeFactory;
 };

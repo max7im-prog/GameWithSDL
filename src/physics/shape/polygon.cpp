@@ -3,7 +3,7 @@
 #include <box2d/box2d.h>
 
 Polygon::Polygon(entt::registry &registry, const World &world,
-                 const PolygonConfig &config)
+                 const Polygon::Config &config)
     : Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
 
@@ -14,7 +14,7 @@ Polygon::Polygon(entt::registry &registry, const World &world,
   shapeId = b2CreatePolygonShape(bodyId, &(config.shapeDef), &polygon);
 }
 
-void PolygonConfig::defaultConfig() {
+void Polygon::Config::defaultConfig() {
   shapeDef = b2DefaultShapeDef();
   bodyDef = b2DefaultBodyDef();
   radius = 0;

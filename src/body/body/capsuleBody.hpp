@@ -8,7 +8,7 @@ class CapsuleBody : public Body, public VisitableImpl<CapsuleBody> {
 public:
   struct Config : public Body::Config {
     void defaultConfig() override;
-    CapsuleConfig shapeCfg;
+    Capsule::Config shapeCfg;
   };
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();

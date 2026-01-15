@@ -1,16 +1,14 @@
 #pragma once
 #include "shape.hpp"
 
-struct CapsuleConfig : public Shape::Config {
-  void defaultConfig() override;
-  float radius;
-  b2Vec2 center1;
-  b2Vec2 center2;
-};
-
 class Capsule : public Shape, public VisitableImpl<Capsule> {
 public:
-  using Config = CapsuleConfig;
+  struct Config : public Shape::Config {
+    void defaultConfig() override;
+    float radius;
+    b2Vec2 center1;
+    b2Vec2 center2;
+  };
   virtual ~Capsule() = default;
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
@@ -21,7 +19,7 @@ public:
 protected:
   Capsule() = delete;
   Capsule(entt::registry &registry, const World &world,
-          const CapsuleConfig &config);
+          const Capsule::Config &config);
 
   friend class ShapeFactory;
 };

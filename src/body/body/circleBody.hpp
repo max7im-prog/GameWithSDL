@@ -8,7 +8,7 @@ class CircleBody : public Body, public VisitableImpl<CircleBody> {
 public:
   struct Config : public Body::Config {
     void defaultConfig() override;
-    CircleConfig shapeCfg;
+    Circle::Config shapeCfg;
   };
   b2Vec2 getCenter();
   float getRadius();

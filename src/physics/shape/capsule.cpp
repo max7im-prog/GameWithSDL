@@ -3,7 +3,7 @@
 #include <box2d/box2d.h>
 
 Capsule::Capsule(entt::registry &registry, const World &world,
-                 const CapsuleConfig &config)
+                 const Capsule::Config &config)
     : Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
 
@@ -14,7 +14,7 @@ Capsule::Capsule(entt::registry &registry, const World &world,
   shapeId = b2CreateCapsuleShape(bodyId, &(config.shapeDef), &capsule);
 }
 
-void CapsuleConfig::defaultConfig() {
+void Capsule::Config::defaultConfig() {
   shapeDef = b2DefaultShapeDef();
   bodyDef = b2DefaultBodyDef();
   radius = 1;

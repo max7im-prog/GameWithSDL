@@ -1,15 +1,13 @@
 #pragma once
 #include "shape.hpp"
 
-struct PolygonConfig : public Shape::Config {
-  void defaultConfig() override;
-  std::vector<b2Vec2> vertices;
-  float radius;
-};
-
 class Polygon : public Shape, public VisitableImpl<Polygon> {
 public:
-  using Config = PolygonConfig;
+  struct Config : public Shape::Config {
+    void defaultConfig() override;
+    std::vector<b2Vec2> vertices;
+    float radius;
+  };
   virtual ~Polygon() = default;
 
   std::vector<b2Vec2> getVertices() const;
@@ -17,7 +15,7 @@ public:
 protected:
   Polygon() = delete;
   Polygon(entt::registry &registry, const World &world,
-          const PolygonConfig &config);
+          const Polygon::Config &config);
 
   friend class ShapeFactory;
 };

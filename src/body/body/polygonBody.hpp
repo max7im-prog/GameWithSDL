@@ -8,7 +8,7 @@ class PolygonBody : public Body, public VisitableImpl<PolygonBody> {
 public:
   struct Config : public Body::Config {
     void defaultConfig() override;
-    PolygonConfig shapeCfg;
+    Polygon::Config shapeCfg;
   };
   const std::shared_ptr<Polygon> getPolygon();
   virtual b2Vec2 getWorldPos() override;

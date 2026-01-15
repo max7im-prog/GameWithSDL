@@ -25,7 +25,7 @@ class LimbBody : public Body, public VisitableImpl<LimbBody> {
 public:
   struct Config : public Body::Config {
     void defaultConfig() override;
-    CapsuleConfig templateCapsuleConfig;
+    Capsule::Config templateCapsuleConfig;
     RevoluteJointConfig templateJointConfig;
     LimbControlConfig limbControlConfig;
 

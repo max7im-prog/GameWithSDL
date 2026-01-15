@@ -44,7 +44,7 @@ void MouseJointSystem::update(entt::registry &registry,
             jointExists = true;
             // Empty shape
             {
-              EmptyShapeConfig config;
+              EmptyShape::Config config;
               config.defaultConfig();
               config.bodyDef.position = mouseLocation;
               config.bodyDef.type = b2_staticBody;

@@ -4,7 +4,7 @@
 #include <box2d/box2d.h>
 
 Segment::Segment(entt::registry &registry, const World &world,
-               const SegmentConfig &config)
+                 const Segment::Config &config)
     : Shape(registry) {
   bodyId = b2CreateBody(world.getWorldId(), &(config.bodyDef));
 
@@ -14,13 +14,12 @@ Segment::Segment(entt::registry &registry, const World &world,
   shapeId = b2CreateSegmentShape(bodyId, &(config.shapeDef), &segment);
 }
 
-void SegmentConfig::defaultConfig() {
+void Segment::Config::defaultConfig() {
   shapeDef = b2DefaultShapeDef();
   bodyDef = b2DefaultBodyDef();
-  localPoint1 = {0,0};
-  localPoint2 = {1,0};
+  localPoint1 = {0, 0};
+  localPoint2 = {1, 0};
 }
-
 
 b2Vec2 Segment::getPoint1() {
   b2Segment segment = b2Shape_GetSegment(shapeId);

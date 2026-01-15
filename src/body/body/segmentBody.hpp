@@ -8,7 +8,7 @@ class SegmentBody : public Body, public VisitableImpl<SegmentBody> {
 public:
   struct Config : public Body::Config {
     void defaultConfig() override;
-    SegmentConfig shapeCfg;
+    Segment::Config shapeCfg;
   };
   const std::shared_ptr<Segment> getSegment();
   virtual b2Vec2 getWorldPos() override;
