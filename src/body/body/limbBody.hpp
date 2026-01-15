@@ -9,28 +9,27 @@
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 
-struct LimbSegmentConfig {
-  b2Vec2 endPos = {0, 0}; // Position in local coordinates
-  float radius = 0.25;
-};
-
-struct LimbControlConfig {
-  float KPMultiplier = 1;
-  float KIMultiplier = 1;
-  float KDMultiplier = 1;
-  float maxForceMultiplier = 1;
-};
-
 class LimbBody : public Body, public VisitableImpl<LimbBody> {
 public:
   struct Config : public Body::Config {
+    struct SegmentConfig {
+      b2Vec2 endPos = {0, 0}; // Position in local coordinates
+      float radius = 0.25;
+    };
+
+    struct ControlConfig {
+      float KPMultiplier = 1;
+      float KIMultiplier = 1;
+      float KDMultiplier = 1;
+      float maxForceMultiplier = 1;
+    };
     void defaultConfig() override;
     Capsule::Config templateCapsuleConfig;
     RevoluteJoint::Config templateJointConfig;
-    LimbControlConfig limbControlConfig;
+    ControlConfig limbControlConfig;
 
-    std::vector<LimbSegmentConfig> segments; // Positions in local coordinates
-    b2Vec2 basePos;                          // Position in world coordinates
+    std::vector<SegmentConfig> segments; // Positions in local coordinates
+    b2Vec2 basePos;                      // Position in world coordinates
 
     std::vector<AngleConstraint> initialAngleConstraints = {};
     b2Rot rootRot;

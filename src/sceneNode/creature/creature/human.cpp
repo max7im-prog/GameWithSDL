@@ -295,7 +295,7 @@ void Human::createAnatomy(
                             config._proportions._leftArmRatio / segmentsPerLimb,
                         {1, 0})};
     for (int i{0}; i < segmentsPerLimb; ++i) {
-      LimbSegmentConfig seg;
+      LimbBody::Config::SegmentConfig seg;
       seg.radius = config._proportions._limbThicknessRatio *
                    config._proportions._baseSizeMeters / 2.0f;
       lastPos = b2Add(lastPos, incr);
@@ -320,7 +320,7 @@ void Human::createAnatomy(
                             segmentsPerLimb,
                         {1, 0})};
     for (int i{0}; i < segmentsPerLimb; ++i) {
-      LimbSegmentConfig seg;
+      LimbBody::Config::SegmentConfig seg;
       seg.radius = config._proportions._limbThicknessRatio *
                    config._proportions._baseSizeMeters / 2.0f;
       lastPos = b2Add(lastPos, incr);
@@ -344,7 +344,7 @@ void Human::createAnatomy(
                             config._proportions._leftLegRatio / segmentsPerLimb,
                         {1, 0})};
     for (int i{0}; i < segmentsPerLimb; ++i) {
-      LimbSegmentConfig seg;
+      LimbBody::Config::SegmentConfig seg;
       seg.radius = config._proportions._limbThicknessRatio *
                    config._proportions._baseSizeMeters / 2.0f;
       lastPos = b2Add(lastPos, incr);
@@ -369,7 +369,7 @@ void Human::createAnatomy(
                             segmentsPerLimb,
                         {1, 0})};
     for (int i{0}; i < segmentsPerLimb; ++i) {
-      LimbSegmentConfig seg;
+      LimbBody::Config::SegmentConfig seg;
       seg.radius = config._proportions._limbThicknessRatio *
                    config._proportions._baseSizeMeters / 2.0f;
       lastPos = b2Add(lastPos, incr);
