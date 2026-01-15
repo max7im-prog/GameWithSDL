@@ -64,6 +64,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 
 # Add subdirectories
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/world)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/common)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/components)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
@@ -84,6 +85,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/behavior)
 set(EXTERNAL_LIBS box2d SDL3::SDL3 SDL3_image::SDL3_image EnTT::EnTT
                   nlohmann_json::nlohmann_json spdlog::spdlog)
 set(GAME_LIBS
+    game_world_lib
     game_body_lib
     game_controls_lib
     game_creature_lib
