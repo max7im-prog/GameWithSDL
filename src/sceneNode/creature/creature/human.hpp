@@ -7,6 +7,7 @@
 #include "humanArticulationModel.hpp"
 #include "humanBalanceModel.hpp"
 #include "humanLocomotionModel.hpp"
+#include "revoluteConnection.hpp"
 #include <entt/entt.hpp>
 
 // Here are the responsibilities of models:
@@ -93,6 +94,13 @@ protected:
   } _bodies;
 
   struct {
+    std::weak_ptr<GirdleConnection> _shoulders;
+    std::weak_ptr<GirdleConnection> _hips;
+    std::weak_ptr<RevoluteConnection> _headToNeck;
+    std::weak_ptr<RevoluteConnection> _neckToTorso;
+  } _connections;
+
+  struct {
     HumanLocomotionModel *_locomotion;
     HumanAimModel *_aim;
     HumanArticulationModel *_articulatein;
@@ -143,6 +151,8 @@ private:
 
     GirdleConnection::Config _shoulderGirdleTemplate;
     GirdleConnection::Config _hipGirdleTemplate;
+    RevoluteConnection::Config _headToNeckTemplate;
+    RevoluteConnection::Config _neckToTorsoTemplate;
   };
 
   InitInfo computeInitInfo(const Human::Config &config);

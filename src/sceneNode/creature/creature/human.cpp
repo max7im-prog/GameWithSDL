@@ -3,9 +3,12 @@
 #include "box2d/box2d.h"
 #include "box2d/collision.h"
 #include "box2d/types.h"
+#include "girdleConnection.hpp"
 #include "kinematicUtils.hpp"
 #include "limbBody.hpp"
+#include "revoluteConnection.hpp"
 #include "shapeFactory.hpp"
+#include <stdexcept>
 
 Human::Human(entt::registry &registry, const std::shared_ptr<World> world,
              const HumanConfig &config,
@@ -146,6 +149,12 @@ Human::createAnatomyTemplates(const Human::Config &config,
 
   // Shoulder Girdle
   templates._shoulderGirdleTemplate.defaultConfig();
+
+  // Head to neck
+  templates._headToNeckTemplate.defaultConfig();
+
+  // neck to torso
+  templates._neckToTorsoTemplate.defaultConfig();
 
   return templates;
 }
@@ -369,6 +378,106 @@ void Human::createAnatomy(
     }
     _bodies._legRight = bodyFactory->create<LimbBody>(cfg);
     registerBody(_bodies._legRight, "rightLeg");
+  }
+
+  // Shoulder girdle
+  {
+    GirdleConnection::Config cfg{initAnatomyTemplates._shoulderGirdleTemplate};
+    auto leftLock = _bodies._shoulderLeft.lock();
+    auto rightLock = _bodies._shoulderRight.lock();
+    auto centerLock = _bodies._torso.lock();
+    if (leftLock && rightLock && centerLock) {
+      cfg.initial3DRotationRad = 0;
+      cfg.centerAttach.shape = centerLock->getPolygon();
+      cfg.centerAttach.localPoint = {
+          0, config._proportions._baseSizeMeters *
+                 config._proportions._torsoHeightRatio / 2.0f};
+      cfg.leftAttach.shape = leftLock->getCircle();
+      cfg.leftAttach.localPoint = {0, 0};
+      cfg.rightAttach.shape = rightLock->getCircle();
+      cfg.rightAttach.localPoint = {0, 0};
+      cfg.girdleWidth = config._proportions._baseSizeMeters *
+                        config._proportions._shoulderGirdleWIdhtRatio;
+      _connections._shoulders =
+          connectionFactory->create<GirdleConnection>(cfg);
+      registerConnection(_connections._shoulders, "shoulderGirdle");
+    } else {
+      throw std::runtime_error(
+          "Human: One or more bodies expired on shoulder creation");
+    }
+  }
+
+  // Hip girdle
+  {
+    GirdleConnection::Config cfg{initAnatomyTemplates._hipGirdleTemplate};
+    auto leftLock = _bodies._hipLeft.lock();
+    auto rightLock = _bodies._hipRight.lock();
+    auto centerLock = _bodies._torso.lock();
+    if (leftLock && rightLock && centerLock) {
+      cfg.initial3DRotationRad = 0;
+      cfg.centerAttach.shape = centerLock->getPolygon();
+      cfg.centerAttach.localPoint = {
+          0, -config._proportions._baseSizeMeters *
+                 config._proportions._torsoHeightRatio / 2.0f};
+      cfg.leftAttach.shape = leftLock->getCircle();
+      cfg.leftAttach.localPoint = {0, 0};
+      cfg.rightAttach.shape = rightLock->getCircle();
+      cfg.rightAttach.localPoint = {0, 0};
+      cfg.girdleWidth = config._proportions._baseSizeMeters *
+                        config._proportions._hipGirdleWidthRatio;
+      _connections._hips = connectionFactory->create<GirdleConnection>(cfg);
+      registerConnection(_connections._hips, "hipGirdle");
+    } else {
+      throw std::runtime_error(
+          "Human: One or more bodies expired on shoulder creation");
+    }
+  }
+
+  // Connect head to neck
+  {
+    RevoluteConnection::Config cfg{initAnatomyTemplates._headToNeckTemplate};
+  }
+
+  // Connect limbs
+  {
+    auto limbLock = _bodies._armLeft.lock();
+    auto attackLock = _bodies._shoulderLeft.lock();
+    if (limbLock && attackLock) {
+      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    } else {
+      throw std::runtime_error(
+          "Human: failed to attach limb - one or more bodies expired");
+    }
+  }
+  {
+    auto limbLock = _bodies._armRight.lock();
+    auto attackLock = _bodies._shoulderRight.lock();
+    if (limbLock && attackLock) {
+      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    } else {
+      throw std::runtime_error(
+          "Human: failed to attach limb - one or more bodies expired");
+    }
+  }
+  {
+    auto limbLock = _bodies._legLeft.lock();
+    auto attackLock = _bodies._hipLeft.lock();
+    if (limbLock && attackLock) {
+      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    } else {
+      throw std::runtime_error(
+          "Human: failed to attach limb - one or more bodies expired");
+    }
+  }
+  {
+    auto limbLock = _bodies._legRight.lock();
+    auto attackLock = _bodies._hipRight.lock();
+    if (limbLock && attackLock) {
+      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    } else {
+      throw std::runtime_error(
+          "Human: failed to attach limb - one or more bodies expired");
+    }
   }
 
   // TODO: complete
