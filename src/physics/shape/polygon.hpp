@@ -1,13 +1,13 @@
 #pragma once
 #include "shape.hpp"
 
-struct PolygonConfig : public ShapeConfig {
+struct PolygonConfig : public Shape::Config {
   void defaultConfig() override;
   std::vector<b2Vec2> vertices;
   float radius;
 };
 
-class Polygon : public Shape , public VisitableImpl<Polygon>{
+class Polygon : public Shape, public VisitableImpl<Polygon> {
 public:
   using Config = PolygonConfig;
   virtual ~Polygon() = default;

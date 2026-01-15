@@ -4,7 +4,7 @@
 #include "shapeFactory.hpp"
 #include "weldJoint.hpp"
 
-struct WeldConnectionConfig : ConnectionConfig {
+struct WeldConnectionConfig : Connection::Config {
   WeldJointConfig templateJointCfg;
   void defaultConfig() override;
 };

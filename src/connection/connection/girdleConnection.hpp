@@ -8,7 +8,7 @@
 #include "world.hpp"
 #include <memory>
 
-struct GirdleConnectionConfig : public ConnectionConfig {
+struct GirdleConnectionConfig : public Connection::Config {
   void defaultConfig() override;
 
   PrismaticJointConfig prismTemplate;

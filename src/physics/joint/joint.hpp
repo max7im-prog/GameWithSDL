@@ -6,10 +6,9 @@
 #include "registryComposite.hpp"
 #include "visitor.hpp"
 
-struct JointConfig : public ObjectConfig{};
-
 class Joint : public RegistryComposite, public virtual IVisitable {
 public:
+  struct Config : public ObjectConfig {};
   b2JointId getJointId();
   b2JointType getType();
   virtual ~Joint();

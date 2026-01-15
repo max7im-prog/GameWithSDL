@@ -1,14 +1,14 @@
 #pragma once
 #include "shape.hpp"
 
-struct CapsuleConfig : public ShapeConfig {
+struct CapsuleConfig : public Shape::Config {
   void defaultConfig() override;
   float radius;
   b2Vec2 center1;
   b2Vec2 center2;
 };
 
-class Capsule : public Shape , public VisitableImpl<Capsule>{
+class Capsule : public Shape, public VisitableImpl<Capsule> {
 public:
   using Config = CapsuleConfig;
   virtual ~Capsule() = default;

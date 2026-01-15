@@ -1,7 +1,7 @@
 #pragma once
 #include "shape.hpp"
 
-struct CircleConfig : public ShapeConfig {
+struct CircleConfig : public Shape::Config {
   void defaultConfig() override;
   float radius;
 };

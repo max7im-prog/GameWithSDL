@@ -2,7 +2,7 @@
 #include "box2d/math_functions.h"
 #include "shape.hpp"
 
-struct SegmentConfig : public ShapeConfig {
+struct SegmentConfig : public Shape::Config {
   void defaultConfig() override;
   b2Vec2 localPoint1, localPoint2;
 };

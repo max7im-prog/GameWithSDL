@@ -1,7 +1,7 @@
 #pragma once
 #include "shape.hpp"
 
-struct EmptyShapeConfig : public ShapeConfig {
+struct EmptyShapeConfig : public Shape::Config {
   void defaultConfig() override;
 
 private:
@@ -9,7 +9,7 @@ private:
   b2ShapeDef shapeDef;
 };
 
-class EmptyShape : public Shape , public VisitableImpl<EmptyShape>{
+class EmptyShape : public Shape, public VisitableImpl<EmptyShape> {
 public:
   using Config = EmptyShapeConfig;
   virtual ~EmptyShape() = default;

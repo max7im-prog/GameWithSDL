@@ -4,11 +4,12 @@
 #include "jointFactory.hpp"
 #include "shapeFactory.hpp"
 
-struct DistanceConnectionConfig : public ConnectionConfig {
+struct DistanceConnectionConfig : public Connection::Config {
   DistanceJointConfig templateJointCfg;
   void defaultConfig() override;
 };
-class DistanceConnection : public Connection , public VisitableImpl<DistanceConnection>{
+class DistanceConnection : public Connection,
+                           public VisitableImpl<DistanceConnection> {
 public:
   using Config = DistanceConnectionConfig;
   const std::shared_ptr<DistanceJoint> getDistanceJoint() const;

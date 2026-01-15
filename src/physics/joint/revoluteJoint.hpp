@@ -4,12 +4,12 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct RevoluteJointConfig : public JointConfig {
+struct RevoluteJointConfig : public Joint::Config {
   void defaultConfig() override;
   b2RevoluteJointDef jointDef;
 };
 
-class RevoluteJoint : public Joint , public VisitableImpl<RevoluteJoint>{
+class RevoluteJoint : public Joint, public VisitableImpl<RevoluteJoint> {
 public:
   using Config = RevoluteJointConfig;
   ~RevoluteJoint() = default;

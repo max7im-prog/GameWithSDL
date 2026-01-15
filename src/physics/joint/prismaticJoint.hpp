@@ -5,12 +5,12 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct PrismaticJointConfig : public JointConfig {
+struct PrismaticJointConfig : public Joint::Config {
   void defaultConfig() override;
   b2PrismaticJointDef jointDef;
 };
 
-class PrismaticJoint : public Joint , public VisitableImpl<PrismaticJoint>{
+class PrismaticJoint : public Joint, public VisitableImpl<PrismaticJoint> {
 public:
   using Config = PrismaticJointConfig;
   ~PrismaticJoint() = default;
@@ -20,7 +20,7 @@ public:
 protected:
   PrismaticJoint() = delete;
   PrismaticJoint(entt::registry &registry, const World &world,
-                const PrismaticJointConfig &config);
+                 const PrismaticJointConfig &config);
 
   friend class JointFactory;
 };

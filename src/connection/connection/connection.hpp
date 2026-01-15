@@ -1,16 +1,15 @@
 #pragma once
 
+#include "joint.hpp"
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"
+#include "shape.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
-#include "shape.hpp"
-#include "joint.hpp"
-
-struct ConnectionConfig :public ObjectConfig{};
 
 class Connection : public RegistryComposite, public virtual IVisitable {
 public:
+  struct Config : public ObjectConfig {};
   virtual ~Connection();
 
   const std::unordered_map<std::string, std::weak_ptr<Shape>> &

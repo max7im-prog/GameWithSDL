@@ -4,19 +4,20 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct MouseJointConfig : public JointConfig {
+struct MouseJointConfig : public Joint::Config {
   void defaultConfig() override;
   b2MouseJointDef jointDef;
 };
 
-class MouseJoint : public Joint , public VisitableImpl<MouseJoint>{
+class MouseJoint : public Joint, public VisitableImpl<MouseJoint> {
 public:
   using Config = MouseJointConfig;
   ~MouseJoint() = default;
 
 protected:
   MouseJoint() = delete;
-  MouseJoint(entt::registry &registry,const World &world, const MouseJointConfig &config);
+  MouseJoint(entt::registry &registry, const World &world,
+             const MouseJointConfig &config);
 
   friend class JointFactory;
 };

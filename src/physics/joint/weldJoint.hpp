@@ -4,12 +4,12 @@
 #include "joint.hpp"
 #include "world.hpp"
 
-struct WeldJointConfig : public JointConfig {
+struct WeldJointConfig : public Joint::Config {
   void defaultConfig() override;
   b2WeldJointDef jointDef;
 };
 
-class WeldJoint : public Joint , public VisitableImpl<WeldJoint>{
+class WeldJoint : public Joint, public VisitableImpl<WeldJoint> {
 public:
   using Config = WeldJointConfig;
   ~WeldJoint() = default;

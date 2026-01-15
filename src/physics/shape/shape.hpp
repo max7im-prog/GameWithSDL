@@ -10,15 +10,14 @@
 #include <entt/entt.hpp>
 #include <optional>
 
-struct ShapeConfig : public ObjectConfig {
-  b2BodyDef bodyDef;
-  b2ShapeDef shapeDef;
-};
-
 class Shape : public RegistryComposite,
               public virtual IVisitable,
               public Pseudo3d {
 public:
+  struct Config : public ObjectConfig {
+    b2BodyDef bodyDef;
+    b2ShapeDef shapeDef;
+  };
   b2BodyId getBodyId();
   b2ShapeId getShapeId();
   b2ShapeType getType();

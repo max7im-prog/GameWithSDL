@@ -4,11 +4,12 @@
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 
-struct RevoluteConnectionConfig : ConnectionConfig {
+struct RevoluteConnectionConfig : Connection::Config {
   RevoluteJointConfig templateJointCfg;
   void defaultConfig() override;
 };
-class RevoluteConnection : public Connection , public VisitableImpl<RevoluteConnection>{
+class RevoluteConnection : public Connection,
+                           public VisitableImpl<RevoluteConnection> {
 public:
   using Config = RevoluteConnectionConfig;
   const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;
