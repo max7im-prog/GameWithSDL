@@ -4,7 +4,7 @@
 #include "connectionFactory.hpp"
 #include "terrain.hpp"
 
-struct SegmentTerrainConfig : public TerrainConfig {
+struct SegmentTerrainConfig : public Terrain::Config {
   SegmentBody::Config templateBodyCfg;
   b2Vec2 point1, point2;
   void defaultConfig() override;

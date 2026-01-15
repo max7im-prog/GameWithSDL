@@ -7,10 +7,6 @@
 #include "world.hpp"
 #include <entt/entt.hpp>
 
-struct CreatureConfig : SceneNodeConfig {
-  static b2Filter defaultFilter();
-};
-
 enum class CreatureAction {
   PrimaryMobility,
   SecondaryMobility,
@@ -23,6 +19,10 @@ enum class CreatureAction {
 
 class Creature : public SceneNode {
 public:
+  struct Config : SceneNode::Config {
+    static b2Filter defaultFilter();
+  };
+
   virtual ~Creature() = 0;
   virtual void move(b2Vec2 dir) = 0;
   virtual void lookAt([[maybe_unused]] b2Vec2 worldPoint) = 0;

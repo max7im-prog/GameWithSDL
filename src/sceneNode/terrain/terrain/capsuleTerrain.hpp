@@ -5,7 +5,7 @@
 #include "connectionFactory.hpp"
 #include "terrain.hpp"
 
-struct CapsuleTerrainConfig : public TerrainConfig {
+struct CapsuleTerrainConfig : public Terrain::Config {
   CapsuleBody::Config templateBodyCfg;
   b2Vec2 point1, point2;
   float radius;

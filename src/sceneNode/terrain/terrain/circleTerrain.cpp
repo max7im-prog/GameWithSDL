@@ -1,7 +1,7 @@
 #include "circleTerrain.hpp"
 #include "box2d/types.h"
-#include "terrain.hpp"
 #include "jsonUtils.hpp"
+#include "terrain.hpp"
 
 CircleTerrain::CircleTerrain(
     entt::registry &registry, const std::shared_ptr<World> world,
@@ -13,8 +13,8 @@ CircleTerrain::CircleTerrain(
   // A single circle
   auto terrainPos =
       b2Add(config._transform._originPos, config._transform._relativePos);
-  auto terrainRot =
-      b2MulRot(b2MakeRot(config._transform._rootRotRad), b2MakeRot(config._transform._relativeRotRad));
+  auto terrainRot = b2MulRot(b2MakeRot(config._transform._rootRotRad),
+                             b2MakeRot(config._transform._relativeRotRad));
   {
     auto bodyCfg = config.templateBodyCfg;
     bodyCfg.shapeCfg.radius =
@@ -22,9 +22,9 @@ CircleTerrain::CircleTerrain(
         std::max(config._transform._scaleX, config._transform._scaleY);
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
-    bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+    bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     circleBody = bodyFactory->create<CircleBody>(bodyCfg);
-    registerBody(circleBody,"main");
+    registerBody(circleBody, "main");
   }
 }
 
@@ -32,22 +32,21 @@ void CircleTerrainConfig::defaultConfig() {
   templateBodyCfg.defaultConfig();
   radius = 1;
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
 void CircleTerrainConfig::fromJSON(const nlohmann::json &json) {
   defaultConfig();
   radius = JsonUtils::getOrDefault<float>(json, "radius", 1.0f);
 
-  if(json.contains("bodyParams")){
-    auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
+  if (json.contains("bodyParams")) {
+    auto bodyParams = Terrain::Config::parseBodyParams(json["bodyParams"]);
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
-
   if (json.contains("renderConfig")) {
-    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+    _renderConfig = SceneNode::Config::parseRenderConfig(json["renderConfig"]);
   } else {
     _renderConfig = nullptr;
   }

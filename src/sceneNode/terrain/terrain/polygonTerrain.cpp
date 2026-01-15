@@ -30,7 +30,7 @@ PolygonTerrain::PolygonTerrain(
     bodyCfg.shapeCfg.vertices = transformedVertices;
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
-    bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+    bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     polygonBody = bodyFactory->create<PolygonBody>(bodyCfg);
     registerBody(polygonBody, "main");
   }
@@ -40,7 +40,7 @@ void PolygonTerrainConfig::defaultConfig() {
   vertices = {{0, 0}, {1, 0}, {1, 1}, {0, 1}};
   templateBodyCfg.defaultConfig();
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
 void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
@@ -74,13 +74,13 @@ void PolygonTerrainConfig::fromJSON(const nlohmann::json &json) {
   }
 
   if (json.contains("bodyParams")) {
-    auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
+    auto bodyParams = Terrain::Config::parseBodyParams(json["bodyParams"]);
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
   if (json.contains("renderConfig")) {
-    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+    _renderConfig = SceneNode::Config::parseRenderConfig(json["renderConfig"]);
   } else {
     _renderConfig = nullptr;
   }

@@ -33,7 +33,7 @@ CapsuleTerrain::CapsuleTerrain(
         std::min(config._transform._scaleX, config._transform._scaleY);
     bodyCfg.shapeCfg.bodyDef.position = terrainPos;
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
-    bodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+    bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     capsuleBody = bodyFactory->create<CapsuleBody>(bodyCfg);
     registerBody(capsuleBody, "main");
   }
@@ -45,7 +45,7 @@ void CapsuleTerrainConfig::defaultConfig() {
   point2 = {1, 0};
   radius = 0.25;
   templateBodyCfg.shapeCfg.bodyDef.type = b2_staticBody;
-  templateBodyCfg.shapeCfg.shapeDef.filter = TerrainConfig::defaultFilter();
+  templateBodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
 }
 
 void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
@@ -77,13 +77,13 @@ void CapsuleTerrainConfig::fromJSON(const nlohmann::json &json) {
   radius = JsonUtils::getOrDefault<float>(json, "radius", 1.0f);
 
   if (json.contains("bodyParams")) {
-    auto bodyParams = TerrainConfig::parseBodyParams(json["bodyParams"]);
+    auto bodyParams = Terrain::Config::parseBodyParams(json["bodyParams"]);
     templateBodyCfg.shapeCfg.bodyDef = bodyParams._bodyDef;
     templateBodyCfg.shapeCfg.shapeDef = bodyParams._shapeDef;
   }
 
   if (json.contains("renderConfig")) {
-    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+    _renderConfig = SceneNode::Config::parseRenderConfig(json["renderConfig"]);
   } else {
     _renderConfig = nullptr;
   }

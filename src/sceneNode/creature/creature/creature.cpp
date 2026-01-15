@@ -20,7 +20,7 @@ void Creature::update(float dt) {
   SceneNode::update(dt);
 }
 
-b2Filter CreatureConfig::defaultFilter() {
+b2Filter Creature::Config::defaultFilter() {
   b2Filter ret = b2DefaultFilter();
   ret.categoryBits = ObjectCategory::CREATURE;
   return ret;

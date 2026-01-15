@@ -72,7 +72,7 @@ DemoCreature::DemoCreature(
   PolygonBody::Config torsoConfig;
   torsoConfig.defaultConfig();
   torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
-  torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
+  torsoConfig.shapeCfg.shapeDef.filter = Creature::Config::defaultFilter();
   torsoConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
   torsoConfig.shapeCfg.vertices = {{(-torsoWidth / 4), (-torsoHeight / 2)},
                                    {(-torsoWidth / 4), (torsoHeight / 2)},
@@ -83,7 +83,7 @@ DemoCreature::DemoCreature(
   shoulderConfig.defaultConfig();
   shoulderConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   shoulderConfig.shapeCfg.radius = segmentRadius * 1.2f;
-  shoulderConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
+  shoulderConfig.shapeCfg.shapeDef.filter = Creature::Config::defaultFilter();
   shoulderConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
 
   LimbBody::Config limbConfig;
@@ -92,7 +92,7 @@ DemoCreature::DemoCreature(
   limbConfig.defaultConfig();
   limbConfig.templateCapsuleConfig.bodyDef.type = b2_dynamicBody;
   limbConfig.templateCapsuleConfig.shapeDef.filter =
-      CreatureConfig::defaultFilter();
+      Creature::Config::defaultFilter();
   limbConfig.templateCapsuleConfig.shapeDef.filter.groupIndex = groupId;
   limbConfig.limbControlConfig = {.KPMultiplier = 7.0f,
                                   .KIMultiplier = 0.3f,
@@ -340,7 +340,7 @@ void DemoCreatureConfig::fromJSON(const nlohmann::json &json) {
   sizeYMeters = json.at("sizeY");
 
   if (json.contains("renderConfig")) {
-    _renderConfig = SceneNodeConfig::parseRenderConfig(json["renderConfig"]);
+    _renderConfig = SceneNode::Config::parseRenderConfig(json["renderConfig"]);
   } else {
     _renderConfig = nullptr;
   }

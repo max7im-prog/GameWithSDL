@@ -3,7 +3,7 @@
 #include "connectionFactory.hpp"
 #include "terrain.hpp"
 
-struct CircleTerrainConfig : public TerrainConfig {
+struct CircleTerrainConfig : public Terrain::Config {
   CircleBody::Config templateBodyCfg;
   float radius;
   void defaultConfig() override;

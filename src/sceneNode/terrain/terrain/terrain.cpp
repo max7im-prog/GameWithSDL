@@ -15,15 +15,15 @@ Terrain::~Terrain() {}
 Terrain::Terrain(entt::registry &registry, const std::shared_ptr<World> world)
     : SceneNode(registry), world(world) {}
 
-b2Filter TerrainConfig::defaultFilter() {
+b2Filter Terrain::Config::defaultFilter() {
   b2Filter ret = b2DefaultFilter();
   ret.categoryBits = ObjectCategory::TERRAIN;
   return ret;
 };
 
-TerrainConfig::BodyParams
-TerrainConfig::parseBodyParams(const nlohmann::json &json) {
-  TerrainConfig::BodyParams ret{};
+Terrain::Config::BodyParams
+Terrain::Config::parseBodyParams(const nlohmann::json &json) {
+  Terrain::Config::BodyParams ret{};
 
   ret._bodyDef = b2DefaultBodyDef();
   if (json.contains("body")) {

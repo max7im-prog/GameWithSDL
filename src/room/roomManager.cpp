@@ -65,7 +65,7 @@ const std::map<std::string,
            PolygonTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = SceneNodeConfig::parseObjectTransform(
+           cfg._transform = SceneNode::Config::parseObjectTransform(
                context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -91,7 +91,7 @@ const std::map<std::string,
            CapsuleTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = SceneNodeConfig::parseObjectTransform(
+           cfg._transform = SceneNode::Config::parseObjectTransform(
                context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -117,7 +117,7 @@ const std::map<std::string,
            SegmentTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = SceneNodeConfig::parseObjectTransform(
+           cfg._transform = SceneNode::Config::parseObjectTransform(
                context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -143,7 +143,7 @@ const std::map<std::string,
            CircleTerrain::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = SceneNodeConfig::parseObjectTransform(
+           cfg._transform = SceneNode::Config::parseObjectTransform(
                context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._terrainFactory;
@@ -169,7 +169,7 @@ const std::map<std::string,
            DemoCreature::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = SceneNodeConfig::parseObjectTransform(
+           cfg._transform = SceneNode::Config::parseObjectTransform(
                context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._creatureFactory;
@@ -194,7 +194,7 @@ const std::map<std::string,
            Human::Config cfg;
            cfg.defaultConfig();
            cfg.fromJSON(context._configJson);
-           cfg._transform = SceneNodeConfig::parseObjectTransform(
+           cfg._transform = SceneNode::Config::parseObjectTransform(
                context._metadataJson, context._room->getJSON());
 
            auto factory = context._mgr._creatureFactory;

@@ -10,7 +10,7 @@
 
 enum Direction { LEFT, RIGHT, STANDING };
 
-struct DemoCreatureConfig : public CreatureConfig {
+struct DemoCreatureConfig : public Creature::Config {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
   float sizeXMeters = 1;

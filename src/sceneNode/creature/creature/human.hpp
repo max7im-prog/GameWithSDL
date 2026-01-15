@@ -21,7 +21,7 @@
 //
 // HumaAimModel - where arms point at, head inclination
 
-struct HumanConfig : public CreatureConfig {
+struct HumanConfig : public Creature::Config {
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
   struct {

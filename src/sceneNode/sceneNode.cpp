@@ -19,12 +19,12 @@ SceneNode::getConnections() const {
   return _connections;
 }
 
-SceneNodeConfig::~SceneNodeConfig() = default;
+SceneNode::Config::~Config() = default;
 
-SceneNodeConfig::Transform
-SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
-                                      const nlohmann::json &roomJson) {
-  SceneNodeConfig::Transform ret{};
+SceneNode::Config::Transform
+SceneNode::Config::parseObjectTransform(const nlohmann::json &objectJson,
+                                        const nlohmann::json &roomJson) {
+  SceneNode::Config::Transform ret{};
 
   // Position
 
@@ -82,7 +82,7 @@ SceneNodeConfig::parseObjectTransform(const nlohmann::json &objectJson,
 }
 
 std::shared_ptr<SceneNodeRenderConfig>
-SceneNodeConfig::parseRenderConfig(const nlohmann::json &json) {
+SceneNode::Config::parseRenderConfig(const nlohmann::json &json) {
   using Config = SceneNodeRenderConfig;
   using BodyConfig = SceneNodeRenderConfig::BodyRenderConfig;
   using ShapeConfig =

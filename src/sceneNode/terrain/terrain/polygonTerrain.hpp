@@ -5,7 +5,7 @@
 #include "polygonBody.hpp"
 #include "terrain.hpp"
 
-struct PolygonTerrainConfig : public TerrainConfig {
+struct PolygonTerrainConfig : public Terrain::Config {
   PolygonBody::Config templateBodyCfg;
   std::vector<b2Vec2> vertices;
   void defaultConfig() override;
