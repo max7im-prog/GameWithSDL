@@ -4,20 +4,19 @@
 #include "revoluteJoint.hpp"
 #include "shapeFactory.hpp"
 
-struct RevoluteConnectionConfig : Connection::Config {
-  RevoluteJoint::Config templateJointCfg;
-  void defaultConfig() override;
-};
 class RevoluteConnection : public Connection,
                            public VisitableImpl<RevoluteConnection> {
 public:
-  using Config = RevoluteConnectionConfig;
+  struct Config : Connection::Config {
+    RevoluteJoint::Config templateJointCfg;
+    void defaultConfig() override;
+  };
   const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;
 
 protected:
   RevoluteConnection(entt::registry &registry,
                      const std::shared_ptr<World> world,
-                     const RevoluteConnectionConfig &config,
+                     const RevoluteConnection::Config &config,
                      const std::shared_ptr<ShapeFactory> shapeFactory,
                      const std::shared_ptr<JointFactory> jointFactory);
   std::weak_ptr<RevoluteJoint> revoluteJoint;

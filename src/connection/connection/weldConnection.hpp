@@ -4,18 +4,17 @@
 #include "shapeFactory.hpp"
 #include "weldJoint.hpp"
 
-struct WeldConnectionConfig : Connection::Config {
-  WeldJoint::Config templateJointCfg;
-  void defaultConfig() override;
-};
 class WeldConnection : public Connection, public VisitableImpl<WeldConnection> {
 public:
-  using Config = WeldConnectionConfig;
+  struct Config : Connection::Config {
+    WeldJoint::Config templateJointCfg;
+    void defaultConfig() override;
+  };
   const std::shared_ptr<WeldJoint> getWeldJoint() const;
 
 protected:
   WeldConnection(entt::registry &registry, const std::shared_ptr<World> world,
-                 const WeldConnectionConfig &config,
+                 const WeldConnection::Config &config,
                  const std::shared_ptr<ShapeFactory> shapeFactory,
                  const std::shared_ptr<JointFactory> jointFactory);
   std::weak_ptr<WeldJoint> weldJoint;

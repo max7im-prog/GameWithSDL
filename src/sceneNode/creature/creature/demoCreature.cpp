@@ -228,7 +228,7 @@ DemoCreature::DemoCreature(
       *bodyPartLocks;
   // Hips
   {
-    GirdleConnectionConfig cfg;
+    GirdleConnection::Config cfg;
     cfg.defaultConfig();
     cfg.girdleWidth = torsoWidth * 0.4;
     cfg.centerAttach.shape = torsoLock->getPolygon();
@@ -256,7 +256,7 @@ DemoCreature::DemoCreature(
 
   // Shoulders
   {
-    GirdleConnectionConfig cfg;
+    GirdleConnection::Config cfg;
     cfg.defaultConfig();
     cfg.girdleWidth = torsoWidth * 1.6f;
     cfg.centerAttach.shape = torsoLock->getPolygon();

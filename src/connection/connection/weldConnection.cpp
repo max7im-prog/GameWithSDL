@@ -3,12 +3,12 @@
 
 WeldConnection::WeldConnection(entt::registry &registry,
                                const std::shared_ptr<World> world,
-                               const WeldConnectionConfig &config,
+                               const WeldConnection::Config &config,
                                const std::shared_ptr<ShapeFactory> shapeFactory,
                                const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
   weldJoint = jointFactory->create<WeldJoint>(config.templateJointCfg);
-  registerJoint(weldJoint,"weldJoint");
+  registerJoint(weldJoint, "weldJoint");
 }
 
 const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
@@ -18,5 +18,6 @@ const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {
   return ret;
 }
 
-void WeldConnectionConfig::defaultConfig() { templateJointCfg.defaultConfig(); }
-
+void WeldConnection::Config::defaultConfig() {
+  templateJointCfg.defaultConfig();
+}

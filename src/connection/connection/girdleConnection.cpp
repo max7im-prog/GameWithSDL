@@ -6,7 +6,7 @@
 #include <stdexcept>
 GirdleConnection::GirdleConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const GirdleConnectionConfig &config,
+    const GirdleConnection::Config &config,
     const std::shared_ptr<ShapeFactory> shapeFactory,
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world), girdleWidth(config.girdleWidth),
@@ -54,7 +54,7 @@ GirdleConnection::GirdleConnection(
   rotationController = PIDRotController(config.rotationControlTemplate);
 }
 
-void GirdleConnectionConfig::defaultConfig() {
+void GirdleConnection::Config::defaultConfig() {
   prismTemplate.defaultConfig();
   girdleWidth = 1;
   rotationAxis = {0, 1};

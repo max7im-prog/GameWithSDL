@@ -8,33 +8,31 @@
 #include "world.hpp"
 #include <memory>
 
-struct GirdleConnectionConfig : public Connection::Config {
-  void defaultConfig() override;
-
-  PrismaticJoint::Config prismTemplate;
-  PIDRotControllerConfig rotationControlTemplate;
-
-  struct {
-    std::shared_ptr<Shape> shape = nullptr;
-    b2Vec2 localPoint = {0, 0};
-  } centerAttach, leftAttach, rightAttach;
-
-  b2Vec2 rotationAxis;
-  float girdleWidth;
-  float initial3DRotationRad;
-};
-
 class GirdleConnection : public Connection,
                          public VisitableImpl<GirdleConnection> {
 public:
-  using Config = GirdleConnectionConfig;
+  struct Config : public Connection::Config {
+    void defaultConfig() override;
+
+    PrismaticJoint::Config prismTemplate;
+    PIDRotControllerConfig rotationControlTemplate;
+
+    struct {
+      std::shared_ptr<Shape> shape = nullptr;
+      b2Vec2 localPoint = {0, 0};
+    } centerAttach, leftAttach, rightAttach;
+
+    b2Vec2 rotationAxis;
+    float girdleWidth;
+    float initial3DRotationRad;
+  };
   virtual void update(float dt) override;
   void rotate3D(float angle);
   void rotate3D(b2Rot rot);
 
 protected:
   GirdleConnection(entt::registry &registry, const std::shared_ptr<World> world,
-                   const GirdleConnectionConfig &config,
+                   const GirdleConnection::Config &config,
                    const std::shared_ptr<ShapeFactory> shapeFactory,
                    const std::shared_ptr<JointFactory> jointFactory);
 

@@ -3,12 +3,12 @@
 
 RevoluteConnection::RevoluteConnection(
     entt::registry &registry, const std::shared_ptr<World> world,
-    const RevoluteConnectionConfig &config,
+    const RevoluteConnection::Config &config,
     const std::shared_ptr<ShapeFactory> shapeFactory,
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world) {
   revoluteJoint = jointFactory->create<RevoluteJoint>(config.templateJointCfg);
-  registerJoint(revoluteJoint,"revoluteJoint");
+  registerJoint(revoluteJoint, "revoluteJoint");
 }
 
 const std::shared_ptr<RevoluteJoint>
@@ -19,7 +19,6 @@ RevoluteConnection::getRevoluteJoint() const {
   return ret;
 }
 
-void RevoluteConnectionConfig::defaultConfig() {
-  templateJointCfg .defaultConfig();
+void RevoluteConnection::Config::defaultConfig() {
+  templateJointCfg.defaultConfig();
 }
-
