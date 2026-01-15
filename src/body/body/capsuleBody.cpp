@@ -27,15 +27,15 @@ float CapsuleBody::getRadius() {
 
 CapsuleBody::CapsuleBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
-                         const CapsuleBodyConfig &config,
+                         const CapsuleBody::Config &config,
                          const std::shared_ptr<ShapeFactory> shapeFactory,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   capsule = shapeFactory->create<Capsule>(config.shapeCfg);
-  registerShape(capsule,"main");
+  registerShape(capsule, "main");
 }
 
-void CapsuleBodyConfig::defaultConfig() { shapeCfg.defaultConfig(); }
+void CapsuleBody::Config::defaultConfig() { shapeCfg.defaultConfig(); }
 
 const std::shared_ptr<Capsule> CapsuleBody::getCapsule() {
 

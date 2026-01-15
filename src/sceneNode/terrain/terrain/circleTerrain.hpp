@@ -4,12 +4,12 @@
 #include "terrain.hpp"
 
 struct CircleTerrainConfig : public TerrainConfig {
-  CircleBodyConfig templateBodyCfg;
+  CircleBody::Config templateBodyCfg;
   float radius;
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class CircleTerrain : public Terrain , public VisitableImpl<CircleTerrain>{
+class CircleTerrain : public Terrain, public VisitableImpl<CircleTerrain> {
 public:
   using Config = CircleTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

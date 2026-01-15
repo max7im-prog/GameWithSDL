@@ -10,7 +10,7 @@
 #include <stdexcept>
 
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
-                   const LimbBodyConfig &c,
+                   const LimbBody::Config &c,
                    const std::shared_ptr<ShapeFactory> shapeFactory,
                    const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world), config(c) {
@@ -112,7 +112,7 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
   }
 }
 
-void LimbBodyConfig::defaultConfig() {
+void LimbBody::Config::defaultConfig() {
   templateCapsuleConfig.defaultConfig();
   templateJointConfig.defaultConfig();
   basePos = {0, 0};

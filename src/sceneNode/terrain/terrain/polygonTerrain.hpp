@@ -6,12 +6,12 @@
 #include "terrain.hpp"
 
 struct PolygonTerrainConfig : public TerrainConfig {
-  PolygonBodyConfig templateBodyCfg;
+  PolygonBody::Config templateBodyCfg;
   std::vector<b2Vec2> vertices;
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class PolygonTerrain : public Terrain , public VisitableImpl<PolygonTerrain>{
+class PolygonTerrain : public Terrain, public VisitableImpl<PolygonTerrain> {
 public:
   using Config = PolygonTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

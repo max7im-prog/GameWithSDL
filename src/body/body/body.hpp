@@ -5,12 +5,12 @@
 #include "registryComposite.hpp"
 #include "shape.hpp"
 
-struct BodyConfig : public ObjectConfig {};
-
 class Body : public RegistryComposite,
              public virtual IVisitable,
              public Pseudo3d {
 public:
+  struct Config : public ObjectConfig {};
+
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Body();
   virtual b2Vec2 getWorldPos() = 0;

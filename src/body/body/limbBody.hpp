@@ -21,22 +21,20 @@ struct LimbControlConfig {
   float maxForceMultiplier = 1;
 };
 
-struct LimbBodyConfig : public BodyConfig {
-  void defaultConfig() override;
-  CapsuleConfig templateCapsuleConfig;
-  RevoluteJointConfig templateJointConfig;
-  LimbControlConfig limbControlConfig;
-
-  std::vector<LimbSegmentConfig> segments; // Positions in local coordinates
-  b2Vec2 basePos;                          // Position in world coordinates
-
-  std::vector<AngleConstraint> initialAngleConstraints = {};
-  b2Rot rootRot;
-};
-
 class LimbBody : public Body, public VisitableImpl<LimbBody> {
 public:
-  using Config = LimbBodyConfig;
+  struct Config : public Body::Config {
+    void defaultConfig() override;
+    CapsuleConfig templateCapsuleConfig;
+    RevoluteJointConfig templateJointConfig;
+    LimbControlConfig limbControlConfig;
+
+    std::vector<LimbSegmentConfig> segments; // Positions in local coordinates
+    b2Vec2 basePos;                          // Position in world coordinates
+
+    std::vector<AngleConstraint> initialAngleConstraints = {};
+    b2Rot rootRot;
+  };
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
   float getLength();
@@ -64,7 +62,7 @@ public:
 protected:
   LimbBody() = delete;
   LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
-           const LimbBodyConfig &config,
+           const LimbBody::Config &config,
            const std::shared_ptr<ShapeFactory> shapeFactory,
            const std::shared_ptr<JointFactory> jointFactory);
 

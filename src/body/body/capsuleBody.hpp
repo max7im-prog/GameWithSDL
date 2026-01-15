@@ -4,14 +4,12 @@
 #include "jointFactory.hpp"
 #include "shapeFactory.hpp"
 
-struct CapsuleBodyConfig : public BodyConfig {
-  void defaultConfig() override;
-  CapsuleConfig shapeCfg;
-};
-
-class CapsuleBody : public Body , public VisitableImpl<CapsuleBody>{
+class CapsuleBody : public Body, public VisitableImpl<CapsuleBody> {
 public:
-  using Config = CapsuleBodyConfig;
+  struct Config : public Body::Config {
+    void defaultConfig() override;
+    CapsuleConfig shapeCfg;
+  };
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
   float getRadius();
@@ -21,7 +19,7 @@ public:
 protected:
   CapsuleBody() = delete;
   CapsuleBody(entt::registry &registry, const std::shared_ptr<World> world,
-              const CapsuleBodyConfig &config,
+              const CapsuleBody::Config &config,
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory);
   std::weak_ptr<Capsule> capsule;

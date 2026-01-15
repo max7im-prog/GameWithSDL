@@ -23,15 +23,15 @@ float CircleBody::getRadius() {
 
 CircleBody::CircleBody(entt::registry &registry,
                        const std::shared_ptr<World> world,
-                       const CircleBodyConfig &config,
+                       const CircleBody::Config &config,
                        const std::shared_ptr<ShapeFactory> shapeFactory,
                        const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   circle = shapeFactory->create<Circle>(config.shapeCfg);
-  registerShape(circle,"main");
+  registerShape(circle, "main");
 }
 
-void CircleBodyConfig::defaultConfig() { shapeCfg.defaultConfig(); }
+void CircleBody::Config::defaultConfig() { shapeCfg.defaultConfig(); }
 
 const std::shared_ptr<Circle> CircleBody::getCircle() {
 

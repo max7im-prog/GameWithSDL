@@ -4,18 +4,15 @@
 
 SegmentBody::SegmentBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
-                         const SegmentBodyConfig &config,
+                         const SegmentBody::Config &config,
                          const std::shared_ptr<ShapeFactory> shapeFactory,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   segment = shapeFactory->create<Segment>(config.shapeCfg);
-  registerShape(segment,"main");
+  registerShape(segment, "main");
 }
 
-void SegmentBodyConfig::defaultConfig() {
-  shapeCfg.defaultConfig();
-}
-
+void SegmentBody::Config::defaultConfig() { shapeCfg.defaultConfig(); }
 
 const std::shared_ptr<Segment> SegmentBody::getSegment() {
 
@@ -25,6 +22,4 @@ const std::shared_ptr<Segment> SegmentBody::getSegment() {
   return ret;
 }
 
-b2Vec2 SegmentBody::getWorldPos(){
-  return segment.lock()->getWorldPos();
-}
+b2Vec2 SegmentBody::getWorldPos() { return segment.lock()->getWorldPos(); }

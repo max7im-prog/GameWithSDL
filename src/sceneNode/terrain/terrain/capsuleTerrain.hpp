@@ -6,13 +6,13 @@
 #include "terrain.hpp"
 
 struct CapsuleTerrainConfig : public TerrainConfig {
-  CapsuleBodyConfig templateBodyCfg;
+  CapsuleBody::Config templateBodyCfg;
   b2Vec2 point1, point2;
   float radius;
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
 };
-class CapsuleTerrain : public Terrain , public VisitableImpl<CapsuleTerrain>{
+class CapsuleTerrain : public Terrain, public VisitableImpl<CapsuleTerrain> {
 public:
   using Config = CapsuleTerrainConfig;
   virtual b2Vec2 getWorldPos() override;

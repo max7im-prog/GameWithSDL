@@ -4,21 +4,19 @@
 #include "segment.hpp"
 #include "shapeFactory.hpp"
 
-struct SegmentBodyConfig : public BodyConfig {
-  void defaultConfig() override;
-  SegmentConfig shapeCfg;
-};
-
-class SegmentBody : public Body , public VisitableImpl<SegmentBody>{
+class SegmentBody : public Body, public VisitableImpl<SegmentBody> {
 public:
-  using Config = SegmentBodyConfig;
+  struct Config : public Body::Config {
+    void defaultConfig() override;
+    SegmentConfig shapeCfg;
+  };
   const std::shared_ptr<Segment> getSegment();
   virtual b2Vec2 getWorldPos() override;
 
 protected:
   SegmentBody() = delete;
   SegmentBody(entt::registry &registry, const std::shared_ptr<World> world,
-              const SegmentBodyConfig &config,
+              const SegmentBody::Config &config,
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory);
 

@@ -4,18 +4,15 @@
 
 PolygonBody::PolygonBody(entt::registry &registry,
                          const std::shared_ptr<World> world,
-                         const PolygonBodyConfig &config,
+                         const PolygonBody::Config &config,
                          const std::shared_ptr<ShapeFactory> shapeFactory,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   polygon = shapeFactory->create<Polygon>(config.shapeCfg);
-  registerShape(polygon,"main");
+  registerShape(polygon, "main");
 }
 
-void PolygonBodyConfig::defaultConfig() {
-  shapeCfg.defaultConfig();
-}
-
+void PolygonBody::Config::defaultConfig() { shapeCfg.defaultConfig(); }
 
 const std::shared_ptr<Polygon> PolygonBody::getPolygon() {
 
@@ -26,6 +23,4 @@ const std::shared_ptr<Polygon> PolygonBody::getPolygon() {
   return ret;
 }
 
-b2Vec2 PolygonBody::getWorldPos(){
-  return polygon.lock()->getWorldPos();
-}
+b2Vec2 PolygonBody::getWorldPos() { return polygon.lock()->getWorldPos(); }

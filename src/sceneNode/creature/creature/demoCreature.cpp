@@ -69,7 +69,7 @@ DemoCreature::DemoCreature(
   b2Vec2 rightHipPos = b2Add(creaturePos, b2Vec2(torsoWidth * 0.3, 0));
 
   // Create bodies
-  PolygonBodyConfig torsoConfig;
+  PolygonBody::Config torsoConfig;
   torsoConfig.defaultConfig();
   torsoConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   torsoConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
@@ -79,14 +79,14 @@ DemoCreature::DemoCreature(
                                    {(torsoWidth / 4), (torsoHeight / 2)},
                                    {(torsoWidth / 4), (-torsoHeight / 2)}};
 
-  CircleBodyConfig shoulderConfig;
+  CircleBody::Config shoulderConfig;
   shoulderConfig.defaultConfig();
   shoulderConfig.shapeCfg.bodyDef.type = b2_dynamicBody;
   shoulderConfig.shapeCfg.radius = segmentRadius * 1.2f;
   shoulderConfig.shapeCfg.shapeDef.filter = CreatureConfig::defaultFilter();
   shoulderConfig.shapeCfg.shapeDef.filter.groupIndex = groupId;
 
-  LimbBodyConfig limbConfig;
+  LimbBody::Config limbConfig;
   limbConfig.templateJointConfig.jointDef.dampingRatio = -1000;
 
   limbConfig.defaultConfig();

@@ -4,21 +4,19 @@
 #include "polygon.hpp"
 #include "shapeFactory.hpp"
 
-struct PolygonBodyConfig : public BodyConfig {
-  void defaultConfig() override;
-  PolygonConfig shapeCfg;
-};
-
-class PolygonBody : public Body , public VisitableImpl<PolygonBody>{
+class PolygonBody : public Body, public VisitableImpl<PolygonBody> {
 public:
-  using Config = PolygonBodyConfig;
+  struct Config : public Body::Config {
+    void defaultConfig() override;
+    PolygonConfig shapeCfg;
+  };
   const std::shared_ptr<Polygon> getPolygon();
   virtual b2Vec2 getWorldPos() override;
 
 protected:
   PolygonBody() = delete;
   PolygonBody(entt::registry &registry, const std::shared_ptr<World> world,
-              const PolygonBodyConfig &config,
+              const PolygonBody::Config &config,
               const std::shared_ptr<ShapeFactory> shapeFactory,
               const std::shared_ptr<JointFactory> jointFactory);
 

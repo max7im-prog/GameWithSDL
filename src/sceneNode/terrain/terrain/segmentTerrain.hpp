@@ -5,7 +5,7 @@
 #include "terrain.hpp"
 
 struct SegmentTerrainConfig : public TerrainConfig {
-  SegmentBodyConfig templateBodyCfg;
+  SegmentBody::Config templateBodyCfg;
   b2Vec2 point1, point2;
   void defaultConfig() override;
   void fromJSON(const nlohmann::json &json) override;
