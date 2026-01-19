@@ -6,7 +6,7 @@
 Body::~Body() {}
 
 Body::Body(entt::registry &registry, const std::shared_ptr<World> world)
-    : RegistryComposite(registry), world(world) {}
+    : Structure(registry), world(world) {}
 
 void Body::registerJoint(std::weak_ptr<Joint> joint, const std::string &name) {
   if (_joints.find(name) != _joints.end()) {

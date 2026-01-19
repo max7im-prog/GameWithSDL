@@ -8,6 +8,7 @@ target_link_libraries(
   game_connection_lib
   PUBLIC box2d
          EnTT::EnTT
+         game_structure_lib
          game_interfaces_lib
          game_physics_lib
          game_controls_lib

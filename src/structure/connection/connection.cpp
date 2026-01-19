@@ -1,13 +1,13 @@
 #include "connection.hpp"
-#include "registryComposite.hpp"
 
 Connection::Connection(entt::registry &registry,
                        const std::shared_ptr<World> world)
-    : RegistryComposite(registry), world(world) {}
+    : Structure(registry), world(world) {}
 
 Connection::~Connection() {}
 
-void Connection::registerJoint(std::weak_ptr<Joint> joint, const std::string &name) {
+void Connection::registerJoint(std::weak_ptr<Joint> joint,
+                               const std::string &name) {
   if (_joints.find(name) != _joints.end()) {
     throw std::runtime_error("Joint with name " + name +
                              " registered more than once");
@@ -16,7 +16,8 @@ void Connection::registerJoint(std::weak_ptr<Joint> joint, const std::string &na
   registerChild(joint);
 }
 
-void Connection::registerShape(std::weak_ptr<Shape> shape, const std::string &name) {
+void Connection::registerShape(std::weak_ptr<Shape> shape,
+                               const std::string &name) {
   if (_shapes.find(name) != _shapes.end()) {
     throw std::runtime_error("Shape with name " + name +
                              " registered more than once");

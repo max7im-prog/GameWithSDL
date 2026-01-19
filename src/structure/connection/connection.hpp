@@ -4,12 +4,13 @@
 #include "objectConfig.hpp"
 #include "registryComposite.hpp"
 #include "shape.hpp"
+#include "structure.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 
-class Connection : public RegistryComposite, public virtual IVisitable {
+class Connection : public Structure, public virtual IVisitable {
 public:
-  struct Config : public ObjectConfig {};
+  struct Config : public Structure::Config {};
   virtual ~Connection();
 
   const std::unordered_map<std::string, std::weak_ptr<Shape>> &

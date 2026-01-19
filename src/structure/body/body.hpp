@@ -4,12 +4,11 @@
 #include "pseudo3d.hpp"
 #include "registryComposite.hpp"
 #include "shape.hpp"
+#include "structure.hpp"
 
-class Body : public RegistryComposite,
-             public virtual IVisitable,
-             public Pseudo3d {
+class Body : public Structure, public virtual IVisitable, public Pseudo3d {
 public:
-  struct Config : public ObjectConfig {};
+  struct Config : public Structure::Config {};
 
   virtual void update([[maybe_unused]] float dt) override {};
   virtual ~Body();
