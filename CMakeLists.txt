@@ -112,12 +112,12 @@ target_include_directories(game_run_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(game_run_lib PUBLIC ${GAME_LIBS} ${EXTERNAL_LIBS})
 
 # Create executable
-add_executable(Game ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
-target_link_libraries(Game PRIVATE game_run_lib)
+add_executable(game ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+target_link_libraries(game PRIVATE game_run_lib)
 
 # Compiler options
 target_compile_options(
-  Game
+  game
   PRIVATE $<$<CONFIG:Debug>:-Wall
           -Wextra
           -g
@@ -130,7 +130,7 @@ target_compile_options(
           -O3
           -g
           -ggdb3>)
-target_link_options(Game PRIVATE $<$<CONFIG:Debug>:-fsanitize=address
+target_link_options(game PRIVATE $<$<CONFIG:Debug>:-fsanitize=address
                     -fsanitize=undefined -fsanitize=leak>)
 
 # Copy resources into build
@@ -139,8 +139,8 @@ add_custom_command(
   TARGET copy_resources
   POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-          "${CMAKE_CURRENT_SOURCE_DIR}/res" "$<TARGET_FILE_DIR:Game>/res")
-add_dependencies(Game copy_resources)
+          "${CMAKE_CURRENT_SOURCE_DIR}/res" "$<TARGET_FILE_DIR:game>/res")
+add_dependencies(game copy_resources)
 
 # Documentation
 find_package(Doxygen)

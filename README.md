@@ -18,11 +18,11 @@ cd ./build
 cmake ..
 cmake --build .
 ```
-The game's binary is located in **/build/bin**
+The game's binary is located as **/build/bin/game**
 
 ## Testing
 
-The program uses google tests to facilitate testing. After the program is built, testing binary can be found as **build/bin/Game_tests**
+The program uses google tests to facilitate testing. After the program is built, testing binary can be found as **build/bin/tests**
 
 ## Documentation
 

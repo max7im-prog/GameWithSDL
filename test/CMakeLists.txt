@@ -1,28 +1,22 @@
-
 enable_testing()
 
 # List all test sources
-file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
-    "*.cpp"
-    "*.hpp"
-)
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "*.cpp" "*.hpp")
 
 # Create the test executable
-add_executable(Game_tests ${TEST_SOURCES})
+add_executable(tests ${TEST_SOURCES})
 
 # Output directory
-set_target_properties(Game_tests PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+set_target_properties(tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY
+                                       "${CMAKE_BINARY_DIR}/bin")
 
 # Link Google Test and your project libraries
-target_link_libraries(Game_tests
-    GTest::gtest_main
-    game_run_lib   # or whatever library contains World/Entity
+target_link_libraries(
+  tests GTest::gtest_main game_run_lib # or whatever library contains
+                                       # World/Entity
 )
 
 # Discover tests
 include(GoogleTest)
-gtest_discover_tests(Game_tests
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+gtest_discover_tests(tests WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
