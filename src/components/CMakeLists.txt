@@ -9,6 +9,8 @@ target_link_libraries(
             EnTT::EnTT
             game_interfaces_lib
             game_physics_lib
+            game_joint_lib
+            game_shape_lib
             game_controls_lib
             game_misc_lib
             game_common_lib)

@@ -103,6 +103,8 @@ set(GAME_LIBS
     game_components_lib
     game_scene_node_lib
     game_fallback_visitor_lib
+    game_joint_lib
+    game_shape_lib
     game_behavior_lib)
 add_library(game_run_lib STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/game.hpp
                                 ${CMAKE_CURRENT_SOURCE_DIR}/src/game.cpp)
