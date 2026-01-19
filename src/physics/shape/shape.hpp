@@ -1,8 +1,8 @@
 #pragma once
 #include "box2d/id.h"
 #include "objectConfig.hpp"
+#include "physicsPrimitive.hpp"
 #include "pseudo3d.hpp"
-#include "registryComposite.hpp"
 #include "visitor.hpp"
 #include "world.hpp"
 #include <box2d/box2d.h>
@@ -10,11 +10,11 @@
 #include <entt/entt.hpp>
 #include <optional>
 
-class Shape : public RegistryComposite,
+class Shape : public PhysicsPrimitive,
               public virtual IVisitable,
               public Pseudo3d {
 public:
-  struct Config : public ObjectConfig {
+  struct Config : public PhysicsPrimitive::Config {
     b2BodyDef bodyDef;
     b2ShapeDef shapeDef;
   };

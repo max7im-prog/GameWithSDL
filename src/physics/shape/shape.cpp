@@ -10,7 +10,7 @@ b2ShapeId Shape::getShapeId() { return shapeId; };
 
 b2ShapeType Shape::getType() { return b2Shape_GetType(shapeId); }
 
-Shape::Shape(entt::registry &registry) : RegistryComposite(registry) {}
+Shape::Shape(entt::registry &registry) : PhysicsPrimitive(registry) {}
 
 Shape::~Shape() {
   if (b2Body_IsValid(bodyId)) {

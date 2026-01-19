@@ -2,13 +2,12 @@
 
 #include "box2d/types.h"
 #include "entt/entt.hpp"
-#include "objectConfig.hpp"
-#include "registryComposite.hpp"
+#include "physicsPrimitive.hpp"
 #include "visitor.hpp"
 
-class Joint : public RegistryComposite, public virtual IVisitable {
+class Joint : public PhysicsPrimitive, public virtual IVisitable {
 public:
-  struct Config : public ObjectConfig {};
+  struct Config : public PhysicsPrimitive::Config {};
   b2JointId getJointId();
   b2JointType getType();
   virtual ~Joint();
