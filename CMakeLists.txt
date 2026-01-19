@@ -70,14 +70,13 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/components)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/interfaces)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/physics)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/controls)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/body)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/structure)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/sceneNode)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/events)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/misc)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/render)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/debug)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/systems)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/connection)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/room)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/behavior)
 
@@ -92,6 +91,7 @@ set(GAME_LIBS
     game_debug_lib
     game_events_lib
     game_interfaces_lib
+    game_structure_lib
     game_misc_lib
     game_physics_lib
     game_render_lib
