@@ -251,8 +251,9 @@ DemoCreature::DemoCreature(
     registerConnection(_hipConnection, "hipConnection");
   }
 
-  leftLegLock->connect(connectionFactory, leftHipLock->getCircle(), {0, 0});
-  rightLegLock->connect(connectionFactory, rightHipLock->getCircle(), {0, 0});
+  leftLegLock->connect(connectionFactory, _leftHip, "main", {0, 0}, _leftHip);
+  rightLegLock->connect(connectionFactory, _rightHip, "main", {0, 0},
+                        _rightHip);
 
   // Shoulders
   {
@@ -279,10 +280,12 @@ DemoCreature::DemoCreature(
     registerConnection(_shoulderConnection, "shoulderConnection");
   }
 
-  leftArmLock->connect(connectionFactory, leftShoulderLock->getCircle(),
-                       {0, 0});
-  rightArmLock->connect(connectionFactory, rightShoulderLock->getCircle(),
-                        {0, 0});
+  // leftLegLock->connect(connectionFactory, _leftHip, "main", {0, 0},
+  // _leftHip);
+  leftArmLock->connect(connectionFactory, _leftShoulder, "main", {0, 0},
+                       _leftShoulder);
+  rightArmLock->connect(connectionFactory, _rightShoulder, "main", {0, 0},
+                        _leftShoulder);
 
   // Configure controllers
   {

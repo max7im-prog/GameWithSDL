@@ -54,7 +54,8 @@ public:
   b2Vec2 getTrackingPoint();
 
   void connect(std::shared_ptr<ConnectionFactory> factory,
-               std::shared_ptr<Shape> shape, b2Vec2 localPoint);
+               std::weak_ptr<Body> body, const std::string &shapeName,
+               b2Vec2 localShapePoint, std::weak_ptr<RegistryComposite> parent);
 
   void update(float dt) override;
 

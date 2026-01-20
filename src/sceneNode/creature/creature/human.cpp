@@ -441,9 +441,9 @@ void Human::createAnatomy(
   // Connect limbs
   {
     auto limbLock = _bodies._armLeft.lock();
-    auto attackLock = _bodies._shoulderLeft.lock();
-    if (limbLock && attackLock) {
-      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    auto attach = _bodies._shoulderLeft;
+    if (limbLock) {
+      limbLock->connect(connectionFactory, attach, "main", {0, 0}, attach);
     } else {
       throw std::runtime_error(
           "Human: failed to attach limb - one or more bodies expired");
@@ -451,9 +451,9 @@ void Human::createAnatomy(
   }
   {
     auto limbLock = _bodies._armRight.lock();
-    auto attackLock = _bodies._shoulderRight.lock();
-    if (limbLock && attackLock) {
-      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    auto attach = _bodies._shoulderLeft;
+    if (limbLock) {
+      limbLock->connect(connectionFactory, attach, "main", {0, 0}, attach);
     } else {
       throw std::runtime_error(
           "Human: failed to attach limb - one or more bodies expired");
@@ -461,9 +461,9 @@ void Human::createAnatomy(
   }
   {
     auto limbLock = _bodies._legLeft.lock();
-    auto attackLock = _bodies._hipLeft.lock();
-    if (limbLock && attackLock) {
-      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    auto attach = _bodies._shoulderLeft;
+    if (limbLock) {
+      limbLock->connect(connectionFactory, attach, "main", {0, 0}, attach);
     } else {
       throw std::runtime_error(
           "Human: failed to attach limb - one or more bodies expired");
@@ -471,9 +471,9 @@ void Human::createAnatomy(
   }
   {
     auto limbLock = _bodies._legRight.lock();
-    auto attackLock = _bodies._hipRight.lock();
-    if (limbLock && attackLock) {
-      limbLock->connect(connectionFactory, attackLock->getCircle(), {0, 0});
+    auto attach = _bodies._shoulderLeft;
+    if (limbLock) {
+      limbLock->connect(connectionFactory, attach, "main", {0, 0}, attach);
     } else {
       throw std::runtime_error(
           "Human: failed to attach limb - one or more bodies expired");

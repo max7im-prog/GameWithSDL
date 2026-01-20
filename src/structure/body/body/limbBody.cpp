@@ -1,5 +1,6 @@
 #include "limbBody.hpp"
 #include "PIDVectorController.hpp"
+#include "bodyComponents.hpp"
 #include "box2d/box2d.h"
 #include "box2d/math_functions.h"
 #include "capsule.hpp"
@@ -246,33 +247,49 @@ void LimbBody::setAngleConstraints(
 }
 
 void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
-                       std::shared_ptr<Shape> shape, b2Vec2 localPoint) {
-  if (!shape) {
-    throw(std::runtime_error("Nullptr instead of shape"));
-  }
-
+                       std::weak_ptr<Body> body, const std::string &shapeName,
+                       b2Vec2 localShapePoint,
+                       std::weak_ptr<RegistryComposite> parent) {
   auto connectionLock = connection.lock();
-
   if (connectionLock) {
-    connectionLock->remove();
     unregisterChild(connection);
-    connection = std::weak_ptr<RevoluteConnection>();
+    connectionLock->remove();
+    connection = std::weak_ptr<RevoluteConnection>{};
   }
-
+  auto parentLock = parent.lock();
+  if (!parentLock) {
+    spdlog::error("LimbBody: failed to lock parent");
+    throw std::runtime_error("LimbBody: failed to lock parent");
+  }
   {
     RevoluteConnection::Config cfg;
     cfg.defaultConfig();
     cfg.templateJointCfg = config.templateJointConfig;
-    cfg.templateJointCfg.jointDef.bodyIdA = shape->getBodyId();
 
-    auto firstSegmentLock = segments[0].lock();
-    if (!firstSegmentLock)
-      throw std::runtime_error("First segment expired");
+    // Body to attach to
+    cfg._attachA._body = body;
+    cfg._attachA._shapeName = shapeName;
+    cfg._attachA._shapeLocalPoint = localShapePoint;
 
-    cfg.templateJointCfg.jointDef.bodyIdB = firstSegmentLock->getBodyId();
-    cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
-    cfg.templateJointCfg.jointDef.localAnchorB =
-        firstSegmentLock->getLocalCenter1();
+    // First segment of a limb
+    auto ent = getEntity();
+    auto &comp = _registry.get<PhysicsBody>(ent);
+    b2Vec2 localPoint{0, 0};
+    const auto &segments = getSegments();
+    if (segments.empty()) {
+      spdlog::error("LimbBody: no first segment in limb");
+      throw std::runtime_error("No first segment in limb");
+    }
+    auto firstSegment = segments[0].lock();
+    if (!firstSegment) {
+      spdlog::error("First segment of a limb expired");
+      throw std::runtime_error("First segment of a limb expired");
+    }
+    localPoint = firstSegment->getLocalCenter1();
+    cfg._attachB._body = std::weak_ptr<Body>{comp.body};
+    cfg._attachB._shapeName = "capsule1";
+    cfg._attachB._shapeLocalPoint = localPoint;
+
     cfg.templateJointCfg.jointDef.enableLimit =
         rootIKTask.angleConstraints[0].enable;
     cfg.templateJointCfg.jointDef.lowerAngle =
@@ -280,11 +297,38 @@ void LimbBody::connect(std::shared_ptr<ConnectionFactory> factory,
     cfg.templateJointCfg.jointDef.upperAngle =
         rootIKTask.angleConstraints[0].maxRot;
     cfg.templateJointCfg.jointDef.referenceAngle =
-        b2Rot_GetAngle(b2MulRot(rootRot, shape->getRotation()));
-
+        b2Rot_GetAngle(rootRot); // TODO: probably wrong rotation
     connection = factory->create<RevoluteConnection>(cfg);
     registerChild(connection);
+    // TODO: perform proper registering for parent
   }
+
+  // {
+  //   RevoluteConnection::Config cfg;
+  //   cfg.defaultConfig();
+  //   cfg.templateJointCfg = config.templateJointConfig;
+  //   cfg.templateJointCfg.jointDef.bodyIdA = shape->getBodyId();
+  //
+  //   auto firstSegmentLock = segments[0].lock();
+  //   if (!firstSegmentLock)
+  //     throw std::runtime_error("First segment expired");
+  //
+  //   cfg.templateJointCfg.jointDef.bodyIdB = firstSegmentLock->getBodyId();
+  //   cfg.templateJointCfg.jointDef.localAnchorA = localPoint;
+  //   cfg.templateJointCfg.jointDef.localAnchorB =
+  //       firstSegmentLock->getLocalCenter1();
+  //   cfg.templateJointCfg.jointDef.enableLimit =
+  //       rootIKTask.angleConstraints[0].enable;
+  //   cfg.templateJointCfg.jointDef.lowerAngle =
+  //       rootIKTask.angleConstraints[0].minRot;
+  //   cfg.templateJointCfg.jointDef.upperAngle =
+  //       rootIKTask.angleConstraints[0].maxRot;
+  //   cfg.templateJointCfg.jointDef.referenceAngle =
+  //       b2Rot_GetAngle(b2MulRot(rootRot, shape->getRotation()));
+  //
+  //   connection = factory->create<RevoluteConnection>(cfg);
+  //   registerChild(connection);
+  // }
 }
 
 b2Rot LimbBody::getAdjustedRootRot() {
