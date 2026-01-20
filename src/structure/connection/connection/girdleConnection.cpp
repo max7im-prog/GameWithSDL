@@ -1,4 +1,5 @@
 #include "girdleConnection.hpp"
+#include "body.hpp"
 #include "box2d/math_functions.h"
 #include "box2d/types.h"
 #include "miscUtils.hpp"
@@ -11,12 +12,88 @@ GirdleConnection::GirdleConnection(
     const std::shared_ptr<JointFactory> jointFactory)
     : Connection(registry, world), girdleWidth(config._girdleWidth),
       current3DRotationRad(config._initial3DRotationRad) {
-  if (!config._centerAttach._shape || !config._leftAttach._shape ||
-      !config._rightAttach._shape) {
-    throw std::invalid_argument("One of the attachments is invalid");
-  }
+
   if (b2Length(config._rotationAxis) == 0) {
-    throw std::invalid_argument("rotation axis has length of 0");
+    throw std::invalid_argument(
+        "GirdleConnection: rotation axis has length of 0");
+  }
+
+  // Check bodies
+  std::shared_ptr<Body> centerBody;
+  std::shared_ptr<Body> leftBody;
+  std::shared_ptr<Body> rightBody;
+  centerBody = config._centerAttach._body.lock();
+  leftBody = config._leftAttach._body.lock();
+  rightBody = config._rightAttach._body.lock();
+
+  if (!centerBody) {
+    spdlog::error("GirdleConnection: center body expired");
+    throw std::runtime_error("GirdleConnection: center body expired");
+  }
+
+  if (!leftBody) {
+    spdlog::error("GirdleConnection: left body expired");
+    throw std::runtime_error("GirdleConnection: left body expired");
+  }
+
+  if (!rightBody) {
+    spdlog::error("GirdleConnection: right body expired");
+    throw std::runtime_error("GirdleConnection: right body expired");
+  }
+
+  // Check if shapes exist
+  std::shared_ptr<Shape> centerShape;
+  std::shared_ptr<Shape> leftShape;
+  std::shared_ptr<Shape> rightShape;
+  {
+    const auto &shapes = centerBody->getShapes();
+    if (shapes.contains(config._centerAttach._shapeName)) {
+      centerShape = shapes.at(config._centerAttach._shapeName).lock();
+    } else {
+      spdlog::error("GirdleConnection: center body has no shape named '{}'",
+                    config._centerAttach._shapeName);
+      throw std::runtime_error(
+          "GirdleConnection: center body has no shape named '" +
+          config._centerAttach._shapeName + "'");
+    }
+  }
+  {
+    const auto &shapes = leftBody->getShapes();
+    if (shapes.contains(config._leftAttach._shapeName)) {
+      leftShape = shapes.at(config._leftAttach._shapeName).lock();
+    } else {
+      spdlog::error("GirdleConnection: left body has no shape named '{}'",
+                    config._leftAttach._shapeName);
+      throw std::runtime_error(
+          "GirdleConnection: left body has no shape named '" +
+          config._leftAttach._shapeName + "'");
+    }
+  }
+  {
+    const auto &shapes = rightBody->getShapes();
+    if (shapes.contains(config._rightAttach._shapeName)) {
+      rightShape = shapes.at(config._rightAttach._shapeName).lock();
+    } else {
+      spdlog::error("GirdleConnection: right body has no shape named '{}'",
+                    config._rightAttach._shapeName);
+      throw std::runtime_error(
+          "GirdleConnection: right body has no shape named '" +
+          config._rightAttach._shapeName + "'");
+    }
+  }
+
+  // Check if shapes are locked
+  if (!centerShape) {
+    throw std::runtime_error(
+        "GirdleConnection: central shape expired on createion");
+  }
+  if (!leftShape) {
+    throw std::runtime_error(
+        "GirdleConnection: left shape expired on createion");
+  }
+  if (!rightShape) {
+    throw std::runtime_error(
+        "GirdleConnection: right shape expired on createion");
   }
 
   // Calculate stuff
@@ -25,8 +102,8 @@ GirdleConnection::GirdleConnection(
 
   {
     auto prismCfg = config._prismTemplate;
-    prismCfg.jointDef.bodyIdA = config._centerAttach._shape->getBodyId();
-    prismCfg.jointDef.localAnchorA = config._centerAttach._localPoint;
+    prismCfg.jointDef.bodyIdA = centerShape->getBodyId();
+    prismCfg.jointDef.localAnchorA = config._centerAttach._shapeLocalPoint;
     prismCfg.jointDef.localAxisA = rotPlaneVector;
     prismCfg.jointDef.enableLimit = true;
     prismCfg.jointDef.upperTranslation = config._girdleWidth / 2;
@@ -34,16 +111,16 @@ GirdleConnection::GirdleConnection(
     prismCfg.jointDef.enableSpring = true;
     {
       auto cfg = prismCfg;
-      cfg.jointDef.bodyIdB = config._leftAttach._shape->getBodyId();
-      cfg.jointDef.localAnchorB = config._leftAttach._localPoint;
+      cfg.jointDef.bodyIdB = leftShape->getBodyId();
+      cfg.jointDef.localAnchorB = config._leftAttach._shapeLocalPoint;
       cfg.jointDef.targetTranslation = -config._girdleWidth / 2;
       leftPrism = jointFactory->create<PrismaticJoint>(cfg);
       registerJoint(leftPrism, "leftPrism");
     }
     {
       auto cfg = prismCfg;
-      cfg.jointDef.bodyIdB = config._rightAttach._shape->getBodyId();
-      cfg.jointDef.localAnchorB = config._rightAttach._localPoint;
+      cfg.jointDef.bodyIdB = rightShape->getBodyId();
+      cfg.jointDef.localAnchorB = config._rightAttach._shapeLocalPoint;
       cfg.jointDef.targetTranslation = config._girdleWidth / 2;
       rightPrism = jointFactory->create<PrismaticJoint>(cfg);
       registerJoint(rightPrism, "rightPrism");

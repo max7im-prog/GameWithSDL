@@ -17,10 +17,9 @@ public:
     PrismaticJoint::Config _prismTemplate;
     PIDRotControllerConfig _rotationControlTemplate;
 
-    struct {
-      std::shared_ptr<Shape> _shape = nullptr;
-      b2Vec2 _localPoint = {0, 0};
-    } _centerAttach, _leftAttach, _rightAttach;
+    BodyAttach _centerAttach;
+    BodyAttach _leftAttach;
+    BodyAttach _rightAttach;
 
     b2Vec2 _rotationAxis;
     float _girdleWidth;

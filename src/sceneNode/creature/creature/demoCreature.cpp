@@ -231,14 +231,18 @@ DemoCreature::DemoCreature(
     GirdleConnection::Config cfg;
     cfg.defaultConfig();
     cfg._girdleWidth = torsoWidth * 0.4;
-    cfg._centerAttach._shape = torsoLock->getPolygon();
-    cfg._centerAttach._localPoint = {0, -torsoHeight / 2};
 
-    cfg._leftAttach._shape = leftHipLock->getCircle();
-    cfg._leftAttach._localPoint = {0, 0};
+    cfg._centerAttach._body = _torso;
+    cfg._centerAttach._shapeName = "main";
+    cfg._centerAttach._shapeLocalPoint = {0, -torsoHeight / 2};
 
-    cfg._rightAttach._shape = rightHipLock->getCircle();
-    cfg._rightAttach._localPoint = {0, 0};
+    cfg._leftAttach._body = _leftHip;
+    cfg._leftAttach._shapeName = "main";
+    cfg._leftAttach._shapeLocalPoint = {0, 0};
+
+    cfg._rightAttach._body = _rightHip;
+    cfg._rightAttach._shapeName = "main";
+    cfg._rightAttach._shapeLocalPoint = {0, 0};
 
     cfg._rotationControlTemplate.kp = 1.0f;
     cfg._rotationControlTemplate.kd = 0.0f;
@@ -260,14 +264,18 @@ DemoCreature::DemoCreature(
     GirdleConnection::Config cfg;
     cfg.defaultConfig();
     cfg._girdleWidth = torsoWidth * 1.6f;
-    cfg._centerAttach._shape = torsoLock->getPolygon();
-    cfg._centerAttach._localPoint = {0, 0};
 
-    cfg._leftAttach._shape = leftShoulderLock->getCircle();
-    cfg._leftAttach._localPoint = {0, 0};
+    cfg._centerAttach._body = _torso;
+    cfg._centerAttach._shapeName = "main";
+    cfg._centerAttach._shapeLocalPoint = {0, 0};
 
-    cfg._rightAttach._shape = rightShoulderLock->getCircle();
-    cfg._rightAttach._localPoint = {0, 0};
+    cfg._leftAttach._body = _leftShoulder;
+    cfg._leftAttach._shapeName = "main";
+    cfg._leftAttach._shapeLocalPoint = {0, 0};
+
+    cfg._rightAttach._body = _rightShoulder;
+    cfg._rightAttach._shapeName = "main";
+    cfg._rightAttach._shapeLocalPoint = {0, 0};
 
     cfg._rotationControlTemplate.kp = 1.0f;
     cfg._rotationControlTemplate.kd = 0.0f;
@@ -280,8 +288,6 @@ DemoCreature::DemoCreature(
     registerConnection(_shoulderConnection, "shoulderConnection");
   }
 
-  // leftLegLock->connect(connectionFactory, _leftHip, "main", {0, 0},
-  // _leftHip);
   leftArmLock->connect(connectionFactory, _leftShoulder, "main", {0, 0},
                        _leftShoulder);
   rightArmLock->connect(connectionFactory, _rightShoulder, "main", {0, 0},

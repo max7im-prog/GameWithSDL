@@ -388,14 +388,14 @@ void Human::createAnatomy(
     auto centerLock = _bodies._torso.lock();
     if (leftLock && rightLock && centerLock) {
       cfg._initial3DRotationRad = 0;
-      cfg._centerAttach._shape = centerLock->getPolygon();
-      cfg._centerAttach._localPoint = {
+      // cfg._centerAttach._shape = centerLock->getPolygon();
+      cfg._centerAttach._shapeLocalPoint = {
           0, config._proportions._baseSizeMeters *
                  config._proportions._torsoHeightRatio / 2.0f};
-      cfg._leftAttach._shape = leftLock->getCircle();
-      cfg._leftAttach._localPoint = {0, 0};
-      cfg._rightAttach._shape = rightLock->getCircle();
-      cfg._rightAttach._localPoint = {0, 0};
+      // cfg._leftAttach._shape = leftLock->getCircle();
+      cfg._leftAttach._shapeLocalPoint = {0, 0};
+      // cfg._rightAttach._shape = rightLock->getCircle();
+      cfg._rightAttach._shapeLocalPoint = {0, 0};
       cfg._girdleWidth = config._proportions._baseSizeMeters *
                          config._proportions._shoulderGirdleWIdhtRatio;
       _connections._shoulders =
@@ -415,14 +415,14 @@ void Human::createAnatomy(
     auto centerLock = _bodies._torso.lock();
     if (leftLock && rightLock && centerLock) {
       cfg._initial3DRotationRad = 0;
-      cfg._centerAttach._shape = centerLock->getPolygon();
-      cfg._centerAttach._localPoint = {
+      // cfg._centerAttach._shape = centerLock->getPolygon();
+      cfg._centerAttach._shapeLocalPoint = {
           0, -config._proportions._baseSizeMeters *
                  config._proportions._torsoHeightRatio / 2.0f};
-      cfg._leftAttach._shape = leftLock->getCircle();
-      cfg._leftAttach._localPoint = {0, 0};
-      cfg._rightAttach._shape = rightLock->getCircle();
-      cfg._rightAttach._localPoint = {0, 0};
+      // cfg._leftAttach._shape = leftLock->getCircle();
+      cfg._leftAttach._shapeLocalPoint = {0, 0};
+      // cfg._rightAttach._shape = rightLock->getCircle();
+      cfg._rightAttach._shapeLocalPoint = {0, 0};
       cfg._girdleWidth = config._proportions._baseSizeMeters *
                          config._proportions._hipGirdleWidthRatio;
       _connections._hips = connectionFactory->create<GirdleConnection>(cfg);
