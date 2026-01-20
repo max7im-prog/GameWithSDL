@@ -4,20 +4,19 @@
 #include "jointFactory.hpp"
 #include "shapeFactory.hpp"
 
-struct DistanceConnectionConfig : public Connection::Config {
-  DistanceJoint::Config templateJointCfg;
-  void defaultConfig() override;
-};
 class DistanceConnection : public Connection,
                            public VisitableImpl<DistanceConnection> {
 public:
-  using Config = DistanceConnectionConfig;
+  struct Config : public Connection::Config {
+    DistanceJoint::Config templateJointCfg;
+    void defaultConfig() override;
+  };
   const std::shared_ptr<DistanceJoint> getDistanceJoint() const;
 
 protected:
   DistanceConnection(entt::registry &registry,
                      const std::shared_ptr<World> world,
-                     const DistanceConnectionConfig &config,
+                     const DistanceConnection::Config &config,
                      const std::shared_ptr<ShapeFactory> shapeFactory,
                      const std::shared_ptr<JointFactory> jointFactory);
   std::weak_ptr<DistanceJoint> distanceJoint;
