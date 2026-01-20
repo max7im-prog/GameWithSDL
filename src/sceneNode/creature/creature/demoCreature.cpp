@@ -230,22 +230,22 @@ DemoCreature::DemoCreature(
   {
     GirdleConnection::Config cfg;
     cfg.defaultConfig();
-    cfg.girdleWidth = torsoWidth * 0.4;
-    cfg.centerAttach.shape = torsoLock->getPolygon();
-    cfg.centerAttach.localPoint = {0, -torsoHeight / 2};
+    cfg._girdleWidth = torsoWidth * 0.4;
+    cfg._centerAttach._shape = torsoLock->getPolygon();
+    cfg._centerAttach._localPoint = {0, -torsoHeight / 2};
 
-    cfg.leftAttach.shape = leftHipLock->getCircle();
-    cfg.leftAttach.localPoint = {0, 0};
+    cfg._leftAttach._shape = leftHipLock->getCircle();
+    cfg._leftAttach._localPoint = {0, 0};
 
-    cfg.rightAttach.shape = rightHipLock->getCircle();
-    cfg.rightAttach.localPoint = {0, 0};
+    cfg._rightAttach._shape = rightHipLock->getCircle();
+    cfg._rightAttach._localPoint = {0, 0};
 
-    cfg.rotationControlTemplate.kp = 1.0f;
-    cfg.rotationControlTemplate.kd = 0.0f;
-    cfg.rotationControlTemplate.ki = 0.0f;
+    cfg._rotationControlTemplate.kp = 1.0f;
+    cfg._rotationControlTemplate.kd = 0.0f;
+    cfg._rotationControlTemplate.ki = 0.0f;
 
-    cfg.rotationAxis = {0, 1};
-    cfg.prismTemplate.jointDef.hertz = 10;
+    cfg._rotationAxis = {0, 1};
+    cfg._prismTemplate.jointDef.hertz = 10;
 
     _hipConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerConnection(_hipConnection, "hipConnection");
@@ -259,22 +259,22 @@ DemoCreature::DemoCreature(
   {
     GirdleConnection::Config cfg;
     cfg.defaultConfig();
-    cfg.girdleWidth = torsoWidth * 1.6f;
-    cfg.centerAttach.shape = torsoLock->getPolygon();
-    cfg.centerAttach.localPoint = {0, 0};
+    cfg._girdleWidth = torsoWidth * 1.6f;
+    cfg._centerAttach._shape = torsoLock->getPolygon();
+    cfg._centerAttach._localPoint = {0, 0};
 
-    cfg.leftAttach.shape = leftShoulderLock->getCircle();
-    cfg.leftAttach.localPoint = {0, 0};
+    cfg._leftAttach._shape = leftShoulderLock->getCircle();
+    cfg._leftAttach._localPoint = {0, 0};
 
-    cfg.rightAttach.shape = rightShoulderLock->getCircle();
-    cfg.rightAttach.localPoint = {0, 0};
+    cfg._rightAttach._shape = rightShoulderLock->getCircle();
+    cfg._rightAttach._localPoint = {0, 0};
 
-    cfg.rotationControlTemplate.kp = 1.0f;
-    cfg.rotationControlTemplate.kd = 0.0f;
-    cfg.rotationControlTemplate.ki = 0.0f;
+    cfg._rotationControlTemplate.kp = 1.0f;
+    cfg._rotationControlTemplate.kd = 0.0f;
+    cfg._rotationControlTemplate.ki = 0.0f;
 
-    cfg.rotationAxis = {0, 1};
-    cfg.prismTemplate.jointDef.hertz = 10;
+    cfg._rotationAxis = {0, 1};
+    cfg._prismTemplate.jointDef.hertz = 10;
 
     _shoulderConnection = connectionFactory->create<GirdleConnection>(cfg);
     registerConnection(_shoulderConnection, "shoulderConnection");

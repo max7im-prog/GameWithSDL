@@ -387,17 +387,17 @@ void Human::createAnatomy(
     auto rightLock = _bodies._shoulderRight.lock();
     auto centerLock = _bodies._torso.lock();
     if (leftLock && rightLock && centerLock) {
-      cfg.initial3DRotationRad = 0;
-      cfg.centerAttach.shape = centerLock->getPolygon();
-      cfg.centerAttach.localPoint = {
+      cfg._initial3DRotationRad = 0;
+      cfg._centerAttach._shape = centerLock->getPolygon();
+      cfg._centerAttach._localPoint = {
           0, config._proportions._baseSizeMeters *
                  config._proportions._torsoHeightRatio / 2.0f};
-      cfg.leftAttach.shape = leftLock->getCircle();
-      cfg.leftAttach.localPoint = {0, 0};
-      cfg.rightAttach.shape = rightLock->getCircle();
-      cfg.rightAttach.localPoint = {0, 0};
-      cfg.girdleWidth = config._proportions._baseSizeMeters *
-                        config._proportions._shoulderGirdleWIdhtRatio;
+      cfg._leftAttach._shape = leftLock->getCircle();
+      cfg._leftAttach._localPoint = {0, 0};
+      cfg._rightAttach._shape = rightLock->getCircle();
+      cfg._rightAttach._localPoint = {0, 0};
+      cfg._girdleWidth = config._proportions._baseSizeMeters *
+                         config._proportions._shoulderGirdleWIdhtRatio;
       _connections._shoulders =
           connectionFactory->create<GirdleConnection>(cfg);
       registerConnection(_connections._shoulders, "shoulderGirdle");
@@ -414,17 +414,17 @@ void Human::createAnatomy(
     auto rightLock = _bodies._hipRight.lock();
     auto centerLock = _bodies._torso.lock();
     if (leftLock && rightLock && centerLock) {
-      cfg.initial3DRotationRad = 0;
-      cfg.centerAttach.shape = centerLock->getPolygon();
-      cfg.centerAttach.localPoint = {
+      cfg._initial3DRotationRad = 0;
+      cfg._centerAttach._shape = centerLock->getPolygon();
+      cfg._centerAttach._localPoint = {
           0, -config._proportions._baseSizeMeters *
                  config._proportions._torsoHeightRatio / 2.0f};
-      cfg.leftAttach.shape = leftLock->getCircle();
-      cfg.leftAttach.localPoint = {0, 0};
-      cfg.rightAttach.shape = rightLock->getCircle();
-      cfg.rightAttach.localPoint = {0, 0};
-      cfg.girdleWidth = config._proportions._baseSizeMeters *
-                        config._proportions._hipGirdleWidthRatio;
+      cfg._leftAttach._shape = leftLock->getCircle();
+      cfg._leftAttach._localPoint = {0, 0};
+      cfg._rightAttach._shape = rightLock->getCircle();
+      cfg._rightAttach._localPoint = {0, 0};
+      cfg._girdleWidth = config._proportions._baseSizeMeters *
+                         config._proportions._hipGirdleWidthRatio;
       _connections._hips = connectionFactory->create<GirdleConnection>(cfg);
       registerConnection(_connections._hips, "hipGirdle");
     } else {

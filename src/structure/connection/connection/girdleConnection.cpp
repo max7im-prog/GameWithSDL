@@ -9,56 +9,56 @@ GirdleConnection::GirdleConnection(
     const GirdleConnection::Config &config,
     const std::shared_ptr<ShapeFactory> shapeFactory,
     const std::shared_ptr<JointFactory> jointFactory)
-    : Connection(registry, world), girdleWidth(config.girdleWidth),
-      current3DRotationRad(config.initial3DRotationRad) {
-  if (!config.centerAttach.shape || !config.leftAttach.shape ||
-      !config.rightAttach.shape) {
+    : Connection(registry, world), girdleWidth(config._girdleWidth),
+      current3DRotationRad(config._initial3DRotationRad) {
+  if (!config._centerAttach._shape || !config._leftAttach._shape ||
+      !config._rightAttach._shape) {
     throw std::invalid_argument("One of the attachments is invalid");
   }
-  if (b2Length(config.rotationAxis) == 0) {
+  if (b2Length(config._rotationAxis) == 0) {
     throw std::invalid_argument("rotation axis has length of 0");
   }
 
   // Calculate stuff
   b2Vec2 rotPlaneVector =
-      b2Normalize(b2RotateVector(b2MakeRot(-B2_PI / 2), config.rotationAxis));
+      b2Normalize(b2RotateVector(b2MakeRot(-B2_PI / 2), config._rotationAxis));
 
   {
-    auto prismCfg = config.prismTemplate;
-    prismCfg.jointDef.bodyIdA = config.centerAttach.shape->getBodyId();
-    prismCfg.jointDef.localAnchorA = config.centerAttach.localPoint;
+    auto prismCfg = config._prismTemplate;
+    prismCfg.jointDef.bodyIdA = config._centerAttach._shape->getBodyId();
+    prismCfg.jointDef.localAnchorA = config._centerAttach._localPoint;
     prismCfg.jointDef.localAxisA = rotPlaneVector;
     prismCfg.jointDef.enableLimit = true;
-    prismCfg.jointDef.upperTranslation = config.girdleWidth / 2;
-    prismCfg.jointDef.lowerTranslation = -config.girdleWidth / 2;
+    prismCfg.jointDef.upperTranslation = config._girdleWidth / 2;
+    prismCfg.jointDef.lowerTranslation = -config._girdleWidth / 2;
     prismCfg.jointDef.enableSpring = true;
     {
       auto cfg = prismCfg;
-      cfg.jointDef.bodyIdB = config.leftAttach.shape->getBodyId();
-      cfg.jointDef.localAnchorB = config.leftAttach.localPoint;
-      cfg.jointDef.targetTranslation = -config.girdleWidth / 2;
+      cfg.jointDef.bodyIdB = config._leftAttach._shape->getBodyId();
+      cfg.jointDef.localAnchorB = config._leftAttach._localPoint;
+      cfg.jointDef.targetTranslation = -config._girdleWidth / 2;
       leftPrism = jointFactory->create<PrismaticJoint>(cfg);
       registerJoint(leftPrism, "leftPrism");
     }
     {
       auto cfg = prismCfg;
-      cfg.jointDef.bodyIdB = config.rightAttach.shape->getBodyId();
-      cfg.jointDef.localAnchorB = config.rightAttach.localPoint;
-      cfg.jointDef.targetTranslation = config.girdleWidth / 2;
+      cfg.jointDef.bodyIdB = config._rightAttach._shape->getBodyId();
+      cfg.jointDef.localAnchorB = config._rightAttach._localPoint;
+      cfg.jointDef.targetTranslation = config._girdleWidth / 2;
       rightPrism = jointFactory->create<PrismaticJoint>(cfg);
       registerJoint(rightPrism, "rightPrism");
     }
   }
 
   // Configure controllers
-  rotationController = PIDRotController(config.rotationControlTemplate);
+  rotationController = PIDRotController(config._rotationControlTemplate);
 }
 
 void GirdleConnection::Config::defaultConfig() {
-  prismTemplate.defaultConfig();
-  girdleWidth = 1;
-  rotationAxis = {0, 1};
-  initial3DRotationRad = 0.0f;
+  _prismTemplate.defaultConfig();
+  _girdleWidth = 1;
+  _rotationAxis = {0, 1};
+  _initial3DRotationRad = 0.0f;
 }
 
 void GirdleConnection::update(float dt) {
