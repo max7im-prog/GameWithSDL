@@ -2,7 +2,7 @@
 #include "box2d/math_functions.h"
 #include "renderComponents.hpp"
 
-Body::~Body() {}
+Body::~Body() = default;
 
 Body::Body(entt::registry &registry, const std::shared_ptr<World> world)
     : Structure(registry), world(world) {}

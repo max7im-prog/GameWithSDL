@@ -2,6 +2,6 @@
 
 Connection::Connection(entt::registry &registry,
                        const std::shared_ptr<World> world)
-    : Structure(registry), world(world) {}
+    : Structure(registry), _world(world) {}
 
-Connection::~Connection() {}
+Connection::~Connection() = default;

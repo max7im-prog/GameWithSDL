@@ -7,7 +7,7 @@ public:
   struct Config : public Structure::Config {};
 
   virtual void update([[maybe_unused]] float dt) override {};
-  virtual ~Body();
+  virtual ~Body() = 0;
   virtual b2Vec2 getWorldPos() = 0;
 
 protected:

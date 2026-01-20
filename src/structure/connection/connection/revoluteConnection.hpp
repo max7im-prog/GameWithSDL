@@ -10,6 +10,8 @@ public:
   struct Config : Connection::Config {
     RevoluteJoint::Config templateJointCfg;
     void defaultConfig() override;
+    BodyAttach _attachA;
+    BodyAttach _attachB;
   };
   const std::shared_ptr<RevoluteJoint> getRevoluteJoint() const;
 
