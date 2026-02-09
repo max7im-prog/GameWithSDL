@@ -53,10 +53,6 @@ protected:
 
   const std::shared_ptr<World> world;
 
-  void registerBody(std::weak_ptr<Body> body, const std::string &name);
-  void registerConnection(std::weak_ptr<Connection> connection,
-                          const std::string &name);
-
 private:
   Terrain() = delete;
   Terrain(Terrain &other) = delete;

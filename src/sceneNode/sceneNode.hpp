@@ -114,4 +114,8 @@ protected:
   SceneNode(entt::registry &registry);
   std::unordered_map<std::string, std::weak_ptr<Body>> _bodies;
   std::unordered_map<std::string, std::weak_ptr<Connection>> _connections;
+
+  void registerBody(std::weak_ptr<Body> body, const std::string &name);
+  void registerConnection(std::weak_ptr<Connection> connection,
+                          const std::string &name);
 };

@@ -1,6 +1,8 @@
 #include "sceneNode.hpp"
 #include "SDL3/SDL.h"
 #include "SDL3/SDL_rect.h"
+#include "body.hpp"
+#include "connection.hpp"
 #include "jsonUtils.hpp"
 #include "registryComposite.hpp"
 #include <iostream>
@@ -198,4 +200,24 @@ SceneNode::Config::parseRenderConfig(const nlohmann::json &json) {
   }
 
   return cfg;
+}
+
+void SceneNode::registerBody(std::weak_ptr<Body> body,
+                             const std::string &name) {
+  if (_bodies.find(name) != _bodies.end()) {
+    throw std::runtime_error("Body with name " + name +
+                             " registered more than once");
+  }
+  _bodies[name] = body;
+  registerChild(body);
+}
+
+void SceneNode::registerConnection(std::weak_ptr<Connection> connection,
+                                   const std::string &name) {
+  if (_connections.find(name) != _connections.end()) {
+    throw std::runtime_error("Connection with name " + name +
+                             " registered more than once");
+  }
+  _connections[name] = connection;
+  registerChild(connection);
 }

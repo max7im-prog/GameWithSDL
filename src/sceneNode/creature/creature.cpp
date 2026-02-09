@@ -26,25 +26,6 @@ b2Filter Creature::Config::defaultFilter() {
   return ret;
 };
 
-void Creature::registerBody(std::weak_ptr<Body> body, const std::string &name) {
-  if (_bodies.find(name) != _bodies.end()) {
-    throw std::runtime_error("Body with name " + name +
-                             " registered more than once");
-  }
-  _bodies[name] = body;
-  registerChild(body);
-}
-
-void Creature::registerConnection(std::weak_ptr<Connection> connection,
-                                  const std::string &name) {
-  if (_connections.find(name) != _connections.end()) {
-    throw std::runtime_error("Connection with name " + name +
-                             " registered more than once");
-  }
-  _connections[name] = connection;
-  registerChild(connection);
-}
-
 void Creature::perform(CreatureAction action, InputState inputState) {
   if (auto it = _actions.find(action); it != _actions.end()) {
     it->second(inputState);

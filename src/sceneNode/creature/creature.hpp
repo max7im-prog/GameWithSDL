@@ -32,10 +32,6 @@ public:
 protected:
   Creature(entt::registry &registry, const std::shared_ptr<World> world);
 
-  void registerBody(std::weak_ptr<Body> body, const std::string &name);
-  void registerConnection(std::weak_ptr<Connection> connection,
-                          const std::string &name);
-
   const std::shared_ptr<World> world;
 
   std::unordered_map<CreatureAction, std::function<void(InputState)>> _actions;
