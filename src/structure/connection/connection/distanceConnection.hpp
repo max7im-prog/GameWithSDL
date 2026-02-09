@@ -10,6 +10,8 @@ public:
   struct Config : public Connection::Config {
     DistanceJoint::Config templateJointCfg;
     void defaultConfig() override;
+    BodyAttach _attachA;
+    BodyAttach _attachB;
   };
   const std::shared_ptr<DistanceJoint> getDistanceJoint() const;
 
