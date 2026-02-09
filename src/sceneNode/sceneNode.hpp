@@ -115,7 +115,7 @@ protected:
   std::unordered_map<std::string, std::weak_ptr<Body>> _bodies;
   std::unordered_map<std::string, std::weak_ptr<Connection>> _connections;
 
-  void registerBody(std::weak_ptr<Body> body, const std::string &name);
+  void registerBody(std::weak_ptr<Body> body, std::string_view name);
   void registerConnection(std::weak_ptr<Connection> connection,
-                          const std::string &name);
+                          std::string_view name);
 };

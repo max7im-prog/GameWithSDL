@@ -54,7 +54,7 @@ DistanceConnection::DistanceConnection(
   cfg.jointDef.localAnchorB = config._attachB._shapeLocalPoint;
 
   distanceJoint = jointFactory->create<DistanceJoint>(config.templateJointCfg);
-  registerJoint(distanceJoint, "distanceJoint");
+  registerJoint(distanceJoint, JointNames::s_main);
 }
 
 const std::shared_ptr<DistanceJoint>

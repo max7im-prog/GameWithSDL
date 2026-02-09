@@ -115,7 +115,7 @@ GirdleConnection::GirdleConnection(
       cfg.jointDef.localAnchorB = config._leftAttach._shapeLocalPoint;
       cfg.jointDef.targetTranslation = -config._girdleWidth / 2;
       leftPrism = jointFactory->create<PrismaticJoint>(cfg);
-      registerJoint(leftPrism, "leftPrism");
+      registerJoint(leftPrism, JointNames::s_leftPrism);
     }
     {
       auto cfg = prismCfg;
@@ -123,7 +123,7 @@ GirdleConnection::GirdleConnection(
       cfg.jointDef.localAnchorB = config._rightAttach._shapeLocalPoint;
       cfg.jointDef.targetTranslation = config._girdleWidth / 2;
       rightPrism = jointFactory->create<PrismaticJoint>(cfg);
-      registerJoint(rightPrism, "rightPrism");
+      registerJoint(rightPrism, JointNames::s_rightPrism);
     }
   }
 

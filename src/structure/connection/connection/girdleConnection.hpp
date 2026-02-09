@@ -25,6 +25,14 @@ public:
     float _girdleWidth;
     float _initial3DRotationRad;
   };
+  struct JointNames {
+    static constexpr std::string_view s_leftPrism = "leftPrism";
+    static constexpr std::string_view s_rightPrism = "rightPrism";
+
+  private:
+    ~JointNames() = delete;
+  };
+
   virtual void update(float dt) override;
   void rotate3D(float angle);
   void rotate3D(b2Rot rot);

@@ -12,6 +12,13 @@ public:
     BodyAttach _attachA;
     BodyAttach _attachB;
   };
+  struct JointNames {
+    static constexpr std::string_view s_main = "main";
+
+  private:
+    ~JointNames() = delete;
+  };
+
   const std::shared_ptr<WeldJoint> getWeldJoint() const;
 
 protected:

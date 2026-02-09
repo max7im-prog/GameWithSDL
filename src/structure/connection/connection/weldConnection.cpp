@@ -54,7 +54,7 @@ WeldConnection::WeldConnection(entt::registry &registry,
   cfg.jointDef.localAnchorB = config._attachB._shapeLocalPoint;
 
   weldJoint = jointFactory->create<WeldJoint>(cfg);
-  registerJoint(weldJoint, "weldJoint");
+  registerJoint(weldJoint, JointNames::s_main);
 }
 
 const std::shared_ptr<WeldJoint> WeldConnection::getWeldJoint() const {

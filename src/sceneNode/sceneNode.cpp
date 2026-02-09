@@ -202,22 +202,23 @@ SceneNode::Config::parseRenderConfig(const nlohmann::json &json) {
   return cfg;
 }
 
-void SceneNode::registerBody(std::weak_ptr<Body> body,
-                             const std::string &name) {
-  if (_bodies.find(name) != _bodies.end()) {
-    throw std::runtime_error("Body with name " + name +
+void SceneNode::registerBody(std::weak_ptr<Body> body, std::string_view name) {
+  std::string nameStr = static_cast<std::string>(name);
+  if (_bodies.find(nameStr) != _bodies.end()) {
+    throw std::runtime_error("Body with name " + nameStr +
                              " registered more than once");
   }
-  _bodies[name] = body;
+  _bodies[nameStr] = body;
   registerChild(body);
 }
 
 void SceneNode::registerConnection(std::weak_ptr<Connection> connection,
-                                   const std::string &name) {
-  if (_connections.find(name) != _connections.end()) {
-    throw std::runtime_error("Connection with name " + name +
+                                   std::string_view name) {
+  std::string nameStr = static_cast<std::string>(name);
+  if (_connections.find(nameStr) != _connections.end()) {
+    throw std::runtime_error("Connection with name " + nameStr +
                              " registered more than once");
   }
-  _connections[name] = connection;
+  _connections[nameStr] = connection;
   registerChild(connection);
 }
