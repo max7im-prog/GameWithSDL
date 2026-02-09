@@ -10,6 +10,12 @@ public:
     void defaultConfig() override;
     Capsule::Config shapeCfg;
   };
+  struct ShapeNames {
+    static constexpr std::string_view s_main = "main";
+
+  private:
+    ~ShapeNames() = delete;
+  };
   b2Vec2 getCenter1();
   b2Vec2 getCenter2();
   float getRadius();

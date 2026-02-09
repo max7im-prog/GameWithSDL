@@ -10,6 +10,12 @@ public:
     void defaultConfig() override;
     Circle::Config shapeCfg;
   };
+  struct ShapeNames {
+    static constexpr std::string_view s_main = "main";
+
+  private:
+    ~ShapeNames() = delete;
+  };
   b2Vec2 getCenter();
   float getRadius();
   const std::shared_ptr<Circle> getCircle();

@@ -32,7 +32,7 @@ CapsuleBody::CapsuleBody(entt::registry &registry,
                          const std::shared_ptr<JointFactory> jointFactory)
     : Body(registry, world) {
   capsule = shapeFactory->create<Capsule>(config.shapeCfg);
-  registerShape(capsule, "main");
+  registerShape(capsule, ShapeNames::s_main);
 }
 
 void CapsuleBody::Config::defaultConfig() { shapeCfg.defaultConfig(); }

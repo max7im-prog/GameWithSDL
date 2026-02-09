@@ -10,6 +10,12 @@ public:
     void defaultConfig() override;
     Segment::Config shapeCfg;
   };
+  struct ShapeNames {
+    static constexpr std::string_view s_main = "main";
+
+  private:
+    ~ShapeNames() = delete;
+  };
   const std::shared_ptr<Segment> getSegment();
   virtual b2Vec2 getWorldPos() override;
 

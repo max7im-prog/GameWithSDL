@@ -10,6 +10,12 @@ public:
     void defaultConfig() override;
     Polygon::Config shapeCfg;
   };
+  struct ShapeNames {
+    static constexpr std::string_view s_main = "main";
+
+  private:
+    ~ShapeNames() = delete;
+  };
   const std::shared_ptr<Polygon> getPolygon();
   virtual b2Vec2 getWorldPos() override;
 
