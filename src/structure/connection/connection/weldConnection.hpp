@@ -9,6 +9,8 @@ public:
   struct Config : Connection::Config {
     WeldJoint::Config templateJointCfg;
     void defaultConfig() override;
+    BodyAttach _attachA;
+    BodyAttach _attachB;
   };
   const std::shared_ptr<WeldJoint> getWeldJoint() const;
 
