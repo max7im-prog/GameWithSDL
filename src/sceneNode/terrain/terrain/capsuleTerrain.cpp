@@ -35,7 +35,7 @@ CapsuleTerrain::CapsuleTerrain(
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     capsuleBody = bodyFactory->create<CapsuleBody>(bodyCfg);
-    registerBody(capsuleBody, "main");
+    registerBody(capsuleBody, BodyNames::s_main);
   }
 }
 

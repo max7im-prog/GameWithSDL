@@ -24,7 +24,7 @@ CircleTerrain::CircleTerrain(
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     circleBody = bodyFactory->create<CircleBody>(bodyCfg);
-    registerBody(circleBody, "main");
+    registerBody(circleBody, BodyNames::s_main);
   }
 }
 

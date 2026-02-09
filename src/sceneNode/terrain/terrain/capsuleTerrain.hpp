@@ -14,6 +14,12 @@ public:
     void defaultConfig() override;
     void fromJSON(const nlohmann::json &json) override;
   };
+  struct BodyNames {
+    static constexpr std::string_view s_main = "main";
+
+  private:
+    ~BodyNames() = delete;
+  };
   virtual b2Vec2 getWorldPos() override;
 
 protected:

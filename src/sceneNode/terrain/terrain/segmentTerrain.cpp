@@ -33,7 +33,7 @@ SegmentTerrain::SegmentTerrain(
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     segmentBody = bodyFactory->create<SegmentBody>(bodyCfg);
-    registerBody(segmentBody, "main");
+    registerBody(segmentBody, BodyNames::s_main);
   }
 }
 

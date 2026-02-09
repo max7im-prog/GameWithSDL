@@ -32,7 +32,7 @@ PolygonTerrain::PolygonTerrain(
     bodyCfg.shapeCfg.bodyDef.rotation = terrainRot;
     bodyCfg.shapeCfg.shapeDef.filter = Terrain::Config::defaultFilter();
     polygonBody = bodyFactory->create<PolygonBody>(bodyCfg);
-    registerBody(polygonBody, "main");
+    registerBody(polygonBody, BodyNames::s_main);
   }
 }
 
