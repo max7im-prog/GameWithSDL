@@ -62,6 +62,34 @@ public:
     } _massDistribution;
   };
 
+  struct BodyNames {
+    static constexpr std::string_view s_torso = "torso";
+    static constexpr std::string_view s_neck = "neck";
+    static constexpr std::string_view s_head = "head";
+    static constexpr std::string_view s_leftShoulder = "leftShoulder";
+    static constexpr std::string_view s_rightShoulder = "rightShoulder";
+    static constexpr std::string_view s_rightHip = "rightHip";
+    static constexpr std::string_view s_leftHip = "leftHip";
+    static constexpr std::string_view s_leftArm = "leftArm";
+    static constexpr std::string_view s_rightArm = "rightArm";
+    static constexpr std::string_view s_leftLeg = "leftLeg";
+    static constexpr std::string_view s_rightLeg = "rightLeg";
+
+  private:
+    ~BodyNames() = delete;
+  };
+  struct ConnectionNames {
+    static constexpr std::string_view s_shoulderGirdle = "shoulderGirdle";
+    static constexpr std::string_view s_hipGirdle = "hipGirdle";
+    static constexpr std::string_view s_torsoNeckConnection =
+        "torsoNeckConnection";
+    static constexpr std::string_view s_neckHeadConnection =
+        "neckHeadConnection";
+
+  private:
+    ~ConnectionNames() = delete;
+  };
+
   void move(b2Vec2 dir) override;
   void lookAt(b2Vec2 worldPoint) override;
   virtual void update(float dt) override;

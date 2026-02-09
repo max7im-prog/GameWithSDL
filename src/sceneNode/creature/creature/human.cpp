@@ -189,7 +189,7 @@ void Human::createAnatomy(
                               (config._proportions._baseSizeMeters *
                                -config._proportions._torsoHeightRatio / 2.0f)}};
     _bodies._torso = bodyFactory->create<PolygonBody>(cfg);
-    registerBody(_bodies._torso, "torso");
+    registerBody(_bodies._torso, BodyNames::s_torso);
   }
 
   // Neck
@@ -204,7 +204,7 @@ void Human::createAnatomy(
     cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
                           config._proportions._limbThicknessRatio / 2.0f;
     _bodies._neck = bodyFactory->create<CapsuleBody>(cfg);
-    registerBody(_bodies._neck, "neck");
+    registerBody(_bodies._neck, BodyNames::s_neck);
   }
 
   // Head
@@ -232,7 +232,7 @@ void Human::createAnatomy(
                               (config._proportions._baseSizeMeters *
                                -config._proportions._headHeightRatio / 2.0f)}};
     _bodies._head = bodyFactory->create<PolygonBody>(cfg);
-    registerBody(_bodies._head, "head");
+    registerBody(_bodies._head, BodyNames::s_head);
   }
 
   // Left Shoulder
@@ -243,7 +243,7 @@ void Human::createAnatomy(
     cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
                           config._proportions._shoulderSizeRatio / 2.0f;
     _bodies._shoulderLeft = bodyFactory->create<CircleBody>(cfg);
-    registerBody(_bodies._shoulderLeft, "leftShoulder");
+    registerBody(_bodies._shoulderLeft, BodyNames::s_leftShoulder);
   }
 
   // Right Shoulder
@@ -254,7 +254,7 @@ void Human::createAnatomy(
     cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
                           config._proportions._shoulderSizeRatio / 2.0f;
     _bodies._shoulderRight = bodyFactory->create<CircleBody>(cfg);
-    registerBody(_bodies._shoulderRight, "rightShoulder");
+    registerBody(_bodies._shoulderRight, BodyNames::s_rightShoulder);
   }
 
   // Left Hip
@@ -265,7 +265,7 @@ void Human::createAnatomy(
     cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
                           config._proportions._hipSizeRatio / 2.0f;
     _bodies._hipLeft = bodyFactory->create<CircleBody>(cfg);
-    registerBody(_bodies._hipLeft, "leftHip");
+    registerBody(_bodies._hipLeft, BodyNames::s_leftHip);
   }
 
   // Right Hip
@@ -276,7 +276,7 @@ void Human::createAnatomy(
     cfg.shapeCfg.radius = config._proportions._baseSizeMeters *
                           config._proportions._hipSizeRatio / 2.0f;
     _bodies._hipRight = bodyFactory->create<CircleBody>(cfg);
-    registerBody(_bodies._hipRight, "rightHip");
+    registerBody(_bodies._hipRight, BodyNames::s_rightHip);
   }
 
   // Limbs
@@ -303,7 +303,7 @@ void Human::createAnatomy(
       cfg.segments.push_back(seg);
     }
     _bodies._armLeft = bodyFactory->create<LimbBody>(cfg);
-    registerBody(_bodies._armLeft, "leftArm");
+    registerBody(_bodies._armLeft, BodyNames::s_leftArm);
   }
 
   // Right arm
@@ -328,7 +328,7 @@ void Human::createAnatomy(
       cfg.segments.push_back(seg);
     }
     _bodies._armRight = bodyFactory->create<LimbBody>(cfg);
-    registerBody(_bodies._armRight, "rightArm");
+    registerBody(_bodies._armRight, BodyNames::s_rightArm);
   }
 
   // Left leg
@@ -352,7 +352,7 @@ void Human::createAnatomy(
       cfg.segments.push_back(seg);
     }
     _bodies._legLeft = bodyFactory->create<LimbBody>(cfg);
-    registerBody(_bodies._legLeft, "leftLeg");
+    registerBody(_bodies._legLeft, BodyNames::s_leftLeg);
   }
 
   // Right leg
@@ -377,7 +377,7 @@ void Human::createAnatomy(
       cfg.segments.push_back(seg);
     }
     _bodies._legRight = bodyFactory->create<LimbBody>(cfg);
-    registerBody(_bodies._legRight, "rightLeg");
+    registerBody(_bodies._legRight, BodyNames::s_rightLeg);
   }
 
   // Shoulder girdle
@@ -400,7 +400,8 @@ void Human::createAnatomy(
                          config._proportions._shoulderGirdleWIdhtRatio;
       _connections._shoulders =
           connectionFactory->create<GirdleConnection>(cfg);
-      registerConnection(_connections._shoulders, "shoulderGirdle");
+      registerConnection(_connections._shoulders,
+                         ConnectionNames::s_shoulderGirdle);
     } else {
       throw std::runtime_error(
           "Human: One or more bodies expired on shoulder creation");
@@ -426,7 +427,7 @@ void Human::createAnatomy(
       cfg._girdleWidth = config._proportions._baseSizeMeters *
                          config._proportions._hipGirdleWidthRatio;
       _connections._hips = connectionFactory->create<GirdleConnection>(cfg);
-      registerConnection(_connections._hips, "hipGirdle");
+      registerConnection(_connections._hips, ConnectionNames::s_hipGirdle);
     } else {
       throw std::runtime_error(
           "Human: One or more bodies expired on shoulder creation");
