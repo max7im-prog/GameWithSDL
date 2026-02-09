@@ -51,7 +51,7 @@ DemoCreature::DemoCreature(
   };
 
   // Calculate stuff
-  constexpr size_t numSegments = 4;
+  constexpr size_t numSegments = 2;
   float segmentLen = b2Length(b2Vec2(config.sizeXMeters, config.sizeYMeters)) *
                      0.7f / numSegments;
   float segmentRadius = config.sizeXMeters / 4;

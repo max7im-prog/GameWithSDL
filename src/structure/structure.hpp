@@ -6,6 +6,8 @@
 #include "shape.hpp"
 class Structure : public RegistryComposite {
 public:
+  using ShapeId = std::string;
+  using JointId = std::string;
   class Config : public ObjectConfig {};
   virtual ~Structure() = 0;
 

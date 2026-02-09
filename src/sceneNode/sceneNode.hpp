@@ -10,6 +10,8 @@
 
 class SceneNodeRenderConfig {
 public:
+  using ConnectionId = std::string;
+  using BodyId = std::string;
   class BodyRenderConfig {
   public:
     class ShapeRenderConfig {
@@ -23,7 +25,7 @@ public:
       struct {
         float _w;
         float _h;
-      } worldSize;
+      } _worldSize;
     };
 
     using ShapeName = std::string;

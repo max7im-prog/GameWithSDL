@@ -141,6 +141,6 @@ void Texturer::visit(Shape &s) {
   el._numTextures = _currentShapeRenderConfig->_numTextures;
   el._initialRect = _currentShapeRenderConfig->_initialRect;
   el._currentRect = el._initialRect;
-  el._worldSize._h = _currentShapeRenderConfig->worldSize._h;
-  el._worldSize._w = _currentShapeRenderConfig->worldSize._w;
+  el._worldSize._h = _currentShapeRenderConfig->_worldSize._h;
+  el._worldSize._w = _currentShapeRenderConfig->_worldSize._w;
 }

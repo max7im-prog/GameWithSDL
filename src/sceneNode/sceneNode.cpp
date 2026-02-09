@@ -178,8 +178,8 @@ SceneNode::Config::parseRenderConfig(const nlohmann::json &json) {
           if (shapeJson.contains("worldDim")) {
             float w = JsonUtils::getOrDefault(shapeJson["worldDim"], "w", 0);
             float h = JsonUtils::getOrDefault(shapeJson["worldDim"], "h", 0);
-            shapeCfg->worldSize._h = h;
-            shapeCfg->worldSize._w = w;
+            shapeCfg->_worldSize._h = h;
+            shapeCfg->_worldSize._w = w;
           }
 
           {
