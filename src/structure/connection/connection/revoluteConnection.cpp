@@ -55,7 +55,7 @@ RevoluteConnection::RevoluteConnection(
   cfg.jointDef.localAnchorB = config._attachB._shapeLocalPoint;
 
   revoluteJoint = jointFactory->create<RevoluteJoint>(cfg);
-  registerJoint(revoluteJoint, "main");
+  registerJoint(revoluteJoint, JointNames::s_main);
 }
 
 const std::shared_ptr<RevoluteJoint>

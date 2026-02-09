@@ -6,22 +6,26 @@ Structure::~Structure() = default;
 Structure::Structure(entt::registry &registry) : RegistryComposite(registry) {}
 
 void Structure::registerJoint(std::weak_ptr<Joint> joint,
-                              const std::string &name) {
-  if (_joints.find(name) != _joints.end()) {
-    throw std::runtime_error("Joint with name " + name +
+                              std::string_view name) {
+
+  std::string nameStr = static_cast<std::string>(name);
+
+  if (_joints.find(nameStr) != _joints.end()) {
+    throw std::runtime_error("Joint with name " + nameStr +
                              " registered more than once");
   }
-  _joints[name] = joint;
+  _joints[nameStr] = joint;
   registerChild(joint);
 }
 
 void Structure::registerShape(std::weak_ptr<Shape> shape,
-                              const std::string &name) {
-  if (_shapes.find(name) != _shapes.end()) {
-    throw std::runtime_error("Shape with name " + name +
+                              std::string_view name) {
+  std::string nameStr = static_cast<std::string>(name);
+  if (_shapes.find(nameStr) != _shapes.end()) {
+    throw std::runtime_error("Shape with name " + nameStr +
                              " registered more than once");
   }
-  _shapes[name] = shape;
+  _shapes[nameStr] = shape;
   registerChild(shape);
 }
 

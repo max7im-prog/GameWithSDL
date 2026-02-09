@@ -16,8 +16,8 @@ public:
   const std::unordered_map<std::string, std::weak_ptr<Joint>> &
   getJoints() const;
 
-  void registerShape(std::weak_ptr<Shape> body, const std::string &name);
-  void registerJoint(std::weak_ptr<Joint> connection, const std::string &name);
+  void registerShape(std::weak_ptr<Shape> body, std::string_view name);
+  void registerJoint(std::weak_ptr<Joint> connection, std::string_view name);
 
 protected:
   std::unordered_map<std::string, std::weak_ptr<Shape>> _shapes;
