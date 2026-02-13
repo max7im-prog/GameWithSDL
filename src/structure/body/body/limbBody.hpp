@@ -34,6 +34,24 @@ public:
     std::vector<AngleConstraint> initialAngleConstraints = {};
     b2Rot rootRot;
   };
+
+  struct ShapeNames {
+    static constexpr std::string s_capsule(uint32_t capsuleNum);
+
+  private:
+    ~ShapeNames() = delete;
+  };
+
+  struct JointNames {
+    // static constexpr std::string_view s_baseJoint = "baseJoint";
+    // TODO: actually use
+
+    static constexpr std::string s_joint(uint32_t jointNum);
+
+  private:
+    ~JointNames() = delete;
+  };
+
   b2Vec2 getBasePos();
   b2Vec2 getEndPos();
   float getLength();

@@ -78,6 +78,7 @@ public:
   private:
     ~BodyNames() = delete;
   };
+
   struct ConnectionNames {
     static constexpr std::string_view s_shoulderGirdle = "shoulderGirdle";
     static constexpr std::string_view s_hipGirdle = "hipGirdle";

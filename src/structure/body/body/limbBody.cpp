@@ -9,6 +9,7 @@
 #include "revoluteConnection.hpp"
 #include "revoluteJoint.hpp"
 #include <stdexcept>
+#include <string>
 
 LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
                    const LimbBody::Config &c,
@@ -48,7 +49,10 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     cfg.bodyDef.position = segWorldPos;
     cfg.bodyDef.rotation = segRot;
     auto capsule = shapeFactory->create<Capsule>(cfg);
-    registerShape(capsule, "capsule" + std::to_string(segNum++));
+
+    // registerShape(capsule, "capsule" + std::to_string(segNum++));
+    registerShape(capsule, ShapeNames::s_capsule(segNum++));
+
     segments.push_back(capsule);
 
     // Post increment (kinda)
@@ -89,7 +93,10 @@ LimbBody::LimbBody(entt::registry &registry, const std::shared_ptr<World> world,
     jointConfig.jointDef.referenceAngle = 0.0f;
 
     auto joint = jointFactory->create<RevoluteJoint>(jointConfig);
-    registerJoint(joint, "joint" + std::to_string(i));
+
+    // registerJoint(joint, "joint" + std::to_string(i));
+    registerJoint(joint, JointNames::s_joint(i));
+
     joints.push_back(joint);
   }
 
@@ -353,4 +360,15 @@ b2Rot LimbBody::getAdjustedRootRot() {
 
   return ret;
 }
+
 b2Vec2 LimbBody::getWorldPos() { return getBasePos(); }
+
+constexpr std::string LimbBody::ShapeNames::s_capsule(uint32_t capsuleNum) {
+  static constexpr std::string s_baseName = "capsule";
+  return s_baseName + std::to_string(capsuleNum);
+}
+
+constexpr std::string LimbBody::JointNames::s_joint(uint32_t jointNum) {
+  static constexpr std::string s_baseName = "joint";
+  return s_baseName + std::to_string(jointNum);
+}
