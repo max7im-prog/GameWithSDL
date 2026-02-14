@@ -1,0 +1,75 @@
+{
+	"type": "Type goes here", // As far as I am concerned, all scene nodes are going to have Type
+	"params": { // A list of all params specific to the type, of any type (string, float, int, etc.)
+		"param1": "lol",
+		"param2": 31.6,
+		"param3": 9,
+		"param4": {},
+		// ,,,
+		"paramN": []
+	},
+	"render": { // Config for rendering that is common for all scene nodes
+		"spriteTemplates": { // All references to sprites and their parameters
+			"legBottom": {
+				"spriteSheet": "res/textures/test/capsule.png",
+				"numSprites": 1,
+				"spriteDim": {
+					"w": 64,
+					"h": 32
+				},
+				"worldDim": {
+					"w": 2,
+					"h": 1
+				}
+			},
+			"legTop": {
+				"spriteSheet": "res/textures/test/circle.png",
+				"numSprites": 1,
+				"spriteDim": {
+					"w": 64,
+					"h": 32
+				},
+				"worldDim": {
+					"w": 2,
+					"h": 1
+				}
+			}
+		},
+		"bodies": [ // List of bodies in sceneNode, initial render sequence is the same as sequence in the list
+			{
+				"name": "rightLeg",
+				"shapes": [ // List of shapes in body, initial render 
+					// sequence is the same as sequence in the list
+					{
+						"name": "capsule0",
+						"template": "legTop",
+						"overrides": { // Optional override
+							"worldDim": {
+								"w": 11,
+								"h": 2
+							}
+						}
+					},
+					{
+						"name": "capsule1",
+						"template": "legBottom"
+						// No override here
+					}
+				]
+			},
+			{
+				"name": "leftLeg",
+				"shapes": [
+					{
+						"name": "capsule0",
+						"template": "legTop"
+					},
+					{
+						"name": "capsule1",
+						"template": "legBottom"
+					}
+				]
+			}
+		]
+	}
+}
