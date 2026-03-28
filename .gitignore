@@ -4,3 +4,4 @@ docs/latex/
 .vscode/
 .cache/
 logs/
+.aider*
